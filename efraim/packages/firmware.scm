@@ -38,11 +38,12 @@
      `(#:modules ((guix build utils))
        #:builder (begin (use-modules (guix build utils))
                    (let ((PATH (string-append
-                                 (assoc-ref %build-inputs tar) "/bin"))
+                                 (assoc-ref %build-inputs "tar") "/bin"))
+                         (tar  (string-append PATH "/tar"))
                          (dest (string-append
                                  (assoc-ref %outputs "out") "/lib/firmware")))
                      (setenv "PATH" PATH)
-                     (system* "tar" "xf" (assoc-ref %build-inputs "source"))
+                     (system* tar "xvf" (assoc-ref %build-inputs "source"))
                      (mkdir-p dest)
                      (delete-file "WHENCE")
                      (delete-file "README")
@@ -60,4 +61,4 @@
     (description "Binary firmware that's not included in the linux-libre
 kernel, and which resides as a separate package in Debian and in a separate git
 repo from the mainline Linux kernel.")
-    (license license:non-copyleft "")))
+    (license (license:non-copyleft ""))))
