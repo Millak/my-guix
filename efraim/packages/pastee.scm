@@ -27,9 +27,9 @@
     (version "0.1.0")
     (source
       (origin
-	(method url-fetch)
-	(uri "https://pastee.org/pastee.py")
-	(sha256
+        (method url-fetch)
+        (uri "https://pastee.org/pastee.py")
+        (sha256
          (base32
           "173m8j46ikmb530ryx84cy2dapxsvkvixal6zakz3vjmq8vz46h6"))))
     (build-system trivial-build-system)
@@ -42,8 +42,8 @@
                 (dest (string-append out "/bin"))
                 (source (assoc-ref %build-inputs "source")))
            (mkdir-p dest)
-           (copy-file source (string-append dest "/" "pastee.py"))
-           (chmod (string-append dest "/" "pastee.py") #o755)))))
+           (copy-file source (string-append dest "/" "pastee"))
+           (chmod (string-append dest "/" "pastee") #o755)))))
     (native-inputs `(("source" ,source)))
     (home-page "https://pastee.org/")
     (synopsis "Pastee python uploader")
