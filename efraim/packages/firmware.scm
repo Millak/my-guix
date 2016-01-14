@@ -20,7 +20,8 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system trivial)
-  #:use-module (gnu packages base))
+  #:use-module (gnu packages base)
+  #:use-module (gnu packages compression))
 
 (define-public firmware-nonfree
   (package
@@ -37,26 +38,19 @@
     (arguments
      `(#:modules ((guix build utils))
        #:builder (begin (use-modules (guix build utils))
-                   (let ((PATH (string-append
-                                 (assoc-ref %build-inputs "tar") "/bin"))
-                         (tar  (string-append PATH "/tar"))
+                   (let ((xz   (assoc-ref %build-inputs "xz"))
+                         (tar  (assoc-ref %build-inputs "tar"))
                          (dest (string-append
                                  (assoc-ref %outputs "out") "/lib/firmware")))
-                     (setenv "PATH" PATH)
-                     (system* tar "xvf" (assoc-ref %build-inputs "source"))
+                     (setenv "PATH" (string-append tar "/bin:" xz "/bin"))
+                     (system* "tar" "xvf" (assoc-ref %build-inputs "source"))
                      (mkdir-p dest)
-                     (delete-file "WHENCE")
-                     (delete-file "README")
-                     (delete-file "GPL-3")
-                     (for-each (lambda (license)
-                                 (delete-file license))
-                               (find-files "." "^LICEN"))
-                     (copy-recursively "." dest)))))
+                     (copy-recursively (string-append name "-" version) dest)))))
     (native-inputs
-     `(("source" ,source)
-       ("tar" ,tar)))
-    (home-page (list "https://packages.debian.org/source/sid/firmware-nonfree"
-                     "https://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git"))
+     `(;;("source" ,source)
+       ("tar" ,tar)
+       ("xz" ,xz)))
+    (home-page "https://packages.debian.org/source/sid/firmware-nonfree")
     (synopsis "Binary firmware for various drivers in the Linux kernel")
     (description "Binary firmware that's not included in the linux-libre
 kernel, and which resides as a separate package in Debian and in a separate git
