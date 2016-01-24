@@ -42,7 +42,9 @@
     (arguments
      `(#:phases
        (modify-phases %standard-phases
-         (delete 'configure))))
+         (delete 'configure))
+       #:make-flags (list (string-append "PREFIX=" %output))
+       #:tests? #f))
     (propagated-inputs
      `(("curl" ,curl)
        ("fribidi" ,fribidi)
