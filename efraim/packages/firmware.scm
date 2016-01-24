@@ -45,10 +45,9 @@
                      (setenv "PATH" (string-append tar "/bin:" xz "/bin"))
                      (system* "tar" "xvf" (assoc-ref %build-inputs "source"))
                      (mkdir-p dest)
-                     (copy-recursively (string-append name "-" version) dest)))))
+                     (copy-recursively (string-append ,name "-" ,version) dest)))))
     (native-inputs
-     `(;;("source" ,source)
-       ("tar" ,tar)
+     `(("tar" ,tar)
        ("xz" ,xz)))
     (home-page "https://packages.debian.org/source/sid/firmware-nonfree")
     (synopsis "Binary firmware for various drivers in the Linux kernel")
