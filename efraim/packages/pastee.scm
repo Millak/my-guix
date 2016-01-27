@@ -38,7 +38,7 @@
        #:builder
        (begin
          (use-modules (guix build utils))
-         (let* ((out  (string-append (assoc-ref %outputs "out")))
+         (let* ((out  (assoc-ref %outputs "out"))
                 (dest (string-append out "/bin"))
                 (source (assoc-ref %build-inputs "source")))
            (mkdir-p dest)
