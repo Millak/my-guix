@@ -19,7 +19,8 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
-  #:use-module (guix build-system trivial))
+  #:use-module (guix build-system trivial)
+  #:use-module (gnu packages python))
 
 (define-public pastee
   (package
@@ -43,8 +44,10 @@
                 (source (assoc-ref %build-inputs "source")))
            (mkdir-p dest)
            (copy-file source (string-append dest "/" "pastee"))
+           (patch-shebang (string-append dest "/" "pastee") (list (string-append (assoc-ref %build-inputs "python") "/bin")))
            (chmod (string-append dest "/" "pastee") #o755)))))
     (native-inputs `(("source" ,source)))
+    (inputs `(("python" ,python-wrapper)))
     (home-page "https://pastee.org/")
     (synopsis "Pastee python uploader")
     (description "Pastee python uploader")
