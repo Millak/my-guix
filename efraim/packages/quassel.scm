@@ -35,7 +35,8 @@
                             version ".tar.bz2"))
         (sha256
          (base32
-          "15vqjiw38mifvnc95bhvy0zl23xxldkwg2byx9xqbyw8rfgggmkb"))))
+          "15vqjiw38mifvnc95bhvy0zl23xxldkwg2byx9xqbyw8rfgggmkb"))
+        (patches (list (search-path "quassel-build-qt5.patch")))))
     (build-system cmake-build-system)
     (arguments
      `(#:configure-flags '("-DWANT_QTCLIENT=ON" ;; These three are not
