@@ -18,36 +18,48 @@
 (define-module (efraim packages quassel)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix build-system cmake)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages kde)
+  #:use-module (gnu packages kde-frameworks)
+  #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages qt))
 
-(define-public quassel-client
+(define-public quassel
+ (let ((commit "b1eb0bfaa5019e3b5a58ff8086d22c2764d6e419"))
   (package
-    (name "quassel-client")
+    (name "quassel")
+    ;;(version (string-append "0.12.2." (string-take commit 7)))
     (version "0.12.2")
     (source
       (origin
-        (method url-fetch)
-        (uri (string-append "http://quassel-irc.org/pub/quassel-"
-                            version ".tar.bz2"))
+        ;;(method url-fetch)
+        ;;(uri (string-append "http://quassel-irc.org/pub/quassel-"
+        ;;                    version ".tar.bz2"))
+        (method git-fetch)
+        (uri (git-reference (url "https://github.com/quassel/quassel.git")
+                            (commit commit)))
         (sha256
          (base32
-          "15vqjiw38mifvnc95bhvy0zl23xxldkwg2byx9xqbyw8rfgggmkb"))
-        (patches (list (search-path "quassel-build-qt5.patch")))))
+          "0g5mdynzc9jj9ksn1vvhc1v93czgb2fyx72mrh2fmqr8y91ihzi1"))
+        (file-name (string-append name "-" version "-1."
+                                  (string-take commit 7) "-checkout"))))
     (build-system cmake-build-system)
     (arguments
-     `(#:configure-flags '("-DWANT_QTCLIENT=ON" ;; These three are not
+     `(#:configure-flags '("-DWANT_QTCLIENT=OFF" ;; These three are not
                            "-DWANT_CORE=OFF" ;; mutually exclusive
-                           "-DWANT_MONO=OFF"
+                           "-DWANT_MONO=ON"
                            "-DUSE_QT5=ON" ;; default is qt4
                            "-DWITH_KDE=OFF" ;; no to integration
                            "-DWITH_OXYGEN=ON" ;; on=embed icons
-                           "-DWITH_WEBKIT=ON"))) ;; wants qtwebkit, in qt5
+                           "-DWITH_WEBKIT=ON") ;; wants qtwebkit, in qt5
+       #:tests? #f)) ;; no test target
+    (native-inputs `(("pkg-config" ,pkg-config)))
     (inputs
-     `(("oxygen-icons" ,oxygen-icons)
+     `(("extra-cmake-modules" ,extra-cmake-modules)
+       ("oxygen-icons" ,oxygen-icons)
        ("qt", qt)
        ("zlib" ,zlib)))
     (home-page "http://quassel-irc.org/")
@@ -56,4 +68,4 @@
 meaning that one or more clients can attach to and detach from the central core.
 It's much like the popular combination of screen and a text-based IRC client
 such as WeeChat or irssi, but graphical.")
-    (license (list license:gpl2 license:gpl3)))) ;; dual licensed
+    (license (list license:gpl2 license:gpl3))))) ;; dual licensed
