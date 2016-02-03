@@ -48,9 +48,9 @@
                                   (string-take commit 7) "-checkout"))))
     (build-system cmake-build-system)
     (arguments
-     `(#:configure-flags '("-DWANT_QTCLIENT=OFF" ;; These three are not
-                           "-DWANT_CORE=OFF" ;; mutually exclusive
-                           "-DWANT_MONO=ON"
+     `(#:configure-flags '(;;"-DWANT_QTCLIENT=OFF" ;; These three are not
+                           ;;"-DWANT_CORE=OFF" ;; mutually exclusive
+                           ;;"-DWANT_MONO=ON"
                            "-DUSE_QT5=ON" ;; default is qt4
                            "-DWITH_KDE=OFF" ;; no to integration
                            "-DWITH_OXYGEN=ON" ;; on=embed icons
