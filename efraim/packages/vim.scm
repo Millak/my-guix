@@ -19,33 +19,35 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
-  #:use-module (gnu packages gtk)
+  #:use-module (gnu packages lua)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
-  #:use-module (gnu packages vim)
-  #:use-module (gnu packages xorg))
+  #:use-module (gnu packages ruby)
+  #:use-module (gnu packages tcl)
+  #:use-module (gnu packages vim))
 
 (define-public vim-custom
   (package (inherit vim)
     (name "vim-custom")
     (arguments
-     `(#:configure-flags '("--enable-python3interp"
-                           "--enable-pythoninterp"
-                           "--enable-perlinterp=dynamic"
-                           "--enable-rubyinterp=dynamic"
-                           "--enable-tclinterp=dynamic"
-                           ;;"--enable-luainterp=dynamic"
+     `(#:configure-flags (list (string-append "--with-lua-prefix=" (assoc-ref %build-inputs "lua"))
+                           "--with-features=huge"
+                           "--enable-python3interp=yes"
+                           "--enable-pythoninterp=yes"
+                           "--enable-perlinterp=yes"
+                           "--enable-rubyinterp=yes"
+                           "--enable-tclinterp=yes"
+                           "--enable-luainterp=yes"
+                           "--enable-cscope"
+                           "--enable-sniff"
                            "--enable-multibyte"
-                           "--enable-gui=gtk2"
-                           "--enable-gtk2-check"
-                           "--enable-fontset"
                            "--disable-selinux")
        ,@(package-arguments vim)))
     (native-inputs `(("pkg-config" ,pkg-config)))
     (inputs
-     `(("gtk+" ,gtk+-2)
-       ("libsm" ,libsm)
-       ("libx11" ,libx11)
-       ("python" ,python)
+     `(("lua" ,lua)
+       ("python" ,python-wrapper)
        ("python" ,python-2)
+       ("ruby" ,ruby)
+       ("tcl" ,tcl)
        ,@(package-inputs vim)))))
