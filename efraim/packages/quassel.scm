@@ -28,24 +28,17 @@
   #:use-module (gnu packages qt))
 
 (define-public quassel
- (let ((commit "b1eb0bfaa5019e3b5a58ff8086d22c2764d6e419"))
   (package
     (name "quassel")
-    ;;(version (string-append "0.12.2." (string-take commit 7)))
-    (version "0.12.2")
+    (version "0.12.3")
     (source
       (origin
-        ;;(method url-fetch)
-        ;;(uri (string-append "http://quassel-irc.org/pub/quassel-"
-        ;;                    version ".tar.bz2"))
-        (method git-fetch)
-        (uri (git-reference (url "https://github.com/quassel/quassel.git")
-                            (commit commit)))
+        (method url-fetch)
+        (uri (string-append "http://quassel-irc.org/pub/quassel-"
+                            version ".tar.bz2"))
         (sha256
          (base32
-          "0g5mdynzc9jj9ksn1vvhc1v93czgb2fyx72mrh2fmqr8y91ihzi1"))
-        (file-name (string-append name "-" version "-1."
-                                  (string-take commit 7) "-checkout"))))
+          "0d6lwf6qblj1ia5j9mjy112zrmpbbg9mmxgscbgxiqychldyjgjd"))))
     (build-system cmake-build-system)
     (arguments
      `(#:configure-flags '(;;"-DWANT_QTCLIENT=OFF" ;; These three are not
@@ -68,4 +61,4 @@
 meaning that one or more clients can attach to and detach from the central core.
 It's much like the popular combination of screen and a text-based IRC client
 such as WeeChat or irssi, but graphical.")
-    (license (list license:gpl2 license:gpl3))))) ;; dual licensed
+    (license (list license:gpl2 license:gpl3)))) ;; dual licensed
