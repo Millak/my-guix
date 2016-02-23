@@ -22,10 +22,28 @@
   #:use-module (guix packages)
   #:use-module (guix build-system cmake)
   #:use-module (gnu packages compression)
-  #:use-module (gnu packages kde)
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages qt))
+
+(define-public oxygen-icons
+  (package
+    (name "oxygen-icons")
+    (version "4.14.2")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (string-append "http://download.kde.org/stable/" version
+                            "/src/" name "-" version ".tar.xz"))
+        (sha256
+         (base32
+          "1mz73f54qh2vd8ibp60f6fjflrprz0lvqfkgh805l7wfhrv4ckbz"))))
+    (build-system cmake-build-system)
+    (arguments `(#:tests? #f)) ; no test target
+    (home-page "http://www.kde.org/")
+    (synopsis "Oxygen icon theme for the KDE desktop")
+    (description "Oxygen icon theme for the KDE desktop")
+    (license lgpl3+)))
 
 (define-public quassel
   (package
