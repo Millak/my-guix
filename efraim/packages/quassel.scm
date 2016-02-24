@@ -43,7 +43,7 @@
     (home-page "http://www.kde.org/")
     (synopsis "Oxygen icon theme for the KDE desktop")
     (description "Oxygen icon theme for the KDE desktop")
-    (license lgpl3+)))
+    (license license:lgpl3+)))
 
 (define-public quassel
   (package
