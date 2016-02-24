@@ -22,6 +22,7 @@
   #:use-module (guix packages)
   #:use-module (guix build-system cmake)
   #:use-module (gnu packages compression)
+  #:use-module (gnu packages kde)
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages qt))
@@ -44,7 +45,7 @@
       ;; by default.
      `(#:configure-flags '(;;"-DWANT_QTCLIENT=OFF" ; 5.0 MiB
                            ;;"-DWANT_CORE=OFF" ; 2.3 MiB
-                           ;;"-DWANT_MONO=ON" ; 6.3 MiB
+                           ;;"-DWANT_MONO=OFF" ; 6.3 MiB
                            "-DUSE_QT5=ON" ; default is qt4
                            "-DWITH_KDE=OFF" ; no to integration
                            "-DWITH_OXYGEN=ON" ; on=embed icons
@@ -54,7 +55,9 @@
     (inputs
      `(("extra-cmake-modules" ,extra-cmake-modules)
        ("oxygen-icons" ,oxygen-icons)
+       ("qca" ,qca)
        ("qt", qt)
+       ("snorenotify" ,snorenotify)
        ("zlib" ,zlib)))
     (home-page "http://quassel-irc.org/")
     (synopsis "distributed IRC client")
