@@ -26,25 +26,6 @@
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages qt))
 
-(define-public oxygen-icons
-  (package
-    (name "oxygen-icons")
-    (version "4.14.2")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (string-append "http://download.kde.org/stable/" version
-                            "/src/" name "-" version ".tar.xz"))
-        (sha256
-         (base32
-          "1mz73f54qh2vd8ibp60f6fjflrprz0lvqfkgh805l7wfhrv4ckbz"))))
-    (build-system cmake-build-system)
-    (arguments `(#:tests? #f)) ; no test target
-    (home-page "http://www.kde.org/")
-    (synopsis "Oxygen icon theme for the KDE desktop")
-    (description "Oxygen icon theme for the KDE desktop")
-    (license license:lgpl3+)))
-
 (define-public quassel
   (package
     (name "quassel")
@@ -59,14 +40,16 @@
           "0d6lwf6qblj1ia5j9mjy112zrmpbbg9mmxgscbgxiqychldyjgjd"))))
     (build-system cmake-build-system)
     (arguments
-     `(#:configure-flags '(;;"-DWANT_QTCLIENT=OFF" ;; These three are not
-                           ;;"-DWANT_CORE=OFF" ;; mutually exclusive
-                           ;;"-DWANT_MONO=ON"
-                           "-DUSE_QT5=ON" ;; default is qt4
-                           "-DWITH_KDE=OFF" ;; no to integration
-                           "-DWITH_OXYGEN=ON" ;; on=embed icons
-                           "-DWITH_WEBKIT=ON") ;; wants qtwebkit, in qt5
-       #:tests? #f)) ;; no test target
+      ;; The three binaries are not mutually exlusive, and are all built
+      ;; by default.
+     `(#:configure-flags '(;;"-DWANT_QTCLIENT=OFF" ; 5.0 MiB
+                           ;;"-DWANT_CORE=OFF" ; 2.3 MiB
+                           ;;"-DWANT_MONO=ON" ; 6.3 MiB
+                           "-DUSE_QT5=ON" ; default is qt4
+                           "-DWITH_KDE=OFF" ; no to integration
+                           "-DWITH_OXYGEN=ON" ; on=embed icons
+                           "-DWITH_WEBKIT=ON") ; wants qtwebkit, in qt5
+       #:tests? #f)) ; no test target
     (native-inputs `(("pkg-config" ,pkg-config)))
     (inputs
      `(("extra-cmake-modules" ,extra-cmake-modules)
