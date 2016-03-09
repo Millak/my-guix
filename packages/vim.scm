@@ -17,7 +17,7 @@
 
 (define-module (packages vim)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (gnu packages lua)
   #:use-module (gnu packages pkg-config)
@@ -29,8 +29,20 @@
 (define-public vim-custom
   (package (inherit vim)
     (name "vim-custom")
+    (version "7.4.963")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/vim/vim.git")
+               (commit (string-append "v" version))))
+        (file-name (string-append "vim-" version "-checkout"))
+        (sha256
+         (base32
+          "1k4n5ybw5wp2iwfp8ax7x3cq5x137rq1hc10h51c9a13qmby741b"))))
     (arguments
-     `(#:configure-flags (list (string-append "--with-lua-prefix=" (assoc-ref %build-inputs "lua"))
+     `(#:configure-flags (list (string-append "--with-lua-prefix="
+                                              (assoc-ref %build-inputs "lua"))
                            "--with-features=huge"
                            "--enable-python3interp=yes"
                            "--enable-pythoninterp=yes"
