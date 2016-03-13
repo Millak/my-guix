@@ -28,7 +28,7 @@
 (define-public translate-shell
   (package
     (name "translate-shell")
-    (version "0.9.3.1")
+    (version "0.9.3.2")
     (source
       (origin
         (method url-fetch)
@@ -36,13 +36,13 @@
                             version ".tar.gz"))
         (sha256
          (base32
-          "19n22gkyg655lvhmsvvxyaxj9qfp3r91qx2dz865f6frx8228nkv"))
+          "0fijjgcgihn0dlvp95vfhs9w3g2fhpzs6dn7x6l82v9gh2975psd"))
         (file-name (string-append name "-" version ".tar.gz"))))
     (build-system gnu-build-system)
     (arguments
      `(#:phases
        (modify-phases %standard-phases
-         (delete 'configure))
+         (delete 'configure)) ; no configure phase
        #:make-flags (list (string-append "PREFIX=" %output))
        #:tests? #f))
     (propagated-inputs
