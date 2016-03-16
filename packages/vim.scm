@@ -19,17 +19,27 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (guix packages)
+  #:use-module (gnu packages acl)
+  #:use-module (gnu packages attr)
+  #:use-module (gnu packages fontutils)
+  #:use-module (gnu packages gettext)
+  #:use-module (gnu packages glib)
+  #:use-module (gnu packages gtk)
+  #:use-module (gnu packages image)
+  #:use-module (gnu packages linux)
   #:use-module (gnu packages lua)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
   #:use-module (gnu packages ruby)
   #:use-module (gnu packages tcl)
-  #:use-module (gnu packages vim))
+  #:use-module (gnu packages vim)
+  #:use-module (gnu packages xdisorg)
+  #:use-module (gnu packages xorg))
 
 (define-public vim-custom
   (package (inherit vim)
     (name "vim-custom")
-    (version "7.4.963")
+    (version "7.4.1100")
     (source
       (origin
         (method git-fetch)
@@ -39,25 +49,49 @@
         (file-name (string-append "vim-" version "-checkout"))
         (sha256
          (base32
-          "1k4n5ybw5wp2iwfp8ax7x3cq5x137rq1hc10h51c9a13qmby741b"))))
+          "05ixszdgyjyv5lv3smlb2viwrqij6v8m9xv17a0ffjxpn5ccdxmj"))))
     (arguments
-     `(#:configure-flags (list (string-append "--with-lua-prefix="
-                                              (assoc-ref %build-inputs "lua"))
-                           "--with-features=huge"
-                           "--enable-python3interp=yes"
-                           "--enable-pythoninterp=yes"
-                           "--enable-perlinterp=yes"
-                           "--enable-rubyinterp=yes"
-                           "--enable-tclinterp=yes"
-                           "--enable-luainterp=yes"
-                           "--enable-cscope"
-                           "--enable-sniff"
-                           "--enable-multibyte"
-                           "--disable-selinux")
+     `(#:configure-flags
+       (list (string-append "--with-lua-prefix="
+                            (assoc-ref %build-inputs "lua"))
+             "--with-features=huge"
+             "--enable-python3interp=yes"
+             "--enable-pythoninterp=yes"
+             "--enable-perlinterp=yes"
+             "--enable-rubyinterp=yes"
+             "--enable-tclinterp=yes"
+             "--enable-luainterp=yes"
+             "--enable-cscope"
+             "--enable-sniff"
+             "--enable-multibyte"
+             "--enable-xim"
+             "--disable-selinux"
+             "--enable-gui")
        ,@(package-arguments vim)))
     (native-inputs `(("pkg-config" ,pkg-config)))
     (inputs
-     `(("lua" ,lua)
+     `(("acl" ,acl)
+       ("atk" ,atk)
+       ("attr" ,attr)
+       ("cairo" ,cairo)
+       ("fontconfig" ,fontconfig)
+       ("freetype" ,freetype)
+       ("gdk-pixbuf+svg" ,gdk-pixbuf+svg)
+       ("gettext" ,gnu-gettext)
+       ("glib" ,glib)
+       ("gpm" ,gpm)
+       ("gtk" ,gtk+-2)
+       ("harfbuzz" ,harfbuzz)
+       ("libice" ,libice)
+       ("libpng" ,libpng)
+       ("libsm" ,libsm)
+       ("libx11" ,libx11)
+       ("libxdmcp" ,libxdmcp)
+       ("libxt" ,libxt)
+       ("libxpm" ,libxpm)
+       ("lua" ,lua)
+       ("pango" ,pango)
+       ("pixman" ,pixman)
        ("python" ,python-wrapper)
        ("python" ,python-2)
        ("ruby" ,ruby)
