@@ -19,6 +19,7 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (gnu packages databases)
+  #:use-module (gnu packages libidn)
   #:use-module (gnu packages mail))
 
 (define-public mutt-custom
@@ -27,7 +28,9 @@
     (arguments
       (substitute-keyword-arguments (package-arguments mutt)
         ((#:configure-flags cf)
-         `(append ,cf '("--enable-hcache")))))
+         `(append ,cf '("--enable-hcache"
+                        "--with-idn")))))
     (inputs
-     `(("gdbm" ,gdbm)
+     `(("libidn" ,libidn)
+       ("gdbm" ,gdbm)
        ,@(package-inputs mutt)))))
