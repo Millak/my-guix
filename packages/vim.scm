@@ -39,7 +39,7 @@
 (define-public vim-custom
   (package (inherit vim)
     (name "vim-custom")
-    (version "7.4.1100")
+    (version "7.4.1130")
     (source
       (origin
         (method git-fetch)
@@ -49,7 +49,7 @@
         (file-name (string-append "vim-" version "-checkout"))
         (sha256
          (base32
-          "05ixszdgyjyv5lv3smlb2viwrqij6v8m9xv17a0ffjxpn5ccdxmj"))))
+          "1phhc2nrllsav331wxlfngivw8wfmg4qf5z5l4fa2bgd80iakjp5"))))
     (arguments
      `(#:configure-flags
        (list (string-append "--with-lua-prefix="
@@ -76,7 +76,7 @@
        ("cairo" ,cairo)
        ("fontconfig" ,fontconfig)
        ("freetype" ,freetype)
-       ("gdk-pixbuf+svg" ,gdk-pixbuf+svg)
+       ("gdk-pixbuf" ,gdk-pixbuf)
        ("gettext" ,gnu-gettext)
        ("glib" ,glib)
        ("gpm" ,gpm)
