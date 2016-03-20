@@ -25,7 +25,8 @@
   #:use-module (gnu packages geeqie)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
-  #:use-module (gnu packages gtk))
+  #:use-module (gnu packages gtk)
+  #:use-module (gnu packages pkg-config))
 
 (define-public viewnior
   (package
@@ -52,11 +53,13 @@
        ("autoconf" ,autoconf)
        ("intltool" ,intltool)
        ("gnome-common" ,gnome-common)
+       ("libtool" ,libtool)
+       ("pkg-config" ,pkg-config)
        ("which" ,which)))
     (inputs
      `(("exiv2" ,exiv2)
        ("gdk-pixbuf" ,gdk-pixbuf)
-       ("glib" ,glib)
+       ("glib" ,glib "bin")
        ("gtk+-2" ,gtk+-2)
        ("shared-mime-info" ,shared-mime-info)))
     (home-page "http://siyanpanayotov.com/project/viewnior/")
