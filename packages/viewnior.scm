@@ -75,4 +75,4 @@
 @item Set image as wallpaper (under GNOME, Fluxbox and LXDE)
 @item Simple interface
 @item Configurable mouse actions")
-    (license license:gpl3)))
+    (license license:gpl3+)))
