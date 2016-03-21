@@ -73,7 +73,7 @@
     (synopsis "Structured terminal forms library")
     (description "Stfl is a library which implements a curses-based widget
 set for text terminals.")
-    (license license:lgpl3)))
+    (license license:lgpl3+)))
 
 (define-public newsbeuter
   (package
