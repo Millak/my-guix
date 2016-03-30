@@ -65,7 +65,6 @@
     (home-page "http://siyanpanayotov.com/project/viewnior/")
     (synopsis "simple, fast and elegant image viewer")
     (description "Viewnior is an image viewer program.  Created to be simple, fast and elegant.  Its minimalistic interface provides more screenspace for your images. Among its features are:
-
 @enumerate
 @item Fullscreen & Slid
 @item Rotate, flip, crop, save, delete images
@@ -74,5 +73,6 @@
 @item Navigation window
 @item Set image as wallpaper (under GNOME, Fluxbox and LXDE)
 @item Simple interface
-@item Configurable mouse actions")
+@item Configurable mouse actions
+@end enumerate\n")
     (license license:gpl3+)))
