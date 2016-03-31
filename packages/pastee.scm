@@ -44,7 +44,9 @@
                 (source (assoc-ref %build-inputs "source")))
            (mkdir-p dest)
            (copy-file source (string-append dest "/" "pastee"))
-           (patch-shebang (string-append dest "/" "pastee") (list (string-append (assoc-ref %build-inputs "python") "/bin")))
+           (patch-shebang
+             (string-append dest "/" "pastee")
+             (list (string-append (assoc-ref %build-inputs "python") "/bin")))
            (chmod (string-append dest "/" "pastee") #o755)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("python" ,python-2)))
