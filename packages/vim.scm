@@ -39,7 +39,7 @@
 (define-public vim-custom
   (package (inherit vim)
     (name "vim-custom")
-    (version "7.4.1130")
+    (version "7.4.1689")
     (source
       (origin
         (method git-fetch)
@@ -49,7 +49,7 @@
         (file-name (string-append "vim-" version "-checkout"))
         (sha256
          (base32
-          "1phhc2nrllsav331wxlfngivw8wfmg4qf5z5l4fa2bgd80iakjp5"))))
+          "0ag54vxsxcz035j4mng0h7zknhvxhp733hivnjq01lzlwzjkbn4a"))))
     (arguments
      `(#:configure-flags
        (list (string-append "--with-lua-prefix="
