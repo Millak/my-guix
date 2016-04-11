@@ -21,6 +21,7 @@
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages groff)
   #:use-module (gnu packages ncurses)
   #:use-module (gnu packages xorg))
 
@@ -40,7 +41,8 @@
     (arguments
      `(#:tests? #f)) ; fileops/{generic.c,make_dirs.c} had failures
     (native-inputs
-     `(("which" ,which)))
+     `(("groff" ,groff) ; for the documentation
+       ("which" ,which)))
     (inputs
      `(("libx11" ,libx11)
        ("ncurses" ,ncurses)))
