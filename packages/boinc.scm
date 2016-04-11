@@ -23,18 +23,13 @@
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages curl)
   #:use-module (gnu packages cyrus-sasl)
-  #:use-module (gnu packages databases)
-  #:use-module (gnu packages gl)
-  #:use-module (gnu packages gnome)
-  #:use-module (gnu packages gtk)
-  #:use-module (gnu packages image)
   #:use-module (gnu packages m4)
   #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages tls)
-  #:use-module (gnu packages wxwidgets)
-  #:use-module (gnu packages xorg))
+  #:use-module (gnu packages python)
+  #:use-module (gnu packages tls))
 
 (define-public boinc
   (package
@@ -56,25 +51,26 @@
        (modify-phases %standard-phases
          (add-before 'configure 'autosetup
            (lambda _
-             (zero? (system* "sh" "_autosetup")))))
-       #:configure-flags (list "--disable-server")))
+             (zero? (system* "sh" "_autosetup"))))
+         (add-before 'install 'fix-install-path
+           (lambda _
+             (substitute* "client/scripts/Makefile.am"
+                          (("\\$\\(DESTDIR\\)")
+                           (assoc-ref %outputs "out"))))))
+       #:configure-flags (list "--disable-server"
+                               "--disable-manager")))
     (native-inputs
      `(("automake" ,automake)
        ("autoconf" ,autoconf)
        ("libtool" ,libtool)
        ("m4" ,m4)
-       ("pkg-config" ,pkg-config)))
+       ("pkg-config" ,pkg-config)
+       ("python-2" ,python-2) ; for the tests
+       ("zlib" ,zlib)))
     (inputs
      `(("curl" ,curl)
        ("cyrus-sasl" ,cyrus-sasl)
-       ("freeglut" ,freeglut)
-       ("gtk" ,gtk+)
-       ("libjpeg" ,libjpeg)
-       ("libnotify" ,libnotify)
-       ("libxmu" ,libxmu)
-       ("openssl" ,openssl)
-       ("sqlite" ,sqlite)
-       ("wxwidgets" ,wxwidgets)))
+       ("openssl" ,openssl)))
     (home-page "http://boinc.berkeley.edu/")
     (synopsis "Software for distributed and grid computing")
     (description "Use the idle time on your computer to cure diseases, study
