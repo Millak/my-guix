@@ -29,7 +29,7 @@
 ;; According to https://golang.org/doc/install/gccgo, gccgo-4.8.2 includes a
 ;; complete go-1.1.2 implementation, gccgo-4.9 includes a complete go-1.2
 ;; implementation, and gccgo-5 a complete implementation of go-1.4.  Ultimately
-;; we hope to build go-1.5 with a bootstrap process using gccgo-5.  As of
+;; we hope to build go-1.5+ with a bootstrap process using gccgo-5.  As of
 ;; go-1.5, go cannot be bootstrapped without go-1.4, so we need to use go-1.4 or
 ;; gccgo-5.  Mips is not officially supported, but it should work if it is
 ;; bootstrapped.
@@ -93,7 +93,7 @@ sequential processes (CSP) concurrent programming features added.")
 
 (define-public go
   (package (inherit go-1.4)
-    (version "1.6")
+    (version "1.6.2")
     (source
       (origin
         (method url-fetch)
@@ -101,7 +101,7 @@ sequential processes (CSP) concurrent programming features added.")
                             version ".src.tar.gz"))
         (sha256
          (base32
-          "0ipivhc34df8h439h5d81m0h1jz0gsy71m67ljrgk6rswj6cwv59"))))
+          "1k5wy5ijll5aacj1m6xxnjfjw6x9f255ml3f1jiicw031mshnyvq"))))
     (native-inputs
      `(("gccgo" ,go-1.4)
        ,@(alist-delete "gccgo" (package-native-inputs go-1.4))))))
