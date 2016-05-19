@@ -28,7 +28,7 @@
 (define-public translate-shell
   (package
     (name "translate-shell")
-    (version "0.9.3.2")
+    (version "0.9.4")
     (source
       (origin
         (method url-fetch)
@@ -36,7 +36,7 @@
                             version ".tar.gz"))
         (sha256
          (base32
-          "0fijjgcgihn0dlvp95vfhs9w3g2fhpzs6dn7x6l82v9gh2975psd"))
+          "0r016dpd79yh7y6bgh0r33djzgbzrvyi2fjwdd795rzxs8j43h5z"))
         (file-name (string-append name "-" version ".tar.gz"))))
     (build-system gnu-build-system)
     (arguments
@@ -50,7 +50,7 @@
        ("fribidi" ,fribidi)
        ("gawk" ,gawk)
        ("mpg123" ,mpg123)))
-    (home-page "https://github.com/soimort/translate-shell")
+    (home-page "https://www.soimort.org/translate-shell")
     (synopsis "Cli translator using Google translate")
     (description "Translate-shell is a simple command line interface to
 @url{http://translate.google.com} which allows you to translate strings in your
