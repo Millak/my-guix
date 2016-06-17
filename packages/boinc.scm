@@ -34,7 +34,7 @@
 (define-public boinc
   (package
     (name "boinc")
-    (version "7.6.31")
+    (version "7.6.33")
     (source
       (origin
         (method url-fetch)
@@ -43,7 +43,7 @@
                             "/" version ".tar.gz"))
         (sha256
          (base32
-          "023zl9wynxgx44h7zfbd488g49mbyv625pak881171aakm090d0k"))
+          "0vdak578bay8knfjmw2rc723h3zksxxg9p8xqq53w0amjsdw5cf4"))
         (file-name (string-append name "-" version ".tar.gz"))))
     (build-system gnu-build-system)
     (arguments
