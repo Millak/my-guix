@@ -18,6 +18,7 @@
 (define-module (packages epour)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system python)
@@ -63,3 +64,17 @@
     (synopsis "EFL Bittorrent client")
     (description "EFL Bittorrent client")
     (license license:gpl3+)))
+
+(define-public epour
+  (package (inherit epour)
+    (version "20160120")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://git.enlightenment.org/apps/epour.git/")
+               (commit "8bf8f56dcbe9bb506935c1bb2c58000d193f5042")))
+        (file-name (string-append "epour-" version "-checkout"))
+        (sha256
+         (base32
+          "1xgawbh1qdp55p7qbl06rsxi4br0w86isvv22zr0qd2g365y6w7q"))))))
