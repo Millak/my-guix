@@ -15,15 +15,15 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (packages aria2-emacs)
+(define-module (packages emacs-aria2)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system emacs))
 
-(define-public aria2-emacs
+(define-public emacs-aria2
   (package
-    (name "aria2-emacs")
+    (name "emacs-aria2")
     (version "0.20141108")
     (source
       (origin
