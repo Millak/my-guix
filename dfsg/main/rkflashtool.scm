@@ -26,17 +26,17 @@
 (define-public rkflashtool
   (package
     (name "rkflashtool")
-    (version "0.0.0-20160221")
+    (version "0.0.0-20160325")
     (source
       (origin
         (method git-fetch)
         (uri (git-reference
               (url "https://github.com/linux-rockchip/rkflashtool.git")
-              (commit "9c91cb1fd62e1bb2579d59619e58818f20b5e1c1")))
+              (commit "094bd6410cb016e487e2ccb1050c59eeac2e6dd1")))
         (file-name (string-append name "-" version "-checkout"))
         (sha256
          (base32
-          "1mw3iw8nx7xwcdwf8d03lbd22pxc8iph7nhldx1z1qda809y1zq5"))))
+          "1zkd8zxir3rfg3sy9r20bcnxclnplryn583gqpcr3iad0k3xbah7"))))
     (build-system gnu-build-system)
     (arguments
      `(#:phases
