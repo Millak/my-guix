@@ -15,39 +15,46 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (packages edi)
+(define-module (dfsg main equate)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
+  #:use-module (guix utils)
   #:use-module (guix build-system gnu)
+  #:use-module (gnu packages autotools)
   #:use-module (gnu packages enlightenment)
+  #:use-module (gnu packages gettext)
   #:use-module (gnu packages pkg-config))
 
-(define-public edi
+(define-public equate
   (package
-    (name "edi")
-    (version "0.3.0")
+    (name "equate")
+    (version "20160611")
     (source
       (origin
-        (method url-fetch)
-        (uri (list
-               (string-append "https://github.com/ajwillia-ms/edi/releases/"
-                              "download/v" version "/edi-" version ".tar.gz")
-               (string-append "https://download.enlightenment.org/rel/apps/edi"
-                              "/edi-" version ".tar.gz")))
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://git.enlightenment.org/apps/equate.git/")
+               (commit "5ee65c6bc64f71198a92244aa6abbb63c122e35d")))
+        (file-name (string-append name "-" version "-checkout"))
         (sha256
          (base32
-          "12nm041xcbpj40aqdp5qy1c7h0hbn88w63h99azqbkvs3lp535hm"))))
+          "18lr9r7v19xhg17j6xc8gcm1rhiljj7mjb5dc7w31j2z1v6nsqd0"))))
     (build-system gnu-build-system)
-    (native-inputs `(("pkg-config" ,pkg-config)))
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'autoconf
+           (lambda _ (zero? (system* "autoreconf" "-vfi")))))))
+    (native-inputs
+     `(("autoconf" ,autoconf)
+       ("automake" ,automake)
+       ("gettext" ,gnu-gettext)
+       ("pkg-config" ,pkg-config)))
     (inputs
      `(("efl" ,efl)
        ("elementary" ,elementary)))
-    (home-page "https://www.enlightenment.org/about-edi")
-    (synopsis "Development environment using the EFL")
-    (description "EDI is a development environment designed for and built using
-the EFL.  Our aim is to create a new, native development environment for Linux
-that makes getting up and running easier than ever before.  With so much
-happening on Linux both on the desktop and on mobile we want to help more
-developers get involved in the exciting future of open source development.")
-    (license (list license:lgpl2.1+ license:gpl2)))) ; check this
+    (home-page "https://www.enlightenment.org")
+    (synopsis "Elementary based calculator")
+    (description "Elementary based calculator")
+    (license license:bsd-2)))

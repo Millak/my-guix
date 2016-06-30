@@ -15,32 +15,28 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (packages mlocate)
+(define-module (dfsg main speedtest-cli)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
-  #:use-module (guix build-system gnu))
+  #:use-module (guix build-system python))
 
-(define-public mlocate
+(define-public speedtest-cli
   (package
-    (name "mlocate")
-    (version "0.26")
+    (name "speedtest-cli")
+    (version "0.3.4")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append "https://fedorahosted.org/releases/m/l/mlocate/"
-                            name "-" version ".tar.xz"))
+        (uri (pypi-uri "speedtest-cli" version))
         (sha256
          (base32
-          "0gi6y52gkakhhlnzy0p6izc36nqhyfx5830qirhvk3qrzrwxyqrh"))))
-    (build-system gnu-build-system)
-    (arguments
-     `(#:tests? #f))
-    (home-page "https://fedorahosted.org/mlocate/")
-    (synopsis "quickly find files on the filesystem based on their name")
-    (description "mlocate is a new implementation of locate, a tool to find
-files anywhere in the filesystem based on their name, using a fixed pattern or a
-regular expression.  Unlike other tools like find(1), locate uses a previously
-created database to perform the search, allowing queries to execute much faster.
-This database is updated periodically from cron.")
-    (license license:gpl2)))
+          "19i671cd815fcv0x7h2m0a493slzwkzn7r926g8myx1srkss0q6d"))))
+    (build-system python-build-system)
+    (home-page "https://github.com/sivel/speedtest-cli/")
+    (synopsis "Command line interface for speedtest.net")
+    (description
+     "Speedtest.net is a webservice that allows you to test your broadband
+connection by downloading a file from one of many Speedtest.net servers from
+around the world.")
+    (license license:asl2.0)))

@@ -15,41 +15,49 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (packages rkflashtool)
+(define-module (wip express)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (guix packages)
+  #:use-module (guix utils)
   #:use-module (guix build-system gnu)
-  #:use-module (gnu packages libusb)
+  #:use-module (gnu packages autotools)
+  #:use-module (gnu packages enlightenment)
+  #:use-module (gnu packages gettext)
   #:use-module (gnu packages pkg-config))
 
-(define-public rkflashtool
+(define-public express
   (package
-    (name "rkflashtool")
-    (version "0.0.0-20160221")
+    (name "express")
+    (version "20151226")
     (source
       (origin
         (method git-fetch)
         (uri (git-reference
-              (url "https://github.com/linux-rockchip/rkflashtool.git")
-              (commit "9c91cb1fd62e1bb2579d59619e58818f20b5e1c1")))
+               (url "https://git.enlightenment.org/apps/express.git/")
+               (commit "9e4500cb46c4d3d4eeb25cf36aaabfd1e7296eef")))
         (file-name (string-append name "-" version "-checkout"))
         (sha256
          (base32
-          "1mw3iw8nx7xwcdwf8d03lbd22pxc8iph7nhldx1z1qda809y1zq5"))))
+          "1gda16css0vbg40x1d8zjx655pm0ag7fds221147568z6mish1xa"))))
     (build-system gnu-build-system)
     (arguments
      `(#:phases
        (modify-phases %standard-phases
-         (delete 'configure)) ; no configure
-       #:make-flags (list (string-append "PREFIX=" %output))
-       #:tests? #f)) ; no tests
+         (add-after 'unpack 'autoconf
+           (lambda _ (zero? (and (setenv "NOCONFIGURE" "TRUE")
+                                 (system* "sh" "autogen.sh"))))))))
     (native-inputs
-     `(("pkg-config" ,pkg-config)))
+     `(("autoconf" ,autoconf)
+       ("automake" ,automake)
+       ("gettext" ,gnu-gettext)
+       ("libtool" ,libtool)
+       ("pkg-config" ,pkg-config)))
     (inputs
-     `(("libusb" ,libusb)))
-    (home-page "https://github.com/linux-rockchip/rkflashtool")
-    (synopsis "Tools for flashing Rockchip devices")
-    (description "Allows flashing of Rockchip based embedded linux devices.
-The list of currently supported devices is: RK2818, RK2918, RK2928, RK3026, RK3036, RK3066, RK312X, RK3168, RK3188, RK3288, RK3368.")
+     `(("efl" ,efl)
+       ("elementary" ,elementary)))
+    (home-page "http://smhouston.us/express/")
+    (synopsis "IRC client with enhanced media capabilities")
+    (description "EFL-based IRC Client which operates similar to the
+Terminology interface.")
     (license license:bsd-2)))

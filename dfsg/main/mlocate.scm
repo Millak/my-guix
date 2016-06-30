@@ -15,32 +15,32 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (packages emacs-aria2)
+(define-module (dfsg main mlocate)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
-  #:use-module (guix build-system emacs))
+  #:use-module (guix build-system gnu))
 
-(define-public emacs-aria2
+(define-public mlocate
   (package
-    (name "emacs-aria2")
-    (version "0.20141108")
+    (name "mlocate")
+    (version "0.26")
     (source
       (origin
         (method url-fetch)
-        (uri "https://melpa.org/packages/aria2-20141107.1517.el")
+        (uri (string-append "https://fedorahosted.org/releases/m/l/mlocate/"
+                            name "-" version ".tar.xz"))
         (sha256
          (base32
-           "00slyi0aw03cp5s4c1xhavn9i1gz7d6d4cmv0g0dd3nx7m1ba3y0"))))
-    (build-system emacs-build-system)
-    (home-page "https://bitbucket.org/ukaszg/aria2.git")
-    (synopsis "Major mode for controlling aria2")
-    (description "This is aria2, a major mode for controlling aria2c downloader
-
-Currrently supported download types are: bittorrent, magnet, meta4, ftp, http,
-https files (basically what aria2c supports).  There is no support for changing
-global or per-download options, but this is planned.
-
-This mode tries to work well with evil-mode, just set aria2-add-evil-quirks to t.")
-    (license (license:non-copyleft
-               "https://www.gnu.org/licenses/license-list.html#informal"))))
+          "0gi6y52gkakhhlnzy0p6izc36nqhyfx5830qirhvk3qrzrwxyqrh"))))
+    (build-system gnu-build-system)
+    (arguments
+     `(#:tests? #f))
+    (home-page "https://fedorahosted.org/mlocate/")
+    (synopsis "quickly find files on the filesystem based on their name")
+    (description "mlocate is a new implementation of locate, a tool to find
+files anywhere in the filesystem based on their name, using a fixed pattern or a
+regular expression.  Unlike other tools like find(1), locate uses a previously
+created database to perform the search, allowing queries to execute much faster.
+This database is updated periodically from cron.")
+    (license license:gpl2)))

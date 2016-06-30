@@ -15,28 +15,32 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (packages speedtest-cli)
+(define-module (dfsg main emacs-aria2)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
-  #:use-module (guix build-system python))
+  #:use-module (guix build-system emacs))
 
-(define-public speedtest-cli
+(define-public emacs-aria2
   (package
-    (name "speedtest-cli")
-    (version "0.3.4")
+    (name "emacs-aria2")
+    (version "0.20141108")
     (source
       (origin
         (method url-fetch)
-        (uri (pypi-uri "speedtest-cli" version))
+        (uri "https://melpa.org/packages/aria2-20141107.1517.el")
         (sha256
          (base32
-          "19i671cd815fcv0x7h2m0a493slzwkzn7r926g8myx1srkss0q6d"))))
-    (build-system python-build-system)
-    (home-page "https://github.com/sivel/speedtest-cli/")
-    (synopsis "Command line interface for speedtest.net")
-    (description
-     "Speedtest.net is a webservice that allows you to test your broadband
-connection by downloading a file from one of many Speedtest.net servers from
-around the world.")
-    (license license:asl2.0)))
+           "00slyi0aw03cp5s4c1xhavn9i1gz7d6d4cmv0g0dd3nx7m1ba3y0"))))
+    (build-system emacs-build-system)
+    (home-page "https://bitbucket.org/ukaszg/aria2.git")
+    (synopsis "Major mode for controlling aria2")
+    (description "This is aria2, a major mode for controlling aria2c downloader
+
+Currrently supported download types are: bittorrent, magnet, meta4, ftp, http,
+https files (basically what aria2c supports).  There is no support for changing
+global or per-download options, but this is planned.
+
+This mode tries to work well with evil-mode, just set aria2-add-evil-quirks to t.")
+    (license (license:non-copyleft
+               "https://www.gnu.org/licenses/license-list.html#informal"))))

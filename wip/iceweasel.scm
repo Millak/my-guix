@@ -15,7 +15,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (packages iceweasel)
+(define-module (wip iceweasel)
   #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (guix packages)

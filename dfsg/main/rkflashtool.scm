@@ -15,46 +15,41 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (packages equate)
+(define-module (dfsg main rkflashtool)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (guix packages)
-  #:use-module (guix utils)
   #:use-module (guix build-system gnu)
-  #:use-module (gnu packages autotools)
-  #:use-module (gnu packages enlightenment)
-  #:use-module (gnu packages gettext)
+  #:use-module (gnu packages libusb)
   #:use-module (gnu packages pkg-config))
 
-(define-public equate
+(define-public rkflashtool
   (package
-    (name "equate")
-    (version "20160611")
+    (name "rkflashtool")
+    (version "0.0.0-20160221")
     (source
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://git.enlightenment.org/apps/equate.git/")
-               (commit "5ee65c6bc64f71198a92244aa6abbb63c122e35d")))
+              (url "https://github.com/linux-rockchip/rkflashtool.git")
+              (commit "9c91cb1fd62e1bb2579d59619e58818f20b5e1c1")))
         (file-name (string-append name "-" version "-checkout"))
         (sha256
          (base32
-          "18lr9r7v19xhg17j6xc8gcm1rhiljj7mjb5dc7w31j2z1v6nsqd0"))))
+          "1mw3iw8nx7xwcdwf8d03lbd22pxc8iph7nhldx1z1qda809y1zq5"))))
     (build-system gnu-build-system)
     (arguments
      `(#:phases
        (modify-phases %standard-phases
-         (add-after 'unpack 'autoconf
-           (lambda _ (zero? (system* "autoreconf" "-vfi")))))))
+         (delete 'configure)) ; no configure
+       #:make-flags (list (string-append "PREFIX=" %output))
+       #:tests? #f)) ; no tests
     (native-inputs
-     `(("autoconf" ,autoconf)
-       ("automake" ,automake)
-       ("gettext" ,gnu-gettext)
-       ("pkg-config" ,pkg-config)))
+     `(("pkg-config" ,pkg-config)))
     (inputs
-     `(("efl" ,efl)
-       ("elementary" ,elementary)))
-    (home-page "https://www.enlightenment.org")
-    (synopsis "Elementary based calculator")
-    (description "Elementary based calculator")
+     `(("libusb" ,libusb)))
+    (home-page "https://github.com/linux-rockchip/rkflashtool")
+    (synopsis "Tools for flashing Rockchip devices")
+    (description "Allows flashing of Rockchip based embedded linux devices.
+The list of currently supported devices is: RK2818, RK2918, RK2928, RK3026, RK3036, RK3066, RK312X, RK3168, RK3188, RK3288, RK3368.")
     (license license:bsd-2)))

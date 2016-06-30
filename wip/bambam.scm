@@ -15,15 +15,16 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (packages bambam)
+(define-module (wip bambam)
   #:use-module ((guix licenses) #:prefix license:)
-  ;#:use-module (guix svn-download)
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system python)
+  #:use-module (gnu packages)
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages image)
+  #:use-module (gnu packages music)
   #:use-module (gnu packages python)
   #:use-module (gnu packages sdl))
 
@@ -55,13 +56,13 @@
     (description "SMPEG (SDL MPEG Player Library) is a free MPEG1 video player
 library with sound support.  Video playback is based on the ubiquitous Berkeley
 MPEG player, mpeg_play v2.2.  Audio is played through a slightly modified
-mpegsound library, part of splay v0.8.2. SMPEG supports MPEG audio (MP3), MPEG-1
-video, and MPEG system streams.")
+mpegsound library, part of splay v0.8.2.  SMPEG supports MPEG audio (MP3),
+MPEG-1 video, and MPEG system streams.")
     (license #f)))
 
-(define-public python-pygame
+(define-public python2-pygame
   (package
-    (name "python-pygame")
+    (name "python2-pygame")
     (version "1.9.1")
     (source
       (origin
@@ -73,17 +74,39 @@ video, and MPEG system streams.")
           "0cyl0ww4fjlf289pjxa53q4klyn55ajvkgymw0qrdgp4593raq52"))))
     (build-system python-build-system)
     (arguments
-     `(#:python ,python-2))
+     `(#:python ,python-2
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'apply-v4l-patch
+           (lambda _
+             (zero? (system* "patch" "--force" "-p1" "-i"
+                             (assoc-ref %build-inputs "patch")))))
+         (add-after 'unpack 'patch-config
+           (lambda _
+             (substitute* '("config_unix.py"
+                            "config_msys.py")
+                          (("not confirm")
+                           "\"-auto\" not in sys.argv and not confirm"))
+             #t))
+         (add-before 'build 'config
+           (lambda _
+             (zero?
+               (system* "python2" "config.py" "-auto")))))))
     (inputs
-     `(("freetype" ,freetype)
-       ("libjpeg" ,libjpeg)
-       ("libpng" ,libpng)
-       ("python2-numpy" ,python2-numpy)
-       ("sdl" ,sdl)
+     `(
+       ;("freetype" ,freetype)
+       ;("libjpeg" ,libjpeg)
+       ;("libpng" ,libpng)
+       ;("python2-numpy" ,python2-numpy)
+       ;("sdl" ,sdl)
+       ("portmidi" ,portmidi)
        ("sdl-image" ,sdl-image)
        ("sdl-mixer" ,sdl-mixer)
        ("sdl-ttf" ,sdl-ttf)
-       ("smpeg" ,smpeg)))
+       ;("smpeg" ,smpeg)
+       ))
+    ;(native-inputs
+    ; `("patch" ,@("/home/efraim/workspace/my-guix/patches/pygame-v4l.patch")))
     (home-page "http://www.pygame.org/")
     (synopsis "SDL bindings for games development in Python")
     (description "A multimedia development kit for Python.  Pygame provides
