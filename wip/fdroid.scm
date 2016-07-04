@@ -22,9 +22,9 @@
   #:use-module (guix build-system python)
   #:use-module (gnu packages python))
 
-(define-public fdroid
+(define-public fdroidserver
   (package
-    (name "python-fdroidserver")
+    (name "fdroidserver")
     (version "0.6.0")
     (source
       (origin
@@ -34,14 +34,30 @@
          (base32
           "1fi4kkgi59gd9nssy9zc86b8rki3m47pd29vc821jgsa89lgjqf5"))))
     (build-system python-build-system)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         ;; this prevents the examples from being installed
+         ;; we want to fix this later
+         (add-before 'install 'patch-install-locations
+           (lambda _
+             (substitute* "setup.py"
+                          (("\\(data_prefix\\ \\+\\ '/share/doc/fdroidserver/examples',") ""))
+             (substitute* "setup.py"
+                          (("\\['buildserver") "'buildserver"))
+             (substitute* "setup.py"
+                          (("'\\]\\)") "'"))
+             )))
+       #:python ,python-2)) ; after 0.6.0 it switches to python3
     (inputs
-     `(("python-mwclient" ,python-mwclient)
-       ("python-paramiko" ,python-paramiko)
-       ("python-pillow" ,python-pillow)
-       ("python-pyasn1" ,python-pyasn1)
-       ("python-pyasn1-modules" ,python-pyasn1-modules)
-       ("python-pyyaml" ,python-pyyaml)
-       ("python-requests" ,python-requests)))
+     `(("python2-apache-libcloud" ,python2-apache-libcloud)
+       ("python2-mwclient" ,python2-mwclient)
+       ("python2-paramiko" ,python2-paramiko)
+       ("python2-pillow" ,python2-pillow)
+       ("python2-pyasn1" ,python2-pyasn1)
+       ("python2-pyasn1-modules" ,python2-pyasn1-modules)
+       ("python2-pyyaml" ,python2-pyyaml)
+       ("python2-requests" ,python2-requests)))
     (home-page "https://f-droid.org")
     (synopsis "F-Droid Server Tools")
     (description "F-Droid Server Tools")
@@ -49,22 +65,151 @@
 
 (define-public python-mwclient
   (package
-      (name "python-mwclient")
-        (version "0.8.1")
-        (source
-          (origin
-            (method url-fetch)
-            (uri (pypi-uri "mwclient" version))
-            (sha256
-             (base32
-              "1r322v6i6xps9xh861rbr4ggshydcgp8cycbdlmgy8qbrh8jg2az"))))
+     (name "python-mwclient")
+     (version "0.8.1")
+     (source
+       (origin
+         (method url-fetch)
+         (uri (pypi-uri "mwclient" version))
+         (sha256
+          (base32
+           "1r322v6i6xps9xh861rbr4ggshydcgp8cycbdlmgy8qbrh8jg2az"))))
     (build-system python-build-system)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (replace 'check
+           (lambda _
+             (zero? (system* "py.test")))))))
+    (native-inputs
+     `(("python-pytest-cache" ,python-pytest-cache)
+       ("python-pytest-cov" ,python-pytest-cov)
+       ("python-pytest-pep8" ,python-pytest-pep8)))
     (inputs
-    `(("python-mock" ,python-mock)
-      ("python-requests" ,python-requests)
-      ("python-responses" ,python-responses)
-      ("python-six" ,python-six)))
-    (home-page "https://github.com/btongminh/mwclient")
+     `(("python-funcsigs" ,python-funcsigs)
+       ("python-mock" ,python-mock)
+       ("python-requests" ,python-requests)
+       ("python-responses" ,python-responses)
+       ("python-six" ,python-six)))
+    (home-page "https://github.com/mwclient/mwclient")
     (synopsis "MediaWiki API client")
     (description "MediaWiki API client")
-    (license license:expat)))
+    (license license:expat)
+    (properties `((python2-variant . ,(delay python2-mwclient))))))
+
+(define-public python2-mwclient
+  (let ((base (package-with-python2
+                (strip-python2-variant python-mwclient))))
+    (package (inherit base)
+      (native-inputs
+       `(("python2-setuptools" ,python2-setuptools)
+         ,@(package-native-inputs base))))))
+
+(define-public python-funcsigs
+  (package
+    (name "python-funcsigs")
+    (version "1.0.2")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (string-append
+               "https://pypi.python.org/packages/"
+               "94/4a/db842e7a0545de1cdb0439bb80e6e42dfe82aaeaadd4072f2263a4fbed23"
+               "/funcsigs-" version ".tar.gz"))
+        (sha256
+         (base32
+          "0l4g5818ffyfmfs1a924811azhjj8ax9xd1cffr1mzd3ycn0zfx7"))))
+    (build-system python-build-system)
+    (arguments `(#:tests? #f)) ; tests fail to recongnize unittest2
+    (native-inputs
+     `(("python-setuptools" ,python-setuptools)))
+    (home-page "http://funcsigs.readthedocs.org")
+    (synopsis
+     "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+")
+    (description
+     "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+")
+    (license license:asl2.0)))
+
+(define-public python2-funcsigs
+  (package-with-python2 python-funcsigs))
+
+(define-public python-pytest-pep8
+  (package
+    (name "python-pytest-pep8")
+    (version "1.0.6")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (string-append
+              "https://pypi.python.org/packages/"
+              "1f/1c/c834344ef39381558b047bea1e3005197fa8457c199d58219996ca07defb"
+              "/pytest-pep8-" version ".tar.gz"))
+        (sha256
+         (base32
+          "06032agzhw1i9d9qlhfblnl3dw5hcyxhagn7b120zhrszbjzfbh3"))))
+    (build-system python-build-system)
+    (inputs
+     `(("python-pep8" ,python-pep8)
+       ("python-pytest" ,python-pytest)
+       ("python-pytest-cache" ,python-pytest-cache)))
+    (home-page
+     "https://bitbucket.org/pytest-dev/pytest-pep8")
+    (synopsis
+     "pytest plugin to check PEP8 requirements")
+    (description
+     "pytest plugin to check PEP8 requirements")
+    (license license:expat)
+    (properties `((python2-variant . ,(delay python2-pytest-pep8))))))
+
+(define-public python2-pytest-pep8
+  (let ((base (package-with-python2
+                (strip-python2-variant python-pytest-pep8))))
+    (package (inherit base)
+      (native-inputs
+       `(("python2-setuptools" ,python2-setuptools)
+         ,@(package-native-inputs base))))))
+
+(define-public python-apache-libcloud
+  (package
+    (name "python-apache-libcloud")
+    (version "1.0.0")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (string-append
+              "https://pypi.python.org/packages/53/30/"
+              "710d4dfc419c30be6416681e31e83e0fb08c3e3aa7b82a058f6597682644"
+              "/apache-libcloud-" version ".tar.bz2"))
+        (sha256
+         (base32
+          "0cbnkz635qhq07854hjgpknf2rih83c8sl2ps3zkqv2dpk2bmq1b"))))
+    (build-system python-build-system)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-before 'check 'prep-tests
+           (lambda _
+             ;; this test requires using ssh
+             (delete-file "libcloud/test/compute/test_ssh_client.py")
+             ;; this is required for the tests to run
+             (copy-file "libcloud/test/secrets.py-dist"
+                        "libcloud/test/secrets.py"))))))
+    (native-inputs
+     `(("python-mock" ,python-mock)))
+    (home-page "https://libcloud.apache.org/")
+    (synopsis
+     "A Python library to abstract away differences among cloud provider APIs")
+    (description
+     "Apache Libcloud is a Python library which hides differences between
+different cloud provider APIs and allows you to manage different cloud resources
+through a unified and easy to use API.  Resources you can manage with Libcloud
+are divided into compute, storage, load balancers, DNS, and container
+categories.")
+    (license license:asl2.0)))
+
+(define-public python2-apache-libcloud
+  (let ((base (package-with-python2 python-apache-libcloud)))
+    (package (inherit base)
+      (native-inputs
+       `(("python2-setuptools" ,python2-setuptools)
+         ,@(package-native-inputs base))))))
