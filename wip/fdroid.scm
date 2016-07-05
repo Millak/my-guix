@@ -42,12 +42,10 @@
          (add-before 'install 'patch-install-locations
            (lambda _
              (substitute* "setup.py"
-                          (("\\(data_prefix\\ \\+\\ '/share/doc/fdroidserver/examples',") ""))
-             (substitute* "setup.py"
-                          (("\\['buildserver") "'buildserver"))
-             (substitute* "setup.py"
-                          (("'\\]\\)") "'"))
-             )))
+                          (("\\(data_prefix\\ \\+\\ '/share/doc/fdroidserver/examples',") "")
+                          (("\\['buildserver") "'buildserver")
+                          (("'\\]\\)") "'")
+                          ))))
        #:python ,python-2)) ; after 0.6.0 it switches to python3
     (inputs
      `(("python2-apache-libcloud" ,python2-apache-libcloud)
