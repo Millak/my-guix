@@ -56,6 +56,8 @@
        ("python2-pyasn1-modules" ,python2-pyasn1-modules)
        ("python2-pyyaml" ,python2-pyyaml)
        ("python2-requests" ,python2-requests)))
+    (propagated-inputs
+     `(("python2-crypto" ,python2-crypto))) ; not sure this is the right one
     (home-page "https://f-droid.org")
     (synopsis "F-Droid Server Tools")
     (description "F-Droid Server Tools")
@@ -110,10 +112,7 @@
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "94/4a/db842e7a0545de1cdb0439bb80e6e42dfe82aaeaadd4072f2263a4fbed23"
-               "/funcsigs-" version ".tar.gz"))
+        (uri (pypi-uri "funcsigs" version))
         (sha256
          (base32
           "0l4g5818ffyfmfs1a924811azhjj8ax9xd1cffr1mzd3ycn0zfx7"))))
@@ -138,10 +137,7 @@
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-              "https://pypi.python.org/packages/"
-              "1f/1c/c834344ef39381558b047bea1e3005197fa8457c199d58219996ca07defb"
-              "/pytest-pep8-" version ".tar.gz"))
+        (uri (pypi-uri "pytest-pep8" version))
         (sha256
          (base32
           "06032agzhw1i9d9qlhfblnl3dw5hcyxhagn7b120zhrszbjzfbh3"))))
@@ -170,17 +166,14 @@
 (define-public python-apache-libcloud
   (package
     (name "python-apache-libcloud")
-    (version "1.0.0")
+    (version "1.1.0")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-              "https://pypi.python.org/packages/53/30/"
-              "710d4dfc419c30be6416681e31e83e0fb08c3e3aa7b82a058f6597682644"
-              "/apache-libcloud-" version ".tar.bz2"))
+        (uri (pypi-uri "apache-libcloud" version ".tar.bz2"))
         (sha256
          (base32
-          "0cbnkz635qhq07854hjgpknf2rih83c8sl2ps3zkqv2dpk2bmq1b"))))
+          "15fqs5ppkrbky2s4lpq4aif9rki4v18jv9l1j74g88g8qlmh3iwl"))))
     (build-system python-build-system)
     (arguments
      `(#:phases
@@ -207,6 +200,100 @@ categories.")
 
 (define-public python2-apache-libcloud
   (let ((base (package-with-python2 python-apache-libcloud)))
+    (package (inherit base)
+      (native-inputs
+       `(("python2-setuptools" ,python2-setuptools)
+         ,@(package-native-inputs base))))))
+
+(define-public python-crypto
+  (package
+    (name "python-crypto")
+    (version "1.4.1")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "crypto" version))
+        (sha256
+         (base32
+          "1gd9cvw1j5j9nxhi7gla2pggnp678zj7l2dc8n4c2r82d9syjblg"))))
+    (build-system python-build-system)
+    (inputs
+     `(("python-naked" ,python-naked)
+       ("python-pyyaml" ,python-pyyaml)
+       ("python-shellescape" ,python-shellescape)))
+    (home-page "https://github.com/chrissimpkins/crypto")
+    (synopsis "Simple symmetric GPG file encryption and decryption")
+    (description
+     "Simple symmetric GPG file encryption and decryption")
+    (license license:expat)))
+
+(define-public python2-crypto
+  (let ((base (package-with-python2 python-crypto)))
+    (package (inherit base)
+      (native-inputs
+       `(("python2-setuptools" ,python2-setuptools)
+         ,@(package-native-inputs base))))))
+
+(define-public python-shellescape
+  (package
+    (name "python-shellescape")
+    (version "3.4.1")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "shellescape" version))
+        (sha256
+         (base32
+          "0n5ky1b2vw2y0d4xl3qybyp2rk0gq5frjs8nr8ak6mgj2fyb4676"))))
+    (build-system python-build-system)
+    (home-page
+     "https://github.com/chrissimpkins/shellescape")
+    (synopsis
+     "Shell escape a string to safely use it as a token in a shell command (backport of Python shlex.quote for Python versions 2.x & < 3.3)")
+    (description
+     "Shell escape a string to safely use it as a token in a shell command (backport of Python shlex.quote for Python versions 2.x & < 3.3)")
+    (license license:expat)
+    (properties `((python2-variant . ,(delay python2-shellescape))))))
+
+(define-public python2-shellescape
+  (let ((base (package-with-python2
+                (strip-python2-variant python-shellescape))))
+    (package (inherit base)
+      (native-inputs
+       `(("python2-setuptools" ,python2-setuptools)
+         ,@(package-native-inputs base))))))
+
+(define-public python-naked
+  (package
+    (name "python-naked")
+    (version "0.1.31")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "Naked" version))
+        (sha256
+         (base32
+          "0zk793hh6z4lirfxz73z4f5yzyx8khhx5w92jh1hfpar2j56pdqj"))))
+    (build-system python-build-system)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-reference
+           ;; installing is much easier when you don't depend on yourself
+           (lambda _
+             (substitute* "setup.py" (("\\['Naked', ") "[")))))))
+    (inputs
+     `(("python-pyyaml" ,python-pyyaml)
+       ("python-requests" ,python-requests)))
+    (home-page "http://naked-py.com")
+    (synopsis "A command line application framework")
+    (description
+     "A command line application framework")
+    (license license:expat)
+    (properties `((python2-variant . ,(delay python2-naked))))))
+
+(define-public python2-naked
+  (let ((base (package-with-python2 (strip-python2-variant python-naked))))
     (package (inherit base)
       (native-inputs
        `(("python2-setuptools" ,python2-setuptools)
