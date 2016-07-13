@@ -63,26 +63,20 @@ from you.")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "5c/9c/ed9015ffc10219e70bf01a33c912c3fbd1400d356c0e6aa606cec4b0932b"
-               "/nautilus-" version ".tar.gz"))
+        (uri (pypi-uri "nautilus" version))
         (sha256
          (base32
           "01hwzjc1zshk4vvxrcghm398fpy4jls66dyz06g07mrwqif8878p"))))
   (build-system python-build-system)
   (arguments `(#:tests? #f)) ; todo re-enable
   (native-inputs
-   `(
-     ("python-graphql-core" ,python-graphql-core)
+   `(("python-graphql-core" ,python-graphql-core)
      ("python-graphql-relay" ,python-graphql-relay)
      ("python-pycparser" ,python-pycparser)
      ("python-requests" ,python-requests)
-     ("python-setuptools" ,python-setuptools)
-     ))
+     ("python-setuptools" ,python-setuptools)))
   (inputs
-   `(
-     ("python-bcrypt" ,python-bcrypt)
+   `(("python-bcrypt" ,python-bcrypt)
      ("python-click" ,python-click)
      ("python-consul" ,python-consul)
      ("python-graphene" ,python-graphene)
@@ -107,10 +101,7 @@ focus on building massively scalable web applications.")
     (source
       (origin
       (method url-fetch)
-      (uri (string-append
-             "https://pypi.python.org/packages/"
-             "11/7d/4c7980d04314466de42ea804db71995c9b3a2a47dc79a63c51f1be0cfd50"
-             "/bcrypt-" version ".tar.gz"))
+      (uri (pypi-uri "bcrypt" version))
       (sha256
        (base32
         "1yl78fnkyxkg6vbas7lsmrrsknhh7fpygp958svhxl90y9z1jbcb"))))
@@ -145,10 +136,7 @@ Password Scheme\"} by Niels Provos and David Mazieres.")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "58/d1/aa1f9cd1f8b5a8a0def0eebd8e58df8d0b98f904a2403f3eedf92f47fbda"
-               "/stem-" version ".tar.bz2"))
+        (uri (pypi-uri "stem" version ".tar.bz2"))
         (sha256
          (base32
           "09a3amp1y351nwz088ckiibbp666qi2lxwkyknavswfm400s0ns7"))))
@@ -181,10 +169,7 @@ protocol to script against the Tor process.")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "cc/12/2f5257e2aaaf8fbf752a2da34faed4dcc49784581daf47a7045d07a6cf10"
-               "/nose2-" version ".tar.gz"))
+        (uri (pypi-uri "nose2" version))
         (sha256
          (base32
           "0wv33xpg4l9baslidl3i5d8z043gi9yi18k3dl79ahfn0pp7740i"))))
@@ -203,31 +188,6 @@ protocol to script against the Tor process.")
 (define-public python2-nose2
   (package-with-python2 python-nose2))
 
-(define-public python-cov-core
-  (package
-      (name "python-cov-core")
-        (version "1.15.0")
-          (source
-                (origin
-                        (method url-fetch)
-                              (uri (string-append
-                                                  "https://pypi.python.org/packages/4b/87/13e75a47b4ba1be06f29f6d807ca99638bedc6b57fa491cd3de891ca2923/cov-core-"
-                                                               version
-                                                                            ".tar.gz"))
-                                    (sha256
-                                              (base32
-                                                          "0k3np9ymh06yv1ib96sb6wfsxjkqhmik8qfsn119vnhga9ywc52a"))))
-            (build-system python-build-system)
-              (inputs
-                    `(("python-coverage" ,python-coverage)))
-                (home-page
-                      "https://github.com/schlamar/cov-core")
-                  (synopsis
-                        "plugin core for use by pytest-cov, nose-cov and nose2-cov")
-                    (description
-                          "plugin core for use by pytest-cov, nose-cov and nose2-cov")
-                      (license #f)))
-
 (define-public python-consul
   (package
     (name "python-consul")
@@ -235,10 +195,7 @@ protocol to script against the Tor process.")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "1d/75/17bfc3aa64a4be11ef3a5e8211f8177a44d6a5cd323b64f8d451e9d59b71"
-               "/python-consul-" version ".tar.gz"))
+        (uri (pypi-uri "python-consul" version))
         (sha256
          (base32
           "0vfyr499sbc4nnhhijp2lznyj507nnak95bvv9w8y78ngxggskbh"))))
@@ -267,10 +224,7 @@ protocol to script against the Tor process.")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "f8/62/0c692b804fde05c5b94eede5912dbde05175fe5873d2d5a748a7919c9304"
-               "/graphene-" version ".tar.gz"))
+        (uri (pypi-uri "graphene" version))
         (sha256
          (base32
           "09zhac7igh9ixdz0ay6csy35b40l1jwbf2wrbxmgxwfhy51iy06q"))))
@@ -312,10 +266,7 @@ with an associated set of resolve methods that know how to fetch data.")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "04/8e/e8a694b9f7894daa41b8a5b014ec473784865d3a79d34e2a908120f28b4a"
-               "/django-filter-" version ".tar.gz"))
+        (uri (pypi-uri "django-filter" version))
         (sha256
          (base32
           "1z7h640zrm7m4vgv709iv62c1jzzmq6113yhj4d6ssgyfr2n3hdl"))))
@@ -345,10 +296,7 @@ them do this.")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "50/6d/77a4644d15746ed2a243ed557af693cec7887e43b357919ba0b4fd029518"
-               "/pytest-django-" version ".tar.gz"))
+        (uri (pypi-uri "pytest-django" version))
         (sha256
          (base32
           "1mmc7zsz3dlhs6sx4sppkj1vgshabi362r1a8b8wpj1qfximpqcb"))))
@@ -388,10 +336,7 @@ useful tools for testing Django applications and projects.")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "cd/f3/f4399406309b9b37305bcadec371f417573aea16a2bf9990e0e8176a45ae"
-               "/SQLAlchemy-Utils-" version ".tar.gz"))
+        (uri (pypi-uri "SQLAlchemy-Utils" version))
         (sha256
          (base32
           "1rwmwvsym2m7x9mwdbp3l8axi9ancmscbbc4hdxja50iwbgcskgg"))))
@@ -421,10 +366,7 @@ useful tools for testing Django applications and projects.")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "cf/dc/684ded66cab738f54907d3adc21ea8cc4bf395802c950e2709e36fc43a99"
-               "/graphql-relay-" version ".tar.gz"))
+        (uri (pypi-uri "graphql-relay" version))
             (sha256
              (base32
               "04wr9ayshxjjdcg2v21c7ffbz36kif1wjl3604fqd3qignb3fbxi"))))
@@ -456,10 +398,7 @@ useful tools for testing Django applications and projects.")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "53/74/7f71377be0d0fc9dbf47701853e6608b3da53ecd0e0c57f750d394455345"
-               "/graphql-core-" version ".tar.gz"))
+        (uri (pypi-uri "graphql-core" version))
             (sha256
              (base32
               "0rsaarx2sj4xnw9966rhh4haiqaapm4lm2mfqm48ywd51j5vh1a0"))))
@@ -494,10 +433,7 @@ useful tools for testing Django applications and projects.")
     (source
       (origin
         (method url-fetch)
-          (uri (string-append
-                 "https://pypi.python.org/packages/"
-                 "99/0e/45906c1e876b175cb51d8710075be900948f44a5f6a92c90095bdcd846c8"
-                 "/pytest-mock-" version ".zip"))
+          (uri (pypi-uri "pytest-mock" version ".zip"))
         (sha256
          (base32
           "0gmlh1jzcs385d0764gshmmyszid70v8sc185pmz7gb97idza461"))))
@@ -532,10 +468,7 @@ useful tools for testing Django applications and projects.")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "8b/e0/7da87005df50169833697637c1e8192f7a7ff72ffc39978833fde18c93da"
-               "/promise-" version ".tar.gz"))
+        (uri (pypi-uri "promise" version))
         (sha256
          (base32
           "1k19ms8l3d5jzjh557rgkxb5sg4mqgfc315rn4hx1z3n8qq6lr3h"))))
@@ -563,10 +496,7 @@ useful tools for testing Django applications and projects.")
       (source
         (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "59/4a/a1b78b0e47e880c07da21d633ff2ac8d5edbf969049a414edfbdadaed869"
-               "/peewee-" version ".tar.gz"))
+        (uri (pypi-uri "peewee" version))
         (sha256
          (base32
           "0zcqszn46ag1kbrhzl95lh9psrai0zj6mq13193jph4m9l991nwz"))))
@@ -589,10 +519,7 @@ useful tools for testing Django applications and projects.")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append
-               "https://pypi.python.org/packages/"
-               "ee/25/1517ce612d7cd0a426ea027275ba74165bbfd86a2daf4bce4839afac3deb"
-               "/pika-" version ".tar.gz"))
+        (uri (pypi-uri "pika" version))
         (sha256
          (base32
           "0nb4h08di432lv7dy2v9kpwgk0w92f24sqc2hw2s9vwr5b8v8xvj"))))
