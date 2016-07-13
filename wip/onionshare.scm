@@ -39,9 +39,18 @@
          (base32
           "0pc3xbq379415s0i0y6rz02hay20zbvgra1jmg4mgrl9vbdr8zmw"))))
     (build-system python-build-system)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-after 'check 'fix-install-path
+           (lambda _
+             (substitute* "setup.py"
+                          (("sys.prefix")
+                           (string-append "'" (assoc-ref %outputs "out") "'"))))))))
     (inputs
      `(("python-flask" ,python-flask)
        ("python-nautilus" ,python-nautilus)
+       ("python-sip" ,python-sip)
        ("python-stem" ,python-stem)
        ("python-pyqt" ,python-pyqt)))
     (home-page "https://onionshare.org/")
