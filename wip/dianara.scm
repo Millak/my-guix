@@ -75,11 +75,18 @@ need to use a web browser.")
     (arguments
      `(#:phases
        (modify-phases %standard-phases
+         (add-after 'unpack 'patch-qtcrypto
+           (lambda _
+             ;; Qca puts QtCrypto in include/Qca-qt5/QtCrypto
+             (substitute* '("tests/ut_interface/ut_interface.h"
+                            "src/interface.h" "src/interface.cpp")
+                          (("QtCrypto") "Qca-qt5/QtCrypto"))))
          (replace 'configure
            (lambda* (#:key outputs #:allow-other-keys)
              (let ((out (assoc-ref outputs "out")))
                (zero? (system* "qmake"
-                               (string-append "PREFIX=" out)))))))))
+                               (string-append "PREFIX=" out)))))))
+       ))
     (inputs
      `(("qca" ,qca)
        ("qtbase" ,qtbase)))
