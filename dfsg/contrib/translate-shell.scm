@@ -21,9 +21,11 @@
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages curl)
+  #:use-module (gnu packages emacs)
   #:use-module (gnu packages fribidi)
   #:use-module (gnu packages gawk)
-  #:use-module (gnu packages mp3))
+  #:use-module (gnu packages mp3)
+  #:use-module (gnu packages readline))
 
 (define-public translate-shell
   (package
@@ -42,17 +44,32 @@
     (arguments
      `(#:phases
        (modify-phases %standard-phases
-         (delete 'configure)) ; no configure phase
+         (delete 'configure) ; no configure phase
+         (add-after 'install 'emacs-install
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let* ((out   (assoc-ref outputs "out"))
+                    (dest  (string-append out "/share/emacs/site-lisp"))
+                    (emacs (string-append (assoc-ref inputs "emacs") "/bin/emacs")))
+               (install-file "google-translate-mode.el" dest)
+               (emacs-generate-autoloads ,name dest)))))
        #:make-flags (list (string-append "PREFIX=" %output))
-       #:tests? #f))
+       #:imported-modules (,@%gnu-build-system-modules (guix build emacs-utils))
+       #:modules ((guix build gnu-build-system)
+                  (guix build emacs-utils)
+                  (guix build utils))
+       #:tests? #f
+       ))
     (propagated-inputs
      `(("curl" ,curl)
        ("fribidi" ,fribidi)
        ("gawk" ,gawk)
-       ("mpg123" ,mpg123)))
+       ("mpg123" ,mpg123)
+       ;("rlwrap" ,rlwrap)
+       ))
+    (native-inputs `(("emacs" ,emacs-minimal)))
     (home-page "https://www.soimort.org/translate-shell")
     (synopsis "Cli translator using Google translate")
     (description "Translate-shell is a simple command line interface to
-@url{http://translate.google.com} which allows you to translate strings in your
+@url{https://translate.google.com} which allows you to translate strings in your
 terminal.")
     (license license:public-domain)))
