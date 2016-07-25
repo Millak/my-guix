@@ -16,6 +16,7 @@
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
 (define-module (wip onionshare)
+  #:use-module (gnu packages)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
@@ -37,16 +38,65 @@
         (file-name (string-append name "-" version ".tar.gz"))
         (sha256
          (base32
-          "0pc3xbq379415s0i0y6rz02hay20zbvgra1jmg4mgrl9vbdr8zmw"))))
+          "0pc3xbq379415s0i0y6rz02hay20zbvgra1jmg4mgrl9vbdr8zmw"))
+        (patches (search-patches "onionshare-fix-install-paths.patch"))))
     (build-system python-build-system)
     (arguments
      `(#:phases
        (modify-phases %standard-phases
-         (add-after 'check 'fix-install-path
-           (lambda _
-             (substitute* "setup.py"
-                          (("sys.prefix")
-                           (string-append "'" (assoc-ref %outputs "out") "'"))))))))
+         (add-after 'unpack 'fix-install-path
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out        (assoc-ref outputs "out"))
+                    (onionshare (string-append out "/share/onionshare")))
+               (substitute* "install/pyinstaller.spec"
+                            ;; inform onionshare where the 'resources' files are installed
+                            (("../resources") onionshare))
+               (substitute* "onionshare/strings.py"
+                            ;; correct the locale directory
+                            (("helpers.get_resource_path\\('locale'\\)")
+                             (string-append "'" onionshare "/locale'")))
+               (substitute* "onionshare/helpers.py"
+                            ;; correct the location of version.txt
+                            (("/usr") out)
+                            (("get_resource_path\\('version.txt'\\)")
+                             (string-append "'" onionshare "/version.txt'"))
+                            (("get_resource_path\\('wordlist.txt'\\)")
+                             (string-append "'" onionshare "/wordlist.txt'")))
+               (substitute* "onionshare/web.py"
+                            ;; fix the location of the html files
+                            (("helpers.get_resource_path\\('html/denied.html'\\)")
+                             (string-append "'" onionshare "/html/denied.html'"))
+                            (("helpers.get_resource_path\\('html/404.html'\\)")
+                             (string-append "'" onionshare "/html/404.html'"))
+                            (("helpers.get_resource_path\\('html/index.html'\\)")
+                             (string-append "'" onionshare "/html/index.html'")))
+               (substitute* "onionshare_gui/file_selection.py"
+                            (("helpers.get_resource_path\\('images/drop_files.png'\\)")
+                             (string-append "'" onionshare "/images/drop_files.png'")))
+               (substitute* "onionshare_gui/server_status.py"
+                            (("helpers.get_resource_path\\('images/server_stopped.png'\\)")
+                             (string-append "'" onionshare "/images/server_stopped.png'"))
+                            (("helpers.get_resource_path\\('images/server_working.png'\\)")
+                             (string-append "'" onionshare "/images/server_working.png'"))
+                            (("helpers.get_resource_path\\('images/server_started.png'\\)")
+                             (string-append "'" onionshare "/images/server_started.png'")))
+               (substitute* "onionshare_gui/onionshare_gui.py"
+                            (("helpers.get_resource_path\\('images/logo.png'\\)")
+                             (string-append "'" onionshare "/images/logo.png'")))
+               (substitute* "install/onionshare.desktop"
+                            (("/usr") out))
+             #t)))
+         (delete 'check)
+         (add-before 'strip 'tests
+           ;; After all the patching we run the tests after installing.
+           ;; This is also a known issue: https://github.com/micahflee/onionshare/issues/284
+           (lambda _ (zero? (system* "nosetests" "test")))))
+       ;; can't compress the egg because it expects to find all the resources
+       ;; inside the egg as though it were a folder.
+       #:configure-flags '("--single-version-externally-managed" "--root=/")
+       ))
+    (native-inputs
+     `(("python-nose" ,python-nose)))
     (inputs
      `(("python-flask" ,python-flask)
        ("python-nautilus" ,python-nautilus)
@@ -63,7 +113,9 @@ using a third party filesharing service.  You host the file on your own computer
 and use a Tor hidden service to make it temporarily accessible over the
 internet.  The other user just needs to use Tor Browser to download the file
 from you.")
-    (license license:gpl3+)))
+    (license (list
+               license:gpl3+
+               license:bsd-3)))) ; onionshare/socks.py
 
 (define-public python-nautilus
   (package
@@ -77,7 +129,7 @@ from you.")
          (base32
           "01hwzjc1zshk4vvxrcghm398fpy4jls66dyz06g07mrwqif8878p"))))
   (build-system python-build-system)
-  (arguments `(#:tests? #f)) ; todo re-enable
+  (arguments `(#:tests? #f)) ; fails to import test modules
   (native-inputs
    `(("python-graphql-core" ,python-graphql-core)
      ("python-graphql-relay" ,python-graphql-relay)
@@ -109,12 +161,12 @@ focus on building massively scalable web applications.")
     (version "2.0.0")
     (source
       (origin
-      (method url-fetch)
-      (uri (pypi-uri "bcrypt" version))
-      (sha256
-       (base32
-        "1yl78fnkyxkg6vbas7lsmrrsknhh7fpygp958svhxl90y9z1jbcb"))))
-    (build-system python-build-system)
+        (method url-fetch)
+        (uri (pypi-uri "bcrypt" version))
+        (sha256
+         (base32
+          "1yl78fnkyxkg6vbas7lsmrrsknhh7fpygp958svhxl90y9z1jbcb"))))
+        (build-system python-build-system)
     (native-inputs
      `(("python-pycparser" ,python-pycparser)
        ("python-pytest" ,python-pytest)))
@@ -164,7 +216,7 @@ Password Scheme\"} by Niels Provos and David Mazieres.")
     (synopsis "Controller library for Tor")
     (description
      "Stem is a Python controller library that allows applications to interact
-with Tor (https://www.torproject.org/).  With it you can use Tor's control
+with Tor @url{https://www.torproject.org/}.  With it you can use Tor's control
 protocol to script against the Tor process.")
     (license license:gpl3)))
 
@@ -189,9 +241,12 @@ protocol to script against the Tor process.")
     (inputs
      `(("python-six" ,python-six)))
     (home-page "https://github.com/nose-devs/nose2")
-    (synopsis "nose2 is the next generation of nicer testing for Python")
+    (synopsis "Next generation of nicer testing for Python")
     (description
-     "nose2 is the next generation of nicer testing for Python")
+     "Nose2 is the next generation of nicer testing for Python, based on the
+plugins branch of unittest2.  Nose2 aims to improve on nose by providing a
+better plugin api, being easier for users to configure, and simplifying internal
+interfaces and processes.")
     (license license:bsd-2)))
 
 (define-public python2-nose2
@@ -214,9 +269,10 @@ protocol to script against the Tor process.")
        ("python-requests" ,python-requests)
        ("python-six" ,python-six)))
     (home-page "https://github.com/cablehead/python-consul")
-    (synopsis "Python client for Consul (http://www.consul.io/)")
+    (synopsis "Python client for Consul")
     (description
-     "Python client for Consul (http://www.consul.io/)")
+     "Python client for @url{http://www.consul.io/,Consul}, a tool for service
+discovery, monitoring and configuration.")
     (license license:expat)))
 
 (define-public python2-consul
@@ -356,7 +412,8 @@ useful tools for testing Django applications and projects.")
     (home-page "https://github.com/kvesteri/sqlalchemy-utils")
     (synopsis "Various utility functions for SQLAlchemy.")
     (description
-     "Various utility functions for SQLAlchemy.")
+     "SQLAlchemy-utils provides various utility functions and custom data types
+for SQLAlchemy.  SQLAlchemy is an SQL database abstraction library for Python.")
     (properties `((python2-variant . ,(delay python2-sqlalchemy-utils))))
     (license license:bsd-3)))
 
@@ -376,9 +433,9 @@ useful tools for testing Django applications and projects.")
       (origin
         (method url-fetch)
         (uri (pypi-uri "graphql-relay" version))
-            (sha256
-             (base32
-              "04wr9ayshxjjdcg2v21c7ffbz36kif1wjl3604fqd3qignb3fbxi"))))
+        (sha256
+         (base32
+          "04wr9ayshxjjdcg2v21c7ffbz36kif1wjl3604fqd3qignb3fbxi"))))
     (build-system python-build-system)
     (native-inputs
      `(("python-pytest" ,python-pytest)))
@@ -388,7 +445,12 @@ useful tools for testing Django applications and projects.")
        ("python-six" ,python-six)))
     (home-page "https://github.com/graphql-python/graphql-relay-py")
     (synopsis "Relay implementation for Python")
-    (description "Relay implementation for Python")
+    (description
+     "This is a library to allow the easy creation of Relay-compliant servers
+using the GraphQL Python reference implementation of a GraphQL server.  It
+should be noted that the code is a exact port of the original
+@url{https://github.com/graphql/graphql-relay-js,graphql-relay js implementation}
+from Facebook.")
     (properties `((python2-variant . ,(delay python2-graphql-relay))))
     (license license:expat)))
 
@@ -408,9 +470,9 @@ useful tools for testing Django applications and projects.")
       (origin
         (method url-fetch)
         (uri (pypi-uri "graphql-core" version))
-            (sha256
-             (base32
-              "0rsaarx2sj4xnw9966rhh4haiqaapm4lm2mfqm48ywd51j5vh1a0"))))
+        (sha256
+         (base32
+          "0rsaarx2sj4xnw9966rhh4haiqaapm4lm2mfqm48ywd51j5vh1a0"))))
     (build-system python-build-system)
     (arguments
      `(#:tests? #f)) ; can't find gevent
@@ -423,7 +485,11 @@ useful tools for testing Django applications and projects.")
        ("python-six" ,python-six)))
     (home-page "https://github.com/graphql-python/graphql-core")
     (synopsis "GraphQL implementation for Python")
-    (description "GraphQL implementation for Python")
+    (description
+     "GraphQL implementation for Python.  GraphQL is a data query language and
+runtime designed and used to request and deliver data to mobile and web apps.
+This library is a port of @url{https://github.com/graphql/graphql-js,graphql-js}
+to Python.")
     (properties `((python2-variant . ,(delay python2-graphql-core))))
     (license license:expat)))
 
@@ -442,7 +508,7 @@ useful tools for testing Django applications and projects.")
     (source
       (origin
         (method url-fetch)
-          (uri (pypi-uri "pytest-mock" version ".zip"))
+        (uri (pypi-uri "pytest-mock" version ".zip"))
         (sha256
          (base32
           "0gmlh1jzcs385d0764gshmmyszid70v8sc185pmz7gb97idza461"))))
@@ -455,7 +521,11 @@ useful tools for testing Django applications and projects.")
     (home-page "https://github.com/pytest-dev/pytest-mock/")
     (synopsis "Thin-wrapper around the mock package for easier use with py.test")
     (description
-     "Thin-wrapper around the mock package for easier use with py.test")
+     "This plugin installs a @code{mocker} fixture which is a thin-wrapper
+around the patching API provided by the @code{mock} package, but with the
+benefit of not having to worry about undoing patches at the end of a test.
+The mocker fixture has the same API as @code{mock.patch}, supporting the
+same arguments.")
     (properties `((python2-variant . ,(delay python2-pytest-mock))))
     (license license:expat)))
 
@@ -482,7 +552,9 @@ useful tools for testing Django applications and projects.")
          (base32
           "1k19ms8l3d5jzjh557rgkxb5sg4mqgfc315rn4hx1z3n8qq6lr3h"))))
     (build-system python-build-system)
-    (arguments `(#:tests? #f)) ; tests wants python-futures, which doesn't exist for python3
+    ;; Tests wants python-futures, which is a python2 only program, and
+    ;; can't be found by python2-promise at test time.
+    (arguments `(#:tests? #f))
     (home-page "https://github.com/syrusakbary/promise")
     (synopsis "Promises/A+ implementation for Python")
     (description
@@ -510,16 +582,19 @@ useful tools for testing Django applications and projects.")
          (base32
           "0zcqszn46ag1kbrhzl95lh9psrai0zj6mq13193jph4m9l991nwz"))))
     (build-system python-build-system)
-    (arguments `(#:tests? #f)) ; Import error when trying to run tests
-    (inputs
+    (arguments
+     `(#:tests? #f)) ; Fails to import test data
+    (native-inputs
      `(("python-cython" ,python-cython)))
-    (home-page "http://github.com/coleifer/peewee/")
-    (synopsis "a little orm")
-    (description "a little orm")
+    (home-page "https://github.com/coleifer/peewee/")
+    (synopsis "Small object-relational mapping utility")
+    (description
+     "Peewee is a simple and small ORM (object-relation mapping) tool.  Peewee
+handles converting between pythonic values and those used by databases, so you
+can use Python types in your code without having to worry.  It has built-in
+support for sqlite, mysql and postgresql.  If you already have a database, you
+can autogenerate peewee models using @code{pwiz}, a model generator.")
     (license license:expat)))
-
-(define-public python2-peewee
-  (package-with-python2 python-peewee))
 
 (define-public python-pika
   (package
@@ -536,10 +611,11 @@ useful tools for testing Django applications and projects.")
     (native-inputs
      `(("python-twisted" ,python-twisted)))
     (home-page "https://pika.readthedocs.org")
-    (synopsis "Pika Python AMQP Client Library")
+    (synopsis "Pure Python AMQP Client Library")
     (description
-     "Pika is a pure-Python implementation of the AMQP 0-9-1 protocol that
-tries to stay fairly independent of the underlying network support library.")
+     "Pika is a pure-Python implementation of the AMQP (Advanced Message Queuing
+Protocol) 0-9-1 protocol that tries to stay fairly independent of the underlying
+network support library.")
     (license license:bsd-3)))
 
 (define-public python2-pika
