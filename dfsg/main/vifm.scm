@@ -20,29 +20,29 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
-  #:use-module (gnu packages base)
   #:use-module (gnu packages groff)
   #:use-module (gnu packages ncurses)
+  #:use-module (gnu packages perl)
   #:use-module (gnu packages xorg))
 
 (define-public vifm
   (package
     (name "vifm")
-    (version "0.8.1a")
+    (version "0.8.2")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append "mirror://sourceforge/vifm/vifm-"
+        (uri (string-append "mirror://sourceforge/vifm/vifm/vifm-"
                             version ".tar.bz2"))
         (sha256
          (base32
-          "08j4vnlhfj56dk5wbk5662yh3ivha1cqqrzzrqlwglijbsmb4kwp"))))
+          "07r15kq7kjl3a41sd11ncpsii866xxps4f90zh3lv8jqcrv6silb"))))
     (build-system gnu-build-system)
     (arguments
      `(#:tests? #f)) ; fileops/{generic.c,make_dirs.c} had failures
     (native-inputs
      `(("groff" ,groff) ; for the documentation
-       ("which" ,which)))
+       ("perl" ,perl)))
     (inputs
      `(("libx11" ,libx11)
        ("ncurses" ,ncurses)))
