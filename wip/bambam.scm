@@ -19,100 +19,36 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
-  #:use-module (guix build-system gnu)
   #:use-module (guix build-system python)
   #:use-module (gnu packages)
-  #:use-module (gnu packages fontutils)
-  #:use-module (gnu packages image)
-  #:use-module (gnu packages music)
-  #:use-module (gnu packages python)
-  #:use-module (gnu packages sdl))
+  #:use-module (gnu packages game-development)
+  #:use-module (gnu packages python))
 
-(define-public smpeg
+(define-public bambam
   (package
-    (name "smpeg")
-    (version "0.4.5+cvs20030824")
+    (name "bambam")
+    (version "0.5")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append "mirror://debian/pool/main/s/smpeg/"
-                            "smpeg_" version ".orig.tar.gz"))
-        ;; Unfortunately the svn-fetch method does not work with this repo
-        ;(method svn-fetch)
-        ;(uri (svn-reference
-        ;       (url "https://svn.icculus.org/smpeg/")
-        ;       (revision 408)))
+        (uri (string-append "https://github.com/porridge/bambam/archive/"
+                            version ".tar.gz"))
+        (file-name (string-append name "-" version ".tar.gz"))
         (sha256
          (base32
-           "05hrprv8h0bw8xxzraccq922b4jk04c3zwyk5nhyizfrgmwylxhj"))))
-        ;  "0cyl0ww4fjlf289pjxa53q4klyn55ajvkgymw0qrdgp4593raq52"))
-        ;(file-name (string-append name "-" version "-checkout"))))
-    (build-system gnu-build-system)
-    (inputs
-     `(("sdl" ,sdl)
-       ("sdl-mixer" ,sdl-mixer)))
-    (home-page "https://icculus.org/smpeg/")
-    (synopsis "SDL MPEG Player Library")
-    (description "SMPEG (SDL MPEG Player Library) is a free MPEG1 video player
-library with sound support.  Video playback is based on the ubiquitous Berkeley
-MPEG player, mpeg_play v2.2.  Audio is played through a slightly modified
-mpegsound library, part of splay v0.8.2.  SMPEG supports MPEG audio (MP3),
-MPEG-1 video, and MPEG system streams.")
-    (license #f)))
-
-(define-public python2-pygame
-  (package
-    (name "python2-pygame")
-    (version "1.9.1")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (string-append "http://pygame.org/ftp/pygame-"
-                            version "release.tar.gz"))
-        (sha256
-         (base32
-          "0cyl0ww4fjlf289pjxa53q4klyn55ajvkgymw0qrdgp4593raq52"))))
+          "10w110mjdwbvddzihh9rganvvjr5jfiz8cs9n7w12zndwwcc3ria"))))
     (build-system python-build-system)
     (arguments
      `(#:python ,python-2
+       #:tests? #f
        #:phases
        (modify-phases %standard-phases
-         (add-after 'unpack 'apply-v4l-patch
-           (lambda _
-             (zero? (system* "patch" "--force" "-p1" "-i"
-                             (assoc-ref %build-inputs "patch")))))
-         (add-after 'unpack 'patch-config
-           (lambda _
-             (substitute* '("config_unix.py"
-                            "config_msys.py")
-                          (("not confirm")
-                           "\"-auto\" not in sys.argv and not confirm"))
-             #t))
-         (add-before 'build 'config
-           (lambda _
-             (zero?
-               (system* "python2" "config.py" "-auto")))))))
+         (delete 'build))))
     (inputs
-     `(
-       ;("freetype" ,freetype)
-       ;("libjpeg" ,libjpeg)
-       ;("libpng" ,libpng)
-       ;("python2-numpy" ,python2-numpy)
-       ;("sdl" ,sdl)
-       ("portmidi" ,portmidi)
-       ("sdl-image" ,sdl-image)
-       ("sdl-mixer" ,sdl-mixer)
-       ("sdl-ttf" ,sdl-ttf)
-       ;("smpeg" ,smpeg)
-       ))
-    ;(native-inputs
-    ; `("patch" ,@("/home/efraim/workspace/my-guix/patches/pygame-v4l.patch")))
-    (home-page "http://www.pygame.org/")
-    (synopsis "SDL bindings for games development in Python")
-    (description "A multimedia development kit for Python.  Pygame provides
-modules for you to access the video display, play sounds, track time, read the
-mouse and joystick, control the CD player, render true type fonts and more.  It
-does this using mainly the cross-platform SDL library, a lightweight wrapper to
-OS-specific APIs.")
-    (license (list license:lgpl2.1
-                   license:public-domain)))) ; programs in example directory
+     `(("python-pygame" ,python-pygame)))
+    (home-page "https://github.com/porridge/bambamb")
+    (synopsis "keyboard mashing and doodling game for babies")
+    (description "Bambam is a simple baby keyboard (and gamepad) masher
+application that locks the keyboard and mouse and instead displays bright
+colors, pictures, and sounds.")
+    (license license:gpl3+)))
