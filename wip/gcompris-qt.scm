@@ -29,7 +29,7 @@
 (define-public gcompris-qt
   (package
     (name "gcompris-qt")
-    (version "0.60")
+    (version "0.61")
     (source
       (origin
         (method url-fetch)
@@ -38,7 +38,7 @@
                version ".tar.xz"))
         (sha256
          (base32
-          "1xyjlzraizg81mmfh9akscn2vyclchrzlp5b8pvi6b2xfdsqpzq4"))))
+          "0f6cm1zfkp8mvr7j3mxgq3d07jd1by825sbk28ypgcqdb1k7faw7"))))
     (build-system cmake-build-system)
     ;(arguments
     ; `(#:configure-flags
@@ -55,14 +55,14 @@
        ("python-2" ,python-2)))
     (inputs
      `(
-       ;("qtbase" ,qtbase)
-       ;("qtdeclarative" ,qtdeclarative)
-       ;("qttools" ,qttools)
-       ;("qtmultimedia" ,qtmultimedia)
-       ;("qtsensors" ,qtsensors)
-       ;("qtsvg" ,qtsvg)
-       ;("qtxmlpatterns" ,qtxmlpatterns)
-       ("qt" ,qt)
+       ("qtbase" ,qtbase)
+       ("qtdeclarative" ,qtdeclarative)
+       ("qttools" ,qttools)
+       ("qtmultimedia" ,qtmultimedia)
+       ("qtsensors" ,qtsensors)
+       ("qtsvg" ,qtsvg)
+       ("qtxmlpatterns" ,qtxmlpatterns)
+       ;("qt" ,qt)
        ))
     (home-page "http://gcompris.net/index-en.html")
     (synopsis "Educational games for small children")
