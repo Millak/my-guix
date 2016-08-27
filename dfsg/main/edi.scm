@@ -26,28 +26,25 @@
 (define-public edi
   (package
     (name "edi")
-    (version "0.3.0")
+    (version "0.4.0")
     (source
       (origin
         (method url-fetch)
         (uri (list
-               (string-append "https://github.com/ajwillia-ms/edi/releases/"
-                              "download/v" version "/edi-" version ".tar.gz")
                (string-append "https://download.enlightenment.org/rel/apps/edi"
-                              "/edi-" version ".tar.gz")))
+                              "/edi-" version ".tar.bz2")
+               (string-append "https://github.com/ajwillia-ms/edi/releases/"
+                              "download/v" version "/edi-" version ".tar.bz2")))
         (sha256
          (base32
-          "12nm041xcbpj40aqdp5qy1c7h0hbn88w63h99azqbkvs3lp535hm"))))
+          "02d8hplcviayri8fxws56n362k6zqsf62v8pbn5sbgwrmkqwybhc"))))
     (build-system gnu-build-system)
     (native-inputs `(("pkg-config" ,pkg-config)))
-    (inputs
-     `(("efl" ,efl)
-       ("elementary" ,elementary)))
+    (inputs `(("efl" ,efl)))
     (home-page "https://www.enlightenment.org/about-edi")
     (synopsis "Development environment using the EFL")
     (description "EDI is a development environment designed for and built using
-the EFL.  Our aim is to create a new, native development environment for Linux
-that makes getting up and running easier than ever before.  With so much
-happening on Linux both on the desktop and on mobile we want to help more
-developers get involved in the exciting future of open source development.")
-    (license (list license:lgpl2.1+ license:gpl2)))) ; check this
+the EFL.  It's aim is to create a new, native development environment for Linux
+that trys to lower the barrier to getting involved in Enlightenment development
+and in creating apps based on the EFL suite.")
+    (license license:gpl2)))
