@@ -72,7 +72,7 @@
        ("fribidi" ,fribidi)
        ("gawk" ,gawk)
        ("mpg123" ,mpg123)
-       ;("rlwrap" ,rlwrap)
+       ("rlwrap" ,rlwrap)
        ))
     (native-inputs `(("emacs" ,emacs-minimal)))
     (home-page "https://www.soimort.org/translate-shell")
