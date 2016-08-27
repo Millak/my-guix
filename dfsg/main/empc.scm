@@ -55,7 +55,6 @@
        ("pkg-config" ,pkg-config)))
     (inputs
      `(("efl" ,efl)
-       ("elementary" ,elementary)
        ;; esql?
        ;; glyr?
        ("libmpdclient" ,libmpdclient)))

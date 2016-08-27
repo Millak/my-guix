@@ -52,8 +52,7 @@
        ("gettext" ,gnu-gettext)
        ("pkg-config" ,pkg-config)))
     (inputs
-     `(("efl" ,efl)
-       ("elementary" ,elementary)))
+     `(("efl" ,efl)))
     (home-page "https://www.enlightenment.org")
     (synopsis "Elementary based calculator")
     (description "Elementary based calculator")

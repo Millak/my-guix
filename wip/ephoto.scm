@@ -56,8 +56,7 @@
        ("libtool" ,libtool)
        ("pkg-config" ,pkg-config)))
     (inputs
-     `(("efl" ,efl)
-       ("elementary" ,elementary)))
+     `(("efl" ,efl)))
     (home-page "http://smhouston.us/ephoto/")
     (synopsis "EFL image viewer/editor/manipulator/slideshow creator")
     (description "Ephoto is an image viewer and editor written using the

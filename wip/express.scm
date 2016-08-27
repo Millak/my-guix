@@ -54,8 +54,7 @@
        ("libtool" ,libtool)
        ("pkg-config" ,pkg-config)))
     (inputs
-     `(("efl" ,efl)
-       ("elementary" ,elementary)))
+     `(("efl" ,efl)))
     (home-page "http://smhouston.us/express/")
     (synopsis "IRC client with enhanced media capabilities")
     (description "EFL-based IRC Client which operates similar to the
