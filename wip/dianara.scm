@@ -17,6 +17,7 @@
 
 (define-module (wip dianara)
   #:use-module ((guix licenses) #:prefix license:)
+  #:use-module (guix build utils)
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
@@ -47,9 +48,9 @@
                                (string-append "PREFIX=" out)))))))))
     (inputs
      `(("file" ,file) ; libmagic
-       ("qca" ,qca)
-       ("qoauth" ,qoauth)
-       ("qtbase" ,qtbase)))
+       ("qca-qt4" ,qca-qt4)
+       ("qoauth-qt4" ,qoauth-qt4)
+       ("qt-4" ,qt-4)))
     (home-page "https://jancoding.wordpress.com/dianara/")
     (synopsis "Client for the pump.io federated social network")
     (description
@@ -96,3 +97,33 @@ need to use a web browser.")
      "QOAuth is a Qt-based C++ implementation of an interface to services
 using OAuth authorization scheme.")
     (license license:lgpl2.1+)))
+
+(define-public qoauth-qt4
+  (package (inherit qoauth)
+    (name "qoauth-qt4")
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'patch-qtcrypto
+           (lambda _
+             ;; Qca puts QtCrypto in include/Qca-qt5/QtCrypto
+             (substitute* '("tests/ut_interface/ut_interface.h"
+                            "src/interface.h" "src/interface.cpp")
+                          (("QtCrypto") "QtCrypto/QtCrypto"))))
+         (replace 'configure
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               (zero? (system* "qmake"
+                               (string-append "PREFIX=" out)))))))
+       ))
+    (inputs
+     `(("qca-qt4" ,qca-qt4)
+       ("qt-4" ,qt-4)))))
+
+
+(define-public qca-qt4
+  (package (inherit qca)
+    (name "qca-qt4")
+    (inputs
+     `(("qt-4" ,qt-4)
+       ,@(alist-delete "qtbase" (package-inputs qca))))))
