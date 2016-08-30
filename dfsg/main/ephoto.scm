@@ -15,45 +15,31 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip ephoto)
+(define-module (dfsg main ephoto)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix git-download)
+  #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system gnu)
-  #:use-module (gnu packages autotools)
   #:use-module (gnu packages check)
   #:use-module (gnu packages enlightenment)
-  #:use-module (gnu packages gettext)
   #:use-module (gnu packages pkg-config))
 
 (define-public ephoto
   (package
     (name "ephoto")
-    (version "20160621")
+    (version "1.0-beta2")
     (source
       (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://git.enlightenment.org/apps/ephoto.git/")
-               (commit "ab8edacd0d9cf26ac8e6df524e6c40462308b033")))
-        (file-name (string-append name "-" version "-checkout"))
+        (method url-fetch)
+        (uri (string-append "http://www.smhouston.us/stuff/ephoto-"
+                            version ".tar.xz"))
         (sha256
          (base32
-          "1m4yg5f5sl56rhaybx3xhvg848r0hfh108wb8qjaxflbl9f8rx6c"))))
+          "09crwhprylsa03mp8vb14balyh5x0zai283gsr8hnl6zkx2bxxah"))))
     (build-system gnu-build-system)
-    (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'autoconf
-           (lambda _ (zero? (and (setenv "NOCONFIGURE" "TRUE")
-                                 (system* "sh" "autogen.sh"))))))))
     (native-inputs
-     `(("autoconf" ,autoconf)
-       ("automake" ,automake)
-       ("check" ,check)
-       ("gettext" ,gnu-gettext)
-       ("libtool" ,libtool)
+     `(("check" ,check)
        ("pkg-config" ,pkg-config)))
     (inputs
      `(("efl" ,efl)))
@@ -74,4 +60,6 @@ adjustments, and color level adjustment.
 @item Applying artistic filters to your image such as black and white and old photo.
 @item Drag And Drop along with file operations to easy maintain your photo directories.
 @end enumerate\n")
-    (license (list license:bsd-2 license:bsd-3))))
+    (license (list
+               license:bsd-2 ; Ephoto's thumbnailing code
+               license:bsd-3))))
