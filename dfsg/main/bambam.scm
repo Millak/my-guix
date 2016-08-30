@@ -15,7 +15,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip bambam)
+(define-module (dfsg main bambam)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
@@ -40,13 +40,36 @@
     (build-system python-build-system)
     (arguments
      `(#:python ,python-2
-       #:tests? #f
+       #:tests? #f ; no tests
        #:phases
        (modify-phases %standard-phases
-         (delete 'build))))
+         (delete 'build)
+         (add-before 'install 'patch-data-dir-location
+           (lambda _
+             (substitute* "bambam.py"
+                          (("'data'")
+                           "'../share/bambam/data'"))
+             #t))
+         (replace 'install
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out   (assoc-ref outputs "out"))
+                    (bin   (string-append out "/bin"))
+                    (share (string-append out "/share")))
+               (mkdir-p bin)
+               (copy-file "bambam.py" (string-append bin "/bambam"))
+               (install-file "bambam.6" (string-append share "/man/man6"))
+               (copy-recursively "data" (string-append share "/bambam/data")))
+             #t))
+         (add-after 'install 'wrap-binary
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin/bambam")))
+               (wrap-program bin
+                 `("PYTHONPATH" ":" prefix (,(getenv "PYTHONPATH")))))
+             #t)))))
     (inputs
      `(("python-pygame" ,python-pygame)))
-    (home-page "https://github.com/porridge/bambamb")
+    (home-page "https://github.com/porridge/bambam")
     (synopsis "keyboard mashing and doodling game for babies")
     (description "Bambam is a simple baby keyboard (and gamepad) masher
 application that locks the keyboard and mouse and instead displays bright
