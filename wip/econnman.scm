@@ -37,8 +37,18 @@
          (base32
           "057pwwavlvrrq26bncqnfrf449zzaim0zq717xv86av4n940gwv0"))))
     (build-system gnu-build-system)
+    (arguments
+     `(#:configure-flags '("--localstatedir=/var")
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'install 'wrap-binary
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin/econnman-bin")))
+               (wrap-program bin
+                 `("PYTHONPATH" ":" prefix (,(getenv "PYTHONPATH"))))
+               #t))))))
     (native-inputs `(("pkg-config" ,pkg-config)))
-    ;; needs to be wrapped
     (inputs
      `(("efl" ,efl)
        ("python-2" ,python-2)
