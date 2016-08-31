@@ -48,43 +48,51 @@
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out        (assoc-ref outputs "out"))
                     (onionshare (string-append out "/share/onionshare")))
-               (substitute* "install/pyinstaller.spec"
-                            ;; inform onionshare where the 'resources' files are installed
-                            (("../resources") onionshare))
-               (substitute* "onionshare/strings.py"
-                            ;; correct the locale directory
-                            (("helpers.get_resource_path\\('locale'\\)")
-                             (string-append "'" onionshare "/locale'")))
-               (substitute* "onionshare/helpers.py"
-                            ;; correct the location of version.txt
-                            (("/usr") out)
-                            (("get_resource_path\\('version.txt'\\)")
-                             (string-append "'" onionshare "/version.txt'"))
-                            (("get_resource_path\\('wordlist.txt'\\)")
-                             (string-append "'" onionshare "/wordlist.txt'")))
-               (substitute* "onionshare/web.py"
-                            ;; fix the location of the html files
-                            (("helpers.get_resource_path\\('html/denied.html'\\)")
-                             (string-append "'" onionshare "/html/denied.html'"))
-                            (("helpers.get_resource_path\\('html/404.html'\\)")
-                             (string-append "'" onionshare "/html/404.html'"))
-                            (("helpers.get_resource_path\\('html/index.html'\\)")
-                             (string-append "'" onionshare "/html/index.html'")))
-               (substitute* "onionshare_gui/file_selection.py"
-                            (("helpers.get_resource_path\\('images/drop_files.png'\\)")
-                             (string-append "'" onionshare "/images/drop_files.png'")))
-               (substitute* "onionshare_gui/server_status.py"
-                            (("helpers.get_resource_path\\('images/server_stopped.png'\\)")
-                             (string-append "'" onionshare "/images/server_stopped.png'"))
-                            (("helpers.get_resource_path\\('images/server_working.png'\\)")
-                             (string-append "'" onionshare "/images/server_working.png'"))
-                            (("helpers.get_resource_path\\('images/server_started.png'\\)")
-                             (string-append "'" onionshare "/images/server_started.png'")))
-               (substitute* "onionshare_gui/onionshare_gui.py"
-                            (("helpers.get_resource_path\\('images/logo.png'\\)")
-                             (string-append "'" onionshare "/images/logo.png'")))
-               (substitute* "install/onionshare.desktop"
-                            (("/usr") out))
+               (substitute*
+                 "install/pyinstaller.spec"
+                 ;; inform onionshare where the 'resources' files are installed
+                 (("../resources") onionshare))
+               (substitute*
+                 "onionshare/strings.py"
+                 ;; correct the locale directory
+                 (("helpers.get_resource_path\\('locale'\\)")
+                  (string-append "'" onionshare "/locale'")))
+               (substitute*
+                 "onionshare/helpers.py"
+                 ;; correct the location of version.txt
+                 (("/usr") out)
+                 (("get_resource_path\\('version.txt'\\)")
+                  (string-append "'" onionshare "/version.txt'"))
+                 (("get_resource_path\\('wordlist.txt'\\)")
+                  (string-append "'" onionshare "/wordlist.txt'")))
+               (substitute*
+                 "onionshare/web.py"
+                 ;; fix the location of the html files
+                 (("helpers.get_resource_path\\('html/denied.html'\\)")
+                  (string-append "'" onionshare "/html/denied.html'"))
+                 (("helpers.get_resource_path\\('html/404.html'\\)")
+                  (string-append "'" onionshare "/html/404.html'"))
+                 (("helpers.get_resource_path\\('html/index.html'\\)")
+                  (string-append "'" onionshare "/html/index.html'")))
+               (substitute*
+                 "onionshare_gui/file_selection.py"
+                 (("helpers.get_resource_path\\('images/drop_files.png'\\)")
+                  (string-append "'" onionshare "/images/drop_files.png'")))
+               (substitute*
+                 "onionshare_gui/server_status.py"
+                 (("helpers.get_resource_path\\('images/server_stopped.png'\\)")
+                  (string-append "'" onionshare "/images/server_stopped.png'"))
+                 (("helpers.get_resource_path\\('images/server_working.png'\\)")
+                  (string-append "'" onionshare "/images/server_working.png'"))
+                 (("helpers.get_resource_path\\('images/server_started.png'\\)")
+                  (string-append "'" onionshare "/images/server_started.png'")))
+               (substitute*
+                 "onionshare_gui/onionshare_gui.py"
+                 (("helpers.get_resource_path\\('images/logo.png'\\)")
+                  (string-append "'" onionshare "/images/logo.png'")))
+               (substitute*
+                 "install/onionshare.desktop"
+                 (("/usr") out))
              #t)))
          (delete 'check)
          (add-before 'strip 'tests
@@ -148,7 +156,7 @@ from you.")
      ("python-tornado" ,python-tornado)
      ("python-wtforms" ,python-wtforms)))
     (home-page "https://github.com/AlecAivazis/nautilus")
-    (synopsis "A library for creating microservice applications")
+    (synopsis "Library for creating microservice applications")
     (description
      "Nautilus is a framework for flux based microservices that looks to
 provide extendible implementations of common aspects of a cloud so that you can
@@ -177,7 +185,7 @@ focus on building massively scalable web applications.")
     (synopsis
      "Modern password hashing library")
     (description
-     "bcrypt is a Python module which provides a password hashing method based
+     "Bcrypt is a Python module which provides a password hashing method based
 on the Blowfish password hashing algorithm, as described in
 @url{http://static.usenix.org/events/usenix99/provos.html,\"A Future-Adaptable
 Password Scheme\"} by Niels Provos and David Mazieres.")
@@ -189,39 +197,6 @@ Password Scheme\"} by Niels Provos and David Mazieres.")
       (native-inputs
        `(("python2-setuptools" ,python2-setuptools)
          ,@(package-native-inputs bcrypt))))))
-
-(define-public python-stem
-  (package
-    (name "python-stem")
-    (version "1.4.1b")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "stem" version ".tar.bz2"))
-        (sha256
-         (base32
-          "09a3amp1y351nwz088ckiibbp666qi2lxwkyknavswfm400s0ns7"))))
-    (build-system python-build-system)
-    (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-         (replace 'check
-           (lambda _ (zero? (system* "python" "run_tests.py" "--unit")))))))
-    (inputs
-     `(("python-mock" ,python-mock)
-       ("python-pep8" ,python-pep8)
-       ("python-pyflakes" ,python-pyflakes)
-       ("python-pycrypto" ,python-pycrypto)))
-    (home-page "https://stem.torproject.org/")
-    (synopsis "Controller library for Tor")
-    (description
-     "Stem is a Python controller library that allows applications to interact
-with Tor @url{https://www.torproject.org/}.  With it you can use Tor's control
-protocol to script against the Tor process.")
-    (license license:gpl3)))
-
-(define-public python2-stem
-  (package-with-python2 python-stem))
 
 (define-public python-nose2
 (package
@@ -380,7 +355,7 @@ them do this.")
      `(("python-py" ,python-py)
        ("python-pytest" ,python-pytest)))
     (home-page "http://pytest-django.readthedocs.org/")
-    (synopsis "A Django plugin for py.test")
+    (synopsis "Django plugin for py.test")
     (description "Pytest-django is a plugin for py.test that provides a set of
 useful tools for testing Django applications and projects.")
     (properties `((python2-variant . ,(delay python2-pytest-django))))
@@ -410,7 +385,7 @@ useful tools for testing Django applications and projects.")
      `(("python-six" ,python-six)
        ("python-sqlalchemy" ,python-sqlalchemy)))
     (home-page "https://github.com/kvesteri/sqlalchemy-utils")
-    (synopsis "Various utility functions for SQLAlchemy.")
+    (synopsis "Various utility functions for SQLAlchemy")
     (description
      "SQLAlchemy-utils provides various utility functions and custom data types
 for SQLAlchemy.  SQLAlchemy is an SQL database abstraction library for Python.")
