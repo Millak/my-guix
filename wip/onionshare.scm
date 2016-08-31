@@ -166,14 +166,14 @@ focus on building massively scalable web applications.")
 (define-public python-bcrypt
   (package
     (name "python-bcrypt")
-    (version "2.0.0")
+    (version "3.1.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "bcrypt" version))
         (sha256
          (base32
-          "1yl78fnkyxkg6vbas7lsmrrsknhh7fpygp958svhxl90y9z1jbcb"))))
+          "1giy0dvd8gvq6flxh44np1v2nqwsji5qsnrz038mgwzgp7c20j75"))))
         (build-system python-build-system)
     (native-inputs
      `(("python-pycparser" ,python-pycparser)
@@ -201,14 +201,14 @@ Password Scheme\"} by Niels Provos and David Mazieres.")
 (define-public python-nose2
 (package
   (name "python-nose2")
-  (version "0.6.4")
+  (version "0.6.5")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "nose2" version))
         (sha256
          (base32
-          "0wv33xpg4l9baslidl3i5d8z043gi9yi18k3dl79ahfn0pp7740i"))))
+          "1x4zjq1zlyrh8b9ba0cmafd3w94pxhid408kibyjd3s6h1lap6s7"))))
     (build-system python-build-system)
     (arguments `(#:tests? #f)) ; TODO: re-enable
     (native-inputs
@@ -230,14 +230,14 @@ interfaces and processes.")
 (define-public python-consul
   (package
     (name "python-consul")
-    (version "0.6.0")
+    (version "0.6.1")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "python-consul" version))
         (sha256
          (base32
-          "0vfyr499sbc4nnhhijp2lznyj507nnak95bvv9w8y78ngxggskbh"))))
+          "0rfyxcy4cr3x848vhx876ifalxd5ghq6l5x813m49h4vq2d4jiq8"))))
     (build-system python-build-system)
     (native-inputs
      `(("python-pytest" ,python-pytest)
@@ -302,14 +302,14 @@ with an associated set of resolve methods that know how to fetch data.")
 (define-public python-django-filter
   (package
     (name "python-django-filter")
-    (version "0.13.0")
+    (version "0.14.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "django-filter" version))
         (sha256
          (base32
-          "1z7h640zrm7m4vgv709iv62c1jzzmq6113yhj4d6ssgyfr2n3hdl"))))
+          "0f78hmk8c903zwfzlsiw7ivgag81ymmb5hi73rzxbhnlg2v0l3fx"))))
     (build-system python-build-system)
     (home-page "https://django-filter.readthedocs.io/en/latest/")
     (synopsis "Reusable Django application to filter querysets dynamically")
@@ -372,14 +372,14 @@ useful tools for testing Django applications and projects.")
 (define-public python-sqlalchemy-utils
   (package
     (name "python-sqlalchemy-utils")
-    (version "0.32.7")
+    (version "0.32.9")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "SQLAlchemy-Utils" version))
         (sha256
          (base32
-          "1rwmwvsym2m7x9mwdbp3l8axi9ancmscbbc4hdxja50iwbgcskgg"))))
+          "1zbmmh7n8m01ikizn2mj1mfwch26nsr1awv9mvskqry7av0mpy98"))))
     (build-system python-build-system)
     (inputs
      `(("python-six" ,python-six)
@@ -479,14 +479,14 @@ to Python.")
 (define-public python-pytest-mock
   (package
     (name "python-pytest-mock")
-    (version "1.1")
+    (version "1.2")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "pytest-mock" version ".zip"))
         (sha256
          (base32
-          "0gmlh1jzcs385d0764gshmmyszid70v8sc185pmz7gb97idza461"))))
+          "03zxar5drzm7ksqyrwypjaza3cri6wqvpr6iam92djvg6znp32gp"))))
     (build-system python-build-system)
     (native-inputs
      `(("unzip" ,unzip)))
@@ -548,14 +548,14 @@ same arguments.")
 (define-public python-peewee
   (package
     (name "python-peewee")
-    (version "2.8.1")
+    (version "2.8.3")
       (source
         (origin
         (method url-fetch)
         (uri (pypi-uri "peewee" version))
         (sha256
          (base32
-          "0zcqszn46ag1kbrhzl95lh9psrai0zj6mq13193jph4m9l991nwz"))))
+          "1605bk11s7aap2q4qyba93rx7yfh8b11kk0cqi08z8klx2iar8yd"))))
     (build-system python-build-system)
     (arguments
      `(#:tests? #f)) ; Fails to import test data
