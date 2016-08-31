@@ -20,6 +20,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
+  #:use-module (guix utils)
   #:use-module (guix build-system python)
   #:use-module (gnu packages databases)
   #:use-module (gnu packages python)
@@ -97,7 +98,8 @@
          (delete 'check)
          (add-before 'strip 'tests
            ;; After all the patching we run the tests after installing.
-           ;; This is also a known issue: https://github.com/micahflee/onionshare/issues/284
+           ;; This is also a known issue:
+           ;; https://github.com/micahflee/onionshare/issues/284
            (lambda _ (zero? (system* "nosetests" "test")))))
        ;; can't compress the egg because it expects to find all the resources
        ;; inside the egg as though it were a folder.
@@ -136,25 +138,25 @@ from you.")
         (sha256
          (base32
           "01hwzjc1zshk4vvxrcghm398fpy4jls66dyz06g07mrwqif8878p"))))
-  (build-system python-build-system)
-  (arguments `(#:tests? #f)) ; fails to import test modules
-  (native-inputs
-   `(("python-graphql-core" ,python-graphql-core)
-     ("python-graphql-relay" ,python-graphql-relay)
-     ("python-pycparser" ,python-pycparser)
-     ("python-requests" ,python-requests)
-     ("python-setuptools" ,python-setuptools)))
-  (inputs
-   `(("python-bcrypt" ,python-bcrypt)
-     ("python-click" ,python-click)
-     ("python-consul" ,python-consul)
-     ("python-graphene" ,python-graphene)
-     ("python-jinja2" ,python-jinja2)
-     ("python-nose2" ,python-nose2)
-     ("python-peewee" ,python-peewee)
-     ("python-pika" ,python-pika)
-     ("python-tornado" ,python-tornado)
-     ("python-wtforms" ,python-wtforms)))
+    (build-system python-build-system)
+    (arguments `(#:tests? #f)) ; fails to import test modules
+    (native-inputs
+     `(("python-graphql-core" ,python-graphql-core)
+       ("python-graphql-relay" ,python-graphql-relay)
+       ("python-pycparser" ,python-pycparser)
+       ("python-requests" ,python-requests)
+       ("python-setuptools" ,python-setuptools)))
+    (inputs
+     `(("python-bcrypt" ,python-bcrypt)
+       ("python-click" ,python-click)
+       ("python-consul" ,python-consul)
+       ("python-graphene" ,python-graphene)
+       ("python-jinja2" ,python-jinja2)
+       ("python-nose2" ,python-nose2)
+       ("python-peewee" ,python-peewee)
+       ("python-pika" ,python-pika)
+       ("python-tornado" ,python-tornado)
+       ("python-wtforms" ,python-wtforms)))
     (home-page "https://github.com/AlecAivazis/nautilus")
     (synopsis "Library for creating microservice applications")
     (description
@@ -199,20 +201,21 @@ Password Scheme\"} by Niels Provos and David Mazieres.")
          ,@(package-native-inputs bcrypt))))))
 
 (define-public python-nose2
-(package
-  (name "python-nose2")
-  (version "0.6.5")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "nose2" version))
-        (sha256
-         (base32
-          "1x4zjq1zlyrh8b9ba0cmafd3w94pxhid408kibyjd3s6h1lap6s7"))))
+  (package
+    (name "python-nose2")
+    (version "0.6.5")
+      (source
+        (origin
+          (method url-fetch)
+          (uri (pypi-uri "nose2" version))
+          (sha256
+           (base32
+            "1x4zjq1zlyrh8b9ba0cmafd3w94pxhid408kibyjd3s6h1lap6s7"))))
     (build-system python-build-system)
-    (arguments `(#:tests? #f)) ; TODO: re-enable
+    (arguments `(#:tests? #f)) ; 'module' object has no attribute 'collector'
     (native-inputs
-     `(("python-pytest-cov" ,python-pytest-cov)))
+     `(("python-setuptools" ,python-setuptools)
+       ("python-pytest-cov" ,python-pytest-cov)))
     (inputs
      `(("python-six" ,python-six)))
     (home-page "https://github.com/nose-devs/nose2")
@@ -450,7 +453,13 @@ from Facebook.")
           "0rsaarx2sj4xnw9966rhh4haiqaapm4lm2mfqm48ywd51j5vh1a0"))))
     (build-system python-build-system)
     (arguments
-     `(#:tests? #f)) ; can't find gevent
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'patch-hardcoded-version
+           (lambda _ (substitute*
+                       "setup.py"
+                       (("'gevent==1.1rc1'") "'gevent'"))
+             #t)))))
     (native-inputs
      `(("python-gevent" ,python-gevent)
        ("python-mock" ,python-mock)
@@ -541,8 +550,12 @@ same arguments.")
   (let ((promise (package-with-python2
                    (strip-python2-variant python-promise))))
     (package (inherit promise)
+      (arguments (substitute-keyword-arguments (package-arguments promise)
+                   ((#:tests? _) #t)))
       (native-inputs
-       `(("python2-setuptools" ,python2-setuptools)
+       `(("python2-futures" ,python2-futures)
+         ("python2-pytest" ,python2-pytest)
+         ("python2-setuptools" ,python2-setuptools)
          ,@(package-native-inputs promise))))))
 
 (define-public python-peewee
@@ -570,6 +583,9 @@ can use Python types in your code without having to worry.  It has built-in
 support for sqlite, mysql and postgresql.  If you already have a database, you
 can autogenerate peewee models using @code{pwiz}, a model generator.")
     (license license:expat)))
+
+(define-public python2-peewee
+  (package-with-python2 python-peewee))
 
 (define-public python-pika
   (package
