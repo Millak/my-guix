@@ -35,7 +35,7 @@
           "0qkpq412p78znw8gckwcx3l0wcss9s0dgw1pvjb1ih2pxf6hm4rw"))))
     (build-system gnu-build-system)
     (home-page "http://libhdate.sourceforge.net/")
-    (synopsis "library to use hebrew dates")
+    (synopsis "Library to use Hebrew dates")
     (description "LibHdate is a small library for the Hebrew calendar and times
 of day, written in C, and including bindings for C++, pascal, perl, php, python,
 and ruby.  It includes two illustrative command-line programs, hcal and hdate,

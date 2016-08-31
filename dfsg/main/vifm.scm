@@ -47,7 +47,7 @@
      `(("libx11" ,libx11)
        ("ncurses" ,ncurses)))
     (home-page "http://vifm.info/")
-    (synopsis "flexible vi-like file manager using ncurses")
+    (synopsis "Flexible vi-like file manager using ncurses")
     (description "Vifm is a file manager providing a vi-like usage experience.
 It has similar keybindings and modes (e.g. normal, command line, visual).  The
 interface uses ncurses, thus vifm can be used in text-only environments.  It

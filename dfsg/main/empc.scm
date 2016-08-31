@@ -28,15 +28,17 @@
   #:use-module (gnu packages pkg-config))
 
 (define-public empc
+  (let ((commit "e8509d5935b79ef7387caeb4f7bc0377e265b366")
+        (revision "1"))
   (package
     (name "empc")
-    (version "20160617")
+    (version (string-append "0.99.0a-" revision "." (string-take commit 7)))
     (source
       (origin
         (method git-fetch)
         (uri (git-reference
                (url "https://git.enlightenment.org/apps/empc.git/")
-               (commit "e8509d5935b79ef7387caeb4f7bc0377e265b366")))
+               (commit commit)))
         (file-name (string-append name "-" version "-checkout"))
         (sha256
          (base32
@@ -61,4 +63,4 @@
     (home-page "https://www.enlightenment.org")
     (synopsis "Enlightenment powered mpd client")
     (description "The best fucking music player ever written")
-    (license license:gpl3+)))
+    (license license:gpl3+))))

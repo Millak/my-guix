@@ -26,27 +26,29 @@
   #:use-module (gnu packages pkg-config))
 
 (define-public ecrire
-  (package
-    (name "ecrire")
-    (version "20151008")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://git.enlightenment.org/apps/ecrire.git/")
-               (commit "a7da0abdb3eef334ac77b61a8320172531518818")))
-        (file-name (string-append name "-" version "-checkout"))
-        (sha256
-         (base32
-          "0f7phsdkxm26nlz6lm4ghski0gjrn2lhbnbjcql4phicdb8p00vl"))))
-    (build-system cmake-build-system)
-    (arguments `(#:tests? #f)) ; no tests
-    (native-inputs
-     `(("gettext" ,gnu-gettext)
-       ("pkg-config" ,pkg-config)))
-    (inputs
-     `(("efl" ,efl)))
-    (home-page "https://www.enlightenment.org")
-    (synopsis "EFL simple text editor")
-    (description "EFL simple text editor")
-    (license license:gpl3+)))
+  (let ((commit "a7da0abdb3eef334ac77b61a8320172531518818")
+        (revision "1"))
+    (package
+      (name "ecrire")
+      (version (string-append "0.0.0-" revision "." (string-take commit 7)))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://git.enlightenment.org/apps/ecrire.git/")
+                 (commit commit)))
+          (file-name (string-append name "-" version "-checkout"))
+          (sha256
+           (base32
+            "0f7phsdkxm26nlz6lm4ghski0gjrn2lhbnbjcql4phicdb8p00vl"))))
+      (build-system cmake-build-system)
+      (arguments `(#:tests? #f)) ; no tests
+      (native-inputs
+       `(("gettext" ,gnu-gettext)
+         ("pkg-config" ,pkg-config)))
+      (inputs
+       `(("efl" ,efl)))
+      (home-page "https://www.enlightenment.org")
+      (synopsis "EFL simple text editor")
+      (description "EFL simple text editor")
+      (license license:gpl3+))))
