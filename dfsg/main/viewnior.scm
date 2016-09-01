@@ -39,8 +39,7 @@
                             name "-" version ".tar.gz"))
         (sha256
          (base32
-          "18309qjgwak3kn228z3p3nx7yxasqgzx69v3rgc23hf161nky0c9"))
-        (file-name (string-append name "-" version ".tar.gz"))))
+          "18309qjgwak3kn228z3p3nx7yxasqgzx69v3rgc23hf161nky0c9"))))
     (build-system gnu-build-system)
     (arguments
      `(#:phases
@@ -52,7 +51,7 @@
      `(("automake" ,automake)
        ("autoconf" ,autoconf)
        ("intltool" ,intltool)
-       ("glib" ,glib "bin")
+       ("glib" ,glib "bin") ; glib-genmarshal
        ("gnome-common" ,gnome-common)
        ("libtool" ,libtool)
        ("pkg-config" ,pkg-config)
@@ -68,13 +67,14 @@
 fast and elegant.  Its minimalistic interface provides more screenspace for
 your images.  Among its features are:
 @enumerate
-@item Fullscreen & Slid
+@item Fullscreen & Slideshow
 @item Rotate, flip, crop, save, delete images
 @item Animation support
 @item Browse only selected images
 @item Navigation window
-@item Set image as wallpaper (under GNOME, Fluxbox and LXDE)
+@item Set image as wallpaper (Gnome 2, Gnome 3, XFCE, LXDE, FluxBox, Nitrogen)
 @item Simple interface
+@item EXIF and IPTC metadata
 @item Configurable mouse actions
 @end enumerate\n")
     (license license:gpl3+)))
