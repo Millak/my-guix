@@ -27,7 +27,6 @@
   #:use-module (gnu packages perl)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages ruby)
-  #:use-module (gnu packages swig)
   #:use-module (gnu packages xml)
   #:use-module (gnu packages web))
 
@@ -53,7 +52,8 @@
            (lambda* (#:key outputs #:allow-other-keys)
              (substitute* "Makefile"
                           (("\\$\\(prefix\\)") (assoc-ref outputs "out")))
-             (setenv "DESTDIR" "")))
+             (setenv "DESTDIR" "")
+             #t))
          ;; in our ncurses, the headers are in /include
          (add-before 'build 'patch-ncursesw
            (lambda _
@@ -67,8 +67,7 @@
                (symlink (string-append lib "/libstfl.so")
                         (string-append lib "/libstfl.so.0"))))))))
     (inputs
-     `(("ncurses" ,ncurses)
-       ("swig" ,swig)))
+     `(("ncurses" ,ncurses)))
     (home-page "http://www.clifford.at/stfl/")
     (synopsis "Structured terminal forms library")
     (description "Stfl is a library which implements a curses-based widget
@@ -97,11 +96,12 @@ set for text terminals.")
                           ;; ncurses5 was sooo last year
                           (("ncursesw5") "ncursesw6"))
              (substitute* "Makefile"
-                          (("/usr/local") (assoc-ref %outputs "out"))))))
+                          (("/usr/local") (assoc-ref %outputs "out")))
+             #t)))
        #:test-target "test"))
     (native-inputs
      `(("gettext" ,gnu-gettext)
-       ("perl" ,perl)
+       ("perl" ,perl) ; for the documentation
        ("pkg-config" ,pkg-config)
        ("ruby" ,ruby))) ; for tests
     (inputs
