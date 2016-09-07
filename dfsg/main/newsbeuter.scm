@@ -58,7 +58,8 @@
          (add-before 'build 'patch-ncursesw
            (lambda _
              (substitute* '("stfl_internals.h")
-                          (("ncursesw/") ""))))
+                          (("ncursesw/") ""))
+             #t))
          (add-after 'install 'install-missing-symlink
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
@@ -107,7 +108,7 @@ set for text terminals.")
     (inputs
      `(("curl" ,curl)
        ("json-c" ,json-c)
-       ("ncurses5" ,ncurses)
+       ("ncurses" ,ncurses)
        ("stfl" ,stfl)
        ("sqlite" ,sqlite)
        ("libxml2" ,libxml2)))

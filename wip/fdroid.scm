@@ -45,7 +45,8 @@
                           (("\\(data_prefix\\ \\+\\ '/share/doc/fdroidserver/examples',") "")
                           (("\\['buildserver") "'buildserver")
                           (("'\\]\\)") "'")
-                          ))))
+                          )
+             #t)))
        #:python ,python-2)) ; after 0.6.0 it switches to python3
     (inputs
      `(("python2-apache-libcloud" ,python2-apache-libcloud)
