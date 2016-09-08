@@ -48,13 +48,13 @@
        ("ncurses" ,ncurses)))
     (home-page "http://vifm.info/")
     (synopsis "Flexible vi-like file manager using ncurses")
-    (description "Vifm is a file manager providing a vi-like usage experience.
+    (description "Vifm is a file manager providing a @code{vi}-like usage experience.
 It has similar keybindings and modes (e.g. normal, command line, visual).  The
 interface uses ncurses, thus vifm can be used in text-only environments.  It
-supports a wide range of features, some of which are known from the vi-editor:
+supports a wide range of features, some of which are known from the @code{vi}-editor:
 @enumerate
 @item utf8 support
-@item user mappings (almost like in vi)
+@item user mappings (almost like in @code{vi})
 @item ranges in command
 @item line commands
 @item user defined commands (with support for ranges)

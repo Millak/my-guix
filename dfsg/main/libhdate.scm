@@ -38,6 +38,6 @@
     (synopsis "Library to use Hebrew dates")
     (description "LibHdate is a small library for the Hebrew calendar and times
 of day, written in C, and including bindings for C++, pascal, perl, php, python,
-and ruby.  It includes two illustrative command-line programs, hcal and hdate,
-and some snippets and scripts written in the binding languages.")
+and ruby.  It includes two illustrative command-line programs, @code{hcal} and
+@code{hdate}, and some snippets and scripts written in the binding languages.")
     (license license:gpl3+)))
