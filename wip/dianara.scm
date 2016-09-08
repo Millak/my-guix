@@ -81,7 +81,8 @@ need to use a web browser.")
              ;; Qca puts QtCrypto in include/Qca-qt5/QtCrypto
              (substitute* '("tests/ut_interface/ut_interface.h"
                             "src/interface.h" "src/interface.cpp")
-                          (("QtCrypto") "Qca-qt5/QtCrypto"))))
+                          (("QtCrypto") "Qca-qt5/QtCrypto"))
+             #t))
          (replace 'configure
            (lambda* (#:key outputs #:allow-other-keys)
              (let ((out (assoc-ref outputs "out")))
@@ -109,7 +110,8 @@ using OAuth authorization scheme.")
              ;; Qca puts QtCrypto in include/Qca-qt5/QtCrypto
              (substitute* '("tests/ut_interface/ut_interface.h"
                             "src/interface.h" "src/interface.cpp")
-                          (("QtCrypto") "QtCrypto/QtCrypto"))))
+                          (("QtCrypto") "QtCrypto/QtCrypto"))
+             #t))
          (replace 'configure
            (lambda* (#:key outputs #:allow-other-keys)
              (let ((out (assoc-ref outputs "out")))

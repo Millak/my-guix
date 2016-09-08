@@ -190,7 +190,7 @@
      `(("python-mock" ,python-mock)))
     (home-page "https://libcloud.apache.org/")
     (synopsis
-     "A Python library to abstract away differences among cloud provider APIs")
+     "Python library to abstract away differences among cloud provider APIs")
     (description
      "Apache Libcloud is a Python library which hides differences between
 different cloud provider APIs and allows you to manage different cloud resources
@@ -282,7 +282,8 @@ categories.")
          (add-after 'unpack 'fix-reference
            ;; installing is much easier when you don't depend on yourself
            (lambda _
-             (substitute* "setup.py" (("\\['Naked', ") "[")))))))
+             (substitute* "setup.py" (("\\['Naked', ") "["))
+             #t)))))
     (inputs
      `(("python-pyyaml" ,python-pyyaml)
        ("python-requests" ,python-requests)))
