@@ -20,6 +20,8 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
+  #:use-module (gnu packages check)
+  #:use-module (gnu packages code)
   #:use-module (gnu packages enlightenment)
   #:use-module (gnu packages llvm)
   #:use-module (gnu packages pkg-config))
@@ -37,7 +39,11 @@
          (base32
           "0qczz5psryxasphg5km95845h510237rf0k1dy8f0dad52ii90j1"))))
     (build-system gnu-build-system)
-    (native-inputs `(("pkg-config" ,pkg-config)))
+    (arguments '(#:configure-flags '("--with-tests=coverage")))
+    (native-inputs
+     `(("check" ,check)
+       ("lcov" ,lcov)
+       ("pkg-config" ,pkg-config)))
     (inputs
      `(("clang" ,clang)
        ("efl" ,efl)))
