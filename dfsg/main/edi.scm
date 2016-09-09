@@ -21,6 +21,7 @@
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages enlightenment)
+  #:use-module (gnu packages llvm)
   #:use-module (gnu packages pkg-config))
 
 (define-public edi
@@ -30,21 +31,21 @@
     (source
       (origin
         (method url-fetch)
-        (uri (list
-               (string-append "https://download.enlightenment.org/rel/apps/edi"
-                              "/edi-" version ".tar.bz2")
-               (string-append "https://github.com/ajwillia-ms/edi/releases/"
-                              "download/v" version "/edi-" version ".tar.bz2")))
+        (uri (string-append "https://github.com/ajwillia-ms/edi/releases/"
+                            "download/v" version "/edi-" version ".tar.bz2"))
         (sha256
          (base32
-          "02d8hplcviayri8fxws56n362k6zqsf62v8pbn5sbgwrmkqwybhc"))))
+          "0qczz5psryxasphg5km95845h510237rf0k1dy8f0dad52ii90j1"))))
     (build-system gnu-build-system)
     (native-inputs `(("pkg-config" ,pkg-config)))
-    (inputs `(("efl" ,efl)))
+    (inputs
+     `(("clang" ,clang)
+       ("efl" ,efl)))
     (home-page "https://www.enlightenment.org/about-edi")
-    (synopsis "Development environment using the EFL")
+    (synopsis "Development environment for Enlightenment")
     (description "EDI is a development environment designed for and built using
 the EFL.  It's aim is to create a new, native development environment for Linux
-that trys to lower the barrier to getting involved in Enlightenment development
-and in creating apps based on the EFL suite.")
-    (license license:gpl2)))
+that tries to lower the barrier to getting involved in Enlightenment development
+and in creating applications based on the Enlightenment Foundation Library suite.")
+    (license (list license:public-domain ; data/extra/skeleton
+                   license:gpl2))))      ; edi
