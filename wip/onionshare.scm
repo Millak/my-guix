@@ -123,9 +123,8 @@ using a third party filesharing service.  You host the file on your own computer
 and use a Tor hidden service to make it temporarily accessible over the
 internet.  The other user just needs to use Tor Browser to download the file
 from you.")
-    (license (list
-               license:gpl3+
-               license:bsd-3)))) ; onionshare/socks.py
+    (license (list license:gpl3+
+                   license:bsd-3)))) ; onionshare/socks.py
 
 (define-public python-nautilus
   (package
@@ -141,20 +140,20 @@ from you.")
     (build-system python-build-system)
     (arguments `(#:tests? #f)) ; fails to import test modules
     (native-inputs
-     `(("python-graphql-core" ,python-graphql-core)
-       ("python-graphql-relay" ,python-graphql-relay)
-       ("python-pycparser" ,python-pycparser)
-       ("python-requests" ,python-requests)
-       ("python-setuptools" ,python-setuptools)))
+     `(("python-setuptools" ,python-setuptools)))
     (inputs
      `(("python-bcrypt" ,python-bcrypt)
        ("python-click" ,python-click)
        ("python-consul" ,python-consul)
+       ("python-graphql-core" ,python-graphql-core)
+       ("python-graphql-relay" ,python-graphql-relay)
        ("python-graphene" ,python-graphene)
        ("python-jinja2" ,python-jinja2)
        ("python-nose2" ,python-nose2)
        ("python-peewee" ,python-peewee)
        ("python-pika" ,python-pika)
+       ("python-pycparser" ,python-pycparser)
+       ("python-requests" ,python-requests)
        ("python-tornado" ,python-tornado)
        ("python-wtforms" ,python-wtforms)))
     (home-page "https://github.com/AlecAivazis/nautilus")
@@ -214,10 +213,11 @@ Password Scheme\"} by Niels Provos and David Mazieres.")
     (build-system python-build-system)
     (arguments `(#:tests? #f)) ; 'module' object has no attribute 'collector'
     (native-inputs
-     `(("python-setuptools" ,python-setuptools)
-       ("python-pytest-cov" ,python-pytest-cov)))
+     `(("python-setuptools" ,python-setuptools)))
     (inputs
-     `(("python-six" ,python-six)))
+     `(("python-cov-core" ,python-cov-core)
+       ("python-pytest-cov" ,python-pytest-cov)
+       ("python-six" ,python-six)))
     (home-page "https://github.com/nose-devs/nose2")
     (synopsis "Next generation of nicer testing for Python")
     (description
@@ -229,6 +229,34 @@ interfaces and processes.")
 
 (define-public python2-nose2
   (package-with-python2 python-nose2))
+
+(define-public python-cov-core
+  (package
+    (name "python-cov-core")
+    (version "1.15.0")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "cov-core" version))
+        (sha256
+         (base32
+    "0k3np9ymh06yv1ib96sb6wfsxjkqhmik8qfsn119vnhga9ywc52a"))))
+    (build-system python-build-system)
+    (native-inputs
+     `(("python-coverage" ,python-coverage)))
+    (home-page "https://github.com/schlamar/cov-core")
+    (synopsis "plugin core for use by pytest-cov, nose-cov and nose2-cov")
+    (description
+     "This is a library package for use by pytest-cov, nose-cov and nose2-cov.
+It is useful for developing coverage plugins for these testing frameworks.")
+    (license license:expat)))
+
+(define-public python2-cov-core
+  (let ((cov-core (package-with-python2 python-cov-core)))
+    (package (inherit cov-core)
+      (native-inputs
+       `(("python2-setuptools" ,python2-setuptools)
+         ,@(package-native-inputs cov-core))))))
 
 (define-public python-consul
   (package
