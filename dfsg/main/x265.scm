@@ -38,7 +38,7 @@
     (build-system cmake-build-system)
     (arguments
      `(#:configure-flags '("-DENABLE_TESTS=ON"
-                           "-HIGH_BIT_DEPTH=ON") ; 64-bit only
+                           "-DHIGH_BIT_DEPTH=ON") ; 64-bit only
        ;; x265 tunes itself to the target's CPU
        ;#:substitutable? #f ; not available in cmake-build-system
        #:phases
