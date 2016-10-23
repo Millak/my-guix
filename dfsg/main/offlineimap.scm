@@ -22,8 +22,8 @@
   #:use-module (gnu packages mail)
   #:use-module (gnu packages python))
 
-(define-public offlineimap-custom
+(define-public offlineimap-py3
   (package (inherit offlineimap)
-    (name "offlineimap-custom")
+    (name "offlineimap-py3")
     (arguments `(#:tests? #f))
     (inputs `(("python-six" ,python-six)))))
