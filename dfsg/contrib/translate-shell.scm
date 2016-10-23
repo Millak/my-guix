@@ -45,14 +45,6 @@
      `(#:phases
        (modify-phases %standard-phases
          (delete 'configure) ; no configure phase
-         (add-after 'patch-source-shebangs 'patch-more-shebangs
-           (lambda* (#:key inputs #:allow-other-keys)
-             (let* ((gawk     (assoc-ref inputs "gawk"))
-                    (gawk-bin (string-append gawk "/bin/gawk"))
-                   )
-               (substitute* (find-files "." "\\.awk$")
-                            (("#!/usr/bin/gawk") gawk-bin)
-                            (("#!/usr/bin/env gawk") gawk-bin)))))
          (add-after 'install 'emacs-install
            (lambda* (#:key inputs outputs #:allow-other-keys)
              (let* ((out   (assoc-ref outputs "out"))
@@ -65,15 +57,14 @@
        #:modules ((guix build gnu-build-system)
                   (guix build emacs-utils)
                   (guix build utils))
-       #:tests? #f
+       #:tests? #f ; hexdump is not available for the tests
        ))
     (propagated-inputs
      `(("curl" ,curl)
        ("fribidi" ,fribidi)
        ("gawk" ,gawk)
        ("mpg123" ,mpg123)
-       ("rlwrap" ,rlwrap)
-       ))
+       ("rlwrap" ,rlwrap)))
     (native-inputs `(("emacs" ,emacs-minimal)))
     (home-page "https://www.soimort.org/translate-shell")
     (synopsis "Cli translator using Google translate")
