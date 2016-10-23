@@ -24,7 +24,7 @@
   #:use-module (gnu packages emacs)
   #:use-module (gnu packages fribidi)
   #:use-module (gnu packages gawk)
-  #:use-module (gnu packages mp3)
+  #:use-module (gnu packages linux) ; util-linux
   #:use-module (gnu packages readline))
 
 (define-public translate-shell
@@ -57,18 +57,20 @@
        #:modules ((guix build gnu-build-system)
                   (guix build emacs-utils)
                   (guix build utils))
-       #:tests? #f ; hexdump is not available for the tests
-       ))
+       #:test-target "test"))
     (propagated-inputs
      `(("curl" ,curl)
        ("fribidi" ,fribidi)
        ("gawk" ,gawk)
-       ("mpg123" ,mpg123)
        ("rlwrap" ,rlwrap)))
-    (native-inputs `(("emacs" ,emacs-minimal)))
+    (native-inputs
+     `(("emacs" ,emacs-minimal)
+       ("util-linux" ,util-linux))) ; hexdump, for the test
     (home-page "https://www.soimort.org/translate-shell")
-    (synopsis "Cli translator using Google translate")
-    (description "Translate-shell is a simple command line interface to
-@url{https://translate.google.com} which allows you to translate strings in your
-terminal.")
+    (synopsis "Translations from the command line")
+    (description
+     "Translate Shell (formerly Google Translate CLI) is a command-line
+translator powered by Google Translate (default), Bing Translator,
+Yandex.Translate and Apertium.  It gives you easy access to one of these
+translation engines from your terminal.")
     (license license:public-domain)))
