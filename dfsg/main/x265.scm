@@ -18,40 +18,19 @@
 
 (define-module (dfsg main x265)
   #:use-module (guix packages)
-  #:use-module (guix download)
-  #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix build-system cmake)
+  #:use-module (guix utils)
+  #:use-module (gnu packages video)
   #:use-module (gnu packages assembly))
 
-(define-public x265
+(define-public x265-custom
   (package
-    (name "x265")
-    (version "2.0")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (string-append "https://download.videolan.org/videolan/x265/"
-                            "x265_" version ".tar.gz"))
-        (sha256
-         (base32
-          "07yf1fkl4qbbmjc8wiy379k3cpqjcdn9lpdyj3310cz3psbnfzss"))))
-    (build-system cmake-build-system)
+    (inherit x265)
+    (name "x265-custom")
     (arguments
-     `(#:configure-flags '("-DENABLE_TESTS=ON"
-                           "-DHIGH_BIT_DEPTH=ON") ; 64-bit only
-       ;; x265 tunes itself to the target's CPU
-       ;#:substitutable? #f ; not available in cmake-build-system
-       #:phases
-       (modify-phases %standard-phases
-         (add-before 'configure 'prepare-build
-           (lambda _
-             (delete-file-recursively "build")
-             (chdir "source")
-             #t)))))
+      (substitute-keyword-arguments (package-arguments x265)
+        ((#:tests? _) #t)
+        ((#:configure-flags _)
+         `(list "-DENABLE_TESTS=ON"
+                "-DHIGH_BIT_DEPTH=ON")))) ; 64-bit only
     (native-inputs
-     `(("yasm" ,yasm)))
-    (home-page "http://x265.org/")
-    (synopsis "Library for encoding h.265/HEVC video streams")
-    (description "x265 is a H.265 / HEVC video encoder application library,
-designed to encode video or images into an H.265 / HEVC encoded bitstream.")
-    (license license:gpl2+)))
+     `(("yasm" ,yasm)))))
