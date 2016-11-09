@@ -27,6 +27,7 @@
   #:use-module (gnu packages perl)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages ruby)
+  #:use-module (gnu packages swig)
   #:use-module (gnu packages xml)
   #:use-module (gnu packages web))
 
@@ -52,14 +53,12 @@
            (lambda* (#:key outputs #:allow-other-keys)
              (substitute* "Makefile"
                           (("\\$\\(prefix\\)") (assoc-ref outputs "out")))
-             (setenv "DESTDIR" "")
-             #t))
+             (setenv "DESTDIR" "")))
          ;; in our ncurses, the headers are in /include
          (add-before 'build 'patch-ncursesw
            (lambda _
              (substitute* '("stfl_internals.h")
-                          (("ncursesw/") ""))
-             #t))
+                          (("ncursesw/") ""))))
          (add-after 'install 'install-missing-symlink
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
@@ -68,7 +67,8 @@
                (symlink (string-append lib "/libstfl.so")
                         (string-append lib "/libstfl.so.0"))))))))
     (inputs
-     `(("ncurses" ,ncurses)))
+     `(("ncurses" ,ncurses)
+       ("swig" ,swig)))
     (home-page "http://www.clifford.at/stfl/")
     (synopsis "Structured terminal forms library")
     (description "Stfl is a library which implements a curses-based widget
@@ -97,18 +97,17 @@ set for text terminals.")
                           ;; ncurses5 was sooo last year
                           (("ncursesw5") "ncursesw6"))
              (substitute* "Makefile"
-                          (("/usr/local") (assoc-ref %outputs "out")))
-             #t)))
+                          (("/usr/local") (assoc-ref %outputs "out"))))))
        #:test-target "test"))
     (native-inputs
      `(("gettext" ,gnu-gettext)
-       ("perl" ,perl) ; for the documentation
+       ("perl" ,perl)
        ("pkg-config" ,pkg-config)
        ("ruby" ,ruby))) ; for tests
     (inputs
      `(("curl" ,curl)
        ("json-c" ,json-c)
-       ("ncurses" ,ncurses)
+       ("ncurses5" ,ncurses)
        ("stfl" ,stfl)
        ("sqlite" ,sqlite)
        ("libxml2" ,libxml2)))
