@@ -19,6 +19,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build utils)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages file)
@@ -48,9 +49,9 @@
                                (string-append "PREFIX=" out)))))))))
     (inputs
      `(("file" ,file) ; libmagic
-       ("qca-qt4" ,qca-qt4)
-       ("qoauth-qt4" ,qoauth-qt4)
-       ("qt-4" ,qt-4)))
+       ("qca" ,qca)
+       ("qoauth" ,qoauth)
+       ("qtbase" ,qtbase)))
     (home-page "https://jancoding.wordpress.com/dianara/")
     (synopsis "Client for the pump.io federated social network")
     (description
@@ -60,44 +61,42 @@ need to use a web browser.")
     (license license:gpl2+)))
 
 (define-public qoauth
-  (package
-    (name "qoauth")
-    (version "1.0.1")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (string-append
-               "https://github.com/ayoy/qoauth/archive/v" version ".tar.gz"))
-        (file-name (string-append name "-" version ".tar.gz"))
-        (sha256
-         (base32
-          "130y1gnc9q10k5j7r612j9p7w8dqjbp8wjv4xzx9hnvkbc6jw88h"))))
-    (build-system gnu-build-system)
-    (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'patch-qtcrypto
-           (lambda _
-             ;; Qca puts QtCrypto in include/Qca-qt5/QtCrypto
-             (substitute* '("tests/ut_interface/ut_interface.h"
-                            "src/interface.h" "src/interface.cpp")
-                          (("QtCrypto") "Qca-qt5/QtCrypto"))
-             #t))
-         (replace 'configure
-           (lambda* (#:key outputs #:allow-other-keys)
-             (let ((out (assoc-ref outputs "out")))
-               (zero? (system* "qmake"
-                               (string-append "PREFIX=" out)))))))
-       ))
-    (inputs
-     `(("qca" ,qca)
-       ("qtbase" ,qtbase)))
-    (home-page "https://github.com/ayoy/qoauth")
-    (synopsis "Qt-based client implementation of the OAuth authorization scheme")
-    (description
-     "QOAuth is a Qt-based C++ implementation of an interface to services
-using OAuth authorization scheme.")
-    (license license:lgpl2.1+)))
+  ;; The last release is from 2010, and support for qt5 has been added since
+  (let ((commit "02fbc13a42d945b703a28a49d71c02b20c76a0b8")
+        (revision "1"))
+    (package
+      (name "qoauth")
+      (version (string-append "1.0.1-" revision "." (string-take commit 7)))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                (url "https://github.com/ayoy/qoauth.git")
+                (commit commit)))
+          (file-name (string-append name "-" version "-checkout"))
+          (sha256
+           (base32
+            "0lnzgpdfjcx7szw1ibm4sqrsd7ahnnrh7i7bxsj63hyicnaihxh8"))))
+      (build-system gnu-build-system)
+      (arguments
+       `(#:phases
+         (modify-phases %standard-phases
+           (replace 'configure
+             (lambda* (#:key outputs #:allow-other-keys)
+               (let ((out (assoc-ref outputs "out")))
+                 (zero? (system* "qmake"
+                                 (string-append "PREFIX=" out)))))))
+         #:tests? #f ; F*** tests
+         ))
+      (inputs
+       `(("qca" ,qca)
+         ("qtbase" ,qtbase)))
+      (home-page "https://github.com/ayoy/qoauth")
+      (synopsis "Qt-based client implementation of the OAuth authorization scheme")
+      (description
+       "QOAuth is a Qt-based C++ implementation of an interface to services
+  using OAuth authorization scheme.")
+      (license license:lgpl2.1+))))
 
 (define-public qoauth-qt4
   (package (inherit qoauth)
