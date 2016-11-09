@@ -36,7 +36,7 @@
       (origin
         (method url-fetch)
         (uri (string-append
-               "http://ranger.nongnu.org/ranger-" version ".tar.gz"))
+               "http://nongnu.org/ranger/ranger-" version ".tar.gz"))
         (sha256
          (base32
           "0yaviybviwdvfg2a0pf2kk28g10k245499xmbpqlai7fv91f7xll"))))
@@ -63,20 +63,18 @@
                (substitute* "ranger/ext/img_display.py"
                             (("/usr/lib/w3m/w3mimgdisplay") (string-append w3m "/libexec/w3m/w3mimgdisplay")))
                (substitute* '("examples/rc_emacs.conf" "ranger/config/rc.conf" "ranger/config/rifle.conf" "ranger/data/scope.sh" "doc/config/rc.conf" "doc/config/rifle.conf" "doc/config/scope.sh")
-                            (("\\ w3m") (string-append w3m "/bin/w3m")))
-               ))))))
-
-
+                            ((" w3m") (string-append " " w3m "/bin/w3m")))
+               #t))))))
     ;; TODO: wrap the binary with all the inputs that otherwise would need to be propagated
     (inputs
-     `(
-       ("file" ,file)
+     `(("file" ,file)
        ("less" ,less)
        ("libcaca" ,libcaca)
        ("poppler" ,poppler)
-       ("python-chardet" ,python-chardet)
        ("sudo" ,sudo)
        ("w3m" ,w3m)))
+    (propagated-inputs
+     `(("python-chardet" ,python-chardet)))
     (home-page "http://ranger.nongnu.org/")
     (synopsis "File manager with an ncurses frontend written in Python")
     (description
