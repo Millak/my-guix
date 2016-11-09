@@ -18,9 +18,11 @@
 (define-module (wip gcompris-qt)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system cmake)
+  #:use-module (guix build-system gnu)
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages python)
@@ -41,9 +43,9 @@
           "0f6cm1zfkp8mvr7j3mxgq3d07jd1by825sbk28ypgcqdb1k7faw7"))))
     (build-system cmake-build-system)
     ;(arguments
-    ; `(#:configure-flags
+    ; '(#:configure-flags
     ;   (list (string-append "Qt5Qml_DIR=" (assoc-ref %build-inputs "qtdeclarative") "/lib/cmake/Qt5Qml/"))))
-     ;`(#:phases
+     ;'(#:phases
      ;  (modify-phases %standard-phases
      ;    (add-before 'configure 'set-CFLAGS
      ;      (lambda _
@@ -55,6 +57,7 @@
        ("python-2" ,python-2)))
     (inputs
      `(
+       ("qml-box2d" ,qml-box2d)
        ("qtbase" ,qtbase)
        ("qtdeclarative" ,qtdeclarative)
        ("qttools" ,qttools)
@@ -80,3 +83,44 @@ Currently available boards include:
 @item small games (memory games, jigsaw puzzles, ...)
 @end enumerate\n")
     (license license:gpl3+)))
+
+(define-public qml-box2d
+  (let ((commit "1b37be7d9dfb44ec6d520595a4e4f45f63717822")
+        (revision "1"))
+    (package
+      (name "qml-box2d")
+      (version (string-append "0.0.0-" revision "." (string-take commit 7)))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                (url "https://github.com/qml-box2d/qml-box2d.git")
+                (commit commit)))
+          (file-name (string-append name "-" version "-checkout"))
+          (sha256
+           (base32
+            "08167byrvb7hb8dh3ws49q8yr0b05b72mcqaqvhy720wwsac0x1v"))))
+      (build-system gnu-build-system)
+      (arguments
+       `(#:phases
+         (modify-phases %standard-phases
+           (replace 'configure
+             (lambda* (#:key outputs #:allow-other-keys)
+               (let ((out (assoc-ref outputs "out")))
+                 (substitute* "box2d.pro"
+                              (("target.path = \\$\\$\\{importPath\\}")
+                               (string-append "target.path = " out)))
+                 (zero? (system* "qmake"
+                                 (string-append "PREFIX=" out)))))))
+         ;#:tests? #f ; no test target
+         ))
+      (native-inputs
+       `(("qtquick" ,qtdeclarative)))
+      (inputs
+       `(("qtbase" ,qtbase)))
+      (home-page "https://wiki.qt.io/Box2D")
+      (synopsis "Qt-based 2D physics engine")
+      (description
+       "Box2D is an open source C++ physics engine for simulating collisions
+and other 2D motions of rigid bodies which can be easily integrated with Qt.")
+      (license license:zlib))))
