@@ -28,7 +28,7 @@
 (define-public syncthing
   (package
     (name "syncthing")
-    (version "0.14.6")
+    (version "0.14.10")
     (source (origin
              (method url-fetch)
              (uri (string-append "https://github.com/syncthing/syncthing"
@@ -36,7 +36,7 @@
                                  "/syncthing-source-v" version ".tar.gz"))
              (sha256
               (base32
-               "0zh1dds7j3xm7r92ry0avqkzmxczbdprzsabj7nknz50ksx2xjcf"))))
+               "0lnzgpdfjcx7szw1ibm4sqrsd7ahnnrh7i7bxsj63hyicnaihxh8"))))
 
     ;; TODO Make go-build-system.
     (build-system gnu-build-system)
