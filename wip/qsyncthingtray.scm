@@ -19,13 +19,13 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
-  #:use-module (guix build-system gnu)
+  #:use-module (guix build-system cmake)
   #:use-module (gnu packages qt))
 
 (define-public qsyncthingtray
   (package
     (name "qsyncthingtray")
-    (version "0.5.1")
+    (version "0.5.2")
     (source
       (origin
         (method url-fetch)
@@ -35,18 +35,15 @@
         (file-name (string-append name "-" version ".tar.gz"))
         (sha256
          (base32
-          "1hq8vgqjhzngfsh6wmq6wrigx41cwm3j8vncmp4wgafdp64gmi34"))))
-    (build-system gnu-build-system)
+          "1q1drrarv249yzcn40095iqik179094z4w48bzl10sx76ms71ms2"))))
+    (build-system cmake-build-system)
     (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-         (replace 'configure
-           (lambda* (#:key outputs #:allow-other-keys)
-             (let ((out (assoc-ref outputs "out")))
-               (zero? (system* "qmake"
-                               (string-append "PREFIX=" out)))))))))
+     '(#:configure-flags '("-DQST_BUILD_WEBKIT=1")
+       #:tests? #f)) ; no test target
     (inputs
-     `(("qt" ,qt)))
+     `(("qtbase" ,qtbase)
+       ("qtwebkit" ,qtwebkit)
+       ))
     (home-page "https://github.com/sieren/QSyncthingTray")
     (synopsis "Traybar Application for Syncthing")
     (description
@@ -56,11 +53,12 @@
 @item Traffic statistics about incoming, outgoing and total throughput.
 @item Launches Syncthing and Syncthing-iNotifier if specified.
 @item Quickly pause Syncthing with one click.
-@item Last Synced Files - Quickly see the recently synchronised files and open their folder.
+@item Last Synced Files - Quickly see the recently synchronised files and open
+their folder.
 @item Quick Access to all shared folders.
 @item Presents Syncthing UI in a separate view instead of using the browser.
 @item Supports authenticated HTTPS connections.
 @item Uses System Notifications about current connection status.
 @item Toggle for monochrome icon.
 @end enumerate\n")
-    (license license:lgpl2.1)))
+    (license license:lgpl3+)))
