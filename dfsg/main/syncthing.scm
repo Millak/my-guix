@@ -36,7 +36,7 @@
                                  "/syncthing-source-v" version ".tar.gz"))
              (sha256
               (base32
-               "0lnzgpdfjcx7szw1ibm4sqrsd7ahnnrh7i7bxsj63hyicnaihxh8"))))
+               "03glwh5qvwhm2wh99rhlb00yw0advl3kg0h1rrd7448cxj21zn5y"))))
 
     ;; TODO Make go-build-system.
     (build-system gnu-build-system)
