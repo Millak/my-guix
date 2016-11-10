@@ -45,26 +45,28 @@
           "1460d5lc780p3q38l3wc9jfr2a7zlyrcra0li65aynj738cam9yl"))))
     (build-system gnu-build-system)
     (arguments
-     `(#:tests? #f ; no test target
+     '(#:tests? #f ; no test target
        #:phases
        (modify-phases %standard-phases
          ;; there is no configure script so we get to do it manually
          (replace 'configure
            (lambda* (#:key outputs #:allow-other-keys)
              (substitute* "Makefile"
-                          (("\\$\\(prefix\\)") (assoc-ref outputs "out")))
-             (setenv "DESTDIR" "")))
+               (("\\$\\(prefix\\)") (assoc-ref outputs "out")))
+             (setenv "DESTDIR" "")
+             #t))
          ;; in our ncurses, the headers are in /include
          (add-before 'build 'patch-ncursesw
            (lambda _
              (substitute* '("stfl_internals.h")
-                          (("ncursesw/") ""))))
+               (("ncursesw/") ""))
+             #t))
          (add-after 'install 'install-missing-symlink
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
                     (lib (string-append out "/lib")))
                ;; newsbeuter looks for libstfl.so.0
-               (symlink (string-append lib "/libstfl.so")
+               (symlink "libstfl.so"
                         (string-append lib "/libstfl.so.0"))))))))
     (inputs
      `(("ncurses" ,ncurses)
@@ -89,15 +91,16 @@ set for text terminals.")
           "1j1x0hgwxz11dckk81ncalgylj5y5fgw5bcmp9qb5hq9kc0vza3l"))))
     (build-system gnu-build-system)
     (arguments
-     `(#:phases
+     '(#:phases
        (modify-phases %standard-phases
          (replace 'configure
            (lambda _
              (substitute* "config.sh"
-                          ;; ncurses5 was sooo last year
-                          (("ncursesw5") "ncursesw6"))
+               ;; ncurses5 was sooo last year
+               (("ncursesw5") "ncursesw6"))
              (substitute* "Makefile"
-                          (("/usr/local") (assoc-ref %outputs "out"))))))
+               (("/usr/local") (assoc-ref %outputs "out")))
+             #t)))
        #:test-target "test"))
     (native-inputs
      `(("gettext" ,gnu-gettext)
@@ -107,12 +110,12 @@ set for text terminals.")
     (inputs
      `(("curl" ,curl)
        ("json-c" ,json-c)
-       ("ncurses5" ,ncurses)
+       ("ncurses" ,ncurses)
        ("stfl" ,stfl)
        ("sqlite" ,sqlite)
        ("libxml2" ,libxml2)))
     (home-page "http://newsbeuter.org/")
-    (synopsis "Text mode rss feed reader")
+    (synopsis "Text mode rss feed reader with podcast support")
     (description "Newsbeuter is an innovative RSS feed reader for the text
 console.  It supports OPML import/exports, HTML rendering, podcast (podbeuter),
 offline reading, searching and storing articles to your filesystem, and many

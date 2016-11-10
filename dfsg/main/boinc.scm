@@ -56,7 +56,8 @@
            (lambda _
              (substitute* "client/scripts/Makefile.am"
                           (("\\$\\(DESTDIR\\)")
-                           (assoc-ref %outputs "out"))))))
+                           (assoc-ref %outputs "out")))
+             #t)))
        #:configure-flags (list "--disable-server"
                                "--disable-manager")))
     (native-inputs

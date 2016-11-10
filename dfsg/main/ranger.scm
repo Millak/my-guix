@@ -52,18 +52,33 @@
                    (poppler (assoc-ref inputs "poppler"))
                    (sudo    (assoc-ref inputs "sudo"))
                    (w3m     (assoc-ref inputs "w3m")))
-               (substitute* '("ranger/data/scope.sh" "doc/config/scope.sh")
-                            (("img2txt") (string-append caca "/bin/img2txt")))
-               (substitute* '("ranger/ext/rifle.py" "ranger/__init__.py" "ranger/core/runner.py" "scripts/rifle")
-                            (("less") (string-append less "/bin/less")))
-               (substitute* '("ranger/data/scope.sh" "doc/config/scope.sh")
-                            (("pdftotext") (string-append poppler "/bin/pdftotext")))
-               (substitute* '("ranger/ext/rifle.py" "ranger/core/runner.py" "ranger/config/rifle.conf" "scripts/rifle")
-                            (("sudo") (string-append sudo "/bin/sudo")))
+               (substitute* '("ranger/data/scope.sh"
+                              "doc/config/scope.sh")
+                 (("img2txt") (string-append caca "/bin/img2txt")))
+               (substitute* '("ranger/ext/rifle.py"
+                              "ranger/__init__.py"
+                              "ranger/core/runner.py"
+                              "scripts/rifle")
+                 (("less") (string-append less "/bin/less")))
+               (substitute* '("ranger/data/scope.sh"
+                              "doc/config/scope.sh")
+                 (("pdftotext") (string-append poppler "/bin/pdftotext")))
+               (substitute* '("ranger/ext/rifle.py"
+                              "ranger/core/runner.py"
+                              "ranger/config/rifle.conf"
+                              "scripts/rifle")
+                 (("sudo") (string-append sudo "/bin/sudo")))
                (substitute* "ranger/ext/img_display.py"
-                            (("/usr/lib/w3m/w3mimgdisplay") (string-append w3m "/libexec/w3m/w3mimgdisplay")))
-               (substitute* '("examples/rc_emacs.conf" "ranger/config/rc.conf" "ranger/config/rifle.conf" "ranger/data/scope.sh" "doc/config/rc.conf" "doc/config/rifle.conf" "doc/config/scope.sh")
-                            ((" w3m") (string-append " " w3m "/bin/w3m")))
+                 (("/usr/lib/w3m/w3mimgdisplay")
+                  (string-append w3m "/libexec/w3m/w3mimgdisplay")))
+               (substitute* '("examples/rc_emacs.conf"
+                              "ranger/config/rc.conf"
+                              "ranger/config/rifle.conf"
+                              "ranger/data/scope.sh"
+                              "doc/config/rc.conf"
+                              "doc/config/rifle.conf"
+                              "doc/config/scope.sh")
+                 ((" w3m") (string-append " " w3m "/bin/w3m")))
                #t))))))
     ;; TODO: wrap the binary with all the inputs that otherwise would need to be propagated
     (inputs
