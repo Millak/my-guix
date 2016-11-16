@@ -23,7 +23,6 @@
   #:use-module (gnu packages curl)
   #:use-module (gnu packages emacs)
   #:use-module (gnu packages fribidi)
-  #:use-module (gnu packages gawk)
   #:use-module (gnu packages linux) ; util-linux
   #:use-module (gnu packages readline))
 
@@ -61,7 +60,6 @@
     (propagated-inputs
      `(("curl" ,curl)
        ("fribidi" ,fribidi)
-       ("gawk" ,gawk)
        ("rlwrap" ,rlwrap)))
     (native-inputs
      `(("emacs" ,emacs-minimal)
