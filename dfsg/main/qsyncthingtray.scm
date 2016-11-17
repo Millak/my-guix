@@ -15,7 +15,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip qsyncthingtray)
+(define-module (dfsg main qsyncthingtray)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
@@ -25,7 +25,7 @@
 (define-public qsyncthingtray
   (package
     (name "qsyncthingtray")
-    (version "0.5.2")
+    (version "0.5.5rc2")
     (source
       (origin
         (method url-fetch)
@@ -35,15 +35,29 @@
         (file-name (string-append name "-" version ".tar.gz"))
         (sha256
          (base32
-          "1q1drrarv249yzcn40095iqik179094z4w48bzl10sx76ms71ms2"))))
+          "0wygq9sfayyhd3ff31yfs5lfl3vnk79i9mnj6m4pgi9zlvdipi80"))))
     (build-system cmake-build-system)
     (arguments
-     '(#:configure-flags '("-DQST_BUILD_WEBKIT=1")
+     `(#:configure-flags '("-DQST_BUILD_WEBKIT=1")
+       #:phases
+       (modify-phases %standard-phases
+         ;; The program is meant to be run from the git repo or source tarball.
+         (replace 'install
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin")))
+               (install-file "QSyncthingTray" bin)
+               (install-file (string-append
+                               "../QSyncthingTray-"
+                               ,(package-version qsyncthingtray)
+                               "/resources/images/Icon1024.png")
+                             (string-append
+                               out "/share/pixmaps/QSyncthingTray.png"))
+               #t))))
        #:tests? #f)) ; no test target
     (inputs
      `(("qtbase" ,qtbase)
-       ("qtwebkit" ,qtwebkit)
-       ))
+       ("qtwebkit" ,qtwebkit)))
     (home-page "https://github.com/sieren/QSyncthingTray")
     (synopsis "Traybar Application for Syncthing")
     (description
