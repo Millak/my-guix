@@ -42,14 +42,14 @@
          (replace 'install
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
-                    (bin (string-append out "/bin/"))
-                    (zsh (string-append out "/share/zsh/site-functions/")))
-               (install-file "wgetpaste" (string-append bin "wgetpaste"))
-               (install-file "_wgetpaste" (string-append zsh "_wgetpaste"))))))
+                    (bin (string-append out "/bin"))
+                    (zsh (string-append out "/share/zsh/site-functions")))
+               (install-file "wgetpaste" bin)
+               (install-file "_wgetpaste" zsh)))))
        #:tests? #f)) ; no test target
     (home-page "http://wgetpaste.zlin.dk/")
     (synopsis "Script that automates pasting to a number of pastebin services")
     (description
-     "Wgetpaste is an extremely simple command-line interface to various online
-pastebin services.")
+     "@code{wgetpaste} is an extremely simple command-line interface to various
+online pastebin services.")
     (license license:public-domain)))
