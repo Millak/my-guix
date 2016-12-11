@@ -46,7 +46,8 @@
              (substitute* "src-qt5/core/libLumina/LuminaOS-Linux.cpp"
                (("/usr/") (assoc-ref %outputs "out")))
              (substitute* "src-qt5/OS-detect.pri"
-               (("/usr") (assoc-ref %outputs "out")))
+               (("/usr") (assoc-ref %outputs "out"))
+               (("L_SESSDIR=/usr/share/xsessions") ""))
              #t))
          (replace 'configure
            (lambda* (#:key outputs #:allow-other-keys)
