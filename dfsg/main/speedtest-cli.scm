@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -24,14 +24,14 @@
 (define-public speedtest-cli
   (package
     (name "speedtest-cli")
-    (version "0.3.4")
+    (version "1.0.1")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "speedtest-cli" version))
         (sha256
          (base32
-          "19i671cd815fcv0x7h2m0a493slzwkzn7r926g8myx1srkss0q6d"))))
+          "1n9jnyv5yyl0zy4ba10sq0a4gkz1knmf4ihh7malpb5npk622cfj"))))
     (build-system python-build-system)
     (home-page "https://github.com/sivel/speedtest-cli/")
     (synopsis "Command line interface for speedtest.net")
