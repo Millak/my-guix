@@ -56,9 +56,7 @@
               (("AppStoreShortcut\\(\\)")
                (string-append "AppStoreShortcut(){ return \"\"; }//"))
               (("\"/usr/") "PREFIX+\"usr")
-              (("\"/\"") "PREFIX")
-              )
-            ))))
+              (("\"/\"") "PREFIX"))))))
     (build-system gnu-build-system)
     (arguments
      `(#:phases
@@ -67,18 +65,17 @@
            (lambda* (#:key inputs outputs #:allow-other-keys)
              (let ((fluxbox (assoc-ref inputs "fluxbox"))
                    (out     (assoc-ref outputs "out")))
-               (substitute* "src-qt5/core-utils/lumina-config/pages/page_fluxbox_settings.cpp"
-                 (("LOS::AppPrefix\\(\\)+\\\"") (string-append "\"" fluxbox "/"))
-                 )
-               ;(substitute* "src-qt5/core/libLumina/LuminaOS-GuixSD.cpp"
-               ;  (("/usr/") (string-append out "/usr"))
-               ;  (("\"/\"") (string-append "\"" out "\""))
-               ;  )
+               (substitute*
+                 "src-qt5/core-utils/lumina-config/pages/page_fluxbox_settings.cpp"
+                 (("LOS::AppPrefix\\(\\)+\\\"")
+                  (string-append "\"" fluxbox "/")))
                (substitute* "src-qt5/OS-detect.pri"
-                 (("L_SESSDIR=/usr/share/xsessions") "")
-                 )
-               )
-               #t))
+                 (("L_SESSDIR=/usr/share/xsessions")
+                  (string-append out "/share/xsessions")))
+               (substitute* "src-qt5/core/lumina-desktop/Lumina-DE.desktop"
+                 (("start-lumina-desktop")
+                  (string-append out "/bin/start-lumina-desktop"))))
+             #t))
          (replace 'configure
            (lambda* (#:key inputs outputs #:allow-other-keys)
              (let* ((qttools (assoc-ref inputs "qttools"))
@@ -125,15 +122,13 @@ to be designed to maximize the individual user's productivity.")
     (build-system trivial-build-system)
     (arguments '(#:builder (mkdir %output)))
     (propagated-inputs
-     `(
-       ("acpi" ,acpi) ; linux
+     `(("acpi" ,acpi) ; linux
        ("dbus" ,dbus) ; glib
        ("lumina" ,lumina)
-       ;("oxygen-icons" ,oxygen-icons) ; kde-frameworks
-       ;("pavucontrol" ,pavucontrol) ; pulseaudio
-       ("sysstat" ,sysstat) ; linux?
-       ("xscreensaver" ,xscreensaver) ; xdisorg
-       ))
+       ("oxygen-icons" ,oxygen-icons) ; kde-frameworks
+       ("pavucontrol" ,pavucontrol) ; pulseaudio
+       ("sysstat" ,sysstat) ; linux
+       ("xscreensaver" ,xscreensaver))) ; xdisorg
     (home-page "https://lumina-desktop.org/")
     (synopsis "The Lumina Desktop Environment")
     (description
