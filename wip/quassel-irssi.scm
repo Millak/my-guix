@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2017 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -21,13 +21,13 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system gnu)
-  #:use-module (gnu packages autotools)
-  #:use-module (gnu packages enlightenment)
-  #:use-module (gnu packages gettext)
-  #:use-module (gnu packages pkg-config))
+  #:use-module (gnu packages glib)
+  #:use-module (gnu packages irc)
+  #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages tls))
 
 (define-public quassel-irssi
-  (let ((commit "cbd9bd7f4ac44260d9fcafb809fdf153cde193e5")
+  (let ((commit "7b034e3a8084d08e87869a96795ab59aa4901c74")
         (revision "1"))
     (package
       (name "quassel-irssi")
@@ -42,24 +42,29 @@
           (file-name (string-append name "-" version "-checkout"))
           (sha256
            (base32
-            "1gda16css0vbg40x1d8zjx655pm0ag7fds221147568z6mish1xa"))))
+            "1lh3x91wp2qa4yv9psljfqbjsn045zi35776frk5k861mshryn6l"))))
       (build-system gnu-build-system)
       (arguments
-       `(#:phases
+       `(#:make-flags (list
+                        (string-append "DESTDIR=" (assoc-ref %outputs "out"))
+                        "CC=gcc")
+         #:phases
          (modify-phases %standard-phases
-           (add-after 'unpack 'autoconf
-             (lambda _ (zero? (and (setenv "NOCONFIGURE" "TRUE")
-                                   (system* "sh" "autogen.sh"))))))))
-      (native-inputs
-       `(("autoconf" ,autoconf)
-         ("automake" ,automake)
-         ("gettext" ,gnu-gettext)
-         ("libtool" ,libtool)
-         ("pkg-config" ,pkg-config)))
+           (add-after 'unpack 'change-dir
+             (lambda* (#:key inputs #:allow-other-keys)
+               (let* ((irssi (assoc-ref inputs "irssi"))
+                      (irssi-include (string-append irssi "/include/irssi")))
+                 (substitute* "core/Makefile"
+                   (("/usr/include/irssi/") irssi-include)))
+               (chdir "core")
+               #t))
+           (delete 'configure)))) ; no configure
+      (native-inputs `(("pkg-config" ,pkg-config)))
       (inputs
-       `(("efl" ,efl)))
-      (home-page "http://smhouston.us/quassel-irssi/")
-      (synopsis "IRC client with enhanced media capabilities")
-      (description "EFL-based IRC Client which operates similar to the
-Terminology interface.")
-      (license license:bsd-2))))
+       `(("irssi" ,irssi)
+         ("glib" ,glib)
+         ("openssl" ,openssl)))
+      (home-page "https://github.com/phhusson/quassel-irssi")
+      (synopsis "Irssi plugin to connect to quassel core")
+      (description "An irssi plugin to connect to quassel core.")
+      (license license:gpl3+)))) ; with openssl linking exception
