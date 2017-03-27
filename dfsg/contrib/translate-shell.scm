@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -29,7 +29,7 @@
 (define-public translate-shell
   (package
     (name "translate-shell")
-    (version "0.9.5")
+    (version "0.9.6.1")
     (source
       (origin
         (method url-fetch)
@@ -37,7 +37,7 @@
                             version ".tar.gz"))
         (sha256
          (base32
-          "0akinlxbn179z1l6d4szc3wdvyil1i9y8jwmkna8fa0bigs89gbl"))
+          "0hcbw7w6h5jpfzghj5dpr3g992dbyjv1qdrqqy149krk1jdbfjqw"))
         (file-name (string-append name "-" version ".tar.gz"))))
     (build-system gnu-build-system)
     (arguments
