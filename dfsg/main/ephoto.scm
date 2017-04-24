@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -28,15 +28,17 @@
 (define-public ephoto
   (package
     (name "ephoto")
-    (version "1.0-beta2")
+    (version "1.0")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append "http://www.smhouston.us/stuff/ephoto-"
-                            version ".tar.xz"))
+        (uri (list (string-append "http://www.smhouston.us/stuff/ephoto-"
+                                  version ".tar.gz")
+                   (string-append "https://download.enlightenment.org/rel/"
+                                  "apps/ephoto/ephoto-" version ".tar.gz")))
         (sha256
          (base32
-          "09crwhprylsa03mp8vb14balyh5x0zai283gsr8hnl6zkx2bxxah"))))
+          "0l6zrk22fap6pylmzxwp6nycy8l5wdc7jza890h4zrwmpfag8w31"))))
     (build-system gnu-build-system)
     (native-inputs
      `(("check" ,check)
