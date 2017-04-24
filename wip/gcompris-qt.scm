@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -22,8 +22,8 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system cmake)
-  #:use-module (guix build-system gnu)
-  #:use-module (gnu packages kde-frameworks)
+  #:use-module (gnu packages kde-frameworks) ; extra-cmake-modules
+  #:use-module (gnu packages gettext)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages python)
   #:use-module (gnu packages qt))
@@ -31,7 +31,7 @@
 (define-public gcompris-qt
   (package
     (name "gcompris-qt")
-    (version "0.61")
+    (version "0.70")
     (source
       (origin
         (method url-fetch)
@@ -40,32 +40,26 @@
                version ".tar.xz"))
         (sha256
          (base32
-          "0f6cm1zfkp8mvr7j3mxgq3d07jd1by825sbk28ypgcqdb1k7faw7"))))
+          "01r7i8dmwb2nlfyp0y0mzs8yydmvn5gq7xn1w7g21lysak1mliwa"))))
     (build-system cmake-build-system)
-    ;(arguments
-    ; '(#:configure-flags
-    ;   (list (string-append "Qt5Qml_DIR=" (assoc-ref %build-inputs "qtdeclarative") "/lib/cmake/Qt5Qml/"))))
-     ;'(#:phases
-     ;  (modify-phases %standard-phases
-     ;    (add-before 'configure 'set-CFLAGS
-     ;      (lambda _
-     ;        (setenv "Qt5Qml_DIR=" (string-append (assoc-ref %build-inputs "qtdeclarative") "/lib/cmake/Qt5Qml/"))
-     ;        #t)))))
+    (arguments
+     '(#:configure-flags (list "-DQML_BOX2D_MODULE=disabled")
+       #:tests? #f)) ; no test target
     (native-inputs
      `(("extra-cmake-modules" ,extra-cmake-modules)
+       ("gettext" ,gettext-minimal)
        ("perl" ,perl)
-       ("python-2" ,python-2)))
+       ;("qttools" ,qttools)
+       ))
     (inputs
-     `(
-       ("qml-box2d" ,qml-box2d)
-       ("qtbase" ,qtbase)
-       ("qtdeclarative" ,qtdeclarative)
-       ("qttools" ,qttools)
-       ("qtmultimedia" ,qtmultimedia)
-       ("qtsensors" ,qtsensors)
-       ("qtsvg" ,qtsvg)
-       ("qtxmlpatterns" ,qtxmlpatterns)
-       ;("qt" ,qt)
+     `(("python-2" ,python-2)
+       ("qt" ,qt)
+       ;("qtbase" ,qtbase)
+       ;("qtdeclarative" ,qtdeclarative)
+       ;("qtmultimedia" ,qtmultimedia)
+       ;("qtsensors" ,qtsensors)
+       ;("qtsvg" ,qtsvg)
+       ;("qtxmlpatterns" ,qtxmlpatterns)
        ))
     (home-page "http://gcompris.net/index-en.html")
     (synopsis "Educational games for small children")
@@ -83,44 +77,3 @@ Currently available boards include:
 @item small games (memory games, jigsaw puzzles, ...)
 @end enumerate\n")
     (license license:gpl3+)))
-
-(define-public qml-box2d
-  (let ((commit "1b37be7d9dfb44ec6d520595a4e4f45f63717822")
-        (revision "1"))
-    (package
-      (name "qml-box2d")
-      (version (string-append "0.0.0-" revision "." (string-take commit 7)))
-      (source
-        (origin
-          (method git-fetch)
-          (uri (git-reference
-                (url "https://github.com/qml-box2d/qml-box2d.git")
-                (commit commit)))
-          (file-name (string-append name "-" version "-checkout"))
-          (sha256
-           (base32
-            "08167byrvb7hb8dh3ws49q8yr0b05b72mcqaqvhy720wwsac0x1v"))))
-      (build-system gnu-build-system)
-      (arguments
-       `(#:phases
-         (modify-phases %standard-phases
-           (replace 'configure
-             (lambda* (#:key outputs #:allow-other-keys)
-               (let ((out (assoc-ref outputs "out")))
-                 (substitute* "box2d.pro"
-                              (("target.path = \\$\\$\\{importPath\\}")
-                               (string-append "target.path = " out)))
-                 (zero? (system* "qmake"
-                                 (string-append "PREFIX=" out)))))))
-         ;#:tests? #f ; no test target
-         ))
-      (native-inputs
-       `(("qtquick" ,qtdeclarative)))
-      (inputs
-       `(("qtbase" ,qtbase)))
-      (home-page "https://wiki.qt.io/Box2D")
-      (synopsis "Qt-based 2D physics engine")
-      (description
-       "Box2D is an open source C++ physics engine for simulating collisions
-and other 2D motions of rigid bodies which can be easily integrated with Qt.")
-      (license license:zlib))))
