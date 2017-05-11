@@ -29,7 +29,7 @@
 (define-public translate-shell
   (package
     (name "translate-shell")
-    (version "0.9.6.2")
+    (version "0.9.6.3")
     (source
       (origin
         (method url-fetch)
@@ -37,7 +37,7 @@
                             version ".tar.gz"))
         (sha256
          (base32
-          "0jsypp6d15ikqmcslpcxhpd1mrlv6hfy2j80fk84a71ns4n343nv"))
+          "13rjq9v3ykk5c0i5daybpnqnyg09cbcgjzykx49h2h5hvspixvi5"))
         (file-name (string-append name "-" version ".tar.gz"))))
     (build-system gnu-build-system)
     (arguments
