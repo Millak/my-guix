@@ -33,7 +33,7 @@
          (base32
            "00slyi0aw03cp5s4c1xhavn9i1gz7d6d4cmv0g0dd3nx7m1ba3y0"))))
     (build-system emacs-build-system)
-    (home-page "https://bitbucket.org/ukaszg/aria2.git")
+    (home-page "https://gitlab.com/ukaszg/aria2.git")
     (synopsis "Major mode for controlling aria2")
     (description "This is aria2, a major mode for controlling aria2c downloader
 
