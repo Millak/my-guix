@@ -40,6 +40,12 @@
          (base32
           "0l6zrk22fap6pylmzxwp6nycy8l5wdc7jza890h4zrwmpfag8w31"))))
     (build-system gnu-build-system)
+    (arguments
+     '(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'set-home-directory
+           ;; FATAL: Cannot create run dir '/homeless-shelter/.run' - errno=2
+           (lambda _ (setenv "HOME" "/tmp") #t)))))
     (native-inputs
      `(("check" ,check)
        ("pkg-config" ,pkg-config)))
