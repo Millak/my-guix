@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -31,7 +31,7 @@
 (define-public epour
   (package
     (name "epour")
-    (version "0.6.0")
+    (version "0.7.0")
     (source
       (origin
         (method url-fetch)
@@ -39,42 +39,18 @@
                             "/epour-" version ".tar.xz"))
         (sha256
          (base32
-          "0fm5gyh6x03ypsqy3gsr36wfr0ys8h7hqwafk49fzjbpv9d3cmcw"))))
+          "0g9f9p01hsq6dcf4cs1pwq95g6fpkyjgwqlvdjk1km1i5gj5ygqw"))))
     (build-system python-build-system)
     (arguments
-     `(#:python ,python-2
-       #:phases
-       (modify-phases %standard-phases
-         (add-after 'install 'wrap-binary
-           (lambda* (#:key inputs outputs #:allow-other-keys)
-             ;; Wrap 'epour' so that it finds libtorrent
-             (let ((out (assoc-ref outputs "out")))
-               (wrap-program (string-append out "/bin/epour")
-                `("PATH" ":" prefix
-                  (,(string-append (assoc-ref inputs "libtorrent") "/bin"))))))))
-       #:tests? #f)) ; no test target
+     '(#:tests? #f)) ; no test target
     (native-inputs `(("intltool" ,intltool)))
     (inputs
      `(("libtorrent" ,libtorrent)
-       ("python2-dbus" ,python2-dbus)
-       ("python2-distutils-extra" ,python2-distutils-extra)
-       ("python2-efl" ,python2-efl)
-       ("python2-pyxdg" ,python2-pyxdg)))
+       ("python-dbus" ,python-dbus)
+       ("python-distutils-extra" ,python-distutils-extra)
+       ("python-efl" ,python-efl)
+       ("python-pyxdg" ,python-pyxdg)))
     (home-page "https://www.enlightenment.org")
     (synopsis "EFL Bittorrent client")
     (description "EFL Bittorrent client")
     (license license:gpl3+)))
-
-(define-public epour
-  (package (inherit epour)
-    (version "20160120")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://git.enlightenment.org/apps/epour.git/")
-               (commit "8bf8f56dcbe9bb506935c1bb2c58000d193f5042")))
-        (file-name (string-append "epour-" version "-checkout"))
-        (sha256
-         (base32
-          "1xgawbh1qdp55p7qbl06rsxi4br0w86isvv22zr0qd2g365y6w7q"))))))

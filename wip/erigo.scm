@@ -43,6 +43,12 @@
          (base32
           "09s9s2ymbba4sx2i6v1divkvap9zlrdiaw4z6qy26rpb04llhg2h"))))
     (build-system cmake-build-system)
+    (arguments
+     '(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'set-home-directory
+           ;; FATAL: Cannot create run dir '/homeless-shelter/.run' - errno=2
+           (lambda _ (setenv "HOME" "/tmp") #t)))))
     (native-inputs
      `(("libffi" ,libffi)
        ("pkg-config" ,pkg-config)

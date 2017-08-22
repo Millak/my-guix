@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -28,11 +28,11 @@
   #:use-module (gnu packages pkg-config))
 
 (define-public empc
-  (let ((commit "e8509d5935b79ef7387caeb4f7bc0377e265b366")
-        (revision "1"))
+  (let ((commit "32c53b57e4032e24d138c351cd9cd27b4ba166d0")
+        (revision "2"))
   (package
     (name "empc")
-    (version (string-append "0.99.0a-" revision "." (string-take commit 7)))
+    (version (string-append "0.99.0.0-" revision "." (string-take commit 7)))
     (source
       (origin
         (method git-fetch)
@@ -42,23 +42,29 @@
         (file-name (string-append name "-" version "-checkout"))
         (sha256
          (base32
-          "1svp67jrprqzrn3ifw6chpfn6cppzlym7ip8dnf7rwkmdq88hmi5"))))
+          "0vxy5d5gvxlfpa9dl9k8wr6azd7d5mixqh7n12f9vj2ydqm0g0n0"))))
     (build-system gnu-build-system)
     (arguments
-     `(#:phases
+     '(#:phases
        (modify-phases %standard-phases
          (add-after 'unpack 'autoconf
-           (lambda _ (zero? (system* "autoreconf" "-vfi")))))))
+           (lambda _ (zero? (system* "autoreconf" "-vfi"))))
+         (add-after 'unpack 'set-home-directory
+           ;; FATAL: Cannot create run dir '/homeless-shelter/.run' - errno=2
+           (lambda _ (setenv "HOME" "/tmp") #t))
+         (add-after 'unpack 'skip-sl-translation
+           ;; This one fails randomly
+           (lambda _ (substitute* "po/LINGUAS"
+                       (("sl") ""))
+                     #t)))))
     (native-inputs
      `(("autoconf" ,autoconf)
        ("automake" ,automake)
-       ("gettext" ,gnu-gettext)
+       ("gettext" ,gettext-minimal)
        ("libtool" ,libtool)
        ("pkg-config" ,pkg-config)))
     (inputs
      `(("efl" ,efl)
-       ;; esql?
-       ;; glyr?
        ("libmpdclient" ,libmpdclient)))
     (home-page "https://www.enlightenment.org")
     (synopsis "Enlightenment powered mpd client")

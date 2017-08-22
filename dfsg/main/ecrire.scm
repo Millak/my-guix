@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -26,8 +26,8 @@
   #:use-module (gnu packages pkg-config))
 
 (define-public ecrire
-  (let ((commit "a7da0abdb3eef334ac77b61a8320172531518818")
-        (revision "1"))
+  (let ((commit "5739b04db6f9ac076cbfa43f60504ef0722816f2")
+        (revision "2"))
     (package
       (name "ecrire")
       (version (string-append "0.0.0-" revision "." (string-take commit 7)))
@@ -40,11 +40,11 @@
           (file-name (string-append name "-" version "-checkout"))
           (sha256
            (base32
-            "0f7phsdkxm26nlz6lm4ghski0gjrn2lhbnbjcql4phicdb8p00vl"))))
+            "1mzk2zjy81js0hyx491cfmk81z36gk8m385s3r4xng8r9pgbx6lr"))))
       (build-system cmake-build-system)
-      (arguments `(#:tests? #f)) ; no tests
+      (arguments '(#:tests? #f)) ; no tests
       (native-inputs
-       `(("gettext" ,gnu-gettext)
+       `(("gettext" ,gettext-minimal)
          ("pkg-config" ,pkg-config)))
       (inputs
        `(("efl" ,efl)))

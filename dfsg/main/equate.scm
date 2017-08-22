@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -23,12 +23,11 @@
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages enlightenment)
-  #:use-module (gnu packages gettext)
   #:use-module (gnu packages pkg-config))
 
 (define-public equate
-  (let ((commit "5ee65c6bc64f71198a92244aa6abbb63c122e35d")
-        (revision "1"))
+  (let ((commit "2afdce05eba77d454774fcf57dba38dc4baf3f0a")
+        (revision "2"))
     (package
       (name "equate")
       (version (string-append "0.0.0-" revision "." (string-take commit 7)))
@@ -41,17 +40,16 @@
           (file-name (string-append name "-" version "-checkout"))
           (sha256
            (base32
-            "18lr9r7v19xhg17j6xc8gcm1rhiljj7mjb5dc7w31j2z1v6nsqd0"))))
+            "13958n8gaphb1bvvrvc74drw3wz46cpzvk4qasiyrziihgrj918d"))))
       (build-system gnu-build-system)
       (arguments
-       `(#:phases
+       '(#:phases
          (modify-phases %standard-phases
            (add-after 'unpack 'autoconf
              (lambda _ (zero? (system* "autoreconf" "-vfi")))))))
       (native-inputs
        `(("autoconf" ,autoconf)
          ("automake" ,automake)
-         ("gettext" ,gnu-gettext)
          ("pkg-config" ,pkg-config)))
       (inputs
        `(("efl" ,efl)))

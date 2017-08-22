@@ -42,11 +42,14 @@
           "1gda16css0vbg40x1d8zjx655pm0ag7fds221147568z6mish1xa"))))
     (build-system gnu-build-system)
     (arguments
-     `(#:phases
+     '(#:phases
        (modify-phases %standard-phases
          (add-after 'unpack 'autoconf
            (lambda _ (zero? (and (setenv "NOCONFIGURE" "TRUE")
-                                 (system* "sh" "autogen.sh"))))))))
+                                 (system* "sh" "autogen.sh")))))
+         (add-after 'unpack 'set-home-directory
+           ;; FATAL: Cannot create run dir '/homeless-shelter/.run' - errno=2
+           (lambda _ (setenv "HOME" "/tmp") #t)))))
     (native-inputs
      `(("autoconf" ,autoconf)
        ("automake" ,automake)
