@@ -28,7 +28,7 @@
 (define-public ephoto
   (package
     (name "ephoto")
-    (version "1.0")
+    (version "1.5")
     (source
       (origin
         (method url-fetch)
@@ -38,7 +38,7 @@
                                   "apps/ephoto/ephoto-" version ".tar.gz")))
         (sha256
          (base32
-          "0l6zrk22fap6pylmzxwp6nycy8l5wdc7jza890h4zrwmpfag8w31"))))
+          "09kraa5zz45728h2dw1ssh23b87j01bkfzf977m48y1r507sy3vb"))))
     (build-system gnu-build-system)
     (arguments
      '(#:phases
