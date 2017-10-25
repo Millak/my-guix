@@ -35,7 +35,7 @@
 (define-public lumina
   (package
     (name "lumina")
-    (version "1.2.0-p1")
+    (version "1.3.0-p1")
     (source
       (origin
         (method url-fetch)
@@ -44,7 +44,7 @@
         (file-name (string-append name "-" version ".tar.gz"))
         (sha256
          (base32
-          "0jdxcpygivc6q3srfb9y91rfp4ksx56mpvzbbyf06a9zzq964dpq"))
+          "0c8w3gkbyq928jg9yzqslpnfgrd47ipd805idi159l9pbpabdwkn"))
         (modules '((guix build utils)))
         (snippet
          '(begin
@@ -69,12 +69,16 @@
                  "src-qt5/core-utils/lumina-config/pages/page_fluxbox_settings.cpp"
                  (("LOS::AppPrefix\\(\\)+\\\"")
                   (string-append "\"" fluxbox "/")))
+               (substitute* "src-qt5/core/lumina-desktop/fluxboxconf/fluxbox-init-rc"
+                 (("/usr/local") fluxbox))
                (substitute* "src-qt5/OS-detect.pri"
                  (("L_SESSDIR=/usr/share/xsessions")
                   (string-append out "/share/xsessions")))
                (substitute* "src-qt5/core/lumina-desktop/Lumina-DE.desktop"
                  (("start-lumina-desktop")
-                  (string-append out "/bin/start-lumina-desktop"))))
+                  (string-append out "/bin/start-lumina-desktop")))
+               (substitute* "src-qt5/desktop-utils/lumina-xdg-entry/lumina-xdg-entry.desktop"
+                 (("/usr/local") out)))
              #t))
          (replace 'configure
            (lambda* (#:key inputs outputs #:allow-other-keys)
@@ -89,12 +93,9 @@
     (native-inputs
      `(("qttools" ,qttools)))
     (inputs
-     `(("libxcb" ,(package
-                    (inherit libxcb)
-                    (arguments
-                     (substitute-keyword-arguments (package-arguments libxcb)
-                       ((#:configure-flags flags)
-                        `(cons* "--enable-xinput" ,flags))))))
+     `(("libxcb" ,libxcb)
+       ("libxdamage" ,libxdamage)
+       ("pulseaudio" ,pulseaudio)
        ("qtbase" ,qtbase)
        ("qtmultimedia" ,qtmultimedia)
        ("qtsvg" ,qtsvg)
