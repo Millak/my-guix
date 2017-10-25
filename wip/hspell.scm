@@ -47,9 +47,9 @@
     (inputs
      `(("aspell" ,aspell)
        ("aspell-dict-he" ,aspell-dict-he)
-       ("gzip" ,gzip)
        ("hunspell" ,hunspell)
-       ("perl" ,perl)))
+       ("perl" ,perl)
+       ("zlib" ,zlib)))
     (home-page "http://hspell.ivrix.org.il/")
     (synopsis "Hebrew linguistic tool")
     (description
