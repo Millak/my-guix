@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -20,18 +20,12 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system python)
-  #:use-module (gnu packages admin)
-  #:use-module (gnu packages file)
-  #:use-module (gnu packages less)
-  #:use-module (gnu packages pdf)
-  #:use-module (gnu packages python)
-  #:use-module (gnu packages video)
-  #:use-module (gnu packages w3m))
+  #:use-module (gnu packages python))
 
 (define-public ranger
   (package
     (name "ranger")
-    (version "1.7.2")
+    (version "1.8.1")
     (source
       (origin
         (method url-fetch)
@@ -39,57 +33,19 @@
                "http://nongnu.org/ranger/ranger-" version ".tar.gz"))
         (sha256
          (base32
-          "0yaviybviwdvfg2a0pf2kk28g10k245499xmbpqlai7fv91f7xll"))))
+          "1d11qw0mr9aj22a7nhr6p2c3yzf359xbffmjsjblq44bjpwzjcql"))))
     (build-system python-build-system)
     (arguments
-     `(#:tests? #f ; There aren't any tests
+     '(#:tests? #f ; There aren't any tests
        #:phases
        (modify-phases %standard-phases
          (add-before 'build 'patch-inputs
-           (lambda* (#:key inputs #:allow-other-keys)
-             (let ((caca    (assoc-ref inputs "libcaca"))
-                   (less    (assoc-ref inputs "less"))
-                   (poppler (assoc-ref inputs "poppler"))
-                   (sudo    (assoc-ref inputs "sudo"))
-                   (w3m     (assoc-ref inputs "w3m")))
-               (substitute* '("ranger/data/scope.sh"
-                              "doc/config/scope.sh")
-                 (("img2txt") (string-append caca "/bin/img2txt")))
-               (substitute* '("ranger/ext/rifle.py"
-                              "ranger/__init__.py"
-                              "ranger/core/runner.py"
-                              "scripts/rifle")
-                 (("less") (string-append less "/bin/less")))
-               (substitute* '("ranger/data/scope.sh"
-                              "doc/config/scope.sh")
-                 (("pdftotext") (string-append poppler "/bin/pdftotext")))
-               (substitute* '("ranger/ext/rifle.py"
-                              "ranger/core/runner.py"
-                              "ranger/config/rifle.conf"
-                              "scripts/rifle")
-                 (("sudo") (string-append sudo "/bin/sudo")))
-               (substitute* "ranger/ext/img_display.py"
-                 (("/usr/lib/w3m/w3mimgdisplay")
-                  (string-append w3m "/libexec/w3m/w3mimgdisplay")))
-               (substitute* '("examples/rc_emacs.conf"
-                              "ranger/config/rc.conf"
-                              "ranger/config/rifle.conf"
-                              "ranger/data/scope.sh"
-                              "doc/config/rc.conf"
-                              "doc/config/rifle.conf"
-                              "doc/config/scope.sh")
-                 ((" w3m") (string-append " " w3m "/bin/w3m")))
-               #t))))))
-    ;; TODO: wrap the binary with all the inputs that otherwise would need to be propagated
-    (inputs
-     `(("file" ,file)
-       ("less" ,less)
-       ("libcaca" ,libcaca)
-       ("poppler" ,poppler)
-       ("sudo" ,sudo)
-       ("w3m" ,w3m)))
-    (propagated-inputs
-     `(("python-chardet" ,python-chardet)))
+           (lambda _
+             (substitute* '("doc/config/scope.sh"
+                            "ranger/data/scope.sh")
+               (("/bin/") ""))
+             #t)))))
+    (inputs `(("python-chardet" ,python-chardet)))
     (home-page "http://ranger.nongnu.org/")
     (synopsis "File manager with an ncurses frontend written in Python")
     (description
