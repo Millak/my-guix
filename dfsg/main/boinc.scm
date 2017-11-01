@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -26,15 +26,22 @@
   #:use-module (gnu packages compression)
   #:use-module (gnu packages curl)
   #:use-module (gnu packages cyrus-sasl)
+  #:use-module (gnu packages databases)
+  #:use-module (gnu packages image)
+  #:use-module (gnu packages gl)
+  #:use-module (gnu packages gnome)
+  #:use-module (gnu packages gtk)
   #:use-module (gnu packages m4)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
-  #:use-module (gnu packages tls))
+  #:use-module (gnu packages tls)
+  #:use-module (gnu packages wxwidgets)
+  #:use-module (gnu packages xorg))
 
 (define-public boinc
   (package
     (name "boinc")
-    (version "7.6.33")
+    (version "7.8.1")
     (source
       (origin
         (method url-fetch)
@@ -43,7 +50,7 @@
                             "/" version ".tar.gz"))
         (sha256
          (base32
-          "0vdak578bay8knfjmw2rc723h3zksxxg9p8xqq53w0amjsdw5cf4"))
+          "0cv9yj2jv9l92arwyd51vc3zxi9n012hyfk0s38i6i8gli5cb4sk"))
         (file-name (string-append name "-" version ".tar.gz"))))
     (build-system gnu-build-system)
     (arguments
@@ -55,10 +62,13 @@
          (add-before 'install 'fix-install-path
            (lambda _
              (substitute* "client/scripts/Makefile.am"
-                          (("\\$\\(DESTDIR\\)")
-                           (assoc-ref %outputs "out")))
+               (("\\$\\(DESTDIR\\)")
+                (assoc-ref %outputs "out")))
              #t)))
-       #:configure-flags (list "--disable-server"
+       ;; TODO: fix target and alt-target per-architecture types
+       #:configure-flags (list "--enable-dynamic-client-linkage"
+                               "--enable-shared"
+                               "--disable-server"
                                "--disable-manager")))
     (native-inputs
      `(("automake" ,automake)
@@ -72,9 +82,32 @@
      `(("curl" ,curl)
        ("cyrus-sasl" ,cyrus-sasl)
        ("openssl" ,openssl)))
-    (home-page "http://boinc.berkeley.edu/")
+    (home-page "https://boinc.berkeley.edu/")
     (synopsis "Software for distributed and grid computing")
     (description "Use the idle time on your computer to cure diseases, study
 global warming, discover pulsars, and do many other types of scientific
 research.")
     (license license:lgpl3+)))
+
+(define-public boinc-full
+  (package
+    (inherit boinc)
+    (name "boinc-full")
+    (arguments
+     (substitute-keyword-arguments (package-arguments boinc)
+      ((#:configure-flags flags)
+       ;`(,(remove (cut string-match "--disable-*" <>)
+       ;            flags)))))
+       `(list "--enable-dynamic-client-linkage"
+               "--enable-shared"))))
+    (inputs
+     `(,@(package-inputs boinc)
+       ("freeglut" ,freeglut)
+       ("gtk+" ,gtk+)
+       ("libjpeg" ,libjpeg)
+       ("libnotify" ,libnotify)
+       ("libxi" ,libxi)
+       ("libxmu" ,libxmu)
+       ("mysql" ,mysql)
+       ("sqlite" ,sqlite)
+       ("wxwidgets" ,wxwidgets)))))
