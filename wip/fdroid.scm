@@ -20,7 +20,10 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system python)
-  #:use-module (gnu packages python))
+  #:use-module (gnu packages check)
+  #:use-module (gnu packages python)
+  #:use-module (gnu packages python-crypto)
+  #:use-module (gnu packages python-web))
 
 (define-public fdroidserver
   (package
@@ -64,48 +67,6 @@
     (description "F-Droid Server Tools")
     (license license:agpl3+)))
 
-(define-public python-mwclient
-  (package
-     (name "python-mwclient")
-     (version "0.8.1")
-     (source
-       (origin
-         (method url-fetch)
-         (uri (pypi-uri "mwclient" version))
-         (sha256
-          (base32
-           "1r322v6i6xps9xh861rbr4ggshydcgp8cycbdlmgy8qbrh8jg2az"))))
-    (build-system python-build-system)
-    (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-         (replace 'check
-           (lambda _
-             (zero? (system* "py.test")))))))
-    (native-inputs
-     `(("python-pytest-cache" ,python-pytest-cache)
-       ("python-pytest-cov" ,python-pytest-cov)
-       ("python-pytest-pep8" ,python-pytest-pep8)))
-    (inputs
-     `(("python-funcsigs" ,python-funcsigs)
-       ("python-mock" ,python-mock)
-       ("python-requests" ,python-requests)
-       ("python-responses" ,python-responses)
-       ("python-six" ,python-six)))
-    (home-page "https://github.com/mwclient/mwclient")
-    (synopsis "MediaWiki API client")
-    (description "MediaWiki API client")
-    (license license:expat)
-    (properties `((python2-variant . ,(delay python2-mwclient))))))
-
-(define-public python2-mwclient
-  (let ((base (package-with-python2
-                (strip-python2-variant python-mwclient))))
-    (package (inherit base)
-      (native-inputs
-       `(("python2-setuptools" ,python2-setuptools)
-         ,@(package-native-inputs base))))))
-
 (define-public python-funcsigs
   (package
     (name "python-funcsigs")
@@ -130,48 +91,6 @@
 
 (define-public python2-funcsigs
   (package-with-python2 python-funcsigs))
-
-(define-public python-apache-libcloud
-  (package
-    (name "python-apache-libcloud")
-    (version "1.1.0")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "apache-libcloud" version ".tar.bz2"))
-        (sha256
-         (base32
-          "15fqs5ppkrbky2s4lpq4aif9rki4v18jv9l1j74g88g8qlmh3iwl"))))
-    (build-system python-build-system)
-    (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-         (add-before 'check 'prep-tests
-           (lambda _
-             ;; this test requires using ssh
-             (delete-file "libcloud/test/compute/test_ssh_client.py")
-             ;; this is required for the tests to run
-             (copy-file "libcloud/test/secrets.py-dist"
-                        "libcloud/test/secrets.py"))))))
-    (native-inputs
-     `(("python-mock" ,python-mock)))
-    (home-page "https://libcloud.apache.org/")
-    (synopsis
-     "Python library to abstract away differences among cloud provider APIs")
-    (description
-     "Apache Libcloud is a Python library which hides differences between
-different cloud provider APIs and allows you to manage different cloud resources
-through a unified and easy to use API.  Resources you can manage with Libcloud
-are divided into compute, storage, load balancers, DNS, and container
-categories.")
-    (license license:asl2.0)))
-
-(define-public python2-apache-libcloud
-  (let ((base (package-with-python2 python-apache-libcloud)))
-    (package (inherit base)
-      (native-inputs
-       `(("python2-setuptools" ,python2-setuptools)
-         ,@(package-native-inputs base))))))
 
 (define-public python-crypto
   (package
