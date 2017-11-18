@@ -107,6 +107,7 @@
     (inputs
      `(("python-naked" ,python-naked)
        ("python-pyyaml" ,python-pyyaml)
+       ("python-requests" ,python-requests)
        ("python-shellescape" ,python-shellescape)))
     (home-page "https://github.com/chrissimpkins/crypto")
     (synopsis "Simple symmetric GPG file encryption and decryption")
