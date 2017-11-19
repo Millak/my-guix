@@ -20,6 +20,7 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
+  #:use-module (gnu packages gnupg)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages wget))
 
@@ -68,3 +69,45 @@ scratch, without requiring the availability of @code{dpkg} or @code{apt}.
 It does this by downloading .deb files from a mirror site, and carefully
 unpacking them into a directory which can eventually be chrooted into.")
     (license license:gpl2)))
+
+(define-public jetring
+  (package
+    (name "jetring")
+    (version "0.25")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (string-append "mirror://debian/pool/main/j/" name "/"
+                            name "_" version ".tar.xz"))
+        (sha256
+         (base32
+          "0shcnnw0h31b08vmnvf18ni33dg40w18wv9smb69vkklz3h4jhpw"))))
+    (build-system gnu-build-system)
+    (arguments
+     '(#:phases
+       (modify-phases %standard-phases
+         (delete 'configure) ; no configure script
+         (replace 'install
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               (for-each (lambda (file)
+                           (install-file file (string-append out "/bin/")))
+                         '("jetring-accept" "jetring-apply" "jetring-build"
+                           "jetring-checksum" "jetring-diff" "jetring-explode"
+                           "jetring-gen" "jetring-review" "jetring-signindex"))
+               #t))))
+       #:tests? #f)) ; no test phase
+    (native-inputs `(("gnupg" ,gnupg)))
+    (inputs `(("perl" ,perl)))
+    (home-page "https://joeyh.name/code/jetring/")
+    (synopsis "gpg keyring maintenance using changesets")
+    (description
+     "Jetring is a collection of tools that allow for gpg keyrings to be
+maintained using changesets.  It was developed with the Debian keyring in mind,
+and aims to solve the problem that a gpg keyring is a binary blob that's hard
+for multiple people to collaboratively edit.
+With jetring, changesets can be submitted, reviewed to see exactly what they
+will do, applied, and used to build a keyring.  The origin of every change made
+to the keyring is available for auditing, and gpg signatures can be used to
+further secure things.")
+    (license license:gpl2+)))
