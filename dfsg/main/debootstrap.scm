@@ -46,14 +46,16 @@
          (delete 'configure)
          (delete 'build)
          (add-after 'unpack 'patch-source
-           (lambda* (#:key inputs #:allow-other-keys)
-             (let ((debian (assoc-ref %build-inputs "debian"))
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let ((out    (assoc-ref outputs "out"))
+                   (debian (assoc-ref %build-inputs "debian"))
                    (ubuntu (assoc-ref %build-inputs "ubuntu")))
                (substitute* "scripts/sid"
                  (("/usr") debian))
                (substitute* "scripts/gutsy"
                  (("/usr") ubuntu))
                (substitute* "debootstrap"
+                 (("=/usr") (string-append "=" out))
                  (("@VERSION@") ,version))
                (substitute* "functions"
                  (("wget ") (string-append (which "wget") " ")))
