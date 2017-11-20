@@ -15,11 +15,14 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip debootstrap)
+(define-module (dfsg main debootstrap)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
+  #:use-module (guix build-system trivial)
+  #:use-module (gnu packages base)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages gnupg)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages wget))
@@ -43,12 +46,18 @@
          (delete 'configure)
          (delete 'build)
          (add-after 'unpack 'patch-source
-           (lambda _
-             (substitute* "debootstrap"
-               (("@VERSION@") ,version))
-             (substitute* "functions"
-               (("wget ") (string-append (which "wget") " ")))
-             #t))
+           (lambda* (#:key inputs #:allow-other-keys)
+             (let ((debian (assoc-ref %build-inputs "debian"))
+                   (ubuntu (assoc-ref %build-inputs "ubuntu")))
+               (substitute* "scripts/sid"
+                 (("/usr") debian))
+               (substitute* "scripts/gutsy"
+                 (("/usr") ubuntu))
+               (substitute* "debootstrap"
+                 (("@VERSION@") ,version))
+               (substitute* "functions"
+                 (("wget ") (string-append (which "wget") " ")))
+               #t)))
          (replace 'install
            (lambda* (#:key outputs #:allow-other-keys)
              (let ((out (assoc-ref outputs "out")))
@@ -60,7 +69,8 @@
                #t))))
        #:tests? #f)) ; no tests
     (inputs
-     `(("perl" ,perl)
+     `(("debian" ,debian-archive-keyring)
+       ("ubuntu" ,ubuntu-keyring)
        ("wget" ,wget)))
     (home-page "https://anonscm.debian.org/cgit/d-i/debootstrap.git")
     (synopsis "Bootstrap a basic Debian system")
@@ -111,3 +121,84 @@ will do, applied, and used to build a keyring.  The origin of every change made
 to the keyring is available for auditing, and gpg signatures can be used to
 further secure things.")
     (license license:gpl2+)))
+
+(define-public debian-archive-keyring
+  (package
+    (name "debian-archive-keyring")
+    (version "2017.6")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (string-append "mirror://debian/pool/main/d/" name "/"
+                            name "_" version ".tar.xz"))
+        (sha256
+         (base32
+          "1gppssbcd721rcrkbqi4rdzf966dqp9kackqza4l8cih82nsgcym"))))
+    (build-system gnu-build-system)
+    (arguments
+     '(#:test-target "verify-results"
+       #:parallel-build? #f ; has race conditions
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'configure) ; no configure script
+         (replace 'install
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (apt (string-append out "/etc/apt/trusted.gpg.d/"))
+                    (key (string-append out "/share/keyrings/")))
+               (install-file "keyrings/debian-archive-keyring.gpg" key)
+               (install-file "keyrings/debian-archive-removed-keys.gpg" key)
+               (for-each (lambda (file)
+                           (install-file file apt))
+                         (find-files "trusted.gpg" "\\.gpg$")))
+             #t)))))
+    (native-inputs
+     `(("gnupg" ,gnupg)
+       ("jetring" ,jetring)))
+    (home-page "https://packages.qa.debian.org/d/debian-archive-keyring.html")
+    (synopsis "GnuPG archive keys of the Debian archive")
+    (description
+     "The Debian project digitally signs its Release files.  This package
+contains the archive keys used for that.")
+    (license (list license:public-domain ; the keys
+                   license:gpl2+)))) ; see debian/copyright
+
+(define-public ubuntu-keyring
+  (package
+    (name "ubuntu-keyring")
+    (version "2016.10.27")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (string-append "https://launchpad.net/ubuntu/+archive/primary/"
+                            "+files/" name "_" version ".tar.gz"))
+        (sha256
+         (base32
+          "1gjsr1mbs5bv94sy26hdax3ja46dqbgbwc4kygnsrr987d1q62yw"))))
+    (build-system trivial-build-system)
+    (arguments
+     `(#:modules ((guix build utils))
+       #:builder (begin
+                   (use-modules (guix build utils))
+                   (let* ((out (assoc-ref %outputs "out"))
+                          (apt (string-append out "/etc/apt/trusted.gpg.d/"))
+                          (key (string-append out "/share/keyrings/")))
+                     (setenv "PATH" (string-append
+                                      (assoc-ref %build-inputs "gzip") "/bin:"
+                                      (assoc-ref %build-inputs "tar") "/bin"))
+                     (system* "tar" "xvf" (assoc-ref %build-inputs "source"))
+                     (for-each (lambda (file)
+                                 (install-file file key)
+                                 (install-file file apt))
+                               (find-files "." "\\.gpg$")))
+                   #t)))
+    (native-inputs
+     `(("tar" ,tar)
+       ("gzip" ,gzip)))
+    (home-page "https://launchpad.net/ubuntu/+source/ubuntu-keyring")
+    (synopsis "GnuPG keys of the Ubuntu archive")
+    (description
+     "The Ubuntu project digitally signs its Release files.  This package
+contains the archive keys used for that.")
+    (license (list license:public-domain ; the keys
+                   license:gpl2+)))) ; see debian/copyright
