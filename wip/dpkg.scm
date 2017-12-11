@@ -28,7 +28,7 @@
 (define-public dpkg
   (package
     (name "dpkg")
-    (version "1.18.23")
+    (version "1.18.24")
     (source
       (origin
         (method url-fetch)
@@ -36,7 +36,7 @@
                             "dpkg_" version ".tar.xz"))
         (sha256
          (base32
-          "08v9ycvpl4bikyjq6js5vls956zz64awfsvi206csb7a1hm8026c"))))
+          "1d6p22vk1b9v16q96mwaz9w2xr4ly28yamkh49md9gq67qfhhlyq"))))
     (build-system gnu-build-system)
     (native-inputs
      `(("gettext" ,gettext-minimal)
