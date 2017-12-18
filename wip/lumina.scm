@@ -23,9 +23,11 @@
   #:use-module (guix utils) ; substitute-keyword-arguments
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system trivial)
+  #:use-module (gnu packages compton)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages linux)
+  #:use-module (gnu packages pdf)
   #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages qt)
   #:use-module (gnu packages wm) ; fluxbox
@@ -35,7 +37,7 @@
 (define-public lumina
   (package
     (name "lumina")
-    (version "1.3.0-p1")
+    (version "1.4.0-p1")
     (source
       (origin
         (method url-fetch)
@@ -44,7 +46,7 @@
         (file-name (string-append name "-" version ".tar.gz"))
         (sha256
          (base32
-          "0c8w3gkbyq928jg9yzqslpnfgrd47ipd805idi159l9pbpabdwkn"))
+          "0bz7jjcvqylizgri3mpn6isq7lgv74d2373i9nrv3jxwni72y83b"))
         (modules '((guix build utils)))
         (snippet
          '(begin
@@ -59,11 +61,12 @@
               (("\"/\"") "PREFIX"))))))
     (build-system gnu-build-system)
     (arguments
-     `(#:phases
+     '(#:phases
        (modify-phases %standard-phases
          (add-after 'unpack 'fix-install-locations
            (lambda* (#:key inputs outputs #:allow-other-keys)
              (let ((fluxbox (assoc-ref inputs "fluxbox"))
+                   (poppler (assoc-ref inputs "poppler"))
                    (out     (assoc-ref outputs "out")))
                (substitute*
                  "src-qt5/core-utils/lumina-config/pages/page_fluxbox_settings.cpp"
@@ -78,7 +81,12 @@
                  (("start-lumina-desktop")
                   (string-append out "/bin/start-lumina-desktop")))
                (substitute* "src-qt5/desktop-utils/lumina-xdg-entry/lumina-xdg-entry.desktop"
-                 (("/usr/local") out)))
+                 (("/usr/local") out))
+               (substitute* "src-qt5/desktop-utils/lumina-pdf/lumina-pdf.pro"
+                 (("\\$\\$\\{L_INCLUDEDIR\\}") (string-append poppler "/include")))
+               (substitute* '("src-qt5/core/lumina-theme-engine/src/lthemeengine-qtplugin/lthemeengine-qtplugin.pro"
+                              "src-qt5/core/lumina-theme-engine/src/lthemeengine-style/lthemeengine-style.pro")
+                 (("PLUGINDIR") "L_LIBDIR/qt5/plugins")))
              #t))
          (replace 'configure
            (lambda* (#:key inputs outputs #:allow-other-keys)
@@ -87,7 +95,9 @@
                     (out (assoc-ref outputs "out")))
                (zero? (system* "qmake" "LINUX_DISTRO=GuixSD"
                                (string-append "LRELEASE=" lrelease)
-                               (string-append "PREFIX=" out)))))))))
+                               (string-append "PREFIX=" out)
+                               "DEFAULT_SETTINGS=GuixSD"
+                               "CONFIG+=WITH_I18N"))))))))
     (propagated-inputs
      `(("fluxbox" ,fluxbox))) ; Also needed at runtime
     (native-inputs
@@ -95,6 +105,7 @@
     (inputs
      `(("libxcb" ,libxcb)
        ("libxdamage" ,libxdamage)
+       ("poppler" ,poppler-qt5)
        ("pulseaudio" ,pulseaudio)
        ("qtbase" ,qtbase)
        ("qtmultimedia" ,qtmultimedia)
@@ -124,12 +135,17 @@ to be designed to maximize the individual user's productivity.")
     (arguments '(#:builder (mkdir %output)))
     (propagated-inputs
      `(("acpi" ,acpi) ; linux
+       ("compton" ,compton)
        ("dbus" ,dbus) ; glib
        ("lumina" ,lumina)
        ("oxygen-icons" ,oxygen-icons) ; kde-frameworks
        ("pavucontrol" ,pavucontrol) ; pulseaudio
        ("sysstat" ,sysstat) ; linux
-       ("xscreensaver" ,xscreensaver))) ; xdisorg
+       ("xbacklight" ,xbacklight) ; xorg
+       ("xinit" ,xinit)
+       ("xrandr" ,xrandr)
+       ("xscreensaver" ,xscreensaver)
+       ("xterm" ,xterm)))
     (home-page "https://lumina-desktop.org/")
     (synopsis "The Lumina Desktop Environment")
     (description
@@ -141,3 +157,7 @@ setup by the system administrator.  This allows every system (or user session)
 to be designed to maximize the individual user's productivity.")
     (license (list license:bsd-3
                    license:cc-by-sa4.0)))) ; icon-theme
+
+;;; Notes:
+;;; For the theme engine:
+;;; Environment Variable QT_QPA_PLATFORMTHEME=lthemeengine needs to be set
