@@ -24,14 +24,14 @@
 (define-public html2text
   (package
     (name "html2text")
-    (version "2016.9.19")
+    (version "2017.10.4")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "html2text" version))
         (sha256
          (base32
-          "0m9dggmxny8wdl9jh2fd6d6hwsn8kqz2m9i5yzjf7xkcdkyzakjm"))))
+          "1b8zikswwlbq4406lqsarqwh8s0637mjd3hqgrdkj2p90vr8vaq2"))))
     (build-system python-build-system)
     (home-page "https://github.com/Alir3z4/html2text/")
     (synopsis "Turn HTML into equivalent Markdown-structured text")
