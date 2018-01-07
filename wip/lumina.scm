@@ -23,6 +23,7 @@
   #:use-module (guix utils) ; substitute-keyword-arguments
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system trivial)
+  #:use-module (gnu packages)
   #:use-module (gnu packages compton)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages kde-frameworks)
@@ -47,18 +48,7 @@
         (sha256
          (base32
           "0bz7jjcvqylizgri3mpn6isq7lgv74d2373i9nrv3jxwni72y83b"))
-        (modules '((guix build utils)))
-        (snippet
-         '(begin
-            ;; This creates the GuixSD specific Lumina config.
-            (copy-file "src-qt5/core/libLumina/LuminaOS-Gentoo.cpp"
-                       "src-qt5/core/libLumina/LuminaOS-GuixSD.cpp")
-            (substitute* "src-qt5/core/libLumina/LuminaOS-GuixSD.cpp"
-              (("Gentoo Linux") "GuixSD")
-              (("AppStoreShortcut\\(\\)")
-               (string-append "AppStoreShortcut(){ return \"\"; }//"))
-              (("\"/usr/") "PREFIX+\"usr")
-              (("\"/\"") "PREFIX"))))))
+        (patches (search-patches "add-LuminaOS-GuixSD.patch"))))
     (build-system gnu-build-system)
     (arguments
      '(#:phases
@@ -80,12 +70,14 @@
                (substitute* "src-qt5/core/lumina-desktop/Lumina-DE.desktop"
                  (("start-lumina-desktop")
                   (string-append out "/bin/start-lumina-desktop")))
-               (substitute* "src-qt5/desktop-utils/lumina-xdg-entry/lumina-xdg-entry.desktop"
+               (substitute*
+                 "src-qt5/desktop-utils/lumina-xdg-entry/lumina-xdg-entry.desktop"
                  (("/usr/local") out))
                (substitute* "src-qt5/desktop-utils/lumina-pdf/lumina-pdf.pro"
                  (("\\$\\$\\{L_INCLUDEDIR\\}") (string-append poppler "/include")))
-               (substitute* '("src-qt5/core/lumina-theme-engine/src/lthemeengine-qtplugin/lthemeengine-qtplugin.pro"
-                              "src-qt5/core/lumina-theme-engine/src/lthemeengine-style/lthemeengine-style.pro")
+               (substitute*
+                 '("src-qt5/core/lumina-theme-engine/src/lthemeengine-qtplugin/lthemeengine-qtplugin.pro"
+                   "src-qt5/core/lumina-theme-engine/src/lthemeengine-style/lthemeengine-style.pro")
                  (("PLUGINDIR") "L_LIBDIR/qt5/plugins")))
              #t))
          (replace 'configure
@@ -132,16 +124,26 @@ to be designed to maximize the individual user's productivity.")
     (version (package-version lumina))
     (source #f)
     (build-system trivial-build-system)
-    (arguments '(#:builder (mkdir %output)))
-    (propagated-inputs
-     `(("acpi" ,acpi) ; linux
+    (arguments
+     '(#:modules ((guix build union))
+       #:builder
+       (begin
+         (use-modules (ice-9 match)
+                      (guix build union))
+         (match %build-inputs
+           (((names . directories) ...)
+            (union-build (assoc-ref %outputs "out")
+                         directories))))))
+    (inputs
+     `(("acpi" ,acpi)
+       ("alsa-utils" ,alsa-utils)
        ("compton" ,compton)
-       ("dbus" ,dbus) ; glib
+       ("dbus" ,dbus)
        ("lumina" ,lumina)
-       ("oxygen-icons" ,oxygen-icons) ; kde-frameworks
-       ("pavucontrol" ,pavucontrol) ; pulseaudio
-       ("sysstat" ,sysstat) ; linux
-       ("xbacklight" ,xbacklight) ; xorg
+       ("oxygen-icons" ,oxygen-icons)
+       ("pavucontrol" ,pavucontrol)
+       ("sysstat" ,sysstat)
+       ("xbacklight" ,xbacklight)
        ("xinit" ,xinit)
        ("xrandr" ,xrandr)
        ("xscreensaver" ,xscreensaver)
