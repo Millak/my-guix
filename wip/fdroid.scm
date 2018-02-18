@@ -67,31 +67,6 @@
     (description "F-Droid Server Tools")
     (license license:agpl3+)))
 
-(define-public python-funcsigs
-  (package
-    (name "python-funcsigs")
-    (version "1.0.2")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "funcsigs" version))
-        (sha256
-         (base32
-          "0l4g5818ffyfmfs1a924811azhjj8ax9xd1cffr1mzd3ycn0zfx7"))))
-    (build-system python-build-system)
-    (arguments `(#:tests? #f)) ; tests fail to recongnize unittest2
-    (native-inputs
-     `(("python-setuptools" ,python-setuptools)))
-    (home-page "http://funcsigs.readthedocs.org")
-    (synopsis
-     "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+")
-    (description
-     "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+")
-    (license license:asl2.0)))
-
-(define-public python2-funcsigs
-  (package-with-python2 python-funcsigs))
-
 (define-public python-crypto
   (package
     (name "python-crypto")
