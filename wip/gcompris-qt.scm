@@ -31,7 +31,7 @@
 (define-public gcompris-qt
   (package
     (name "gcompris-qt")
-    (version "0.70")
+    (version "0.81")
     (source
       (origin
         (method url-fetch)
@@ -40,7 +40,7 @@
                version ".tar.xz"))
         (sha256
          (base32
-          "01r7i8dmwb2nlfyp0y0mzs8yydmvn5gq7xn1w7g21lysak1mliwa"))))
+          "16w4kjmq3rjh7zxfbhhqmlr26c9q7fa89hbxpafm9f5jcvmibmbr"))))
     (build-system cmake-build-system)
     (arguments
      '(#:configure-flags (list "-DQML_BOX2D_MODULE=disabled")
@@ -49,17 +49,17 @@
      `(("extra-cmake-modules" ,extra-cmake-modules)
        ("gettext" ,gettext-minimal)
        ("perl" ,perl)
-       ;("qttools" ,qttools)
+       ("qttools" ,qttools)
        ))
     (inputs
      `(("python-2" ,python-2)
-       ("qt" ,qt)
-       ;("qtbase" ,qtbase)
-       ;("qtdeclarative" ,qtdeclarative)
-       ;("qtmultimedia" ,qtmultimedia)
-       ;("qtsensors" ,qtsensors)
-       ;("qtsvg" ,qtsvg)
-       ;("qtxmlpatterns" ,qtxmlpatterns)
+       ;("qt" ,qt)
+       ("qtbase" ,qtbase)
+       ("qtdeclarative" ,qtdeclarative)
+       ("qtmultimedia" ,qtmultimedia)
+       ("qtsensors" ,qtsensors)
+       ("qtsvg" ,qtsvg)
+       ("qtxmlpatterns" ,qtxmlpatterns)
        ))
     (home-page "http://gcompris.net/index-en.html")
     (synopsis "Educational games for small children")

@@ -1,4 +1,4 @@
-;;; Copyright © 2017 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2017, 2018 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -27,8 +27,8 @@
   #:use-module (gnu packages tls))
 
 (define-public quassel-irssi
-  (let ((commit "7b034e3a8084d08e87869a96795ab59aa4901c74")
-        (revision "1"))
+  (let ((commit "079be662dde374a383646256108a4974c2bc7796")
+        (revision "2"))
     (package
       (name "quassel-irssi")
       (version (string-append "0.0.0-" revision "." (string-take commit 7)))
@@ -42,7 +42,7 @@
           (file-name (string-append name "-" version "-checkout"))
           (sha256
            (base32
-            "1lh3x91wp2qa4yv9psljfqbjsn045zi35776frk5k861mshryn6l"))))
+            "0z24l5pg1b7ycaw5jj7fahryp1zq6n6bvwix58ki9a0m4x7jd2w9"))))
       (build-system gnu-build-system)
       (arguments
        `(#:make-flags (list
@@ -63,7 +63,7 @@
       (inputs
        `(("irssi" ,irssi)
          ("glib" ,glib)
-         ("openssl" ,openssl)))
+         ("openssl" ,openssl-next)))
       (home-page "https://github.com/phhusson/quassel-irssi")
       (synopsis "Irssi plugin to connect to quassel core")
       (description "An irssi plugin to connect to quassel core.")

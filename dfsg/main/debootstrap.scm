@@ -18,6 +18,7 @@
 (define-module (dfsg main debootstrap)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system trivial)
@@ -30,15 +31,17 @@
 (define-public debootstrap
   (package
     (name "debootstrap")
-    (version "1.0.92")
+    (version "1.0.93")
     (source
       (origin
-        (method url-fetch)
-        (uri (string-append "mirror://debian/pool/main/d/debootstrap/"
-                            "debootstrap_" version ".tar.gz"))
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://anonscm.debian.org/cgit/d-i/debootstrap.git")
+               (commit version)))
+        (file-name (git-file-name name version))
         (sha256
          (base32
-          "06gp6ivmfh0ks4mibx1mz0pwzjyxqas319s741pp9b3k091jkip1"))))
+          "1jxq91602a152c56l2f8kzkiszp26cziqddcs4v695bcif72kfz6"))))
     (build-system gnu-build-system)
     (arguments
      `(#:phases
@@ -74,6 +77,11 @@
      `(("debian" ,debian-archive-keyring)
        ("ubuntu" ,ubuntu-keyring)
        ("wget" ,wget)))
+    ;; The following are required for debootstrap to work correctly
+    (propagated-inputs
+     `(("binutils" ,binutils)
+       ("gnupg" ,gnupg)
+       ("perl" ,perl)))
     (home-page "https://anonscm.debian.org/cgit/d-i/debootstrap.git")
     (synopsis "Bootstrap a basic Debian system")
     (description "Debootstrap is used to create a Debian base system from
@@ -101,18 +109,23 @@ unpacking them into a directory which can eventually be chrooted into.")
          (delete 'configure) ; no configure script
          (replace 'install
            (lambda* (#:key outputs #:allow-other-keys)
-             (let ((out (assoc-ref outputs "out")))
+             (let* ((out (assoc-ref outputs "out"))
+                    (man (string-append out "/share/man")))
                (for-each (lambda (file)
                            (install-file file (string-append out "/bin/")))
                          '("jetring-accept" "jetring-apply" "jetring-build"
                            "jetring-checksum" "jetring-diff" "jetring-explode"
                            "jetring-gen" "jetring-review" "jetring-signindex"))
+               (for-each (lambda (file)
+                           (install-file file (string-append man "/man1/")))
+                         (find-files "." ".*\\.1$"))
+               (install-file "jetring.7" (string-append man "/man7/"))
                #t))))
        #:tests? #f)) ; no test phase
     (native-inputs `(("gnupg" ,gnupg)))
     (inputs `(("perl" ,perl)))
     (home-page "https://joeyh.name/code/jetring/")
-    (synopsis "gpg keyring maintenance using changesets")
+    (synopsis "Gpg keyring maintenance using changesets")
     (description
      "Jetring is a collection of tools that allow for gpg keyrings to be
 maintained using changesets.  It was developed with the Debian keyring in mind,
@@ -127,7 +140,7 @@ further secure things.")
 (define-public debian-archive-keyring
   (package
     (name "debian-archive-keyring")
-    (version "2017.6")
+    (version "2017.7")
     (source
       (origin
         (method url-fetch)
@@ -135,7 +148,7 @@ further secure things.")
                             name "_" version ".tar.xz"))
         (sha256
          (base32
-          "1gppssbcd721rcrkbqi4rdzf966dqp9kackqza4l8cih82nsgcym"))))
+          "1pdwgipfi0y4svhxlw8arhq792f1g3vlmw4raphizy7sa65vd4ca"))))
     (build-system gnu-build-system)
     (arguments
      '(#:test-target "verify-results"
@@ -168,7 +181,7 @@ contains the archive keys used for that.")
 (define-public ubuntu-keyring
   (package
     (name "ubuntu-keyring")
-    (version "2016.10.27")
+    (version "2018.02.28")
     (source
       (origin
         (method url-fetch)
@@ -176,7 +189,7 @@ contains the archive keys used for that.")
                             "+files/" name "_" version ".tar.gz"))
         (sha256
          (base32
-          "1gjsr1mbs5bv94sy26hdax3ja46dqbgbwc4kygnsrr987d1q62yw"))))
+          "1zj3012cz7rlx9pm39wnwa0lmi1h38n6bkgbz81vnmcsvqsc9a3a"))))
     (build-system trivial-build-system)
     (arguments
      `(#:modules ((guix build utils))
@@ -188,7 +201,7 @@ contains the archive keys used for that.")
                      (setenv "PATH" (string-append
                                       (assoc-ref %build-inputs "gzip") "/bin:"
                                       (assoc-ref %build-inputs "tar") "/bin"))
-                     (system* "tar" "xvf" (assoc-ref %build-inputs "source"))
+                     (invoke "tar" "xvf" (assoc-ref %build-inputs "source"))
                      (for-each (lambda (file)
                                  (install-file file key)
                                  (install-file file apt))
