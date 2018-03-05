@@ -43,7 +43,20 @@
           "16w4kjmq3rjh7zxfbhhqmlr26c9q7fa89hbxpafm9f5jcvmibmbr"))))
     (build-system cmake-build-system)
     (arguments
-     '(#:configure-flags (list "-DQML_BOX2D_MODULE=disabled")
+     `(#:phases
+       (modify-phases %standard-phases
+         ;; Ensure that icons are found at runtime.
+         (add-after 'install 'wrap-executable
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               (wrap-program (string-append out "/bin/gcompris-qt")
+                 `("QT_PLUGIN_PATH" ":" prefix
+                   ,(map (lambda (label)
+                           (string-append (assoc-ref inputs label)
+                                          "/lib/qt5/plugins/"))
+                         '("qtbase" "qtsvg"))))
+               #t))))
+       #:configure-flags (list "-DQML_BOX2D_MODULE=disabled")
        #:tests? #f)) ; no test target
     (native-inputs
      `(("extra-cmake-modules" ,extra-cmake-modules)
@@ -61,6 +74,10 @@
        ("qtsvg" ,qtsvg)
        ("qtxmlpatterns" ,qtxmlpatterns)
        ))
+    (propagated-inputs
+     `(("qtdeclarative" ,qtdeclarative) ; needed to launch
+       ("qtmultimedia" ,qtmultimedia)
+       ("qtquickcontrols" ,qtquickcontrols))) ; needed to launch
     (home-page "http://gcompris.net/index-en.html")
     (synopsis "Educational games for small children")
     (description
