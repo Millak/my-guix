@@ -21,6 +21,7 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system cmake)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages kde)
@@ -97,3 +98,53 @@
     (description "Kdenlive is a powerful non-linear multi-track video editing
 suite, which supports DV, HDV and many more formats.")
     (license license:gpl2+)))
+
+(define-public plasma-workspace
+  (package
+    (name "plasma-workspace")
+    (version "5.11.5")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "mirror://kde//stable/plasma/" version
+                           "/plasma-workspace-" version ".tar.xz"))
+       (sha256
+        (base32
+         "1ipklc6v2ml095sy80rgq4123vkk3famjwf8s3rgkk172s76qm98"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)
+       ("pkg-config" ,pkg-config)))
+    (inputs
+     `(
+       ("baloo" ,baloo)
+       ("kconfigwidgets" ,kconfigwidgets)
+       ("kcmutils" ,kcmutils)
+       ("kcrash" ,kcrash)
+       ("kdbusaddons" ,kdbusaddons)
+       ("kdeclarative" ,kdeclarative)
+       ("kdelibs4support" ,kdelibs4support)
+       ("kdesu" ,kdesu)
+       ("kdoctools" ,kdoctools)
+       ("kglobalaccel" ,kglobalaccel)
+       ("kidletime" ,kidletime)
+       ("knewstuff" ,knewstuff)
+       ("knotifyconfig" ,knotifyconfig)
+       ("kpackage" ,kpackage)
+       ("krunner" ,krunner)
+       ("ktexteditor" ,ktexteditor)
+       ("ktextwidgets" ,ktextwidgets)
+       ("kwallet" ,kwallet)
+       ("kwayland" ,kwayland)
+       ("libksysguard" ,libksysguard)
+       ("plasma-framework" ,plasma-framework)
+       ("qtbase" ,qtbase)
+       ("qtdeclarative" ,qtdeclarative)
+       ("qtscript" ,qtscript)
+       ("zlib" ,zlib)
+       ))
+    (home-page #f)
+    (synopsis "")
+    (description "")
+    (license #f)
+    ))
