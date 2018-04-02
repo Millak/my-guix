@@ -20,24 +20,24 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system python)
+  #:use-module (gnu packages check)
   #:use-module (gnu packages python))
 
 (define-public ranger
   (package
     (name "ranger")
-    (version "1.8.1")
+    (version "1.9.1")
     (source
       (origin
         (method url-fetch)
         (uri (string-append
-               "http://nongnu.org/ranger/ranger-" version ".tar.gz"))
+               "https://ranger.github.io/ranger-" version ".tar.gz"))
         (sha256
          (base32
-          "1d11qw0mr9aj22a7nhr6p2c3yzf359xbffmjsjblq44bjpwzjcql"))))
+          "1lnzkrxcnlwnyi3z0v8ybyp8d5rm26qm35rr68kbs2lbs06inha0"))))
     (build-system python-build-system)
     (arguments
-     '(#:tests? #f ; There aren't any tests
-       #:phases
+     '(#:phases
        (modify-phases %standard-phases
          (add-before 'build 'patch-inputs
            (lambda _
@@ -46,7 +46,9 @@
                (("/bin/") ""))
              #t)))))
     (inputs `(("python-chardet" ,python-chardet)))
-    (home-page "http://ranger.nongnu.org/")
+    (native-inputs
+     `(("python-pytest" ,python-pytest)))
+    (home-page "https://ranger.github.io/")
     (synopsis "File manager with an ncurses frontend written in Python")
     (description
      "Ranger is a console file manager that gives you greater flexibility
@@ -56,4 +58,4 @@ lists of files on the other, with a preview to the right so you know where
 you'll be going.
 The default keys are similar to those of Vim, Emacs and Midnight Commander,
 though Ranger is easily controllable with just the arrow keys or the mouse.")
-    (license license:agpl3+)))
+    (license license:gpl3+)))
