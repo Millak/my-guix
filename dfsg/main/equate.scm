@@ -37,7 +37,7 @@
           (uri (git-reference
                  (url "https://git.enlightenment.org/apps/equate.git/")
                  (commit commit)))
-          (file-name (string-append name "-" version "-checkout"))
+          (file-name (git-file-name name version))
           (sha256
            (base32
             "13958n8gaphb1bvvrvc74drw3wz46cpzvk4qasiyrziihgrj918d"))))
@@ -46,7 +46,8 @@
        '(#:phases
          (modify-phases %standard-phases
            (add-after 'unpack 'autoconf
-             (lambda _ (zero? (system* "autoreconf" "-vfi")))))))
+             (lambda _ (invoke "autoreconf" "-vfi")
+               #t)))))
       (native-inputs
        `(("autoconf" ,autoconf)
          ("automake" ,automake)

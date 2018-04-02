@@ -33,12 +33,12 @@
       (origin
         (method url-fetch)
         (uri (list (string-append "http://www.smhouston.us/stuff/ephoto-"
-                                  version ".tar.gz")
+                                  version ".tar.xz")
                    (string-append "https://download.enlightenment.org/rel/"
-                                  "apps/ephoto/ephoto-" version ".tar.gz")))
+                                  "apps/ephoto/ephoto-" version ".tar.xz")))
         (sha256
          (base32
-          "09kraa5zz45728h2dw1ssh23b87j01bkfzf977m48y1r507sy3vb"))))
+          "04kli43sfsy6s660g13pjc0kjmgdcmq8m4qh02vvpcwv60mf9mgz"))))
     (build-system gnu-build-system)
     (arguments
      '(#:phases

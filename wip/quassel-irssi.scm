@@ -37,8 +37,7 @@
           (method git-fetch)
           (uri (git-reference
                  (url "https://github.com/phhusson/quassel-irssi.git")
-                 (commit commit)
-                 (recursive? #t)))
+                 (commit commit)))
           (file-name (string-append name "-" version "-checkout"))
           (sha256
            (base32
