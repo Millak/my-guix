@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2018 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -18,6 +18,7 @@
 (define-module (dfsg main emacs-aria2)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix build-system emacs))
 
@@ -31,7 +32,7 @@
         (uri "https://melpa.org/packages/aria2-20141107.1517.el")
         (sha256
          (base32
-           "00slyi0aw03cp5s4c1xhavn9i1gz7d6d4cmv0g0dd3nx7m1ba3y0"))))
+          "00slyi0aw03cp5s4c1xhavn9i1gz7d6d4cmv0g0dd3nx7m1ba3y0"))))
     (build-system emacs-build-system)
     (home-page "https://gitlab.com/ukaszg/aria2.git")
     (synopsis "Major mode for controlling aria2")
@@ -44,3 +45,22 @@ global or per-download options, but this is planned.
 This mode tries to work well with evil-mode, just set aria2-add-evil-quirks to t.")
     (license (license:non-copyleft
                "https://www.gnu.org/licenses/license-list.html#informal"))))
+
+(define-public emacs-aria2el
+  (let ((commit "ab1014b1063d95c3ba6e856877aa88573f2af904")
+        (revision "1"))
+    (package
+      (inherit emacs-aria2)
+      (name "emacs-aria2el")
+      (version (string-append "0.0.0-" revision "." (string-take commit 7)))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://github.com/LdBeth/aria2.el.git")
+                 (commit commit)))
+          (file-name (string-append name "-" version "-checkout"))
+          (sha256
+           (base32
+            "1i4iggk8n56ln0blrilpbwp95ayr11ayxyxypna0nx2yyv86pj50"))))
+      (home-page "https://github.com/LdBeth/aria2.el.git"))))
