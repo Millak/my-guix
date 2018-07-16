@@ -19,8 +19,7 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (gnu packages cdrom)
-  #:use-module (gnu packages tcl)
-  #:use-module (srfi srfi-1))
+  #:use-module (gnu packages tcl))
 
 (define-public my-xorriso
   (package
