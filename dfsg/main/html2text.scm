@@ -1,4 +1,4 @@
-;;; Copyright © 2017 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2017, 2018 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -19,21 +19,24 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
-  #:use-module (guix build-system python))
+  #:use-module (guix build-system python)
+  #:use-module (gnu packages check))
 
 (define-public html2text
   (package
     (name "html2text")
-    (version "2017.10.4")
+    (version "2018.1.9")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "html2text" version))
         (sha256
          (base32
-          "1b8zikswwlbq4406lqsarqwh8s0637mjd3hqgrdkj2p90vr8vaq2"))))
+          "1m6d7ciq30adc3d1n8g6r46072n7q8kdy039pqvnnmp763xi8xb2"))))
     (build-system python-build-system)
-    (home-page "https://github.com/Alir3z4/html2text/")
+    (native-inputs
+     `(("python-unittest2" ,python-unittest2)))
+    (home-page "https://github.com/Alir3z4/html2text")
     (synopsis "Turn HTML into equivalent Markdown-structured text")
     (description "html2text is a Python script that converts a page of HTML
 into clean, easy-to-read plain ASCII text.  Better yet, that ASCII also happens
