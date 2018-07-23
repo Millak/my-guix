@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2018 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -34,7 +34,7 @@
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://git.enlightenment.org/apps/express.git/")
+               (url "https://git.enlightenment.org/apps/express.git")
                (commit "9e4500cb46c4d3d4eeb25cf36aaabfd1e7296eef")))
         (file-name (string-append name "-" version "-checkout"))
         (sha256
@@ -44,16 +44,16 @@
     (arguments
      '(#:phases
        (modify-phases %standard-phases
-         (add-after 'unpack 'autoconf
-           (lambda _ (zero? (and (setenv "NOCONFIGURE" "TRUE")
-                                 (system* "sh" "autogen.sh")))))
-         (add-after 'unpack 'set-home-directory
-           ;; FATAL: Cannot create run dir '/homeless-shelter/.run' - errno=2
-           (lambda _ (setenv "HOME" "/tmp") #t)))))
+         (add-after 'unpack 'setenv
+           (lambda _
+             (setenv "NOCONFIGURE" "TRUE")
+             ;; FATAL: Cannot create run dir '/homeless-shelter/.run' - errno=2
+             (setenv "HOME" "/tmp")
+             #t)))))
     (native-inputs
      `(("autoconf" ,autoconf)
        ("automake" ,automake)
-       ("gettext" ,gnu-gettext)
+       ("gettext" ,gettext-minimal)
        ("libtool" ,libtool)
        ("pkg-config" ,pkg-config)))
     (inputs

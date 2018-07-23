@@ -35,9 +35,9 @@
         (origin
           (method git-fetch)
           (uri (git-reference
-                 (url "https://git.enlightenment.org/apps/ecrire.git/")
+                 (url "https://git.enlightenment.org/apps/ecrire.git")
                  (commit commit)))
-          (file-name (string-append name "-" version "-checkout"))
+          (file-name (git-file-name name version))
           (sha256
            (base32
             "1mzk2zjy81js0hyx491cfmk81z36gk8m385s3r4xng8r9pgbx6lr"))))

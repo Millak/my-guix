@@ -1,4 +1,4 @@
-;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017, 2018 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -35,7 +35,7 @@
         (origin
           (method git-fetch)
           (uri (git-reference
-                 (url "https://git.enlightenment.org/apps/equate.git/")
+                 (url "https://git.enlightenment.org/apps/equate.git")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256
@@ -45,12 +45,14 @@
       (arguments
        '(#:phases
          (modify-phases %standard-phases
-           (add-after 'unpack 'autoconf
-             (lambda _ (invoke "autoreconf" "-vfi")
+           (add-after 'unpack 'set-env
+             (lambda _
+               (setenv "NOCONFIGURE" "TRUE")
                #t)))))
       (native-inputs
        `(("autoconf" ,autoconf)
          ("automake" ,automake)
+         ("libtool" ,libtool)
          ("pkg-config" ,pkg-config)))
       (inputs
        `(("efl" ,efl)))

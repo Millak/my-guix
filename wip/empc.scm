@@ -1,4 +1,4 @@
-;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017, 2018 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -15,7 +15,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (dfsg main empc)
+(define-module (wip empc)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (guix packages)
@@ -39,7 +39,7 @@
         (uri (git-reference
                (url "https://git.enlightenment.org/apps/empc.git/")
                (commit commit)))
-        (file-name (string-append name "-" version "-checkout"))
+        (file-name (git-file-name name version))
         (sha256
          (base32
           "0vxy5d5gvxlfpa9dl9k8wr6azd7d5mixqh7n12f9vj2ydqm0g0n0"))))
@@ -47,8 +47,6 @@
     (arguments
      '(#:phases
        (modify-phases %standard-phases
-         (add-after 'unpack 'autoconf
-           (lambda _ (zero? (system* "autoreconf" "-vfi"))))
          (add-after 'unpack 'set-home-directory
            ;; FATAL: Cannot create run dir '/homeless-shelter/.run' - errno=2
            (lambda _ (setenv "HOME" "/tmp") #t))
