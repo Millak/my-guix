@@ -21,14 +21,16 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system gnu)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages irc)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages tls))
 
 (define-public quassel-irssi
-  (let ((commit "079be662dde374a383646256108a4974c2bc7796")
-        (revision "2"))
+  ;(let ((commit "079be662dde374a383646256108a4974c2bc7796") ; master
+  (let ((commit "19e810405789a35b92026b56ea49d01a3f544b07") ; irssi-abi-8 branch
+        (revision "3"))
     (package
       (name "quassel-irssi")
       (version (string-append "0.0.0-" revision "." (string-take commit 7)))
@@ -37,16 +39,20 @@
           (method git-fetch)
           (uri (git-reference
                  (url "https://github.com/phhusson/quassel-irssi.git")
-                 (commit commit)))
+                 (commit commit)
+                 (recursive? #t)))
           (file-name (string-append name "-" version "-checkout"))
           (sha256
            (base32
-            "0z24l5pg1b7ycaw5jj7fahryp1zq6n6bvwix58ki9a0m4x7jd2w9"))))
+            ;"0z24l5pg1b7ycaw5jj7fahryp1zq6n6bvwix58ki9a0m4x7jd2w9"))))
+            "0kqcf71yzy2vn7gbrgxvk3hiki9dyv8jd2l90bg5s2wvya04jps4"))))
       (build-system gnu-build-system)
       (arguments
        `(#:make-flags (list
                         (string-append "DESTDIR=" (assoc-ref %outputs "out"))
+                        (string-append "LIBDIR=" "lib")
                         "CC=gcc")
+         #:tests? #f ; no tests
          #:phases
          (modify-phases %standard-phases
            (add-after 'unpack 'change-dir
@@ -62,7 +68,8 @@
       (inputs
        `(("irssi" ,irssi)
          ("glib" ,glib)
-         ("openssl" ,openssl-next)))
+         ("openssl" ,openssl-next)
+         ("zlib" ,zlib)))
       (home-page "https://github.com/phhusson/quassel-irssi")
       (synopsis "Irssi plugin to connect to quassel core")
       (description "An irssi plugin to connect to quassel core.")
