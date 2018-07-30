@@ -19,7 +19,6 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
-  #:use-module (guix utils)
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages check)
   #:use-module (gnu packages enlightenment)
@@ -54,7 +53,7 @@
     (home-page "http://smhouston.us/ephoto/")
     (synopsis "EFL image viewer/editor/manipulator/slideshow creator")
     (description "Ephoto is an image viewer and editor written using the
-Enlightenment Foundation Libraries (EFL).  It focuses on simplicity and ease
+@dfn{Enlightenment Foundation Libraries} (EFL).  It focuses on simplicity and ease
 of use, while taking advantage of the speed and small footprint the EFL provide.
 
 Ephoto’s features include:
