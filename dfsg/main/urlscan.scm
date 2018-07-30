@@ -17,7 +17,7 @@
 
 (define-module (dfsg main urlscan)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix git-download)
+  #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system python)
   #:use-module (gnu packages python))
