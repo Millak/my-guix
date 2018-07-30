@@ -28,14 +28,11 @@
     (version "0.8.7")
     (source
       (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/firecat53/urlscan")
-               (commit version)))
-        (file-name (git-file-name name version))
+        (method url-fetch)
+        (uri (pypi-uri "urlscan" version))
         (sha256
          (base32
-          "1jxjcq869jimsq1ihk2fbjhp5lj7yga0hbp0msskxyz92afl1kz8"))))
+          "1f29bk0pmxas39i4xpnx37l1gis97qv9w44cgzwshsg9cbz56fk4"))))
     (build-system python-build-system)
     (propagated-inputs
      `(("python-urwid" ,python-urwid)))
