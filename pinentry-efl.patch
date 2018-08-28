@@ -175,7 +175,7 @@ index ff6c2e0..b7cc04b 100644
  	Curses Pinentry ..: $pinentry_curses
  	TTY Pinentry .....: $pinentry_tty
  	Emacs Pinentry ...: $pinentry_emacs
-+	EFL   Pinentry ...: $pinentry_efl
++	EFL Pinentry .....: $pinentry_efl
  	GTK+-2 Pinentry ..: $pinentry_gtk_2
  	GNOME 3 Pinentry .: $pinentry_gnome_3
  	Qt Pinentry ......: $pinentry_qt $pinentry_qt_lib_version
