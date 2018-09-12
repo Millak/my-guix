@@ -28,22 +28,20 @@
 (define-public rtv
   (package
     (name "rtv")
-    (version "1.23.0")
+    (version "1.24.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "rtv" version))
         (sha256
          (base32
-          "03d5y3bjs4b9m5p5yq2lvy1q4r93kb3j0m7icalp9vifiaif220f"))))
+          "0g8klxazbnmqcpcnw8crs4wy4qckqy7am2yy7jwr9xacx02rk16k"))))
     (build-system python-build-system)
     (arguments
      '(#:phases
        (modify-phases %standard-phases
          (add-before 'check 'set-home-dir
-           (lambda _
-             (setenv "HOME" (getcwd))
-             #t)))
+           (lambda _ (setenv "HOME" (getcwd)) #t)))
        #:tests? #f)) ; tests fail: _curses.error: setupterm: could not find terminal
     (propagated-inputs
      `(("python-beautifulsoup4" ,python-beautifulsoup4)
@@ -60,7 +58,7 @@
        ("python-vcrpy" ,python-vcrpy)))
     (home-page "https://github.com/michael-lazar/rtv")
     (synopsis
-     "A simple terminal viewer for Reddit (Reddit Terminal Viewer)")
+     "Terminal viewer for Reddit (Reddit Terminal Viewer)")
     (description
      "A simple terminal viewer for Reddit (Reddit Terminal Viewer)")
     (license license:expat)))
@@ -97,23 +95,24 @@
 (define python-coveralls
   (package
     (name "python-coveralls")
-    (version "1.3.0")
+    (version "1.5.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "coveralls" version))
         (sha256
          (base32
-          "0il3vac7pqnhivlm0jflsbh46zyqm5cn2izc8zip6mifims98iv6"))))
+          "08mcbzq3gz5247li96iwi6df3j2i51v4g0kp5g2kcyy1ivkngvlx"))))
     (build-system python-build-system)
-    (arguments '(#:tests? #f)) ; no tests are found
+    (arguments '(#:tests? #f)) ; Tests require git repo and network connectivity.
     (propagated-inputs
      `(("python-docopt" ,python-docopt)
        ("python-coverage" ,python-coverage)
        ("python-requests" ,python-requests)))
     (native-inputs
-     `(("python-pytest-runner" ,python-pytest-runner)
-       ("python-pytest" ,python-pytest)
+     `(("python-pytest" ,python-pytest)
+       ("python-pytest-cov" ,python-pytest-cov)
+       ("python-pytest-runner" ,python-pytest-runner)
        ("python-mock" ,python-mock)
        ("python-sh" ,python-sh)
        ("python-pyyaml" ,python-pyyaml)))
