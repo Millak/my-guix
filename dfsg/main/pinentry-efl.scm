@@ -36,10 +36,11 @@
     (arguments
      '(#:configure-flags '("--enable-pinentry-efl"
                            "--enable-pinentry-tty"
+                           "--enable-pinentry-curses"
                            "--enable-pinentry-emacs")
        #:phases
        (modify-phases %standard-phases
-         (add-after 'unpack 'bootstrap
+         (replace 'bootstrap
            (lambda _
              (invoke "sh" "autogen.sh")))
          (add-after 'install 'fix-symlink

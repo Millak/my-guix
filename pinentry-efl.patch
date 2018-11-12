@@ -1,34 +1,24 @@
-From cb3a5f9bdc1977fe14b877919c0c67dcb28387bc Mon Sep 17 00:00:00 2001
+https://git.gnupg.org/cgi-bin/gitweb.cgi?p=pinentry.git;a=commit;h=948105b7a34ec9a9e5479d376b7c86bafee50a01
+This patch can be removed with the next release of pinentry.
+
+From 948105b7a34ec9a9e5479d376b7c86bafee50a01 Mon Sep 17 00:00:00 2001
 From: "William L. Thomson Jr" <wlt@o-sinc.com>
-Date: Sun, 7 Jan 2018 14:14:04 -0500
-Subject: [PATCH] efl: Add an initial pinentry interface using EFL
+Date: Tue, 29 May 2018 22:50:47 +0100
+Subject: [PATCH] efl: Add an EFL-based pinentry.
 
-* configure.ac: Modified, added checks for EFL components.
-* Makefile.am: Modified, added the subdirectory for the EFL interface.
-* NEWS: Modified, added news entry about EFL interface
-* efl/Makefile.am: Modified, added build script for the EFL inferface.
-* efl/pinentry-efl.c: New file, the EFL interface code.
+* NEWS: Update.
+* Makefile.am: Add new efl subdirectory.
+* configure.ac: Add --enable-pinentry-efl option.
+* efl/Makefile.am: New file.
+* efl/pinentry-efl.c: New file.
 
-Submitted to gnupg project, after many months of waiting it was excluded
-for no reason on 1.1.0 release. With no reason for exclusion provided!
-While other interfaces like TQT were added in considerably less time...
-https://dev.gnupg.org/T3279
-https://dev.gnupg.org/T2905
-https://marc.info/?l=gnupg-devel&w=2&r=1&s=william+thomson&q=b
-
-I withdrew submission and will maintain here as a fork of pinentry...
-I may eventually remove all other interfaces as this will only be for efl.
-
-Thanks GNUPG!!! I did a DCO for nothing...
-https://marc.info/?l=gnupg-devel&m=149554672724860&w=2
+Signed-off-by: Damien Goutte-Gattat <dgouttegattat@incenp.org>
 ---
- Makefile.am             |   8 +-
- NEWS                    |   2 +
- configure.ac            |  80 +++++-
- efl/Makefile.am         |  38 +++
- efl/pinentry-efl.c      | 620 +++++++++++++++++++++++++++++++++++++++++++++++
- m4/Makefile.am          |   2 +-
- 8 files changed, 1995 insertions(+), 3 deletions(-)
+ Makefile.am        |   8 +-
+ configure.ac       |  44 +++-
+ efl/Makefile.am    |  38 ++++
+ efl/pinentry-efl.c | 623 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 716 insertions(+), 2 deletions(-)
  create mode 100644 efl/Makefile.am
  create mode 100644 efl/pinentry-efl.c
 
@@ -54,103 +44,54 @@ index 8c8b8e5..b8fd0e1 100644
  
  
  install-exec-local:
-diff --git a/NEWS b/NEWS
-index 3e32d49..9ea6845 100644
---- a/NEWS
-+++ b/NEWS
-@@ -22,6 +22,8 @@ Noteworthy changes in version 1.1.0 (2017-12-03)
-  * Fixed various minor problems.
- 
- 
-+ * A EFL based pinentry has been contributed.
-+
- Noteworthy changes in version 1.0.0 (2016-11-22)
- ------------------------------------------------
- 
 diff --git a/configure.ac b/configure.ac
-index ff6c2e0..b7cc04b 100644
+index ff6c2e0..e305e44 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -418,6 +418,78 @@ fi
+@@ -419,6 +419,42 @@ fi
  
  
- 
-+dnl
-+dnl Check for EFL pinentry programs.
-+dnl
-+AC_ARG_ENABLE(pinentry-efl,
-+            AC_HELP_STRING([--enable-pinentry-efl], [build EFL pinentry]),
-+            pinentry_efl=$enableval, pinentry_efl=maybe)
-+
-+dnl check for pkg-config
-+if test "$pinentry_efl" != "no"; then
-+	AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
-+	if test x"${PKG_CONFIG}" = xno ; then
-+		pinentry_efl=no
-+	fi
-+fi
-+
-+if test "$pinentry_efl" != "no"; then
-+	AC_MSG_CHECKING([for efl])
-+	"${PKG_CONFIG}" --exists 'elementary >= 1.18'
-+	if test $? -ne 0 ; then
-+		AC_MSG_RESULT([no])
-+		AC_MSG_WARN([efl >= 1.18 is required for efl pinentry])
-+		pinentry_efl=no
-+	else
-+		AC_MSG_RESULT([yes])
-+		EFL_CFLAGS=`"${PKG_CONFIG}" --cflags ecore-x elementary`
-+		EFL_LIBS=`"${PKG_CONFIG}" --libs ecore-x elementary`
-+		AC_SUBST(EFL_CFLAGS)
-+		AC_SUBST(EFL_LIBS)
-+		if test "$pinentry_efl" != "no"
-+		then
-+			pinentry_efl=yes
-+		fi
-+	fi
-+fi
-+AM_CONDITIONAL(BUILD_PINENTRY_EFL, test "$pinentry_efl" = "yes")
-+
-+dnl
-+dnl Check for EFL pinentry programs.
-+dnl
-+AC_ARG_ENABLE(pinentry-efl,
-+            AC_HELP_STRING([--enable-pinentry-efl], [build EFL pinentry]),
-+            pinentry_efl=$enableval, pinentry_efl=maybe)
-+
-+dnl check for pkg-config
-+if test "$pinentry_efl" != "no"; then
-+	AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
-+	if test x"${PKG_CONFIG}" = xno ; then
-+		pinentry_efl=no
-+	fi
-+fi
-+
-+if test "$pinentry_efl" != "no"; then
-+	AC_MSG_CHECKING([for efl])
-+	"${PKG_CONFIG}" --exists 'elementary >= 1.18'
-+	if test $? -ne 0 ; then
-+		AC_MSG_RESULT([no])
-+		AC_MSG_WARN([efl >= 1.18 is required for efl pinentry])
-+		pinentry_efl=no
-+	else
-+		AC_MSG_RESULT([yes])
-+		EFL_CFLAGS=`"${PKG_CONFIG}" --cflags ecore-x elementary`
-+		EFL_LIBS=`"${PKG_CONFIG}" --libs ecore-x elementary`
-+		AC_SUBST(EFL_CFLAGS)
-+		AC_SUBST(EFL_LIBS)
-+		if test "$pinentry_efl" != "no"
-+		then
-+			pinentry_efl=yes
-+		fi
-+	fi
-+fi
-+AM_CONDITIONAL(BUILD_PINENTRY_EFL, test "$pinentry_efl" = "yes")
-+
  dnl
++dnl Check for EFL pinentry programs.
++dnl
++AC_ARG_ENABLE(pinentry-efl,
++            AC_HELP_STRING([--enable-pinentry-efl], [build EFL pinentry]),
++            pinentry_efl=$enableval, pinentry_efl=maybe)
++
++dnl check for pkg-config
++if test "$pinentry_efl" != "no"; then
++	AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
++	if test x"${PKG_CONFIG}" = xno ; then
++		pinentry_efl=no
++	fi
++fi
++
++if test "$pinentry_efl" != "no"; then
++	AC_MSG_CHECKING([for efl])
++	"${PKG_CONFIG}" --exists 'elementary >= 1.18'
++	if test $? -ne 0 ; then
++		AC_MSG_RESULT([no])
++		AC_MSG_WARN([efl >= 1.18 is required for efl pinentry])
++		pinentry_efl=no
++	else
++		AC_MSG_RESULT([yes])
++		EFL_CFLAGS=`"${PKG_CONFIG}" --cflags ecore-x elementary`
++		EFL_LIBS=`"${PKG_CONFIG}" --libs ecore-x elementary`
++		AC_SUBST(EFL_CFLAGS)
++		AC_SUBST(EFL_LIBS)
++		if test "$pinentry_efl" != "no"
++		then
++			pinentry_efl=yes
++		fi
++	fi
++fi
++AM_CONDITIONAL(BUILD_PINENTRY_EFL, test "$pinentry_efl" = "yes")
++
++dnl
  dnl Check for GTK+-2 / GNOME3 pinentry programs.
  dnl
-@@ -645,7 +717,11 @@ else
+ AC_ARG_ENABLE(pinentry-gtk2,
+@@ -645,7 +681,11 @@ else
                if test "$pinentry_tqt" = "yes"; then
                  PINENTRY_DEFAULT=pinentry-tqt
                else
@@ -163,7 +104,7 @@ index ff6c2e0..b7cc04b 100644
                fi
              fi
            fi
-@@ -721,6 +797,7 @@ secmem/Makefile
+@@ -721,6 +761,7 @@ secmem/Makefile
  pinentry/Makefile
  curses/Makefile
  tty/Makefile
@@ -171,7 +112,7 @@ index ff6c2e0..b7cc04b 100644
  emacs/Makefile
  gtk+-2/Makefile
  gnome3/Makefile
-@@ -744,6 +821,7 @@ AC_MSG_NOTICE([
+@@ -744,6 +785,7 @@ AC_MSG_NOTICE([
  	Curses Pinentry ..: $pinentry_curses
  	TTY Pinentry .....: $pinentry_tty
  	Emacs Pinentry ...: $pinentry_emacs
@@ -225,10 +166,10 @@ index 0000000..b986a04
 +pinentry_efl_SOURCES = pinentry-efl.c
 diff --git a/efl/pinentry-efl.c b/efl/pinentry-efl.c
 new file mode 100644
-index 0000000..9383a6e
+index 0000000..ca99693
 --- /dev/null
 +++ b/efl/pinentry-efl.c
-@@ -0,0 +1,620 @@
+@@ -0,0 +1,623 @@
 +/* pinentry-efl.c
 +   Copyright (C) 2017 Obsidian-Studios, Inc.
 +     Author William L. Thomson Jr. <wlt@o-sinc.com>
@@ -236,7 +177,7 @@ index 0000000..9383a6e
 +   Based on pinentry-gtk2.c
 +   Copyright (C) 1999 Robert Bihlmeyer <robbe@orcus.priv.at>
 +   Copyright (C) 2001, 2002, 2007, 2015 g10 Code GmbH
-+   Copyright (C) 2004 by Albrecht Dreß <albrecht.dress@arcor.de>
++   Copyright (C) 2004 by Albrecht DreÃ <albrecht.dress@arcor.de>
 +
 +   pinentry-efl is a pinentry application for the EFL widget set.
 +   It tries to follow the Gnome Human Interface Guide as close as
@@ -302,8 +243,12 @@ index 0000000..9383a6e
 +
 +static Eina_Bool got_input;
 +static Ecore_Timer *timer;
-+static Evas_Object *error_label, *check_label;
-+static Evas_Object *win, *entry, *repeat_entry, *qualitybar;
++static Evas_Object *check_label;
++static Evas_Object *error_label;
++static Evas_Object *entry;
++static Evas_Object *repeat_entry;
++static Evas_Object *qualitybar;
++static Evas_Object *win;
 +static char **pargv;
 +static int grab_failed;
 +static int passphrase_ok;
@@ -375,9 +320,6 @@ index 0000000..9383a6e
 +        elm_entry_password_set(entry, EINA_TRUE);
 +        elm_object_text_set(check_label,ENTRY_SHOW);
 +    }
-+/*
-+  evas_object_size_hint_weight_set(check_label, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-+*/
 +  evas_object_size_hint_min_set(check_label,
 +                                ELM_SCALE_SIZE(BUTTON_WIDTH),
 +                                ELM_SCALE_SIZE(BUTTON_HEIGHT));
@@ -396,7 +338,8 @@ index 0000000..9383a6e
 +
 +  if (data)
 +    {
-+      const char *s, *s2;
++      const char *s;
++      const char *s2;
 +
 +      s = elm_entry_entry_get (entry);
 +      if (!s)
@@ -422,7 +365,7 @@ index 0000000..9383a6e
 +      passphrase_ok = 1;
 +      pinentry_setbufferlen (pinentry, strlen (s) + 1);
 +      if (pinentry->pin)
-+	strcpy (pinentry->pin, s);
++	strncpy (pinentry->pin, s, strlen(s) + 1);
 +    }
 +  quit ();
 +}
@@ -455,7 +398,9 @@ index 0000000..9383a6e
 +create_window (void)
 +{
 +  char *txt;
-+  Evas_Object *table, *icon, *obj;
++  Evas_Object *icon;
++  Evas_Object *obj;
++  Evas_Object *table;
 +  int btn_txt_len = 0;
 +  int row = 0;
 +  int ok_len = 0;
@@ -550,7 +495,7 @@ index 0000000..9383a6e
 +
 +      entry = elm_entry_add(table);
 +      elm_entry_scrollable_set(entry, EINA_TRUE);
-+      elm_scroller_policy_set(entry, 
++      elm_scroller_policy_set(entry,
 +                              ELM_SCROLLER_POLICY_OFF,
 +                              ELM_SCROLLER_POLICY_OFF);
 +      elm_entry_password_set(entry, EINA_TRUE);
@@ -752,7 +697,7 @@ index 0000000..9383a6e
 +        ic_size = ic_size/3.5;
 +      else if(row<4)
 +        ic_size = ic_size - ic_size/row;
-+      evas_object_size_hint_min_set(obj, 
++      evas_object_size_hint_min_set(obj,
 +                                    ELM_SCALE_SIZE(ic_size),
 +                                    ELM_SCALE_SIZE(ic_size));
 +      evas_object_size_hint_weight_set(obj, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
@@ -839,7 +784,6 @@ index 0000000..9383a6e
 +  else
 +    {
 +      pinentry_cmd_handler = curses_cmd_handler;
-+      //pinentry_set_flavor_flag ("curses");
 +    }
 +#endif
 +
@@ -849,11 +793,6 @@ index 0000000..9383a6e
 +
 +  return 0;
 +}
-diff --git a/m4/Makefile.am b/m4/Makefile.am
-index a5d43de..dbbefc4 100644
---- a/m4/Makefile.am
-+++ b/m4/Makefile.am
-@@ -1,2 +1,2 @@
--EXTRA_DIST = curses.m4 glib.m4 gpg-error.m4 gtk.m4 iconv.m4 \
-+EXTRA_DIST = curses.m4 glib.m4 gpg-error.m4 efl.m4 gtk.m4 iconv.m4 \
-              libassuan.m4 pkg.m4 qt.m4
+-- 
+2.8.0.rc3
+
