@@ -13,7 +13,6 @@ env:
   - FILE=dfsg/main/confclerk.scm
   - FILE=dfsg/main/cpuid2cpuflags.scm
   - FILE=dfsg/main/ecrire.scm
-  - FILE=dfsg/main/emacs-aria2.scm
   - FILE=dfsg/main/equate.scm
   - FILE=dfsg/main/evisum.scm
   - FILE=dfsg/main/html2text.scm
