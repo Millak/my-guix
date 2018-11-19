@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Millak/my-guix.svg?branch=master)](https://travis-ci.org/Millak/my-guix)
+
 copied and modified from:
 https://git.dthompson.us/guix-custom.git/blob/HEAD:/README.md
 
