@@ -1,4 +1,4 @@
-;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017, 2018 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -15,9 +15,9 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (dfsg main boinc)
+(define-module (wip boinc)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system gnu)
@@ -41,24 +41,23 @@
 (define-public boinc
   (package
     (name "boinc")
-    (version "7.8.1")
+    (version "7.14.2")
     (source
       (origin
-        (method url-fetch)
-        (uri (string-append "https://github.com/BOINC/boinc/archive/"
-                            "client_release/" (version-major+minor version)
-                            "/" version ".tar.gz"))
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/BOINC/boinc.git")
+               (commit (string-append  "client_release/"
+                                       (version-major+minor version)
+                                       "/" version))))
+        (file-name (git-file-name name version))
         (sha256
          (base32
-          "0cv9yj2jv9l92arwyd51vc3zxi9n012hyfk0s38i6i8gli5cb4sk"))
-        (file-name (string-append name "-" version ".tar.gz"))))
+          "0nicpkag18xq0libfqqvs0im22mijpsxzfk272iwdd9l0lmgfvyd"))))
     (build-system gnu-build-system)
     (arguments
      `(#:phases
        (modify-phases %standard-phases
-         (add-before 'configure 'autosetup
-           (lambda _
-             (zero? (system* "sh" "_autosetup"))))
          (add-before 'install 'fix-install-path
            (lambda _
              (substitute* "client/scripts/Makefile.am"
@@ -108,6 +107,6 @@ research.")
        ("libnotify" ,libnotify)
        ("libxi" ,libxi)
        ("libxmu" ,libxmu)
-       ("mysql" ,mysql)
+       ("mariadb" ,mariadb)
        ("sqlite" ,sqlite)
        ("wxwidgets" ,wxwidgets)))))
