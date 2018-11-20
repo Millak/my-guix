@@ -18,43 +18,25 @@
 (define-module (dfsg main pinentry-efl)
   #:use-module (guix packages)
   #:use-module (guix utils)
-  #:use-module (gnu packages)
-  #:use-module (gnu packages autotools)
-  #:use-module (gnu packages gettext)
-  #:use-module (gnu packages gnupg)
-  #:use-module (gnu packages enlightenment)
-  #:use-module (gnu packages pkg-config))
+  #:use-module (gnu packages gnupg))
 
-(define-public pinentry-efl
+(define-public my-pinentry-efl
   (package
-    (inherit pinentry-tty)
-    (name "pinentry-efl")
-    (source
-      (origin
-        (inherit (package-source pinentry-tty))
-        (patches (search-patches "pinentry-efl.patch"))))
+    (inherit pinentry-efl)
+    (name "my-pinentry-efl")
     (arguments
-     '(#:configure-flags '("--enable-pinentry-efl"
-                           "--enable-pinentry-tty"
-                           "--enable-pinentry-curses"
-                           "--enable-pinentry-emacs")
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'bootstrap
-           (lambda _
-             (invoke "sh" "autogen.sh")))
-         (add-after 'install 'fix-symlink
-           (lambda* (#:key outputs #:allow-other-keys)
-             (let ((out (assoc-ref outputs "out")))
-               (with-directory-excursion (string-append out "/bin")
-                 (delete-file "pinentry")
-                 (symlink "pinentry-efl" "pinentry"))
-               #t))))))
-    (native-inputs
-     `(("autoconf" ,autoconf)
-       ("automake" ,automake)
-       ("gettext" ,gettext-minimal)
-       ("pkg-config" ,pkg-config)))
-    (inputs
-     `(("efl" ,efl)
-       ,@(package-inputs pinentry-tty)))))
+      (substitute-keyword-arguments (package-arguments pinentry-efl)
+        ((#:configure-flags _)
+         `(list "--enable-pinentry-efl"
+                "--enable-pinentry-tty"
+                "--enable-pinentry-curses"
+                "--enable-pinentry-emacs"))
+        ((#:phases phases)
+         `(modify-phases ,phases
+            (add-after 'install 'fix-symlink
+              (lambda* (#:key outputs #:allow-other-keys)
+                (let ((out (assoc-ref outputs "out")))
+                  (with-directory-excursion (string-append out "/bin")
+                    (delete-file "pinentry")
+                    (symlink "pinentry-efl" "pinentry"))
+                  #t)))))))))
