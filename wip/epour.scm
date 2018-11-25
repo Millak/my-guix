@@ -97,7 +97,7 @@ Foundation Libraries} (EFL) and rb-libtorrent.")
                         (package-inputs libtorrent-rasterbar))))
     (native-inputs
      `(("python" ,python)
-       ,@(alist-delete "python-2"
+       ,@(alist-delete "python"
                         (package-native-inputs libtorrent-rasterbar))))))
 
 (define boost-local
@@ -105,5 +105,5 @@ Foundation Libraries} (EFL) and rb-libtorrent.")
     (inherit boost)
     (native-inputs
      `(("python" ,python)
-       ,@(alist-delete "python-2"
+       ,@(alist-delete "python"
                         (package-native-inputs boost))))))
