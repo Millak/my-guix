@@ -22,6 +22,7 @@ env:
   - FILE=dfsg/main/ponyos.scm
   - FILE=dfsg/main/pinentry-efl.scm
   - FILE=dfsg/main/rtv.scm
+  - FILE=dfsg/main/viiper.scm
   - FILE=dfsg/main/wgetpaste.scm
   - FILE=dfsg/main/xorriso.scm
 

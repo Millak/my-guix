@@ -15,13 +15,11 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip viiper)
+(define-module (dfsg main viiper)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (guix packages)
-  #:use-module (guix utils)
-  #:use-module (guix build-system gnu)
-  )
+  #:use-module (guix build-system gnu))
 
 (define-public viiper
   (let ((commit "6b7680f67b8362da98fbc11fcfc017ac1898ad22")
@@ -41,7 +39,7 @@
             "047gyssdhkflry9s71xay89qf74gs9gcdcsvd2j74qyp2jidwmgg"))))
       (build-system gnu-build-system)
       (arguments
-       `(#:tests? #f ; no test target
+       '(#:tests? #f ; no test target
          #:phases
           (modify-phases %standard-phases
             (delete 'configure) ; no configure script
