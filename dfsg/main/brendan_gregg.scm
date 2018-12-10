@@ -21,6 +21,7 @@
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system trivial)
+  #:use-module (gnu packages linux)
   #:use-module (gnu packages perl))
 
 (define-public baud
@@ -65,6 +66,245 @@ serial connections to teletypes or dumb terminals (aka glass teletypes, green
 screens, etc).  While links to servers have increased in speed, the code for
 most commands has remained the same. Some operating systems have a man page,
 fastcommands(5), that lists commands that are high speed link safe.")
+    (license license:gpl2+)))
+
+(define-public ishadm
+  (package
+    (name "ishadm")
+    (version "1.00")
+    (source
+      (origin
+        (method url-fetch)
+        (uri "http://www.brendangregg.com/Specials/ishadm")
+        (sha256
+         (base32
+          "1mr3a46qxzbn00gaqgfbwcjd3lxgbgnirvv8xj60vdja63s10g8z"))))
+    (build-system trivial-build-system)
+    (arguments
+     `(#:modules ((guix build utils))
+       #:builder
+       (begin
+         (use-modules (guix build utils))
+         (let* ((out     (assoc-ref %outputs "out"))
+                (dest    (string-append out "/bin/ishadm"))
+                (perl    (assoc-ref %build-inputs "perl"))
+                (netstat (string-append (assoc-ref %build-inputs "net-tools")
+                                        "/bin/netstat"))
+                (source  (assoc-ref %build-inputs "source")))
+           (mkdir-p (string-append out "/bin"))
+           (copy-file source dest) ; not install-file
+           (patch-shebang dest
+             (list (string-append perl "/bin")))
+           (substitute* dest
+             (("netstat") netstat))
+           (chmod dest #o555)))))
+    (native-inputs `(("source" ,source)))
+    (inputs
+     `(("net-tools" ,net-tools)
+       ("perl" ,perl)))
+    (home-page "http://www.brendangregg.com/specials.html")
+    (synopsis "Information Super Highway Administration")
+    (description "This checks and enables network routes to the Information
+Super Highway to ensure maximum Internet performance.  Must be run as root to
+update the routes.")
+    (license license:gpl2+)))
+
+;;;TODO: Write a service.
+(define-public turbo
+  (package
+    (name "turbo")
+    (version "1.00")
+    (source
+      (origin
+        (method url-fetch)
+        (uri "http://www.brendangregg.com/Specials/turbo")
+        (sha256
+         (base32
+          "0liq55l3nnd77pd2zs0rcgk2afszgzkxjcambl7v405ylgxl04b6"))))
+    (build-system trivial-build-system)
+    (arguments
+     `(#:modules ((guix build utils))
+       #:builder
+       (begin
+         (use-modules (guix build utils))
+         (let* ((out    (assoc-ref %outputs "out"))
+                (dest   (string-append out "/bin/turbo"))
+                (perl   (assoc-ref %build-inputs "perl"))
+                (source (assoc-ref %build-inputs "source")))
+           (mkdir-p (string-append out "/bin"))
+           (copy-file source dest) ; not install-file
+           (patch-shebang dest
+             (list (string-append perl "/bin")))
+           (chmod dest #o555)))))
+    (native-inputs `(("source" ,source)))
+    (inputs `(("perl" ,perl)))
+    (home-page "http://www.brendangregg.com/specials.html")
+    (synopsis "Toggle the turbo button")
+    (description "Once upon a time computers were made with a physical turbo
+button that doubled the CPU speed.  These days we need to make do with a
+script.")
+    (license license:gpl2+)))
+
+;;;TODO: Write a service.
+(define-public icmpcharger
+  (package
+    (name "icmpcharger")
+    (version "1.00")
+    (source
+      (origin
+        (method url-fetch)
+        (uri "http://www.brendangregg.com/Specials/icmpcharger")
+        (sha256
+         (base32
+          "1i9jlly3758mz4pagxcnrjs50a6anr9npkjraixanhd1ga76wl0b"))))
+    (build-system trivial-build-system)
+    (arguments
+     `(#:modules ((guix build utils))
+       #:builder
+       (begin
+         (use-modules (guix build utils))
+         (let* ((out    (assoc-ref %outputs "out"))
+                (dest   (string-append out "/bin/icmpcharger"))
+                (perl   (assoc-ref %build-inputs "perl"))
+                (icmp   (string-append (assoc-ref %build-inputs "headers")
+                                       "/include/linux"))
+                (source (assoc-ref %build-inputs "source")))
+           (mkdir-p (string-append out "/bin"))
+           (copy-file source dest) ; not install-file
+           (substitute* dest
+             (("/usr/include") icmp))
+           (patch-shebang dest
+             (list (string-append perl "/bin")))
+           (chmod dest #o555)))))
+    (native-inputs `(("source" ,source)))
+    (inputs
+     `(("headers" ,linux-libre-headers)
+       ("perl" ,perl)))
+    (home-page "http://www.brendangregg.com/specials.html")
+    (synopsis "ICMP driver trickle charger")
+    (description "This trickle charges the ICMP driver by sending a series of
+ICMP packets to localhost at regular intervals.  This program autodetects the
+hardware type and uses appropriate values for the interval based on the wattage
+of each packet.  This script can be incorporated into the system startup
+process as a daemon.
+
+The batteries in the kernel's ICMP driver can become depleted, a common problem
+that causes high latency or dropped packets for any ICMP type.  RFC792 fails to
+specify an ICMP message for battery status, leaving such problems difficult to
+identify or diagnose.  This script serves as a precaution against ICMP driver
+failure.
+
+This program also improves the performance of the ICMP driver by \"priming\" the
+L1, L2 and TLB caches with ICMP driver entries.")
+    (license license:gpl2+)))
+
+(define-public bottom
+  (package
+    (name "bottom")
+    (version "0.91")
+    (source
+      (origin
+        (method url-fetch)
+        (uri "http://www.brendangregg.com/Specials/bottom")
+        (sha256
+         (base32
+          "1ziarv1whhqv43w0k6zbvqs7w25py5izb16w1ipm278raxqqwgq7"))))
+    (build-system trivial-build-system)
+    (arguments
+     `(#:modules ((guix build utils))
+       #:builder
+       (begin
+         (use-modules (guix build utils))
+         (let* ((out    (assoc-ref %outputs "out"))
+                (dest   (string-append out "/bin/bottom"))
+                (perl   (assoc-ref %build-inputs "perl"))
+                (source (assoc-ref %build-inputs "source")))
+           (mkdir-p (string-append out "/bin"))
+           (copy-file source dest) ; not install-file
+           (patch-shebang dest
+             (list (string-append perl "/bin")))
+           (chmod dest #o555)))))
+    (native-inputs `(("source" ,source)))
+    (inputs `(("perl" ,perl)))
+    (home-page "http://www.brendangregg.com/specials.html")
+    (synopsis "display bottom processes")
+    (description "This is the opposite of @code{top}, it displays processes
+that are using the least CPU.  It is the companion to the \"prstat\" command.")
+    (license license:gpl2+)))
+
+(define-public ltzip
+  (package
+    (name "ltzip")
+    (version "0.70")
+    (source
+      (origin
+        (method url-fetch)
+        (uri "http://www.brendangregg.com/Specials/ltzip")
+        (sha256
+         (base32
+          "0gr25mh0daklc590lk324mn3i5mdj1zaipjnr8jxlvv92nk9l8n6"))))
+    (build-system trivial-build-system)
+    (arguments
+     `(#:modules ((guix build utils))
+       #:builder
+       (begin
+         (use-modules (guix build utils))
+         (let* ((out    (assoc-ref %outputs "out"))
+                (dest   (string-append out "/bin/ltzip"))
+                (perl   (assoc-ref %build-inputs "perl"))
+                (source (assoc-ref %build-inputs "source")))
+           (mkdir-p (string-append out "/bin"))
+           (copy-file source dest) ; not install-file
+           (patch-shebang dest
+             (list (string-append perl "/bin")))
+           (chmod dest #o555)))))
+    (native-inputs `(("source" ,source)))
+    (inputs `(("perl" ,perl)))
+    (home-page "http://www.brendangregg.com/specials.html")
+    (synopsis "Lossy Text Compression")
+    (description "This program compresses text files using a unique lossy text
+compression algorithm.  Decompression is not possible.  The result file has a
+\".ltz\" extension, and the original file remains.
+
+Not only is the byte count reduced, but the bytes themselves are smaller
+bytes - and weigh less when stored on disk.")
+    (license license:gpl2+)))
+
+(define-public ltunzip
+  (package
+    (name "ltunzip")
+    (version "0.70")
+    (source
+      (origin
+        (method url-fetch)
+        (uri "http://www.brendangregg.com/Specials/ltunzip")
+        (sha256
+         (base32
+          "154fk9lw2450ij3b78rbqy3wl88wjbg0afmnvlamk1n2qgz7k3bv"))))
+    (build-system trivial-build-system)
+    (arguments
+     `(#:modules ((guix build utils))
+       #:builder
+       (begin
+         (use-modules (guix build utils))
+         (let* ((out    (assoc-ref %outputs "out"))
+                (dest   (string-append out "/bin/ltunzip"))
+                (perl   (assoc-ref %build-inputs "perl"))
+                (source (assoc-ref %build-inputs "source")))
+           (mkdir-p (string-append out "/bin"))
+           (copy-file source dest) ; not install-file
+           (patch-shebang dest
+             (list (string-append perl "/bin")))
+           (chmod dest #o555)))))
+    (native-inputs `(("source" ,source)))
+    (inputs `(("perl" ,perl)))
+    (home-page "http://www.brendangregg.com/specials.html")
+    (synopsis "Lossy Text Uncompression")
+    (description "This program uncompresses text files that were compressed
+using @dfn{the lossy text compression tool} (ltzip).  Like @code{ltzip},
+@code{ltunzip} is also a lossy algorithm, and so performs lossy uncompression.
+There is a high probability that the original text file will NOT be returned.
+The result file has a \".un\" extension, and  the original ltz file remains.")
     (license license:gpl2+)))
 
 (define-public maybe
@@ -177,6 +417,43 @@ slightly improved when using a quality pair of CDROM tweezers.  Some admins and
 found that spraying their CDROMs with shaving cream can help keep the tracks on
 the CDROM.  @code{cdrewind} is far more reliable and should be used for desktops
 through to servers.")
+    (license license:gpl2+)))
+
+(define-public psss
+  (package
+    (name "psss")
+    (version "1.00")
+    (source
+      (origin
+        (method url-fetch)
+        (uri "http://www.brendangregg.com/Specials/psss")
+        (sha256
+         (base32
+          "1xrxyw13aab1d8d2ibs3ajd6l5hl9my342682ppj4scxqg60gkcn"))))
+    (build-system trivial-build-system)
+    (arguments
+     `(#:modules ((guix build utils))
+       #:builder
+       (begin
+         (use-modules (guix build utils))
+         (let* ((out    (assoc-ref %outputs "out"))
+                (dest   (string-append out "/bin/psss"))
+                (perl   (assoc-ref %build-inputs "perl"))
+                (source (assoc-ref %build-inputs "source")))
+           (mkdir-p (string-append out "/bin"))
+           (copy-file source dest) ; not install-file
+           (patch-shebang dest
+             (list (string-append perl "/bin")))
+           (chmod dest #o555)))))
+    (native-inputs `(("source" ,source)))
+    (inputs `(("perl" ,perl)))
+    (home-page "http://www.brendangregg.com/Specials/psss_chart.html")
+    (synopsis "Process Status with StarSign")
+    (description "@code{psss} is ps with StarSign, and inserts a field to
+display the starsign of the process.
+The Starsign is calculated from the proc->p_mstart value.  Some OSes do
+maintain this as a \"struct starsign *p_starsign\" in the proc structure, which
+this program currently does not use.")
     (license license:gpl2+)))
 
 (define-public lsss
