@@ -1,4 +1,4 @@
-;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017, 2018 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -18,7 +18,7 @@
 (define-module (wip lumina)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build utils)
-  #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils) ; substitute-keyword-arguments
   #:use-module (guix build-system gnu)
@@ -41,14 +41,15 @@
     (version "1.4.0-p1")
     (source
       (origin
-        (method url-fetch)
-        (uri (string-append
-              "https://github.com/trueos/lumina/archive/v" version ".tar.gz"))
-        (file-name (string-append name "-" version ".tar.gz"))
-        (sha256
-         (base32
-          "0bz7jjcvqylizgri3mpn6isq7lgv74d2373i9nrv3jxwni72y83b"))
-        (patches (search-patches "add-LuminaOS-GuixSD.patch"))))
+        (method git-fetch)
+          (uri (git-reference
+                 (url "https://github.com/trueos/lumina.git")
+                 (commit (string-append "v" version))))
+          (file-name (git-file-name name version))
+          (sha256
+           (base32
+            "0jin0a2s6pjbpw7w1bz67dgqp0xlpw1a7nh8zv0qwdf954zczanp"))
+          (patches (search-patches "add-LuminaOS-GuixSD.patch"))))
     (build-system gnu-build-system)
     (arguments
      '(#:phases
@@ -85,11 +86,11 @@
              (let* ((qttools (assoc-ref inputs "qttools"))
                     (lrelease (string-append qttools "/bin/lrelease"))
                     (out (assoc-ref outputs "out")))
-               (zero? (system* "qmake" "LINUX_DISTRO=GuixSD"
-                               (string-append "LRELEASE=" lrelease)
-                               (string-append "PREFIX=" out)
-                               "DEFAULT_SETTINGS=GuixSD"
-                               "CONFIG+=WITH_I18N"))))))))
+               (invoke "qmake" "LINUX_DISTRO=GuixSD"
+                       (string-append "LRELEASE=" lrelease)
+                       (string-append "PREFIX=" out)
+                       "DEFAULT_SETTINGS=GuixSD"
+                       "CONFIG+=WITH_I18N")))))))
     (propagated-inputs
      `(("fluxbox" ,fluxbox))) ; Also needed at runtime
     (native-inputs
