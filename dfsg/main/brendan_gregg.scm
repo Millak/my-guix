@@ -1,4 +1,4 @@
-;;; Copyright Â  2017 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright Â© 2017, 2018 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -54,15 +54,15 @@
     (home-page "http://www.brendangregg.com/specials.html")
     (synopsis "Run commands safley at their native baud")
     (description "This allows older commands to be executed safely at their
-original native baud. Commands are now often run over high speed telnet or ssh
+original native baud.  Commands are now often run over high speed telnet or ssh
 sessions, at speeds they were not designed for - sometimes called
-\"overbauding\". Overbauding can cause command overheating, resulting in
-Command Fault Heat State Exception (CFHSE) errors.
+\"overbauding\".  Overbauding can cause command overheating, resulting in
+@dfn{Command Fault Heat State Exception} (CFHSE) errors.
 
 Many command line programs, especially those for Unix, were orginially written
 to run at bauds such as 300, 1200, 2400 or even 9600. This was the days of
 serial connections to teletypes or dumb terminals (aka glass teletypes, green
-screens, etc). While links to servers have increased in speed, the code for
+screens, etc).  While links to servers have increased in speed, the code for
 most commands has remained the same. Some operating systems have a man page,
 fastcommands(5), that lists commands that are high speed link safe.")
     (license license:gpl2+)))
@@ -131,9 +131,9 @@ fastcommands(5), that lists commands that are high speed link safe.")
     (inputs `(("perl" ,perl)))
     (home-page "http://www.brendangregg.com/specials.html")
     (synopsis "Server on status")
-    (description "Onstat tells you if your server is switched on. A common
+    (description "Onstat tells you if your server is switched on.  A common
 problem is when staff attempt to use a server or desktop when the power is not
-switched on. This may help diagnose such a situation.")
+switched on.  This may help diagnose such a situation.")
     (license license:gpl2+)))
 
 (define-public cdrewind
@@ -167,16 +167,16 @@ switched on. This may help diagnose such a situation.")
     (home-page "http://www.brendangregg.com/specials.html")
     (synopsis "Rewind CDROMs before ejection")
     (description "Many Unix based operating systems neglect to rewind CDROMs
-fully before ejection. This may leave some CDROMs positioned incorrectly when
-they are next used. cdrewind should be used to ensure that  the CDROM drive has
-completed the rewind cycle before the disk is removed.
+fully before ejection.  This may leave some CDROMs positioned incorrectly when
+they are next used.  @code{cdrewind} should be used to ensure that the CDROM
+drive has completed the rewind cycle before the disk is removed.
 
 Some cheaper CDROM drives can eject the disk while there are still tracks in
-the drive. Placing these tracks back on the CDROM is a tedious process, only
-slightly improved when using a quality pair of CDROM tweezers. Some admins and
+the drive.  Placing these tracks back on the CDROM is a tedious process, only
+slightly improved when using a quality pair of CDROM tweezers.  Some admins and
 found that spraying their CDROMs with shaving cream can help keep the tracks on
-the CDROM. cdrewind is far more reliable and should be used for desktops through
-to servers.")
+the CDROM.  @code{cdrewind} is far more reliable and should be used for desktops
+through to servers.")
     (license license:gpl2+)))
 
 (define-public lsss
@@ -209,8 +209,9 @@ to servers.")
     (inputs `(("perl" ,perl)))
     (home-page "http://www.brendangregg.com/specials.html")
     (synopsis "ls with StarSign")
-    (description "@code{lsss} is ls with StarSign, an improved ls command. This
-runs the ls command and inserts a field to display the starsign of each file.")
+    (description "@code{lsss} is ls with StarSign, an improved @code{ls}
+command.  This runs the @code{ls} command and inserts a field to display the
+starsign of each file.")
     (license license:gpl2+)))
 
 (define-public gwhiz
@@ -243,9 +244,9 @@ runs the ls command and inserts a field to display the starsign of each file.")
     (inputs `(("perl" ,perl)))
     (home-page "http://www.brendangregg.com/specials.html")
     (synopsis "whiz files or output streams")
-    (description "Gwhiz will whiz files or commands, making them easier to read
-so that you do not miss important details. If your terminal supports color,
-@code{gwhiz} can highlight in colour using the \"-c\" option.")
+    (description "@code{gwhiz} will whiz files or commands, making them easier
+to read so that you do not miss important details.  If your terminal supports
+color, @code{gwhiz} can highlight in colour using the \"-c\" option.")
     (license license:gpl2+)))
 
 (define-public l33t
@@ -278,7 +279,7 @@ so that you do not miss important details. If your terminal supports color,
     (inputs `(("perl" ,perl)))
     (home-page "http://www.brendangregg.com/specials.html")
     (synopsis "auto l33t converter")
-    (description "This program converts text to l33t-speak. This is helpful to
+    (description "This program converts text to l33t-speak.  This is helpful to
 convert text that has been written in a formal and confusing manner, into text
 that is easy to follow.")
     (license license:gpl2+)))
@@ -313,13 +314,13 @@ that is easy to follow.")
     (inputs `(("perl" ,perl)))
     (home-page "http://www.brendangregg.com/specials.html")
     (synopsis "heavyweight encryption algorithm: Triple ROT13")
-    (description "This implements a new encryption algorithm, 3ROT13. This is a
+    (description "This implements a new encryption algorithm, 3ROT13.  This is a
 symmetric cypher that has a number of desirable features over existing
-algorithms; Firstly it is stateless - this allows recovery of any random
+algorithms; firstly it is stateless - this allows recovery of any random
 substring from the cyphertext, which is especially useful if portions of the
-cyphertext are lost or damaged. 3ROT13 is also keyless, removing the need to
-worry about key storage or key lengths. Finally ROT13 is fast. Should a higher
-performance be desired this code can be reworked in C.")
+cyphertext are lost or damaged.  @code{3rot13} is also keyless, removing the
+need to worry about key storage or key lengths.  Finally ROT13 is fast.  Should
+a higher performance be desired this code can be reworked in C.")
     (license license:gpl2+)))
 
 (define-public nrot13
@@ -353,7 +354,7 @@ performance be desired this code can be reworked in C.")
     (home-page "http://www.brendangregg.com/specials.html")
     (synopsis "configurable encryption algorithm: NROT13")
     (description "This implements a new configurable encryption algorithm,
-NROT13. This is similar to the 3ROT13 algorithm, a symmetric stateless
+NROT13.  This is similar to the 3ROT13 algorithm, a symmetric stateless
 keyless cypher, however this allows the user to customise the number of cycles.
 For example, 3ROT13 can be used, as well as 9ROT13 and even the
 supersymmetric 31ROT13.")
@@ -379,10 +380,10 @@ supersymmetric 31ROT13.")
          (delete 'unpack)
          (replace 'build
            (lambda* (#:key source #:allow-other-keys)
-             (zero? (system* "gcc" "-o" "mkzombie" source))))
+             (invoke "gcc" "-o" "mkzombie" source)))
          (replace 'install
-           (lambda _
-             (let* ((out  (assoc-ref %outputs "out"))
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out  (assoc-ref outputs "out"))
                     (dest (string-append out "/bin/mkzombie")))
                (mkdir-p (string-append out "/bin"))
                (copy-file "mkzombie" dest))
@@ -390,5 +391,6 @@ supersymmetric 31ROT13.")
     (home-page "http://www.brendangregg.com/specials.html")
     (synopsis "make zombie processes")
     (description "This program creates one or more zombies and a daemon their
-leader. It can be used to replenish system zombies, or to feed the init monster.")
+leader.  It can be used to replenish system zombies, or to feed the init
+monster.")
     (license license:gpl2+)))
