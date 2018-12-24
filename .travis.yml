@@ -8,6 +8,7 @@ addons:
      - gnupg wget grep sed
 
 env:
+  - FILE=dfsg/main/bidiv.scm
   - FILE=dfsg/main/brendan_gregg.scm
   - FILE=dfsg/main/confclerk.scm
   - FILE=dfsg/main/cpuid2cpuflags.scm
