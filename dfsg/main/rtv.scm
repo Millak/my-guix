@@ -66,14 +66,14 @@
 (define python-vcrpy
   (package
     (name "python-vcrpy")
-    (version "1.13.0")
+    (version "2.0.1")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "vcrpy" version))
         (sha256
          (base32
-          "00dwcv6yg5fcy1g6jn7zmd61j12fbh9yr8ml5mnmifbhib3zjcbh"))))
+          "0kws7l3hci1dvjv01nxw3805q9v2mwldw58bgl8s90wqism69gjp"))))
     (build-system python-build-system)
     (arguments `(#:tests? #f)) ; tests require more packages for python-pytest-httpbin
     (propagated-inputs
@@ -95,14 +95,14 @@
 (define python-coveralls
   (package
     (name "python-coveralls")
-    (version "1.5.0")
+    (version "1.5.1")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "coveralls" version))
         (sha256
          (base32
-          "08mcbzq3gz5247li96iwi6df3j2i51v4g0kp5g2kcyy1ivkngvlx"))))
+          "0vfdny96gcq05qk5wxdbfxfaaprdk7c9q2pqvg7ac5l9sf48wqxb"))))
     (build-system python-build-system)
     (arguments '(#:tests? #f)) ; Tests require git repo and network connectivity.
     (propagated-inputs
