@@ -1,4 +1,4 @@
-;;; Copyright © 2017 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2017, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -43,7 +43,58 @@
      '(#:configure-flags '("--enable-fatverb"
                            "--enable-linginfo"
                            "--enable-shared"
-                           "--enable-test")))
+                           "--enable-test")
+       #:test-target "test"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'skip-aspell-test
+           ;; he.dat is not in the aspell directory
+           (lambda _
+             (substitute* "Makefile.in"
+               (("he.rws ") " "))
+             (substitute* "test/test1"
+               (("test_all\\ aspell") "#test_all aspell"))
+             #t))
+         (add-after 'unpack 'set-perl-path
+           (lambda _
+             (setenv "PERL5LIB"
+                     (string-append (getcwd) ":" (getenv "PERL5LIB")))
+           #t))
+         (replace 'install
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin"))
+                    (lib (string-append out "/lib"))
+                    (inc (string-append out "/include"))
+                    (share (string-append out "/share"))
+                    (man1 (string-append share "/man1"))
+                    (man3 (string-append share "/man3")))
+               (install-file "hspell" bin)
+               (install-file "multispell" bin)
+               (symlink "hspell" (string-append bin "/hspell-i"))
+               (install-file "libhspell.a" lib)
+               (for-each
+                 (lambda (file)
+                   (install-file file share))
+                 (find-files "." "^hebrew.wgz"))
+               (install-file "hspell.1" man1)
+               (install-file "hspell.3" man3)
+               (install-file "linginfo.h" inc)
+               (install-file "hspell.h" inc)
+               (install-file "libhspell.so.0" lib)
+               (symlink "libhspell.so.0" (string-append lib "/libhspell.so")))
+             #t))
+         (add-after 'install 'wrap-binaries
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin"))
+                    (lib (string-append out "/lib")))
+               (for-each
+                 (lambda (file)
+                   (wrap-program file
+                     `("PATH" ":" prefix (,lib))))
+                 (find-files bin ".*")))
+             #t)))))
     (inputs
      `(("aspell" ,aspell)
        ("aspell-dict-he" ,aspell-dict-he)
