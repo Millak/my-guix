@@ -23,6 +23,7 @@
   #:use-module (gnu packages check)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-web)
+  #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages web))
 
 (define-public rtv
@@ -87,9 +88,9 @@
        ("python-pytest-httpbin" ,python-pytest-httpbin)))
     (home-page "https://github.com/kevin1024/vcrpy")
     (synopsis
-      "Automatically mock your HTTP interactions to simplify and speed up testing")
+     "Automatically mock your HTTP interactions to simplify and speed up testing")
     (description
-      "Automatically mock your HTTP interactions to simplify and speed up testing")
+     "Automatically mock your HTTP interactions to simplify and speed up testing")
     (license license:expat)))
 
 (define python-coveralls
@@ -116,10 +117,10 @@
        ("python-mock" ,python-mock)
        ("python-sh" ,python-sh)
        ("python-pyyaml" ,python-pyyaml)))
-    (home-page
-      "http://github.com/coveralls-clients/coveralls-python")
+    (home-page "http://github.com/coveralls-clients/coveralls-python")
     (synopsis
-      "Show coverage stats online via coveralls.io")
+     "Show coverage stats online via coveralls.io")
     (description
-      "Show coverage stats online via coveralls.io")
+     "coveralls.io is a service for publishing your coverage stats online.
+This package provides seamless integration with @code{coverage.py}.")
     (license license:expat)))
