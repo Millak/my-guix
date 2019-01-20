@@ -28,8 +28,8 @@
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages glib) ; intltool
   #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages python)
   #:use-module (gnu packages python-web)
+  #:use-module (gnu packages python-xyz)
   #:use-module (srfi srfi-1))
 
 (define-public epour
