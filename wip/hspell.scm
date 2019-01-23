@@ -40,10 +40,13 @@
           "18xymabvwr47gi4w2sw1galpvvq2hrjpj4aw45nivlj0hzaza43k"))))
     (build-system gnu-build-system)
     (arguments
-     '(#:configure-flags '("--enable-fatverb"
+     '(#:configure-flags (list "--enable-fatverb"
                            "--enable-linginfo"
                            "--enable-shared"
-                           "--enable-test")
+                           "--enable-test"
+                           (string-append "LDFLAGS=-Wl,-rpath="
+                                          (assoc-ref %outputs "out")
+                                          "/lib"))
        #:test-target "test"
        #:phases
        (modify-phases %standard-phases
@@ -81,25 +84,27 @@
                (install-file "hspell.3" man3)
                (install-file "linginfo.h" inc)
                (install-file "hspell.h" inc)
-               (install-file "libhspell.so.0" lib)
-               (symlink "libhspell.so.0" (string-append lib "/libhspell.so")))
-             #t))
-         (add-after 'install 'wrap-binaries
-           (lambda* (#:key outputs #:allow-other-keys)
-             (let* ((out (assoc-ref outputs "out"))
-                    (bin (string-append out "/bin"))
-                    (lib (string-append out "/lib")))
-               (for-each
-                 (lambda (file)
-                   (wrap-program file
-                     `("PATH" ":" prefix (,lib))))
-                 (find-files bin ".*")))
+               (when (file-exists? "libhspell.so.0")
+                 (install-file "libhspell.so.0" lib)
+                 (symlink "libhspell.so.0" (string-append lib "/libhspell.so"))))
+         ;    #t))
+         ;(add-after 'install 'wrap-binaries
+         ;  (lambda* (#:key outputs #:allow-other-keys)
+         ;    (let* ((out (assoc-ref outputs "out"))
+         ;           (bin (string-append out "/bin"))
+         ;           (lib (string-append out "/lib")))
+         ;      (for-each
+         ;        (lambda (file)
+         ;          (wrap-program file
+         ;            `("PATH" ":" prefix (,lib))))
+         ;        (find-files bin ".*")))
              #t)))))
-    (inputs
+    (native-inputs
      `(("aspell" ,aspell)
        ("aspell-dict-he" ,aspell-dict-he)
-       ("hunspell" ,hunspell)
-       ("perl" ,perl)
+       ("hunspell" ,hunspell)))
+    (inputs
+     `(("perl" ,perl)
        ("zlib" ,zlib)))
     (home-page "http://hspell.ivrix.org.il/")
     (synopsis "Hebrew linguistic tool")
