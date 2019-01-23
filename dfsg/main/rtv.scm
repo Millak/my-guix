@@ -21,7 +21,9 @@
   #:use-module (guix build-system python)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages check)
+  #:use-module (gnu packages ncurses)
   #:use-module (gnu packages python)
+  #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-web)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages web))
@@ -41,15 +43,21 @@
     (arguments
      '(#:phases
        (modify-phases %standard-phases
-         (add-before 'check 'set-home-dir
-           (lambda _ (setenv "HOME" (getcwd)) #t)))
-       #:tests? #f)) ; tests fail: _curses.error: setupterm: could not find terminal
+         (add-before 'check 'set-environment-variables
+           (lambda* (#:key inputs #:allow-other-keys)
+             (setenv "HOME" (getcwd))
+             (setenv "TERM" "linux")
+             (setenv "TERMINFO" (string-append (assoc-ref inputs "ncurses")
+                                               "/share/terminfo"))
+             #t)))
+       #:tests? #f)) ; tests fail: _curses.error: nocbreak() returned ERR
     (propagated-inputs
      `(("python-beautifulsoup4" ,python-beautifulsoup4)
        ("python-decorator" ,python-decorator)
        ("python-kitchen" ,python-kitchen)
        ("python-requests" ,python-requests)
        ("python-six" ,python-six)))
+    (inputs `(("ncurses" ,ncurses)))
     (native-inputs
      `(("python-coveralls" ,python-coveralls)
        ("python-coverage" ,python-coverage)
@@ -61,8 +69,9 @@
     (synopsis
      "Terminal viewer for Reddit (Reddit Terminal Viewer)")
     (description
-     "A simple terminal viewer for Reddit (Reddit Terminal Viewer)")
-    (license license:expat)))
+     "RTV provides a text-based interface to view and interact with reddit.")
+    (license (list license:expat
+                   license:gpl3+)))) ; rtv/packages/praw
 
 (define python-vcrpy
   (package
@@ -91,36 +100,4 @@
      "Automatically mock your HTTP interactions to simplify and speed up testing")
     (description
      "Automatically mock your HTTP interactions to simplify and speed up testing")
-    (license license:expat)))
-
-(define python-coveralls
-  (package
-    (name "python-coveralls")
-    (version "1.5.1")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "coveralls" version))
-        (sha256
-         (base32
-          "0vfdny96gcq05qk5wxdbfxfaaprdk7c9q2pqvg7ac5l9sf48wqxb"))))
-    (build-system python-build-system)
-    (arguments '(#:tests? #f)) ; Tests require git repo and network connectivity.
-    (propagated-inputs
-     `(("python-docopt" ,python-docopt)
-       ("python-coverage" ,python-coverage)
-       ("python-requests" ,python-requests)))
-    (native-inputs
-     `(("python-pytest" ,python-pytest)
-       ("python-pytest-cov" ,python-pytest-cov)
-       ("python-pytest-runner" ,python-pytest-runner)
-       ("python-mock" ,python-mock)
-       ("python-sh" ,python-sh)
-       ("python-pyyaml" ,python-pyyaml)))
-    (home-page "http://github.com/coveralls-clients/coveralls-python")
-    (synopsis
-     "Show coverage stats online via coveralls.io")
-    (description
-     "coveralls.io is a service for publishing your coverage stats online.
-This package provides seamless integration with @code{coverage.py}.")
     (license license:expat)))
