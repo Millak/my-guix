@@ -57,9 +57,9 @@
        ("python-kitchen" ,python-kitchen)
        ("python-requests" ,python-requests)
        ("python-six" ,python-six)))
-    (inputs `(("ncurses" ,ncurses)))
     (native-inputs
-     `(("python-coveralls" ,python-coveralls)
+     `(("ncurses" ,ncurses)
+       ("python-coveralls" ,python-coveralls)
        ("python-coverage" ,python-coverage)
        ("python-mock" ,python-mock)
        ("python-pylint" ,python-pylint)
