@@ -26,6 +26,7 @@ env:
   - FILE=dfsg/main/viiper.scm
   - FILE=dfsg/main/wgetpaste.scm
   - FILE=dfsg/main/xorriso.scm
+  - FILE=dfsg/contrib/dropbox.scm
 
 install:
     - wget "https://git.savannah.gnu.org/cgit/guix.git/plain/etc/guix-install.sh?h=v0.16.0" -O guix-install.sh
