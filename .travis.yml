@@ -5,7 +5,7 @@ os: linux
 addons:
   apt:
     packages:
-     - gnupg grep sed
+     - gnupg wget grep sed
 
 env:
   - FILE=dfsg/main/bidiv.scm

@@ -18,7 +18,7 @@
 (define-module (dfsg main mcron)
   #:use-module (guix packages)
   #:use-module (guix utils)
-  #:use-module (gnu packages guile)
+  #:use-module (gnu packages guile-xyz)
   #:use-module (srfi srfi-1))
 
 (define-public my-mcron
