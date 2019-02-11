@@ -1,4 +1,4 @@
-;;; Copyright © 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -31,14 +31,14 @@
 (define-public rtv
   (package
     (name "rtv")
-    (version "1.24.0")
+    (version "1.25.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "rtv" version))
         (sha256
          (base32
-          "0g8klxazbnmqcpcnw8crs4wy4qckqy7am2yy7jwr9xacx02rk16k"))))
+          "1kik9jk94q728ls0kd3jk1iwx7xymw885ym7a5sarkzxafch546l"))))
     (build-system python-build-system)
     (arguments
      '(#:phases
