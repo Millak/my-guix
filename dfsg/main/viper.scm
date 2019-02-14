@@ -1,4 +1,4 @@
-;;; Copyright © 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -15,17 +15,17 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (dfsg main viiper)
+(define-module (dfsg main viper)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix build-system gnu))
 
-(define-public viiper
-  (let ((commit "6b7680f67b8362da98fbc11fcfc017ac1898ad22")
-        (revision "1"))
+(define-public viper
+  (let ((commit "edd02980f70019b1d01508467c671282561ed778")
+        (revision "2"))
     (package
-      (name "viiper")
+      (name "viper")
       (version (string-append "0.0.0-" revision "." (string-take commit 7)))
       (source
         (origin
@@ -36,10 +36,11 @@
           (file-name (git-file-name name version))
           (sha256
            (base32
-            "047gyssdhkflry9s71xay89qf74gs9gcdcsvd2j74qyp2jidwmgg"))))
+            "0lf2ba3grl3i5m6k1hsamwz288sslhy7ydnrwc6gqjc7yl0jm5ab"))))
       (build-system gnu-build-system)
       (arguments
        '(#:tests? #f ; no test target
+         #:make-flags (list "CC=gcc")
          #:phases
           (modify-phases %standard-phases
             (delete 'configure) ; no configure script
@@ -47,10 +48,13 @@
               (lambda* (#:key outputs #:allow-other-keys)
                 (let* ((out (assoc-ref outputs "out"))
                        (bin (string-append out "/bin")))
-                  (install-file "viiper" bin))
+                  (install-file "viper" bin))
                 #t)))))
-      (home-page "https://www.viiper.org/")
+      (home-page "https://gir.st/viper.htm")
       (synopsis "terminal + emoji = snek")
       (description
-       "VIIper - a snake clone for unicode-compatible terminals.")
+       "VIper - a snake clone for unicode-compatible terminals.")
       (license license:gpl3))))
+
+(define-public viiper
+  (deprecated-package "viiper" viper))
