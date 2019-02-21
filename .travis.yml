@@ -1,6 +1,6 @@
-language: cpp
-sudo: enabled
 os: linux
+sudo: enabled
+language: generic
 
 addons:
   apt:
