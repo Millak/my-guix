@@ -68,6 +68,7 @@
                (substitute* "src-qt5/OS-detect.pri"
                  (("L_SESSDIR=/usr/share/xsessions")
                   (string-append out "/share/xsessions")))
+               ;; This is probably not needed
                (substitute* "src-qt5/core/lumina-desktop/Lumina-DE.desktop"
                  (("start-lumina-desktop")
                   (string-append out "/bin/start-lumina-desktop")))
@@ -76,6 +77,7 @@
                  (("/usr/local") out))
                (substitute* "src-qt5/desktop-utils/lumina-pdf/lumina-pdf.pro"
                  (("\\$\\$\\{L_INCLUDEDIR\\}") (string-append poppler "/include")))
+               ;; This one is probably wrong
                (substitute*
                  '("src-qt5/core/lumina-theme-engine/src/lthemeengine-qtplugin/lthemeengine-qtplugin.pro"
                    "src-qt5/core/lumina-theme-engine/src/lthemeengine-style/lthemeengine-style.pro")
@@ -83,9 +85,9 @@
              #t))
          (replace 'configure
            (lambda* (#:key inputs outputs #:allow-other-keys)
-             (let* ((qttools (assoc-ref inputs "qttools"))
+             (let* ((qttools  (assoc-ref inputs "qttools"))
                     (lrelease (string-append qttools "/bin/lrelease"))
-                    (out (assoc-ref outputs "out")))
+                    (out      (assoc-ref outputs "out")))
                (invoke "qmake" "LINUX_DISTRO=GuixSD"
                        (string-append "LRELEASE=" lrelease)
                        (string-append "PREFIX=" out)
