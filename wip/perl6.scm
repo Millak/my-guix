@@ -162,7 +162,7 @@ regular expression engine for the virtual machine.")
         (modules '((guix build utils)))
         (snippet
          '(begin
-            (delete-file-recursively "3rdparty/dynasm")
+            ;(delete-file-recursively "3rdparty/dynasm") ; JIT
             (delete-file-recursively "3rdparty/dyncall")
             (delete-file-recursively "3rdparty/freebsd")
             (delete-file-recursively "3rdparty/libuv")
