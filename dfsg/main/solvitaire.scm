@@ -22,8 +22,8 @@
   #:use-module (guix build-system gnu))
 
 (define-public solvitaire
-  (let ((commit "26738c8a3404a1431dd61ca306f013cd07dd2418")
-        (revision "1"))
+  (let ((commit "9e393b31fe342d991894ca84e247e501d41caa9c")
+        (revision "2"))
     (package
       (name "solvitaire")
       (version (string-append "0.0.0-" revision "." (string-take commit 7)))
@@ -36,7 +36,7 @@
           (file-name (git-file-name name version))
           (sha256
            (base32
-            "12x2fy1cw3np9rq3s1jwffkyi80chv0brlxr1q50ig8vw3k87hrs"))))
+            "1azrrwl8ian04l4x7b0p2xd4smkrbf76p97fpclqgqvv76wzmn9r"))))
       (build-system gnu-build-system)
       (arguments
        '(#:test-target "longtest"
@@ -49,7 +49,8 @@
                 (let* ((out (assoc-ref outputs "out"))
                        (bin (string-append out "/bin")))
                   (install-file "sol" bin)
-                  (install-file "spider" bin))
+                  (install-file "spider" bin)
+                  (install-file "freecell" bin))
                 #t)))))
       (home-page "https://gir.st/sol.htm")
       (synopsis "solitaire in your terminal")
