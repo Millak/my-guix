@@ -17,7 +17,6 @@ env:
   - FILE=dfsg/main/evisum.scm
   - FILE=dfsg/main/html2text.scm
   - FILE=dfsg/main/mcron.scm
-  - FILE=dfsg/main/micropython.scm
   - FILE=dfsg/main/minesviiper.scm
   - FILE=dfsg/main/mpv.scm
   - FILE=dfsg/main/mupdf.scm
