@@ -48,6 +48,11 @@
     (arguments
      `(#:phases
        (modify-phases %standard-phases
+         (add-after 'unpack 'patch-source-date
+           (lambda _
+             (substitute* "tools/build/gen-version.pl"
+               (("gmtime") "gmtime(0)"))
+             #t))
          (add-after 'patch-source-shebangs 'patch-more-shebangs
            (lambda _
              (substitute* '("tools/build/create-js-runner.pl"
@@ -68,7 +73,10 @@
          (replace 'check
            (lambda _
              ;; Just run the perl6 tests for now
-             (invoke "make" "m-test6"))))))
+             (invoke "make" "m-test6")))
+         )
+       ;#:tests? #f
+       ))
     (inputs
      `(
        ("moarvm" ,moarvm)
@@ -118,6 +126,11 @@ specification and runs on top of several virtual machines.")
                             "t/nqp/111-spawnprocasync.t"
                             "t/nqp/113-run-command.t")
                (("/bin/sh") (which "sh")))
+             #t))
+         (add-after 'unpack 'patch-source-date
+           (lambda _
+             (substitute* "tools/build/gen-version.pl"
+               (("gmtime") "gmtime(0)"))
              #t))
          (add-after 'unpack 'remove-failing-test
            ;; This test fails for unknown reasons
@@ -185,6 +198,7 @@ regular expression engine for the virtual machine.")
                        "--has-libuv"
                        "--has-libffi")))))))
     (home-page "https://moarvm.org/")
+    ;; These should be inputs but moar.h can't find them when building rakudo
     (propagated-inputs
      `(("libatomic-ops" ,libatomic-ops)
        ("libuv" ,libuv)
