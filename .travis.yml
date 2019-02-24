@@ -39,6 +39,7 @@ install:
     - guix pull --fallback --substitute-urls="https://ci.guix.info https://mirror.hydra.gnu.org"
 
 script:
+    - export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"¬
     - GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback --substitute-urls="https://ci.guix.info https://mirror.hydra.gnu.org" $(grep define-public $FILE | cut -f2 -d' ')
 
 notifications:
@@ -47,4 +48,4 @@ notifications:
         on_failure: always
 
 git:
-    depth: 10
+    depth: 1
