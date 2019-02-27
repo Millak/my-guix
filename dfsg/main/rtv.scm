@@ -31,14 +31,14 @@
 (define-public rtv
   (package
     (name "rtv")
-    (version "1.25.0")
+    (version "1.25.1")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "rtv" version))
         (sha256
          (base32
-          "1kik9jk94q728ls0kd3jk1iwx7xymw885ym7a5sarkzxafch546l"))))
+          "0my75wibri123z49y8b3spj14jn7c77yih5rc438y3pmssriaz2h"))))
     (build-system python-build-system)
     (arguments
      '(#:phases
