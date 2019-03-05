@@ -22,7 +22,6 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages check)
   #:use-module (gnu packages ncurses)
-  #:use-module (gnu packages python)
   #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-web)
   #:use-module (gnu packages python-xyz)
@@ -31,14 +30,14 @@
 (define-public rtv
   (package
     (name "rtv")
-    (version "1.25.1")
+    (version "1.26.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "rtv" version))
         (sha256
          (base32
-          "0my75wibri123z49y8b3spj14jn7c77yih5rc438y3pmssriaz2h"))))
+          "1aamkli1mlq2vxixlva790y0l0cbvbkz07lknajin0841sdq0411"))))
     (build-system python-build-system)
     (arguments
      '(#:phases
@@ -66,10 +65,9 @@
        ("python-pytest" ,python-pytest)
        ("python-vcrpy" ,python-vcrpy)))
     (home-page "https://github.com/michael-lazar/rtv")
-    (synopsis
-     "Terminal viewer for Reddit (Reddit Terminal Viewer)")
+    (synopsis "Terminal viewer for Reddit (Reddit Terminal Viewer)")
     (description
-     "RTV provides a text-based interface to view and interact with reddit.")
+     "RTV provides a text-based interface to view and interact with Reddit.")
     (license (list license:expat
                    license:gpl3+)))) ; rtv/packages/praw
 
@@ -96,8 +94,25 @@
        ("python-pytest" ,python-pytest)
        ("python-pytest-httpbin" ,python-pytest-httpbin)))
     (home-page "https://github.com/kevin1024/vcrpy")
-    (synopsis
-     "Automatically mock your HTTP interactions to simplify and speed up testing")
+    (synopsis "Automatically mock your HTTP interactions")
     (description
-     "Automatically mock your HTTP interactions to simplify and speed up testing")
+     "VCR.py simplifies and speeds up tests that make HTTP requests.  The first
+time you run code that is inside a VCR.py context manager or decorated function,
+VCR.py records all HTTP interactions that take place through the libraries it
+supports and serializes and writes them to a flat file (in yaml format by
+default).  This flat file is called a cassette.  When the relevant piece of code
+is executed again, VCR.py will read the serialized requests and responses from
+the aforementioned cassette file, and intercept any HTTP requests that it
+recognizes from the original test run and return the responses that corresponded
+to those requests.  This means that the requests will not actually result in
+HTTP traffic, which confers several benefits including:
+@enumerate
+@item The ability to work offline
+@item Completely deterministic tests
+@item Increased test execution speed
+@end enumerate
+If the server you are testing against ever changes its API, all you need to do
+is delete your existing cassette files, and run your tests again.  VCR.py will
+detect the absence of a cassette file and once again record all HTTP
+interactions, which will update them to correspond to the new API.")
     (license license:expat)))
