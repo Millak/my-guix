@@ -23,7 +23,6 @@ env:
   - FILE=dfsg/main/nyancat.scm
   - FILE=dfsg/main/ponyos.scm
   - FILE=dfsg/main/pinentry-efl.scm
-  - FILE=dfsg/main/rtv.scm
   - FILE=dfsg/main/solvitaire.scm
   - FILE=dfsg/main/viper.scm
   - FILE=dfsg/main/wgetpaste.scm
