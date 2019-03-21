@@ -22,8 +22,8 @@
   #:use-module (guix build-system gnu))
 
 (define-public solvitaire
-  (let ((commit "9e393b31fe342d991894ca84e247e501d41caa9c")
-        (revision "2"))
+  (let ((commit "2b1e08372df6471a3462aef71b5a52ce641b3aad")
+        (revision "3"))
     (package
       (name "solvitaire")
       (version (string-append "0.0.0-" revision "." (string-take commit 7)))
@@ -36,7 +36,7 @@
           (file-name (git-file-name name version))
           (sha256
            (base32
-            "1azrrwl8ian04l4x7b0p2xd4smkrbf76p97fpclqgqvv76wzmn9r"))))
+            "171vfrmn2xl4jfbgsqsq0rz0jkpkx2mpminmxxg1fn5pmmy8pkrv"))))
       (build-system gnu-build-system)
       (arguments
        '(#:test-target "longtest"
