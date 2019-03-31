@@ -1,4 +1,4 @@
-;;; Copyright © 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -31,17 +31,15 @@
 (define-public ftl
   (package
     (name "ftl")
-    (version "1.6.8")
+    (version "1.6.9")
     (source
       (origin
         (method url-fetch/tarbomb)
-        (uri (string-append
-               "file:///gnu/store/7bz2fbvq9la030wmka0gnlcc4rmmmpi4-FTL-linux-"
-               version ".tar.gz"))
+        (uri "file:///gnu/store/jzwz3gni1rdfkvkcghp9n7yh8b8yiwqd-FTL.1.6.9.tar.gz")
         (file-name (string-append "FTL-Linux-" version ".tar.gz"))
         (sha256
          (base32
-          "04kl0hy5vs5a34jb0mnrcrdvn7a96l8hs7gkvk5qifyzar9f1bs7"))))
+          "0vlgi0kpbybyvrgkdy1mpzhk8h9p2qp5qg1k2irs08izdj66dya4"))))
     (build-system gnu-build-system)
     (arguments
      `(#:tests? #f
