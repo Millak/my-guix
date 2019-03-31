@@ -1,4 +1,4 @@
-;;; Copyright © 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -64,7 +64,7 @@
     (inputs
      `(("qtbase" ,qtbase)))
     (home-page "http://www.toastfreeware.priv.at/confclerk")
-    (synopsis "offline conference schedule application")
+    (synopsis "Offline conference schedule application")
     (description
      "ConfClerk is an application written in Qt, which makes conference schedules
 available offline.  It displays the conference schedule from various views,

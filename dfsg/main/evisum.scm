@@ -1,4 +1,4 @@
-;;; Copyright © 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -53,7 +53,7 @@
      `(("efl" ,efl)
        ("perl" ,perl)))
     (home-page "https://www.enlightenment.org")
-    (synopsis "An EFL process viewer")
+    (synopsis "EFL process viewer")
     (description
      "This is a process monitor and system monitor using the
 @dfn{Enlightenment Foundation Libraries} (EFL).")

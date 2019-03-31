@@ -51,7 +51,7 @@
                   (install-file "mines" bin))
                 #t)))))
       (home-page "https://gir.st/mines.htm")
-      (synopsis "minesweeper clone with vi keybindings")
+      (synopsis "Minesweeper clone with vi keybindings")
       (description
        "minesVIiper is a clone of Minesweeper, which runs in the terminal and
 can be controlled by either @code{vi} style keybindings, or the mouse.")

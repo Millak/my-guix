@@ -53,7 +53,7 @@
                   (install-file "freecell" bin))
                 #t)))))
       (home-page "https://gir.st/sol.htm")
-      (synopsis "solitaire in your terminal")
+      (synopsis "Solitaire in your terminal")
       (description
        "Play klondike and spider solitaire in your unicode terminal.
 

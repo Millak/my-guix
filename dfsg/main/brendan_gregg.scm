@@ -1,4 +1,4 @@
-;;; Copyright © 2017, 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2017, 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -61,10 +61,10 @@ sessions, at speeds they were not designed for - sometimes called
 @dfn{Command Fault Heat State Exception} (CFHSE) errors.
 
 Many command line programs, especially those for Unix, were orginially written
-to run at bauds such as 300, 1200, 2400 or even 9600. This was the days of
+to run at bauds such as 300, 1200, 2400 or even 9600.  This was the days of
 serial connections to teletypes or dumb terminals (aka glass teletypes, green
 screens, etc).  While links to servers have increased in speed, the code for
-most commands has remained the same. Some operating systems have a man page,
+most commands has remained the same.  Some operating systems have a man page,
 fastcommands(5), that lists commands that are high speed link safe.")
     (license license:gpl2+)))
 
@@ -227,7 +227,7 @@ L1, L2 and TLB caches with ICMP driver entries.")
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
     (home-page "http://www.brendangregg.com/specials.html")
-    (synopsis "display bottom processes")
+    (synopsis "Display bottom processes")
     (description "This is the opposite of @code{top}, it displays processes
 that are using the least CPU.  It is the companion to the \"prstat\" command.")
     (license license:gpl2+)))
@@ -485,7 +485,7 @@ this program currently does not use.")
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
     (home-page "http://www.brendangregg.com/specials.html")
-    (synopsis "ls with StarSign")
+    (synopsis "@code{ls} with StarSign")
     (description "@code{lsss} is ls with StarSign, an improved @code{ls}
 command.  This runs the @code{ls} command and inserts a field to display the
 starsign of each file.")
@@ -520,7 +520,7 @@ starsign of each file.")
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
     (home-page "http://www.brendangregg.com/specials.html")
-    (synopsis "whiz files or output streams")
+    (synopsis "Whiz files or output streams")
     (description "@code{gwhiz} will whiz files or commands, making them easier
 to read so that you do not miss important details.  If your terminal supports
 color, @code{gwhiz} can highlight in colour using the \"-c\" option.")
@@ -555,7 +555,7 @@ color, @code{gwhiz} can highlight in colour using the \"-c\" option.")
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
     (home-page "http://www.brendangregg.com/specials.html")
-    (synopsis "auto l33t converter")
+    (synopsis "Auto l33t converter")
     (description "This program converts text to l33t-speak.  This is helpful to
 convert text that has been written in a formal and confusing manner, into text
 that is easy to follow.")
@@ -590,7 +590,7 @@ that is easy to follow.")
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
     (home-page "http://www.brendangregg.com/specials.html")
-    (synopsis "heavyweight encryption algorithm: Triple ROT13")
+    (synopsis "Heavyweight encryption algorithm: Triple ROT13")
     (description "This implements a new encryption algorithm, 3ROT13.  This is a
 symmetric cypher that has a number of desirable features over existing
 algorithms; firstly it is stateless - this allows recovery of any random
@@ -629,7 +629,7 @@ a higher performance be desired this code can be reworked in C.")
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
     (home-page "http://www.brendangregg.com/specials.html")
-    (synopsis "configurable encryption algorithm: NROT13")
+    (synopsis "Configurable encryption algorithm: NROT13")
     (description "This implements a new configurable encryption algorithm,
 NROT13.  This is similar to the 3ROT13 algorithm, a symmetric stateless
 keyless cypher, however this allows the user to customise the number of cycles.
@@ -666,7 +666,7 @@ supersymmetric 31ROT13.")
                (copy-file "mkzombie" dest))
              #t)))))
     (home-page "http://www.brendangregg.com/specials.html")
-    (synopsis "make zombie processes")
+    (synopsis "Make zombie processes")
     (description "This program creates one or more zombies and a daemon their
 leader.  It can be used to replenish system zombies, or to feed the init
 monster.")

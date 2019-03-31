@@ -51,7 +51,7 @@
                   (install-file "viper" bin))
                 #t)))))
       (home-page "https://gir.st/viper.htm")
-      (synopsis "terminal + emoji = snek")
+      (synopsis "Terminal + emoji = snek")
       (description
        "VIper - a snake clone for unicode-compatible terminals.")
       (license license:gpl3))))

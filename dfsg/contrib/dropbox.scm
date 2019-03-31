@@ -1,4 +1,4 @@
-;;; Copyright © 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -108,7 +108,7 @@ your process.")
        ("python-requests" ,python-requests-2.21) ; >=2.16.2
        ("python-six" ,python-six)
        ("python-urllib3" ,python-urllib3)))
-    (home-page "http://www.dropbox.com/developers")
+    (home-page "https://www.dropbox.com/developers")
     (synopsis "Official Dropbox API Client")
     (description "A Python SDK for integrating with the Dropbox API v2.")
     (license license:expat)))
@@ -153,8 +153,8 @@ your process.")
     (propagated-inputs
      `(("python-argon2-cffi" ,python-argon2-cffi)
        ("python-cryptography" ,python-cryptography)))
-    (home-page "http://www.dropbox.com/developers")
-    (synopsis "library to password-protect your data")
+    (home-page "https://www.dropbox.com/developers")
+    (synopsis "Library to password-protect your data")
     (description
      "Privy is a small and fast utility for password-protecting secret
 data such as API keys, cryptocurrency wallets, or seeds for digital
@@ -206,14 +206,14 @@ can decide how long it takes to hash a password and how much memory is required.
 (define-public python-sentry-sdk
   (package
     (name "python-sentry-sdk")
-    (version "0.6.9")
+    (version "0.7.9")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "sentry-sdk" version))
         (sha256
          (base32
-          "0m1nmq61hxzk8g2qaidxqjxqdq0nybsjd60pw867f6lrzsnpkfvq"))))
+          "1s8pn21f8w7a1z8hdqws6wirwzsfgl1pk09ibnjsh86ccm7jrg1m"))))
     (build-system python-build-system)
     (arguments '(#:tests? #f)) ; wow thats a lot of test requirements
     (propagated-inputs
@@ -274,8 +274,7 @@ user-space file systems in Python.")
      `(("fuse" ,fuse)))
     (propagated-inputs
      `(("python-paramiko" ,python-paramiko)))
-    (home-page
-      "http://github.com/rianhunter/fusepyng")
+    (home-page "https://github.com/rianhunter/fusepyng")
     (synopsis "Simple ctypes bindings for FUSE")
     (description "@code{fusepyng} is a Python module that provides a simple
 interface to FUSE on various operating systems.  It's just one file and is
