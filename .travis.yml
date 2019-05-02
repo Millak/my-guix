@@ -29,16 +29,16 @@ env:
   - FILE=dfsg/contrib/dropbox.scm
 
 install:
-    - wget "https://git.savannah.gnu.org/cgit/guix.git/plain/etc/guix-install.sh?h=v0.16.0" -O guix-install.sh
+    - wget "https://git.savannah.gnu.org/cgit/guix.git/plain/etc/guix-install.sh?h=v1.0.0" -O guix-install.sh
     - until gpg --recv-keys 3CE464558A84FDC69DB40CFB090B11993D9AEBB5; do echo "trying again..."; done
     - echo -e 'y\ny' | sudo bash guix-install.sh
     - sudo mkdir -p /var/guix/profiles/per-user/travis
     - sudo chown travis:travis /var/guix/profiles/per-user/travis
-    - guix pull --fallback --substitute-urls="https://ci.guix.info https://mirror.hydra.gnu.org"
+    - guix pull --fallback
 
 script:
     - export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
-    - GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback --substitute-urls="https://ci.guix.info https://mirror.hydra.gnu.org" $(grep define-public $FILE | cut -f2 -d' ')
+    - GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public $FILE | cut -f2 -d' ')
 
 notifications:
     email:
