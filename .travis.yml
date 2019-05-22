@@ -1,6 +1,6 @@
 os: linux
 sudo: enabled
-language: generic
+language: minimal
 
 addons:
   apt:
@@ -8,6 +8,8 @@ addons:
      - gnupg wget grep sed
 
 env:
+  - GUIX_SYSTEM=i686-linux
+  - GUIX_SYSTEM=x86_64-linux
   - FILE=dfsg/main/bidiv.scm
   - FILE=dfsg/main/brendan_gregg.scm
   - FILE=dfsg/main/confclerk.scm
@@ -38,7 +40,7 @@ install:
 
 script:
     - export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
-    - GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public $FILE | cut -f2 -d' ')
+    - GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public $FILE | cut -f2 -d' ') --system=$GUIX_SYSTEM
 
 notifications:
     email:
