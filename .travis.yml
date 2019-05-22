@@ -8,27 +8,28 @@ addons:
      - gnupg wget grep sed
 
 env:
-  - GUIX_SYSTEM=i686-linux
-  - GUIX_SYSTEM=x86_64-linux
-  - FILE=dfsg/main/bidiv.scm
-  - FILE=dfsg/main/brendan_gregg.scm
-  - FILE=dfsg/main/confclerk.scm
-  - FILE=dfsg/main/cpuid2cpuflags.scm
-  - FILE=dfsg/main/ecrire.scm
-  - FILE=dfsg/main/equate.scm
-  - FILE=dfsg/main/evisum.scm
-  - FILE=dfsg/main/html2text.scm
-  - FILE=dfsg/main/mcron.scm
-  - FILE=dfsg/main/minesviiper.scm
-  - FILE=dfsg/main/mpv.scm
-  - FILE=dfsg/main/mupdf.scm
-  - FILE=dfsg/main/nyancat.scm
-  - FILE=dfsg/main/ponyos.scm
-  - FILE=dfsg/main/pinentry-efl.scm
-  - FILE=dfsg/main/solvitaire.scm
-  - FILE=dfsg/main/viper.scm
-  - FILE=dfsg/main/xorriso.scm
-  - FILE=dfsg/contrib/dropbox.scm
+  matrix:
+    - GUIX_SYSTEM=i686-linux
+    - GUIX_SYSTEM=x86_64-linux
+    - FILE=dfsg/main/bidiv.scm
+    - FILE=dfsg/main/brendan_gregg.scm
+    - FILE=dfsg/main/confclerk.scm
+    - FILE=dfsg/main/cpuid2cpuflags.scm
+    - FILE=dfsg/main/ecrire.scm
+    - FILE=dfsg/main/equate.scm
+    - FILE=dfsg/main/evisum.scm
+    - FILE=dfsg/main/html2text.scm
+    - FILE=dfsg/main/mcron.scm
+    - FILE=dfsg/main/minesviiper.scm
+    - FILE=dfsg/main/mpv.scm
+    - FILE=dfsg/main/mupdf.scm
+    - FILE=dfsg/main/nyancat.scm
+    - FILE=dfsg/main/ponyos.scm
+    - FILE=dfsg/main/pinentry-efl.scm
+    - FILE=dfsg/main/solvitaire.scm
+    - FILE=dfsg/main/viper.scm
+    - FILE=dfsg/main/xorriso.scm
+    - FILE=dfsg/contrib/dropbox.scm
 
 install:
     - travis_retry wget "https://git.savannah.gnu.org/cgit/guix.git/plain/etc/guix-install.sh?h=v1.0.1" -O guix-install.sh
