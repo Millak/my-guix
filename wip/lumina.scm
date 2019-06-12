@@ -92,7 +92,15 @@
                        (string-append "LRELEASE=" lrelease)
                        (string-append "PREFIX=" out)
                        "DEFAULT_SETTINGS=GuixSD"
-                       "CONFIG+=WITH_I18N")))))))
+                       "CONFIG+=WITH_I18N"))))
+         (add-before 'reset-gzip-timestamps 'make-files-writable
+           (lambda* (#:key outputs #:allow-other-keys)
+             ;; Make sure .gz files are writable so that the
+             ;; 'reset-gzip-timestamps' phase can do its work.
+             (let ((out (assoc-ref outputs "out")))
+               (for-each make-file-writable
+                         (find-files out "\\.gz$"))
+               #t))))))
     (propagated-inputs
      `(("fluxbox" ,fluxbox))) ; Also needed at runtime
     (native-inputs
