@@ -43,6 +43,7 @@
     (build-system gnu-build-system)
     (arguments
      `(#:tests? #f
+       #:substitutable? #f
        #:modules ((guix build gnu-build-system)
                   (guix build utils)
                   (srfi srfi-26))

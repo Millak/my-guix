@@ -72,6 +72,7 @@
                  (install-file "share/doc/ravkavonline/LICENSE.txt"
                                (string-append out "/share/doc/ravkavonline")))
                #t))))
+       #:substitutable? #f
        #:tests? #f))
     (native-inputs
      `(("patchelf" ,patchelf)))
