@@ -27,7 +27,7 @@
 (define-public ravkavonline
   (package
     (name "ravkavonline")
-    (version "1.4.0")
+    (version "2.4.1")
     (source
       (origin
         (method url-fetch)
@@ -35,7 +35,7 @@
                             "ravkavonline_" version "_amd64.deb"))
         (sha256
          (base32
-          "0kzfxv3vz03m9sym1b0x9k22aav1rbvfb46xz2zy9hzkcvirral8"))))
+          "1hjm05mgg5dyi00d6rjwn58p0v19as6ib8323n94myr0wmzxa7nn"))))
     (build-system gnu-build-system)
     (arguments
      `(#:phases
@@ -44,10 +44,10 @@
          (replace 'unpack
            (lambda* (#:key inputs #:allow-other-keys)
              (let ((source (assoc-ref inputs "source")))
-               (invoke "ar" "x" source "data.tar.xz"))))
+               (invoke "ar" "x" source "data.tar.gz"))))
          (add-after 'unpack 'unpack-tarball
            (lambda _
-             (invoke "tar" "xvf" "data.tar.xz")))
+             (invoke "tar" "xvf" "data.tar.gz")))
          (replace 'build
            (lambda* (#:key inputs outputs #:allow-other-keys)
              (let* ((ravkav  "usr/bin/ravkavonline")
@@ -73,6 +73,7 @@
                                (string-append out "/share/doc/ravkavonline")))
                #t))))
        #:substitutable? #f
+       #:strip-binaries? #f
        #:tests? #f))
     (native-inputs
      `(("patchelf" ,patchelf)))
