@@ -63,7 +63,7 @@
      `(("pkg-config" ,pkg-config)))
     (inputs
      `(("glib" ,glib)
-       ("mpv" ,my-mpv)))
+       ("mpv" ,mpv)))
     (home-page "https://github.com/hoyon/mpv-mpris")
     (synopsis "MPRIS plugin for mpv")
     (description "MPRIS plugin for mpv written in C.  Requires mpv to be built
