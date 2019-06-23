@@ -73,7 +73,7 @@ need to use a web browser.")
           (uri (git-reference
                 (url "https://github.com/ayoy/qoauth.git")
                 (commit commit)))
-          (file-name (string-append name "-" version "-checkout"))
+          (file-name (git-file-name name version))
           (sha256
            (base32
             "0lnzgpdfjcx7szw1ibm4sqrsd7ahnnrh7i7bxsj63hyicnaihxh8"))))

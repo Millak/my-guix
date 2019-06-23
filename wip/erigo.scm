@@ -38,7 +38,7 @@
         (uri (git-reference
                (url "https://git.enlightenment.org/tools/erigo.git/")
                (commit "d2cc463ccc31f0061d4d144279d9968de6dfb030")))
-        (file-name (string-append name "-" version "-checkout"))
+        (file-name (git-file-name name version))
         (sha256
          (base32
           "09s9s2ymbba4sx2i6v1divkvap9zlrdiaw4z6qy26rpb04llhg2h"))))

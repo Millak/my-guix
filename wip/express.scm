@@ -36,7 +36,7 @@
         (uri (git-reference
                (url "https://git.enlightenment.org/apps/express.git")
                (commit "9e4500cb46c4d3d4eeb25cf36aaabfd1e7296eef")))
-        (file-name (string-append name "-" version "-checkout"))
+        (file-name (git-file-name name version))
         (sha256
          (base32
           "1gda16css0vbg40x1d8zjx655pm0ag7fds221147568z6mish1xa"))))

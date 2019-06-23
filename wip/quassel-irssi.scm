@@ -41,7 +41,7 @@
                  (url "https://github.com/phhusson/quassel-irssi.git")
                  (commit commit)
                  (recursive? #t)))
-          (file-name (string-append name "-" version "-checkout"))
+          (file-name (git-file-name name version))
           (sha256
            (base32
             ;"0z24l5pg1b7ycaw5jj7fahryp1zq6n6bvwix58ki9a0m4x7jd2w9"))))

@@ -59,7 +59,7 @@ This mode tries to work well with evil-mode, just set aria2-add-evil-quirks to t
           (uri (git-reference
                  (url "https://github.com/LdBeth/aria2.el.git")
                  (commit commit)))
-          (file-name (string-append name "-" version "-checkout"))
+          (file-name (git-file-name name version))
           (sha256
            (base32
             "1i4iggk8n56ln0blrilpbwp95ayr11ayxyxypna0nx2yyv86pj50"))))
