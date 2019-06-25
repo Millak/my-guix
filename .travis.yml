@@ -21,6 +21,7 @@ env:
   - FILE=dfsg/main/mpv.scm
   - FILE=dfsg/main/mupdf.scm
   - FILE=dfsg/main/nyancat.scm
+  - FILE=dfsg/main/parcimonie.scm
   - FILE=dfsg/main/ponyos.scm
   - FILE=dfsg/main/pinentry-efl.scm
   - FILE=dfsg/main/solvitaire.scm
