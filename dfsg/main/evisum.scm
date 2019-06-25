@@ -23,13 +23,14 @@
   #:use-module (guix utils)
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages enlightenment)
+  #:use-module (gnu packages linux)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages pkg-config))
 
 (define-public evisum
   (package
     (name "evisum")
-    (version "0.1.2")
+    (version "0.2.3")
     (source
       (origin
         (method url-fetch)
@@ -37,7 +38,7 @@
                             "evisum/evisum-" version ".tar.xz"))
         (sha256
          (base32
-          "125jmsdqjqfcpfp5673rdx5mbq6ndw29rq4b7hzl1qbb63jrifqz"))))
+          "1lj62n896kablsl687c66yxrwajrh6ralb3y6nmcqv34pglnigca"))))
     (build-system gnu-build-system)
     (arguments
      '(#:tests? #f   ; no tests
@@ -50,7 +51,8 @@
     (native-inputs
      `(("pkg-config" ,pkg-config)))
     (inputs
-     `(("efl" ,efl)
+     `(("alsa-lib" ,alsa-lib)
+       ("efl" ,efl)
        ("perl" ,perl)))
     (home-page "https://www.enlightenment.org")
     (synopsis "EFL process viewer")
@@ -59,21 +61,21 @@
 @dfn{Enlightenment Foundation Libraries} (EFL).")
     (license license:bsd-2)))
 
-(define-public evisum-git
-  (let ((commit "7262b879165f5c156269265618427aae45bb5c91")
-        (revision "1"))
-    (package
-      (inherit evisum)
-      (name "evisum-git")
-      (version (string-append (package-version evisum) "-"
-                              revision "." (string-take commit 7)))
-      (source
-        (origin
-          (method git-fetch)
-          (uri (git-reference
-                 (url "https://git.enlightenment.org/apps/evisum.git")
-                 (commit commit)))
-          (file-name (git-file-name name version))
-          (sha256
-           (base32
-            "1vdb875wz8b825mi6pngj7jdqa6bvfdw6hbdbjv2lls4qrhlwbmd")))))))
+;(define-public evisum-git
+;  (let ((commit "7262b879165f5c156269265618427aae45bb5c91")
+;        (revision "1"))
+;    (package
+;      (inherit evisum)
+;      (name "evisum-git")
+;      (version (string-append (package-version evisum) "-"
+;                              revision "." (string-take commit 7)))
+;      (source
+;        (origin
+;          (method git-fetch)
+;          (uri (git-reference
+;                 (url "https://git.enlightenment.org/apps/evisum.git")
+;                 (commit commit)))
+;          (file-name (git-file-name name version))
+;          (sha256
+;           (base32
+;            "1vdb875wz8b825mi6pngj7jdqa6bvfdw6hbdbjv2lls4qrhlwbmd")))))))
