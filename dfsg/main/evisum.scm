@@ -61,7 +61,8 @@
 @dfn{Enlightenment Foundation Libraries} (EFL).")
     (license license:bsd-2)))
 
-;(define-public evisum-git
+(define-public evisum-git
+  (deprecated-package "evisum-git" evisum))
 ;  (let ((commit "7262b879165f5c156269265618427aae45bb5c91")
 ;        (revision "1"))
 ;    (package
