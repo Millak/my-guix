@@ -36,7 +36,7 @@
       (origin
         (method url-fetch/tarbomb)
         (uri "file:///gnu/store/jzwz3gni1rdfkvkcghp9n7yh8b8yiwqd-FTL.1.6.9.tar.gz")
-        (file-name (string-append "FTL-Linux-" version ".tar.gz"))
+        (file-name (string-append "FTL-Linux-" version))
         (sha256
          (base32
           "0vlgi0kpbybyvrgkdy1mpzhk8h9p2qp5qg1k2irs08izdj66dya4"))))
