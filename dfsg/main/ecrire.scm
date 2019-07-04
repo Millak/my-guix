@@ -1,4 +1,4 @@
-;;; Copyright © 2016, 2017 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -26,29 +26,29 @@
   #:use-module (gnu packages pkg-config))
 
 (define-public ecrire
-  (let ((commit "5739b04db6f9ac076cbfa43f60504ef0722816f2")
-        (revision "2"))
-    (package
-      (name "ecrire")
-      (version (string-append "0.0.0-" revision "." (string-take commit 7)))
-      (source
-        (origin
-          (method git-fetch)
-          (uri (git-reference
-                 (url "https://git.enlightenment.org/apps/ecrire.git")
-                 (commit commit)))
-          (file-name (git-file-name name version))
-          (sha256
-           (base32
-            "1mzk2zjy81js0hyx491cfmk81z36gk8m385s3r4xng8r9pgbx6lr"))))
-      (build-system cmake-build-system)
-      (arguments '(#:tests? #f)) ; no tests
-      (native-inputs
-       `(("gettext" ,gettext-minimal)
-         ("pkg-config" ,pkg-config)))
-      (inputs
-       `(("efl" ,efl)))
-      (home-page "https://www.enlightenment.org")
-      (synopsis "EFL simple text editor")
-      (description "EFL simple text editor")
-      (license license:gpl3+))))
+  (package
+    (name "ecrire")
+    (version "0.3.4")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/Obsidian-StudiosInc/ecrire.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "05aiadyjsyxj35wks7y3k6wjvgycwf4f7jbpxns8lr6ab64yzvk8"))))
+    (build-system cmake-build-system)
+    (arguments
+     '(#:configure-flags '("-DENABLE_NLS:BOOL=TRUE")
+       #:tests? #f)) ; no tests
+    (native-inputs
+     `(("gettext" ,gettext-minimal)
+       ("pkg-config" ,pkg-config)))
+    (inputs
+     `(("efl" ,efl)))
+    (home-page "https://www.enlightenment.org")
+    (synopsis "EFL simple text editor")
+    (description "EFL simple text editor")
+    (license license:gpl3+)))
