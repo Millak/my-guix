@@ -15,12 +15,13 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip clipboard)
+(define-module (dfsg main enlightenment)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system meson)
+  #:use-module (guix build-system trivial)
   #:use-module (gnu packages enlightenment)
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages pkg-config))
@@ -41,19 +42,24 @@
           "1yw75p1jwcqikybx71p0lycdhzh1gr1pbqb8wp9wzyif9aplfd95"))))
     (build-system meson-build-system)
     (arguments
-     '(#:configure-flags (list (string-append "-Dhomedir-install=" (assoc-ref %outputs "out")))
-       ;; This really should be in ~/.e/e/... or %enlightenment/modules/...
+     '(#:configure-flags (list (string-append "-Dhomedir-install="
+                                              (assoc-ref %outputs "out")))
        #:phases
        (modify-phases %standard-phases
+         (add-after 'unpack 'fix-install-location
+           ;; clipboard tries to install to enlightenment's directory
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               (substitute* "meson.build"
+                 ((".e/e/modules") "lib/enlightenment/modules"))
+               #t)))
          (add-after 'unpack 'set-home-dir
            (lambda _
              (setenv "HOME" (getenv "TMPDIR"))
              #t)))))
     (native-inputs
-     `(
-       ("gettext" ,gettext-minimal)
-       ("pkg-config" ,pkg-config)
-       ))
+     `(("gettext" ,gettext-minimal)
+       ("pkg-config" ,pkg-config)))
     (inputs
      `(("efl" ,efl)
        ("enlightenment" ,enlightenment)))
@@ -71,3 +77,29 @@ with no additional dependencies, integrate in a natural way with the e17/Moksha
 desktops and be a usable alternative to other clipboard managers (Parcellite,
 CopyQ, glipper etc.).")
     (license license:gpl3)))
+
+(define-public custom-enlightenment
+  (package
+    (name "custom-enlightenment")
+    (version (package-version enlightenment))
+    (source #f)
+    (build-system trivial-build-system)
+    (arguments
+     '(#:modules ((guix build union))
+       #:builder
+       (begin
+         (use-modules (ice-9 match)
+                      (guix build union))
+         (match %build-inputs
+           (((names . directories) ...)
+            (union-build (assoc-ref %outputs "out")
+                         directories)
+            #t)))))
+    (inputs
+     `(("enlightenment" ,enlightenment)
+       ("clipboard" ,clipboard)))
+    (home-page (package-home-page enlightenment))
+    (synopsis "Enlightenment with extra modules")
+    (description (package-description enlightenment))
+    (license (list (package-license enlightenment)
+                   (package-license clipboard)))))
