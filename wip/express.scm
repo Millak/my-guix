@@ -1,4 +1,4 @@
-;;; Copyright © 2016, 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -26,40 +26,42 @@
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages pkg-config))
 
-(define-public express
-  (package
-    (name "express")
-    (version "20151226")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://git.enlightenment.org/apps/express.git")
-               (commit "9e4500cb46c4d3d4eeb25cf36aaabfd1e7296eef")))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "1gda16css0vbg40x1d8zjx655pm0ag7fds221147568z6mish1xa"))))
-    (build-system gnu-build-system)
-    (arguments
-     '(#:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'setenv
-           (lambda _
-             (setenv "NOCONFIGURE" "TRUE")
-             ;; FATAL: Cannot create run dir '/homeless-shelter/.run' - errno=2
-             (setenv "HOME" "/tmp")
-             #t)))))
-    (native-inputs
-     `(("autoconf" ,autoconf)
-       ("automake" ,automake)
-       ("gettext" ,gettext-minimal)
-       ("libtool" ,libtool)
-       ("pkg-config" ,pkg-config)))
-    (inputs
-     `(("efl" ,efl)))
-    (home-page "http://smhouston.us/express/")
-    (synopsis "IRC client with enhanced media capabilities")
-    (description "EFL-based IRC Client which operates similar to the
+(define-public e-express
+  (let ((commit "c42d2480060a7700209abd1abefb8ef6522a5482")
+        (revision "1"))
+    (package
+      (name "e-express")
+      (version "0.0.1")
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://git.enlightenment.org/apps/express.git")
+                 (commit commit)))
+          (file-name (git-file-name name version))
+          (sha256
+           (base32
+            "07wf3x59p7790lfa1b1whxrp7qmj89z4l54ylcn7f250bif37nl8"))))
+      (build-system gnu-build-system)
+      (arguments
+       '(#:phases
+         (modify-phases %standard-phases
+           (add-after 'unpack 'setenv
+             (lambda _
+               (setenv "NOCONFIGURE" "TRUE")
+               ;; FATAL: Cannot create run dir '/homeless-shelter/.run' - errno=2
+               (setenv "HOME" "/tmp")
+               #t)))))
+      (native-inputs
+       `(("autoconf" ,autoconf)
+         ("automake" ,automake)
+         ("gettext" ,gettext-minimal)
+         ("libtool" ,libtool)
+         ("pkg-config" ,pkg-config)))
+      (inputs
+       `(("efl" ,efl)))
+      (home-page "http://smhouston.us/express/")
+      (synopsis "IRC client with enhanced media capabilities")
+      (description "EFL-based IRC Client which operates similar to the
 Terminology interface.")
-    (license license:bsd-2)))
+      (license license:bsd-2))))
