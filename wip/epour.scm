@@ -21,6 +21,7 @@
   #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils)
+  #:use-module (guix build-system gnu)
   #:use-module (guix build-system python)
   #:use-module (gnu packages bittorrent)
   #:use-module (gnu packages boost)
@@ -87,11 +88,27 @@ Foundation Libraries} (EFL) and rb-libtorrent.")
   (package
     (inherit boost)
     (arguments
-     (substitute-keyword-arguments (package-arguments boost)
-       ((#:phases phases)
-        `(modify-phases ,phases
-           (delete 'provide-libboost_python)))))
+     `(#:imported-modules (,@%gnu-build-system-modules
+                            (guix build python-build-system))
+       ,@(substitute-keyword-arguments (package-arguments boost)
+         ((#:phases phases)
+          `(modify-phases ,phases
+             (replace 'provide-libboost_python
+               (lambda* (#:key outputs inputs #:allow-other-keys)
+                 (let* ((out (assoc-ref outputs "out"))
+                        (py-version ((@@ (guix build python-build-system)
+                                         get-python-version) (assoc-ref inputs "python")))
+                        (py-suffix (string-join (string-split py-version #\.) "")))
+                   ;; Boost can build support for both Python 2 and Python 3 since
+                   ;; version 1.67.0, and suffixes each library with the Python
+                   ;; version.  Many consumers only check for libboost_python
+                   ;; however, so we provide it here as suggested in
+                   ;; <https://github.com/boostorg/python/issues/203>.
+                   (with-directory-excursion (string-append out "/lib")
+                     (symlink (string-append "libboost_python" py-suffix ".so")
+                              "libboost_python.so"))
+                   #t))))))))
     (native-inputs
-     `(("python" ,python-3)
+     `(("python" ,python-wrapper)
        ,@(alist-delete "python"
                         (package-native-inputs boost))))))
