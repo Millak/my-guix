@@ -1,4 +1,4 @@
-;;; Copyright © 2016, 2017, 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017, 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -71,24 +71,6 @@
 Foundation Libraries} (EFL) and rb-libtorrent.")
     (license license:gpl3+)))
 
-(define python-parse
-  (package
-    (name "python-parse")
-    (version "1.9.0")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "parse" version))
-        (sha256
-         (base32
-          "0dvli4vcvzkp4zf7pqy70xs2y8mwnyi6m7rg6hm07k8jla709mlx"))))
-    (build-system python-build-system)
-    (home-page "https://github.com/r1chardj0n3s/parse")
-    (synopsis "parse() is the opposite of format()")
-    (description
-     "Parse strings using a specification based on the Python format() syntax.")
-    (license license:expat)))
-
 (define libtorrent-rasterbar-local
   (package
     (inherit libtorrent-rasterbar)
@@ -104,6 +86,11 @@ Foundation Libraries} (EFL) and rb-libtorrent.")
 (define boost-local
   (package
     (inherit boost)
+    (arguments
+     (substitute-keyword-arguments (package-arguments boost)
+       ((#:phases phases)
+        `(modify-phases ,phases
+           (delete 'provide-libboost_python)))))
     (native-inputs
      `(("python" ,python-3)
        ,@(alist-delete "python"
