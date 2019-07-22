@@ -1,4 +1,4 @@
-;;; Copyright © 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -21,13 +21,14 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system cmake)
-  #:use-module (gnu packages game-development)
+  #:use-module (gnu packages gcc)
+  #:use-module (gnu packages llvm)
   #:use-module (gnu packages python))
 
 (define-public emojicode
   (package
     (name "emojicode")
-    (version "0.5.4")
+    (version "0.9")
     (source
       (origin
         (method git-fetch)
@@ -37,28 +38,33 @@
           (file-name (git-file-name name version))
           (sha256
            (base32
-            "0ybh1db3f5qk5lgfavb4axwch90lijz3g855p7vmra38qsxhfj3s"))))
+            "0wcfip96m749zglv62rgd9bagn1450fqkfxcrffxyq1hxyrrz39x"))))
     (build-system cmake-build-system)
     (arguments
      `(#:test-target "tests"
+       ;#:configure-flags '((string-append "-DdefaultPackagesDirectory=" ...something
        #:phases
        (modify-phases %standard-phases
          (replace 'install
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
                     (bin (string-append out "/bin")))
-               (install-file "emojicode" bin)
-               (install-file "emojicodec" bin)
-               (copy-recursively
-                 (string-append "Emojicode-" ,version "-Linux-"
-                                (car (string-split ,(%current-system) #\-))
-                                "/packages")
-                 (string-append out "/lib/emojicode/")))
+               (invoke "ninja" "magicinstall")
+               ;(install-file "emojicode" bin)
+               ;(install-file "emojicodec" bin)
+               ;(copy-recursively
+               ;  (string-append "Emojicode-" ,version "-Linux-"
+               ;                 (car (string-split ,(%current-system) #\-))
+               ;                 "/packages")
+               ;  (string-append out "/lib/emojicode/"))
+               )
              #t)))))
     (native-inputs
-     `(("python" ,python))) ; for the tests
-    (inputs
-     `(("allegro" ,allegro)))
+     `(;("gcc" ,gcc-7)
+       ;("gcc:lib" ,gcc-7 "lib")
+       ("clang" ,clang-6)
+       ("llvm" ,llvm-7)
+       ("python" ,python))) ; for the tests
     (home-page "https://www.emojicode.org/")
     (synopsis "World's only programming language that's bursting with emojis")
     (description
