@@ -19,6 +19,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
+  #:use-module (guix utils)
   #:use-module (guix build-system haskell)
   #:use-module (gnu packages haskell)
   #:use-module (gnu packages ncurses))
@@ -80,14 +81,26 @@ too slow and you'll get wound up in the scroll and crushed.")
                             "lib/UI/NCurses.chs"
                             "lib/UI/NCurses/Enums.chs")
                (("ncursesw/ncurses.h") "ncurses.h"))
-             #t)))))
-    (inputs
-     `(("ghc-c2hs" ,ghc-c2hs)
-       ("ghc-text" ,ghc-text)
-       ("ncurses" ,ncurses)))
+             #t)))
+       #:cabal-revision
+       ("1"
+        "1wfdy716s5p1sqp2gsg43x8wch2dxg0vmbbndlb2h3d8c9jzxnca")))
+    (inputs `(("ncurses" ,ncurses-5)))
+    (native-inputs `(("ghc-c2hs" ,ghc-c2hs)))
     (home-page "https://john-millikin.com/software/haskell-ncurses/")
     (synopsis "Modernised bindings to GNU ncurses")
     (description "GNU ncurses is a library for creating command-line application
 with pseudo-graphical interfaces.  This package is a nice, modern binding to GNU
 ncurses.")
     (license license:gpl3)))
+
+(define-public ncurses-5
+  (package
+    (inherit ncurses)
+    (arguments
+     (substitute-keyword-arguments (package-arguments ncurses)
+       ((#:configure-flags cf)
+        `(cons* "--with-abi-version=5"
+                "--without-cxx-binding"
+                "--without-normal"
+                ,cf))))))
