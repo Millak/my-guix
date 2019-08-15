@@ -23,6 +23,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages check)
   #:use-module (gnu packages time)
+  #:use-module (gnu packages python)
   #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages python-web)
@@ -47,7 +48,7 @@
             "1f8afjdfd22dygh6mdyf2l69ghgdp45p16v2w3c12ishl460a455"))))
       (build-system python-build-system)
       (arguments
-       '(#:tests? #f ; no tests
+       `(#:tests? #f ; no tests
          #:phases
          (modify-phases %standard-phases
            (replace 'install
@@ -100,6 +101,9 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
      "Python wrapper for the Mastodon API")
     (license license:expat)))
 
+(define-public python2-mastodon-py
+  (package-with-python2 python-mastodon-py))
+
 (define-public python-blurhash
   (package
     (name "python-blurhash")
@@ -131,6 +135,9 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
      "Pure-Python implementation of the blurhash algorithm.")
     (license license:expat)))
 
+(define-public python2-blurhash
+  (package-with-python2 python-blurhash))
+
 (define-public python-http-ece
   (package
     (name "python-http-ece")
@@ -156,6 +163,9 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
      "Encrypted Content Encoding for HTTP")
     (license license:expat)))
 
+(define-public python2-http-ece
+  (package-with-python2 python-http-ece))
+
 (define-public python-pytest-vcr
   (package
     (name "python-pytest-vcr")
@@ -176,3 +186,6 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
     (description
      "Plugin for managing VCR.py cassettes")
     (license license:expat)))
+
+(define-public python2-pytest-vcr
+  (package-with-python2 python-pytest-vcr))
