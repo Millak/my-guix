@@ -21,7 +21,7 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system haskell)
-  #:use-module (gnu packages haskell)
+  #:use-module (gnu packages haskell-xyz)
   #:use-module (gnu packages ncurses))
 
 (define-public scroll
@@ -47,7 +47,7 @@
         ("ghc-ncurses" ,ghc-ncurses)
         ("ghc-optparse-applicative" ,ghc-optparse-applicative)
         ("ghc-random" ,ghc-random)
-        ("ghc-text" ,ghc-text)
+        ;("ghc-text" ,ghc-text)
         ("ghc-vector" ,ghc-vector)
         ))
     (home-page "https://joeyh.name/code/scroll/")
