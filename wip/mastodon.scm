@@ -19,15 +19,21 @@
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix git-download)
+  #:use-module (guix build-system meson)
   #:use-module (guix build-system python)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages check)
-  #:use-module (gnu packages time)
+  #:use-module (gnu packages gettext)
+  #:use-module (gnu packages glib)
+  #:use-module (gnu packages gnome)
+  #:use-module (gnu packages gtk)
+  #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages python-web)
-  #:use-module (gnu packages python-xyz))
+  #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages time))
 
 (define-public fern
   (let ((commit "46067d64ffcc999ce8fe1a4feac76e45b3372438")
@@ -189,3 +195,96 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
 
 (define-public python2-pytest-vcr
   (package-with-python2 python-pytest-vcr))
+
+(define-public tootle
+  (package
+    (name "tootle")
+    (version "0.2.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/bleakgrey/tootle.git")
+               (commit version)))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1z3wyx316nns6gi7vlvcfmalhvxncmvcmmlgclbv6b6hwl5x2ysi"))))
+    (build-system meson-build-system)
+    (arguments
+     '(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'skip-gtk-update-icon-cache
+           ;; Don't create 'icon-theme.cache'.
+           (lambda _
+             (substitute* "meson/post_install.py"
+               (("gtk-update-icon-cache") "true"))
+             #t))
+        (add-after 'install 'wrap-program
+          (lambda* (#:key inputs outputs #:allow-other-keys)
+            (wrap-program (string-append (assoc-ref outputs "out")
+                                         "/bin/com.github.bleakgrey.tootle")
+            ;; For GtkFileChooserDialog.
+            `("GSETTINGS_SCHEMA_DIR" =
+              (,(string-append
+                  ;(assoc-ref inputs "gtk+")
+                  (assoc-ref outputs "out")
+                  "/share/glib-2.0/schemas")))))))))
+    (native-inputs
+     `(
+       ("gettext" ,gettext-minimal)
+       ("glib:bin" ,glib "bin")     ; for glib-compile-resources
+       ("pkg-config" ,pkg-config)
+       ))
+    (inputs
+     `(
+       ("gtk+" ,gtk+)
+       ("granite" ,granite)
+       ("json-glib" ,json-glib)
+       ("libgee" ,libgee)
+       ("libsoup" ,libsoup)
+       ("vala" ,vala)
+       ))
+    (home-page "https://github.com/bleakgrey/tootle")
+    (synopsis "GTK3 client for Mastodon")
+    (description "Simple Mastodon client designed for elementary OS.")
+    (license license:gpl3+)))
+
+(define-public granite
+  (package
+    (name "granite")
+    (version "5.2.4")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/elementary/granite.git")
+               (commit version)))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1j31kn5s6ih6nv75j965j2ds1c7ca31q9lcg6z4g7bgs22j79vvq"))))
+    (build-system meson-build-system)
+    (arguments
+     '(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'skip-gtk-update-icon-cache
+           ;; Don't create 'icon-theme.cache'.
+           (lambda _
+             (substitute* "meson/post_install.py"
+               (("gtk-update-icon-cache") "true"))
+             #t)))))
+    (native-inputs
+     `(("gettext" ,gettext-minimal)
+       ("gobject-introspection" ,gobject-introspection)
+       ("pkg-config" ,pkg-config)))
+    (inputs
+     `(("gtk+" ,gtk+)
+       ("libgee" ,libgee)
+       ("vala" ,vala)))
+    (home-page "https://github.com/elementary/granite")
+    (synopsis "Library that extends GTK with common widgets and utilities")
+    (description "Granite is a companion library for GTK+ and GLib.  Among other
+things, it provides complex widgets and convenience functions designed for use
+in apps built for elementary OS.")
+    (license license:lgpl3)))
