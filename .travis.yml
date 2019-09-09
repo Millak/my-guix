@@ -16,6 +16,8 @@ env:
   - FILE=dfsg/main/enlightenment.scm
   - FILE=dfsg/main/equate.scm
   - FILE=dfsg/main/html2text.scm
+  - FILE=dfsg/main/klavaro.scm
+  - FILE=dfsg/main/ktouch.scm
   - FILE=dfsg/main/mcron.scm
   - FILE=dfsg/main/minesviiper.scm
   - FILE=dfsg/main/mpv.scm
