@@ -15,7 +15,6 @@ env:
   - FILE=dfsg/main/ecrire.scm
   - FILE=dfsg/main/enlightenment.scm
   - FILE=dfsg/main/equate.scm
-  - FILE=dfsg/main/html2text.scm
   - FILE=dfsg/main/mcron.scm
   - FILE=dfsg/main/minesviiper.scm
   - FILE=dfsg/main/mpv.scm
