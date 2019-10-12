@@ -15,7 +15,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip scroll)
+(define-module (dfsg main scroll)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
@@ -39,17 +39,14 @@
           "0apzrvf99rskj4dbmn57jjxrsf19j436s8a09m950df5aws3a0wj"))))
     (build-system haskell-build-system)
     (inputs
-      `(
-        ("ghc-case-insensitive" ,ghc-case-insensitive)
+      `(("ghc-case-insensitive" ,ghc-case-insensitive)
         ("ghc-data-default" ,ghc-data-default)
         ("ghc-ifelse" ,ghc-ifelse)
         ("ghc-monad-loops" ,ghc-monad-loops)
         ("ghc-ncurses" ,ghc-ncurses)
         ("ghc-optparse-applicative" ,ghc-optparse-applicative)
         ("ghc-random" ,ghc-random)
-        ;("ghc-text" ,ghc-text)
-        ("ghc-vector" ,ghc-vector)
-        ))
+        ("ghc-vector" ,ghc-vector)))
     (home-page "https://joeyh.name/code/scroll/")
     (synopsis "scroll(6), a roguelike game")
     (description
@@ -79,13 +76,14 @@ too slow and you'll get wound up in the scroll and crushed.")
            (lambda _
              (substitute* '("cbits/hsncurses-shim.h"
                             "lib/UI/NCurses.chs"
-                            "lib/UI/NCurses/Enums.chs")
-               (("ncursesw/ncurses.h") "ncurses.h"))
+                            "lib/UI/NCurses/Enums.chs"
+                            "lib/UI/NCurses/Panel.chs")
+               (("<ncursesw/") "<"))
              #t)))
        #:cabal-revision
        ("1"
         "1wfdy716s5p1sqp2gsg43x8wch2dxg0vmbbndlb2h3d8c9jzxnca")))
-    (inputs `(("ncurses" ,ncurses5)))
+    (inputs `(("ncurses" ,ncurses)))
     (native-inputs `(("ghc-c2hs" ,ghc-c2hs)))
     (home-page "https://john-millikin.com/software/haskell-ncurses/")
     (synopsis "Modernised bindings to GNU ncurses")
@@ -93,15 +91,3 @@ too slow and you'll get wound up in the scroll and crushed.")
 with pseudo-graphical interfaces.  This package is a nice, modern binding to GNU
 ncurses.")
     (license license:gpl3)))
-
-(define-public ncurses5
-  (package
-    (inherit ncurses)
-    (name "ncurses5")
-    (arguments
-     (substitute-keyword-arguments (package-arguments ncurses)
-       ((#:configure-flags cf)
-        `(cons* "--with-abi-version=5"
-                "--without-cxx-binding"
-                "--without-normal"
-                ,cf))))))
