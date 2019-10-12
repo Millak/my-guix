@@ -68,7 +68,7 @@
       (inputs
        `(("irssi" ,irssi)
          ("glib" ,glib)
-         ("openssl" ,openssl-next)
+         ("openssl" ,openssl)
          ("zlib" ,zlib)))
       (home-page "https://github.com/phhusson/quassel-irssi")
       (synopsis "Irssi plugin to connect to quassel core")

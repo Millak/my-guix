@@ -85,7 +85,7 @@ too slow and you'll get wound up in the scroll and crushed.")
        #:cabal-revision
        ("1"
         "1wfdy716s5p1sqp2gsg43x8wch2dxg0vmbbndlb2h3d8c9jzxnca")))
-    (inputs `(("ncurses" ,ncurses-5)))
+    (inputs `(("ncurses" ,ncurses5)))
     (native-inputs `(("ghc-c2hs" ,ghc-c2hs)))
     (home-page "https://john-millikin.com/software/haskell-ncurses/")
     (synopsis "Modernised bindings to GNU ncurses")
@@ -94,9 +94,10 @@ with pseudo-graphical interfaces.  This package is a nice, modern binding to GNU
 ncurses.")
     (license license:gpl3)))
 
-(define-public ncurses-5
+(define-public ncurses5
   (package
     (inherit ncurses)
+    (name "ncurses5")
     (arguments
      (substitute-keyword-arguments (package-arguments ncurses)
        ((#:configure-flags cf)
