@@ -64,7 +64,7 @@
                  (invoke "make" "install"))))
            (delete 'build))))
       (propagated-inputs
-       `(("mastodon-py" ,python-mastodon-py)))
+       `(("mastodon-py" ,python2-mastodon-py)))
       (home-page "https://github.com/enkiv2/fern")
       (synopsis "Curses-based mastodon client")
       (description "Fern is a curses-based mastodon client modeled off usenet
@@ -74,17 +74,18 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
 (define-public python-mastodon-py
   (package
     (name "python-mastodon-py")
-    (version "1.4.6")
+    (version "1.5.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "Mastodon.py" version))
         (sha256
          (base32
-          "1hvivnqvrhd9d3n3sbwx5bg9fsg1hvyqdnfy5zbhcm0nhya5a09b"))))
+          "0mypfz5k1phn7b2fk362w8zqh2wi3czf58g4zik64n17r8viww40"))))
     (build-system python-build-system)
     (propagated-inputs
-     `(("python-dateutil" ,python-dateutil)
+     `(("python-blurhash" ,python-blurhash)
+       ("python-dateutil" ,python-dateutil)
        ("python-decorator" ,python-decorator)
        ("python-magic" ,python-magic)
        ("python-pytz" ,python-pytz)
@@ -113,14 +114,14 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
 (define-public python-blurhash
   (package
     (name "python-blurhash")
-    (version "1.1.3")
+    (version "1.1.4")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "blurhash" version))
         (sha256
          (base32
-          "1kg50iy01c6igxsp6f762gj0naz2971c794g6ccx8qr92bl2xsz0"))))
+          "1vjcphfrqvbjv4c8vhrxgyfy163n50wmcbqp0yny85m8wmiv2mns"))))
     (build-system python-build-system)
     (arguments
      '(;#:phases
@@ -231,20 +232,16 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
                   (assoc-ref outputs "out")
                   "/share/glib-2.0/schemas")))))))))
     (native-inputs
-     `(
-       ("gettext" ,gettext-minimal)
+     `(("gettext" ,gettext-minimal)
        ("glib:bin" ,glib "bin")     ; for glib-compile-resources
-       ("pkg-config" ,pkg-config)
-       ))
+       ("pkg-config" ,pkg-config)))
     (inputs
-     `(
-       ("gtk+" ,gtk+)
+     `(("gtk+" ,gtk+)
        ("granite" ,granite)
        ("json-glib" ,json-glib)
        ("libgee" ,libgee)
        ("libsoup" ,libsoup)
-       ("vala" ,vala)
-       ))
+       ("vala" ,vala)))
     (home-page "https://github.com/bleakgrey/tootle")
     (synopsis "GTK3 client for Mastodon")
     (description "Simple Mastodon client designed for elementary OS.")
@@ -253,7 +250,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
 (define-public granite
   (package
     (name "granite")
-    (version "5.2.4")
+    (version "5.2.5")
     (source
       (origin
         (method git-fetch)
@@ -263,7 +260,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "1j31kn5s6ih6nv75j965j2ds1c7ca31q9lcg6z4g7bgs22j79vvq"))))
+          "0z40vhcp2w8s8rnc56pzvjc4s77bln8k84rwwypivjmk3lhpw1vi"))))
     (build-system meson-build-system)
     (arguments
      '(#:phases
