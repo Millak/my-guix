@@ -25,6 +25,7 @@ env:
   - FILE=dfsg/main/ponyos.scm
   - FILE=dfsg/main/pinentry-efl.scm
   - FILE=dfsg/main/rockchip.scm
+  - FILE=dfsg/main/scroll.scm
   - FILE=dfsg/main/solvitaire.scm
   - FILE=dfsg/main/viper.scm
   - FILE=dfsg/main/xorriso.scm
