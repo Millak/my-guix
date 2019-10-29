@@ -25,17 +25,6 @@
   (package
     (inherit xorriso)
     (name "my-xorriso")
-    (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-         (add-before 'patch-source-shebangs 'patch-wish-shebang
-           (lambda* (#:key inputs #:allow-other-keys)
-             (let ((tk (assoc-ref inputs "tk")))
-               (substitute* "frontend/xorriso-tcltk"
-                 (("/usr/bin/wish")
-                  (string-append "/usr/bin/wish" ,(version-major+minor
-                                                    (package-version tk)))))
-               #t))))))
     (inputs
      `(("tk" ,tk)
        ,@(package-inputs xorriso)))))
