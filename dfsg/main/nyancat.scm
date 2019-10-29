@@ -41,7 +41,7 @@
      '(#:phases
        (modify-phases %standard-phases
          (delete 'configure) ; no configure script
-         (add-after 'unpack 'set-environmental-variables
+         (add-after 'unpack 'set-environment-variables
            (lambda _ (setenv "CC" (which "gcc")) #t))
          (replace 'install
            (lambda* (#:key outputs #:allow-other-keys)
