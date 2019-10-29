@@ -24,16 +24,16 @@
 (define-public cpuid2cpuflags
   (package
     (name "cpuid2cpuflags")
-    (version "5")
+    (version "8")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append "https://github.com/mgorny/" name "/releases/"
+        (uri (string-append "https://github.com/mgorny/cpuid2cpuflags/releases/"
                             "download/v" version "/"
-                            name "-" version ".tar.bz2"))
+                            "cpuid2cpuflags-" version ".tar.bz2"))
         (sha256
          (base32
-          "0mlpyc93jrbgy42cv53dp4sn2n8xiai9v28chgqljma0075nfgxr"))))
+          "18gpgawpwx5xw8kf4mx3g3f85m0j4kwq92vjqa75dirfkhg3d3fv"))))
     (build-system gnu-build-system)
     (home-page "https://github.com/mgorny/cpuid2cpuflags")
     (synopsis "Tool to generate CPU_FLAGS_* for your CPU")
