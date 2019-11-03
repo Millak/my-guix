@@ -333,39 +333,12 @@ additional improvements.")
     (arguments
      '(#:import-path "github.com/gdamore/encoding"))
     (propagated-inputs
-     `(("go-golang-org-x-text-encoding" ,go-golang-org-x-text-encoding)
-       ("go-golang-org-x-text-transform" ,go-golang-org-x-text-transform)))
+     `(("go-golang-org-x-text" ,go-golang-org-x-text)))
     (home-page "https://github.com/gdamore/encoding")
     (synopsis "Various character map encodings")
     (description "Encoding provides a number of encodings that are missing from
 the standard Go encoding package.")
     (license license:asl2.0)))
-
-(define-public go-golang-org-x-text-encoding
-  (let ((commit "e19ae1496984b1c655b8044a65c0300a3c878dd3")
-        (revision "1"))
-    (package
-      (name "go-golang-org-x-text-encoding")
-      (version (git-version "0.0.0" revision commit))
-      (source (origin
-                (method git-fetch)
-                (uri (git-reference
-                      (url "https://go.googlesource.com/text")
-                      (commit commit)))
-                (file-name (string-append "go.googlesource.com-text-"
-                                          version "-checkout"))
-                (sha256
-                 (base32
-                  "1cvnnx8nwx5c7gr6ajs7sldhbqh52n7h6fsa3i21l2lhx6xrsh4w"))))
-      (build-system go-build-system)
-      (arguments
-       `(#:import-path "golang.org/x/text/encoding"
-         #:unpack-path "golang.org/x/text"))
-      (synopsis "Interface for character encodings")
-      (description "This package defines an interface for character encodings,
-such as Shift JIS and Windows 1252, that can convert to and from UTF-8.")
-      (home-page "https://go.googlesource.com/text")
-      (license license:bsd-3))))
 
 (define-public go-github-com-lucasb-eyer-go-colorful
   (package
@@ -547,8 +520,7 @@ Features
     (arguments
      '(#:import-path "github.com/emersion/go-imap"))
     (propagated-inputs
-     `(("go-golang-org-x-text-encoding" ,go-golang-org-x-text-encoding)
-       ("go-golang-org-x-text-transform" ,go-golang-org-x-text-transform)))
+     `(("go-golang-org-x-text" ,go-golang-org-x-text)))
     (home-page "https://github.com/emersion/go-imap")
     (synopsis "IMAP library for clients and servers")
     (description "An IMAP4rev1 library written in Go. It can be used to build a
