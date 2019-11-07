@@ -176,12 +176,11 @@ signatures.")
     (arguments
      '(#:phases
        (modify-phases %standard-phases
-         (delete 'check)
          (replace 'build
            (lambda _
              (setenv "ARGON2_CFFI_USE_SYSTEM" "1")
              (invoke "python" "setup.py" "build")))
-         (add-after 'install 'check
+         (replace 'check
            (lambda* (#:key inputs outputs #:allow-other-keys)
              (add-installed-pythonpath inputs outputs)
              (invoke "python" "-m" "pytest")
