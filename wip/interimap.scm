@@ -91,8 +91,8 @@ mailbox and deliver them to an SMTP session.")
     (license license:gpl3+)))
 
 (define-public interimap-git
-  (let ((commit "39faf86e122fefe4a8093f3b6609658c56c696c0")
-        (revision "1"))
+  (let ((commit "67e0d741f21bd589a2cbb4d23f07f5fb5eae889b")
+        (revision "2"))
     (package
       (inherit interimap)
       (name "interimap-git")
@@ -106,7 +106,7 @@ mailbox and deliver them to an SMTP session.")
           (file-name (git-file-name "interimap" version))
           (sha256
            (base32
-            "0wcjzgpkvlkk9ccpmyqacd9z2hg8pksbqd1w6x38vab504hbxizb"))))
+            "0h38jq1hjjwhh0crm9nf01f5dk5xl4lxaiz6bb0324q58llqviki"))))
       (arguments
        (substitute-keyword-arguments (package-arguments interimap)
          ((#:tests? _ #t) #f) ; tests require running dovecot service
