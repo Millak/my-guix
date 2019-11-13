@@ -75,12 +75,15 @@ Foundation Libraries} (EFL) and rb-libtorrent.")
 (define libtorrent-rasterbar-local
   (package
     (inherit libtorrent-rasterbar)
+    (arguments
+     (substitute-keyword-arguments (package-arguments libtorrent-rasterbar)
+       ((#:tests? _ #f) #f)))
     (inputs
-     `(("boost" ,boost-local)
+     `(("boost" ,boost-with-python3)
        ,@(alist-delete "boost"
                         (package-inputs libtorrent-rasterbar))))
     (native-inputs
-     `(("python" ,python-3)
+     `(("python" ,python-wrapper)
        ,@(alist-delete "python"
                         (package-native-inputs libtorrent-rasterbar))))))
 
