@@ -1,6 +1,9 @@
 os: linux
 sudo: enabled
 language: minimal
+arch:
+  - amd64
+  - arm64
 
 cache:
   directories:
