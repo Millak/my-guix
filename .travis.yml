@@ -2,10 +2,14 @@ os: linux
 sudo: enabled
 language: minimal
 
+cache:
+  directories:
+    - $HOME/.cache/guix
+
 addons:
   apt:
     packages:
-     - gnupg wget grep sed
+      - gnupg wget grep sed
 
 env:
   - FILE=dfsg/main/bidiv.scm
@@ -30,22 +34,22 @@ env:
   - FILE=dfsg/main/xorriso.scm
   - FILE=dfsg/contrib/dropbox.scm
 
-install:
-    - travis_retry wget http://guix.gnu.org/install.sh -O guix-install.sh
-    - travis_retry wget "https://sv.gnu.org/people/viewgpg.php?user_id=15145" -qO - | gpg --import -
-    - echo -e 'y\ny' | sudo bash guix-install.sh
-    - sudo mkdir -p /var/guix/profiles/per-user/travis
-    - sudo chown travis:travis /var/guix/profiles/per-user/travis
-    - guix pull --fallback
+install: |
+  travis_retry wget http://guix.gnu.org/install.sh -O guix-install.sh
+  travis_retry wget "https://sv.gnu.org/people/viewgpg.php?user_id=15145" -qO - | gpg --import -
+  echo -e 'y\ny' | sudo bash guix-install.sh
+  sudo mkdir -p /var/guix/profiles/per-user/travis
+  sudo chown travis:travis /var/guix/profiles/per-user/travis
+  guix pull --fallback
 
-script:
-    - export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
-    - GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public $FILE | cut -f2 -d' ')
+script: |
+  export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+  GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public $FILE | cut -f2 -d' ')
 
 notifications:
-    email:
-        on_success: never
-        on_failure: always
+  email:
+    on_success: never
+    on_failure: always
 
 git:
-    depth: 1
+  depth: 1
