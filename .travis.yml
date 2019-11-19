@@ -5,9 +5,12 @@ arch:
   - amd64
   - arm64
 
-cache:
-  directories:
-    - $HOME/.cache/guix
+jobs:
+  exclude:
+    - arch: arm64
+      FILE: dfsg/main/cpuid2cpuflags.scm
+  allow_failures:
+    - FILE: dfsg/main/ecrire.scm
 
 addons:
   apt:
