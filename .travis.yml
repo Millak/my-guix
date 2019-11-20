@@ -34,8 +34,9 @@ env:
   - FILE: dfsg/main/nyancat.scm
   - FILE: dfsg/main/parallel.scm
   - FILE: dfsg/main/parcimonie.scm
-  - FILE: dfsg/main/ponyos.scm
   - FILE: dfsg/main/pinentry-efl.scm
+  - FILE: dfsg/main/ponyos.scm
+  - FILE: dfsg/main/presentty.scm
   - FILE: dfsg/main/rockchip.scm
   - FILE: dfsg/main/solvitaire.scm
   - FILE: dfsg/main/viper.scm
