@@ -9,6 +9,8 @@ jobs:
   exclude:
     - arch: arm64
       FILE: dfsg/main/cpuid2cpuflags.scm
+    - arch: arm64
+      FILE: dfsg/main/ponyos.scm
   allow_failures:
     - FILE: dfsg/main/ecrire.scm
 
@@ -18,27 +20,27 @@ addons:
       - gnupg wget grep sed
 
 env:
-  - FILE=dfsg/main/bidiv.scm
-  - FILE=dfsg/main/brendan_gregg.scm
-  - FILE=dfsg/main/confclerk.scm
-  - FILE=dfsg/main/cpuid2cpuflags.scm
-  - FILE=dfsg/main/ecrire.scm
-  - FILE=dfsg/main/enlightenment.scm
-  - FILE=dfsg/main/equate.scm
-  - FILE=dfsg/main/mcron.scm
-  - FILE=dfsg/main/minesviiper.scm
-  - FILE=dfsg/main/mpv.scm
-  - FILE=dfsg/main/mupdf.scm
-  - FILE=dfsg/main/nyancat.scm
-  - FILE=dfsg/main/parallel.scm
-  - FILE=dfsg/main/parcimonie.scm
-  - FILE=dfsg/main/ponyos.scm
-  - FILE=dfsg/main/pinentry-efl.scm
-  - FILE=dfsg/main/rockchip.scm
-  - FILE=dfsg/main/solvitaire.scm
-  - FILE=dfsg/main/viper.scm
-  - FILE=dfsg/main/xorriso.scm
-  - FILE=dfsg/contrib/dropbox.scm
+  - FILE: dfsg/main/bidiv.scm
+  - FILE: dfsg/main/brendan_gregg.scm
+  - FILE: dfsg/main/confclerk.scm
+  - FILE: dfsg/main/cpuid2cpuflags.scm
+  - FILE: dfsg/main/ecrire.scm
+  - FILE: dfsg/main/enlightenment.scm
+  - FILE: dfsg/main/equate.scm
+  - FILE: dfsg/main/mcron.scm
+  - FILE: dfsg/main/minesviiper.scm
+  - FILE: dfsg/main/mpv.scm
+  - FILE: dfsg/main/mupdf.scm
+  - FILE: dfsg/main/nyancat.scm
+  - FILE: dfsg/main/parallel.scm
+  - FILE: dfsg/main/parcimonie.scm
+  - FILE: dfsg/main/ponyos.scm
+  - FILE: dfsg/main/pinentry-efl.scm
+  - FILE: dfsg/main/rockchip.scm
+  - FILE: dfsg/main/solvitaire.scm
+  - FILE: dfsg/main/viper.scm
+  - FILE: dfsg/main/xorriso.scm
+  - FILE: dfsg/contrib/dropbox.scm
 
 install: |
   travis_retry wget http://guix.gnu.org/install.sh -O guix-install.sh
