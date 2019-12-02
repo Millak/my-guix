@@ -17,6 +17,7 @@
 
 (define-module (dfsg main presentty)
   #:use-module ((guix licenses) #:prefix license:)
+  #:use-module (guix git-download)
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix utils)
@@ -37,10 +38,18 @@
         (uri (pypi-uri "presentty" version))
         (sha256
          (base32
-          "1qpy992hyg1amjl0acic3agj20spcpv5m0ncg1283mmxs8cs3xy9"))))
+          "1qpy992hyg1amjl0acic3agj20spcpv5m0ncg1283mmxs8cs3xy9"))
+        (patches
+          (list
+            (origin
+              (method url-fetch)
+              (uri "https://sources.debian.org/data/main/p/presentty/0.2.1-1/debian/patches/presentty-python3.patch")
+              (sha256
+               (base32
+                "03d3ylh1z99g4dqj7aka60spagnwss9mbacd7jbpk1gazflnssz1")))))))
     (build-system python-build-system)
     (arguments
-     `(#:python ,python-2
+     `(#:tests? #f ; Test suite hasn't withstood the test of time.
        #:phases
        (modify-phases %standard-phases
          (add-after 'unpack 'relax-version-requirements
@@ -61,8 +70,8 @@
                                           ,(dirname (which "jp2a"))))
                      `("PYTHONPATH" prefix
                        ,(cons (string-append out "/lib/python"
-                                            (python-version python)
-                                            "/site-packages")
+                                             (python-version python)
+                                             "/site-packages")
                               (search-path-as-string->list
                                 (or (getenv "PYTHONPATH") ""))))))
                  '("presentty" "presentty-console")))
@@ -70,13 +79,14 @@
     (inputs
      `(("cowsay" ,cowsay)
        ("figlet" ,figlet)
-       ("jp2a" ,jp2a)
-       ("python2-pillow" ,python2-pillow)
-       ("python2-pygments" ,python2-pygments)
-       ("python2-urwid" ,python2-urwid)))
+       ("jp2a" ,jp2a-1.0.6)
+       ("python-docutils" ,python-docutils)
+       ("python-pillow" ,python-pillow-2)
+       ("python-six" ,python-six)
+       ("python-urwid" ,python-urwid)))
     (native-inputs
-     `(("python2-docutils" ,python2-docutils)
-       ("python2-pbr" ,python2-pbr)))
+     `(("python-pbr" ,python-pbr)
+       ("python-pygments" ,python-pygments)))
     (home-page "http://git.inaugust.com/cgit/presentty/")
     (synopsis "Console-based presentation system")
     (description "Presentty is a console-based presentation program where slides
@@ -84,3 +94,36 @@ are authored in reStructuredText.  Its features include, but are not limited to:
 Cross-fade animations, progressive list display, panning transitions, syntax
 highlighting, Cowsay and figlet integration, ANSI art, JPEG display.")
     (license license:gpl3+)))
+
+(define-public python-pillow-2
+  (package
+    (inherit python-pillow)
+    (version "2.9.0")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "Pillow" version))
+        (sha256
+         (base32
+          "0ada7lf3lmbdsqm3b7ja920p1pllyfhmqndr85ikpj77fmz9s5qg"))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments python-pillow)
+       ((#:phases phases)
+        `(modify-phases ,phases
+           (delete 'check-installed)))))))
+
+(define-public jp2a-1.0.6
+  (package
+    (inherit jp2a)
+    (name "jp2a")
+    (version "1.0.6")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://salsa.debian.org/debian/jp2a.git")
+             (commit (string-append "upstream/" version))))
+       (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "0992czbzv2z32frzxc2kvp4fljblhmyvzwzp2mkk9qn9hdv8iv66"))))))
