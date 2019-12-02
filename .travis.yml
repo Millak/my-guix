@@ -1,16 +1,8 @@
 os: linux
 sudo: enabled
 language: minimal
-arch:
-  - amd64
-  - arm64
 
 jobs:
-  exclude:
-    - arch: arm64
-      FILE: dfsg/main/cpuid2cpuflags.scm
-    - arch: arm64
-      FILE: dfsg/main/ponyos.scm
   allow_failures:
     - FILE: dfsg/main/ecrire.scm
 
