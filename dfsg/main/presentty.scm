@@ -79,7 +79,7 @@
     (inputs
      `(("cowsay" ,cowsay)
        ("figlet" ,figlet)
-       ("jp2a" ,jp2a-1.0.6)
+       ("jp2a" ,jp2a)
        ("python-docutils" ,python-docutils)
        ("python-pillow" ,python-pillow-2)
        ("python-six" ,python-six)
@@ -108,22 +108,4 @@ highlighting, Cowsay and figlet integration, ANSI art, JPEG display.")
           "0ada7lf3lmbdsqm3b7ja920p1pllyfhmqndr85ikpj77fmz9s5qg"))))
     (arguments
      (substitute-keyword-arguments (package-arguments python-pillow)
-       ((#:phases phases)
-        `(modify-phases ,phases
-           (delete 'check-installed)))))))
-
-(define-public jp2a-1.0.6
-  (package
-    (inherit jp2a)
-    (name "jp2a")
-    (version "1.0.6")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://salsa.debian.org/debian/jp2a.git")
-             (commit (string-append "upstream/" version))))
-       (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "0992czbzv2z32frzxc2kvp4fljblhmyvzwzp2mkk9qn9hdv8iv66"))))))
+       ((#:tests? _ #f) #f)))))
