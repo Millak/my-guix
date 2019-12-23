@@ -49,23 +49,14 @@
     (build-system python-build-system)
     (arguments
      `(#:tests? #f   ; no test target
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'install
-           (lambda* (#:key outputs #:allow-other-keys)
-             (let ((out (assoc-ref outputs "out")))
-               (invoke "python" "setup.py" "install" (string-append "--prefix=" out))
-               #t))))))
+       #:use-setuptools? #f))
     (native-inputs `(("intltool" ,intltool)))
     (propagated-inputs
      `(("libtorrent-rasterbar-local" ,libtorrent-rasterbar-local)
        ("python-dbus" ,python-dbus)
        ("python-distutils-extra" ,python-distutils-extra)
        ("python-efl" ,python-efl)
-       ;("python-parse" ,python-parse)
-       ("python-pyxdg" ,python-pyxdg)
-       ;("python-urllib3" ,python-urllib3)
-       ))
+       ("python-pyxdg" ,python-pyxdg)))
     (home-page "https://www.enlightenment.org")
     (synopsis "EFL Bittorrent client")
     (description "Epour is a BitTorrent client based on the @dfn{Enlightenment
@@ -86,32 +77,3 @@ Foundation Libraries} (EFL) and rb-libtorrent.")
      `(("python" ,python-wrapper)
        ,@(alist-delete "python"
                         (package-native-inputs libtorrent-rasterbar))))))
-
-(define boost-local
-  (package
-    (inherit boost)
-    (arguments
-     `(#:imported-modules (,@%gnu-build-system-modules
-                            (guix build python-build-system))
-       ,@(substitute-keyword-arguments (package-arguments boost)
-         ((#:phases phases)
-          `(modify-phases ,phases
-             (replace 'provide-libboost_python
-               (lambda* (#:key outputs inputs #:allow-other-keys)
-                 (let* ((out (assoc-ref outputs "out"))
-                        (py-version ((@@ (guix build python-build-system)
-                                         get-python-version) (assoc-ref inputs "python")))
-                        (py-suffix (string-join (string-split py-version #\.) "")))
-                   ;; Boost can build support for both Python 2 and Python 3 since
-                   ;; version 1.67.0, and suffixes each library with the Python
-                   ;; version.  Many consumers only check for libboost_python
-                   ;; however, so we provide it here as suggested in
-                   ;; <https://github.com/boostorg/python/issues/203>.
-                   (with-directory-excursion (string-append out "/lib")
-                     (symlink (string-append "libboost_python" py-suffix ".so")
-                              "libboost_python.so"))
-                   #t))))))))
-    (native-inputs
-     `(("python" ,python-wrapper)
-       ,@(alist-delete "python"
-                        (package-native-inputs boost))))))
