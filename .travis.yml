@@ -22,7 +22,6 @@ env:
   - FILE: dfsg/main/fonts.scm
   - FILE: dfsg/main/mcron.scm
   - FILE: dfsg/main/minesviiper.scm
-  - FILE: dfsg/main/mpv.scm
   - FILE: dfsg/main/mupdf.scm
   - FILE: dfsg/main/nyancat.scm
   - FILE: dfsg/main/parallel.scm
