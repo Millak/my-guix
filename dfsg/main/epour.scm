@@ -15,7 +15,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip epour)
+(define-module (dfsg main epour)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix git-download)
@@ -49,12 +49,22 @@
     (build-system python-build-system)
     (arguments
      `(#:tests? #f   ; no test target
-       #:use-setuptools? #f))
-    (native-inputs `(("intltool" ,intltool)))
-    (propagated-inputs
+       #:use-setuptools? #f
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'find-theme-dir
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               (substitute* "epour/gui/__init__.py"
+                 (("join\\(data_path")
+                  (string-append "join(\"" out "/share/epour\"")))
+               #t))))))
+    (native-inputs
+     `(("intltool" ,intltool)
+       ("python-distutils-extra" ,python-distutils-extra)))
+    (inputs
      `(("libtorrent-rasterbar-local" ,libtorrent-rasterbar-local)
        ("python-dbus" ,python-dbus)
-       ("python-distutils-extra" ,python-distutils-extra)
        ("python-efl" ,python-efl)
        ("python-pyxdg" ,python-pyxdg)))
     (home-page "https://www.enlightenment.org")
