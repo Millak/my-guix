@@ -35,6 +35,7 @@ env:
   - FILE: dfsg/main/viper.scm
   - FILE: dfsg/main/xorriso.scm
   - FILE: dfsg/contrib/dropbox.scm
+  - FILE: dfsg/contrib/zfs.scm
 
 install: |
   travis_retry wget http://guix.gnu.org/install.sh -O guix-install.sh
