@@ -1,4 +1,4 @@
-;;; Copyright © 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -27,11 +27,9 @@
   #:use-module (gnu packages libffi)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages password-utils)
-  #:use-module (gnu packages python)
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages python-web)
-  #:use-module (gnu packages python-xyz)
-  )
+  #:use-module (gnu packages python-xyz))
 
 (define-public dbxfs
   (package
@@ -43,20 +41,18 @@
         (uri (pypi-uri "dbxfs" version))
         (sha256
          (base32
-          "1f9sy2ax215dxiwszrrcadffjdsmrlxm4kwrbiap9dhxvzm226ks"))))
+          "1f9sy2ax215dxiwszrrcadffjdsmrlxm4kwrbiap9dhxvzm226ks"))
+        (patches (search-patches "dbxfs-remove-sentry-sdk.patch"))))
     (build-system python-build-system)
-    (arguments '(#:tests? #f)) ; tests requires safefs
-    ;(inputs
-    ; `(("safefs" ,safefs)))
+    (arguments
+     '(#:tests? #f)) ; tests requires safefs
     (propagated-inputs
      `(("python-appdirs" ,python-appdirs)
        ("python-block-tracing" ,python-block-tracing)
        ("python-dropbox" ,python-dropbox)
-       ("python-entrypoints" ,python-entrypoints)
+       ("python-keyring" ,python-keyring)
        ("python-keyrings.alt" ,python-keyrings.alt)
        ("python-privy" ,python-privy)
-       ("python-secretstorage" ,python-secretstorage)
-       ("python-sentry-sdk" ,python-sentry-sdk) ; for error reports
        ("python-userspacefs" ,python-userspacefs)))
   (home-page "https://github.com/rianhunter/dbxfs")
   (synopsis "User-space file system for Dropbox")
@@ -89,14 +85,14 @@ your process.")
 (define-public python-dropbox
   (package
     (name "python-dropbox")
-    (version "9.3.0")
+    (version "9.4.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "dropbox" version))
         (sha256
          (base32
-          "1ckpbksdby70d70m58b904h8y8v7m82h12n3q3qk58r4yrqwvld5"))))
+          "0qid094qna6bl4zpd08f6snvipwjls1yadacvmwri11djgp0wvj3"))))
     (build-system python-build-system)
     (arguments '(#:tests? #f)) ; Tests require a network connection.
     (native-inputs
@@ -105,26 +101,13 @@ your process.")
     (propagated-inputs
      `(("python-certifi" ,python-certifi)
        ("python-chardet" ,python-chardet)
-       ("python-requests" ,python-requests-2.21) ; >=2.16.2
+       ("python-requests" ,python-requests)
        ("python-six" ,python-six)
        ("python-urllib3" ,python-urllib3)))
     (home-page "https://www.dropbox.com/developers")
     (synopsis "Official Dropbox API Client")
     (description "A Python SDK for integrating with the Dropbox API v2.")
     (license license:expat)))
-
-(define python-requests-2.21
-  (package
-    (inherit python-requests)
-    (name "python-requests")
-    (version "2.21.0")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "requests" version))
-        (sha256
-         (base32
-          "13jr0wkj9c2j8c0c8iaal9iivi0bpxghnsdn6lxcpnmc657q4ajh"))))))
 
 (define-public python-privy
   (package
@@ -164,14 +147,16 @@ signatures.")
 (define-public python-argon2-cffi
   (package
     (name "python-argon2-cffi")
-    (version "19.1.0")
+    (version "19.2.0")
     (source
       (origin
         (method url-fetch)
-        (uri (pypi-uri "argon2_cffi" version))
+        (uri (pypi-uri "argon2-cffi" version))
         (sha256
          (base32
-          "09lbgwfhm5mm5slinzbwsrflbygl6c3kb2ljrd0111hrp4kqlm41"))))
+          "18xxfw30gi3lwaz4vwb05iavzlrk3fa1x9fippzrgd3px8z65apz"))
+        (modules '((guix build utils)))
+        (snippet '(begin (delete-file-recursively "extras") #t))))
     (build-system python-build-system)
     (arguments
      '(#:phases
@@ -183,7 +168,7 @@ signatures.")
          (replace 'check
            (lambda* (#:key inputs outputs #:allow-other-keys)
              (add-installed-pythonpath inputs outputs)
-             (invoke "python" "-m" "pytest")
+             (invoke "pytest")
              (invoke "python" "-m" "argon2" "--help")
              ;; see tox.ini
              (invoke "python" "-m" "argon2" "-n" "1" "-t" "1" "-m" "8" "-p" "1"))))))
@@ -201,30 +186,6 @@ signatures.")
 both a configurable runtime as well as memory consumption.  This means that you
 can decide how long it takes to hash a password and how much memory is required.")
     (license license:expat)))
-
-(define-public python-sentry-sdk
-  (package
-    (name "python-sentry-sdk")
-    (version "0.7.9")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "sentry-sdk" version))
-        (sha256
-         (base32
-          "1s8pn21f8w7a1z8hdqws6wirwzsfgl1pk09ibnjsh86ccm7jrg1m"))))
-    (build-system python-build-system)
-    (arguments '(#:tests? #f)) ; wow thats a lot of test requirements
-    (propagated-inputs
-     `(("python-certifi" ,python-certifi)
-       ("python-flask" ,python-flask)
-       ("python-urllib3" ,python-urllib3)))
-    (home-page "https://github.com/getsentry/sentry-python")
-    (synopsis "Python client for Sentry")
-    (description
-     "Sentry is a client/server architecture.  You integrate Sentry's SDK into
-your application and it starts sending errors to Sentry's servers as they happen.")
-    (license license:bsd-3)))
 
 (define-public python-userspacefs
   (package
@@ -283,24 +244,29 @@ implemented using @code{ctypes}.")
 (define-public python-keyrings.alt
   (package
     (name "python-keyrings.alt")
-    (version "3.1.1")
+    (version "3.4.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "keyrings.alt" version))
         (sha256
          (base32
-          "0lgp2d3hrpvbb2rfz18vrv5lrck72k3l2f2cpkbks2kigrfbgiqb"))
+          "0gdjdqpq2hf770p6iwi891mil0vbsdhvy88x0v8b2w4y4b28lcli"))
         (modules '((guix build utils)))
         (snippet
          '(begin
-            (delete-file "tests/test_Windows.py")
-            (delete-file "keyrings/alt/Windows.py")
             (delete-file "keyrings/alt/_win_crypto.py")
+            ;; Rely on python-keyring>20:
+            ;; https://github.com/jaraco/keyrings.alt/issues/33
+            (substitute* '("keyrings/alt/tests/test_Gnome.py"
+                           "keyrings/alt/tests/test_Google.py"
+                           "keyrings/alt/tests/test_Windows.py"
+                           "keyrings/alt/tests/test_file.py"
+                           "keyrings/alt/tests/test_pyfs.py")
+              (("keyring.tests.test_backend") "keyring.testing.backend")
+              (("keyring.tests.util") "keyring.testing.util"))
             #t))))
     (build-system python-build-system)
-    (propagated-inputs
-     `(("python-six" ,python-six)))
     (native-inputs
      `(("python-keyring" ,python-keyring)
        ("python-pytest" ,python-pytest)
@@ -312,55 +278,4 @@ implications.  These backends were extracted from the main keyring project to
 make them available for those who wish to employ them, but are discouraged for
 general production use.  Include this module and use its backends at your own
 risk.")
-    (license license:expat)))
-
-(define-public python-secretstorage
-  (package
-    (name "python-secretstorage")
-    (version "3.1.1")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "SecretStorage" version))
-        (sha256
-         (base32
-          "14lznnn916ddn6yrd3w2nr2zq49zc8hw53yjz1k9yhd492p9gir0"))))
-    (build-system python-build-system)
-    (arguments
-     '(#:tests? #f)) ; Tests require a running dbus service.
-    (propagated-inputs
-     `(("python-cryptography" ,python-cryptography)
-       ("python-jeepney" ,python-jeepney)))
-    (home-page "https://github.com/mitya57/secretstorage")
-    (synopsis "Python bindings to FreeDesktop.org Secret Service API")
-    (description
-     "@code{python-secretstorage} provides a way for securely storing passwords
-and other secrets.  It uses D-Bus Secret Service API that is supported by GNOME
-Keyring (since version 2.30) and KSecretsService.  SecretStorage supports most
-of the functions provided by Secret Service, including creating and deleting
-items and collections, editing items, locking and unlocking collections
-(asynchronous unlocking is also supported).")
-    (license license:bsd-3)))
-
-(define-public python-jeepney
-  (package
-    (name "python-jeepney")
-    (version "0.4")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "jeepney" version))
-        (sha256
-         (base32
-          "0w1w1rawl9k4lx91w16d19kbmf1349mhy8ph8x3w0qp1blm432b0"))))
-    (build-system python-build-system)
-    (native-inputs
-     `(("python-testpath" ,python-testpath)
-       ("python-tornado" ,python-tornado)
-       ("python-pytest" ,python-pytest)))
-    (home-page "https://gitlab.com/takluyver/jeepney")
-    (synopsis "Low-level, pure Python DBus protocol wrapper")
-    (description
-     "This is a low-level, pure Python DBus protocol client.  It has an
-I/O-free core, and integration modules for different event loops.")
     (license license:expat)))
