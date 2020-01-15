@@ -1,4 +1,4 @@
-;;; Copyright © 2019 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -98,6 +98,7 @@ highlighting, Cowsay and figlet integration, ANSI art, JPEG display.")
 (define-public python-pillow-2
   (package
     (inherit python-pillow)
+    (name "python-pillow-2")
     (version "2.9.0")
     (source
       (origin
