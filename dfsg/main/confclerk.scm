@@ -1,4 +1,4 @@
-;;; Copyright © 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -30,8 +30,8 @@
     (source
       (origin
         (method url-fetch)
-        (uri (string-append "http://www.toastfreeware.priv.at/tarballs/"
-                            name "/" name "-" version ".tar.gz"))
+        (uri (string-append "https://www.toastfreeware.priv.at/tarballs/"
+                            "confclerk/confclerk-" version ".tar.gz"))
         (sha256
          (base32
           "10rhg44px4nvbkd3p341cmp2ds43jn8r4rvgladda9v8zmsgr2b3"))))
@@ -63,7 +63,7 @@
      `(("perl" ,perl))) ; pod2man
     (inputs
      `(("qtbase" ,qtbase)))
-    (home-page "http://www.toastfreeware.priv.at/confclerk")
+    (home-page "https://www.toastfreeware.priv.at/confclerk")
     (synopsis "Offline conference schedule application")
     (description
      "ConfClerk is an application written in Qt, which makes conference schedules
@@ -76,6 +76,5 @@ the PentaBarf conference management system (or frab) used by e.g. FOSDEM,
 DebConf, FrOSCon, Grazer LinuxTage, and the CCC congresses.
 
 ConfClerk is targeted at mobile devices but works on any system running Qt.")
-    (license (list
-               license:gpl2+
-               license:lgpl3)))) ; or cc-by3.0 for src/icons/*
+    (license (list license:gpl2+
+                   license:lgpl3)))) ; or cc-by3.0 for src/icons/*
