@@ -81,7 +81,20 @@
        ("figlet" ,figlet)
        ("jp2a" ,jp2a)
        ("python-docutils" ,python-docutils)
-       ("python-pillow" ,python-pillow-2)
+       ("python-pillow"
+        ,(package
+           (inherit python-pillow)
+           (version "2.9.0")
+           (source
+             (origin
+               (method url-fetch)
+               (uri (pypi-uri "Pillow" version))
+               (sha256
+                (base32
+                 "0ada7lf3lmbdsqm3b7ja920p1pllyfhmqndr85ikpj77fmz9s5qg"))))
+           (arguments
+            (substitute-keyword-arguments (package-arguments python-pillow)
+              ((#:tests? _ #f) #f)))))
        ("python-six" ,python-six)
        ("python-urwid" ,python-urwid)))
     (native-inputs
@@ -94,19 +107,3 @@ are authored in reStructuredText.  Its features include, but are not limited to:
 Cross-fade animations, progressive list display, panning transitions, syntax
 highlighting, Cowsay and figlet integration, ANSI art, JPEG display.")
     (license license:gpl3+)))
-
-(define-public python-pillow-2
-  (package
-    (inherit python-pillow)
-    (name "python-pillow-2")
-    (version "2.9.0")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "Pillow" version))
-        (sha256
-         (base32
-          "0ada7lf3lmbdsqm3b7ja920p1pllyfhmqndr85ikpj77fmz9s5qg"))))
-    (arguments
-     (substitute-keyword-arguments (package-arguments python-pillow)
-       ((#:tests? _ #f) #f)))))
