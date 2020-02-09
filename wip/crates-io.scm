@@ -41,7 +41,7 @@
         ("rust-failure" ,rust-failure-0.1)
         ("rust-ffsend-api" ,rust-ffsend-api-0.4)
         ("rust-fs2" ,rust-fs2-0.4)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-open" ,rust-open-1)
         ("rust-openssl-probe" ,rust-openssl-probe-0.1)
         ("rust-pathdiff" ,rust-pathdiff-0.1)
@@ -185,48 +185,6 @@
     (license (list license:asl2.0
                    license:expat))))
 
-(define-public rust-android-glue-0.2
-  (package
-    (name "rust-android-glue")
-    (version "0.2.3")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "android-glue" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "01y495x4i9vqkwmklwn2xk7sqg666az2axjcpkr4iwngdwi48100"))))
-    (build-system cargo-build-system)
-    (home-page "https://github.com/tomaka/android-rs-glue")
-    (synopsis "Glue for the Android JNI")
-    (description "Glue for the Android JNI")
-    (license license:expat)))
-
-(define-public rust-ansi-term-0.12
-  (package
-    (inherit rust-ansi-term-0.11)
-    (name "rust-ansi-term")
-    (version "0.12.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "ansi-term" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1ljmkbilxgmhavxvxqa7qvm6f3fjggi7q2l3a72q9x0cxjvrnanm"))))
-    (arguments
-     `(#:cargo-inputs
-       (("rust-serde" ,rust-serde-1.0)
-        ("rust-winapi" ,rust-winapi-0.3))
-       #:cargo-development-inputs
-       (("rust-doc-comment" ,rust-doc-comment-0.3)
-        ("rust-regex" ,rust-regex-1.1)
-        ("rust-serde-json" ,rust-serde-json-1.0))))))
-
 (define-public rust-ansi-term-0.9
   (package
     (inherit rust-ansi-term-0.11)
@@ -241,22 +199,6 @@
        (sha256
         (base32
          "1xif1bh938qpfc3d0f9xgidibpm65xix11w9gszwqnia00q7rb13"))))
-    (arguments '())))
-
-(define-public rust-approx-0.1
-  (package
-    (inherit rust-approx-0.3)
-    (name "rust-approx")
-    (version "0.1.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "approx" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "153awzwywmb61xg857b80l63b1x6hifx2pha7lxf6fck9qxwraq8"))))
     (arguments '())))
 
 (define-public rust-async-compression-0.2
@@ -321,7 +263,7 @@
         ("rust-serde" ,rust-serde-1.0))
        #:cargo-development-inputs
        (("rust-fst" ,rust-fst-0.1)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-quickcheck" ,rust-quickcheck-0.7)
         ("rust-rand" ,rust-rand-0.6))))
     (home-page "https://github.com/tapeinosyne/atlatl")
@@ -501,7 +443,7 @@
         ("rust-clap" ,rust-clap-2)
         ("rust-env-logger" ,rust-env-logger-0.6)
         ("rust-hashbrown" ,rust-hashbrown-0.1)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-log" ,rust-log-0.4)
         ("rust-peeking-take-while" ,rust-peeking-take-while)
         ("rust-proc-macro2" ,rust-proc-macro2)
@@ -535,7 +477,7 @@
         ("rust-clang-sys" ,rust-clang-sys-0.23)
         ("rust-clap" ,rust-clap-2)
         ("rust-env-logger" ,rust-env-logger-0.5)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-log" ,rust-log-0.4)
         ("rust-peeking-take-while" ,rust-peeking-take-while)
         ("rust-proc-macro2" ,rust-proc-macro2-0.3.5) ; 0.3.5
@@ -1149,7 +1091,7 @@
          ,rust-clippy-mini-macro-test)
         ("rust-compiletest-rs" ,rust-compiletest-rs-0.3)
         ("rust-derive-new" ,rust-derive-new)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-rustc-version" ,rust-rustc-version-0.2)
         ("rust-serde" ,rust-serde-1.0)
         ("rust-serde-derive" ,rust-serde-derive-1.0))
@@ -1197,7 +1139,7 @@
        (("rust-cargo-metadata" ,rust-cargo-metadata-0.5)
         ("rust-if-chain" ,rust-if-chain-0.1)
         ("rust-itertools" ,rust-itertools-0.7)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-matches" ,rust-matches)
         ("rust-pulldown-cmark" ,rust-pulldown-cmark-0.1)
         ("rust-quine-mc-cluskey" ,rust-quine-mc-cluskey)
@@ -1283,7 +1225,7 @@
     (arguments
      `(#:cargo-inputs
        (("rust-atty" ,rust-atty-0.2)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-winapi" ,rust-winapi-0.3))
        #:cargo-development-inputs
        (("rust-ansi-term" ,rust-ansi-term-0.12)
@@ -1311,30 +1253,11 @@
          "00vwd3r2jrd6qz4r91bwqhmkl371wyyjvirrc7bzh9r91yv91nvc"))))
     (arguments
      `(#:cargo-inputs
-       (("rust-lazy-static" ,rust-lazy-static-1.4)
+       (("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-winconsole" ,rust-winconsole))
        #:cargo-development-inputs
        (("rust-ansi-term" ,rust-ansi-term-0.9)
         ("rust-rspec" ,rust-rspec-1.0.0-beta3))))))
-
-(define-public rust-compiler-error-0.1
-  (package
-    (name "rust-compiler-error")
-    (version "0.1.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "compiler-error" version))
-       (file-name (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0irh7c0gznk2k6mj3cmqw7x4pg59lppmy1y8d6k5xc926rnmz5zg"))))
-    (build-system cargo-build-system)
-    (arguments '(#:skip-build? #t))
-    (home-page "https://github.com/lu-zero/compiler_error")
-    (synopsis "Triggerable compiler error")
-    (description "Triggerable compiler error")
-    (license license:expat)))
 
 (define-public rust-compiletest-rs-0.2
   (package
@@ -1551,7 +1474,7 @@
         ("rust-criterion-plot" ,rust-criterion-plot-0.4)
         ("rust-csv" ,rust-csv-1.1)
         ("rust-itertools" ,rust-itertools-0.8)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-num-traits" ,rust-num-traits-0.2)
         ("rust-rand-core" ,rust-rand-core-0.5)
         ("rust-rand-os" ,rust-rand-os)
@@ -1631,7 +1554,7 @@
        (("rust-arrayvec" ,rust-arrayvec-0.4)
         ("rust-cfg-if" ,rust-cfg-if)
         ("rust-crossbeam-utils" ,rust-crossbeam-utils-0.2)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-memoffset" ,rust-memoffset-0.2)
         ("rust-nodrop" ,rust-nodrop)
         ("rust-rand" ,rust-rand-0.3)
@@ -2045,7 +1968,7 @@ attributes.")
          "0jha611mffc2qnxvdl3pmglz07akl99lk1vihhb3nl1cd69x7b6q"))))
     (arguments
      `(#:cargo-inputs
-       (("rust-lazy-static" ,rust-lazy-static-1.4)
+       (("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-regex" ,rust-regex-0.2)
         ("rust-serde" ,rust-serde-1.0)
         ("rust-serde-derive" ,rust-serde-derive-1.0)
@@ -2236,7 +2159,7 @@ attributes.")
     (arguments
      `(#:cargo-inputs
        (("rust-cfg-if" ,rust-cfg-if)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-libc" ,rust-libc-0.2)
         ("rust-bindgen" ,rust-bindgen-0.39))
        #:cargo-development-inputs
@@ -2727,7 +2650,7 @@ attributes.")
        (("rust-backtrace" ,rust-backtrace-0.3)
         ("rust-fnv" ,rust-fnv)
         ("rust-glutin" ,rust-glutin-0.21)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-smallvec" ,rust-smallvec-0.6)
         ("rust-takeable-option" ,rust-takeable-option-0.5))
        #:cargo-development-inputs
@@ -2824,7 +2747,7 @@ attributes.")
         ("rust-glutin-gles2-sys" ,rust-glutin-gles2-sys-0.1)
         ("rust-glutin-glx-sys" ,rust-glutin-glx-sys-0.1)
         ("rust-glutin-wgl-sys" ,rust-glutin-wgl-sys-0.1)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-libloading" ,rust-libloading)
         ("rust-objc" ,rust-objc-0.2)
         ("rust-osmesa-sys" ,rust-osmesa-sys)
@@ -3042,7 +2965,7 @@ attributes.")
         ("rust-scopeguard" ,rust-scopeguard)
         ("rust-serde" ,rust-serde-1.0))
        #:cargo-development-inputs
-       (("rust-lazy-static" ,rust-lazy-static-1.2)
+       (("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-rand" ,rust-rand-0.5)
         ("rust-rayon" ,rust-rayon-1.1)
         ("rust-rustc-hash" ,rust-rustc-hash)
@@ -3141,7 +3064,7 @@ attributes.")
         ("rust-syn" ,rust-syn-0.15)
         ("rust-typed-arena" ,rust-typed-arena-1.4))))))
 
-(define-public rust-http-body
+(define-public rust-http-body-0.1
   (package
     (name "rust-http-body")
     (version "0.1.0")
@@ -3169,7 +3092,7 @@ attributes.")
      "Trait representing an asynchronous, streaming, HTTP request or response body.")
     (license license:expat)))
 
-(define-public rust-hyper
+(define-public rust-hyper-0.12
   (package
     (name "rust-hyper")
     (version "0.12.33")
@@ -3190,7 +3113,7 @@ attributes.")
         ("rust-futures-cpupool" ,rust-futures-cpupool)
         ("rust-h2" ,rust-h2-0.1)
         ("rust-http" ,rust-http-0.1)
-        ("rust-http-body" ,rust-http-body)
+        ("rust-http-body" ,rust-http-body-0.1)
         ("rust-httparse" ,rust-httparse-1.3)
         ("rust-iovec" ,rust-iovec)
         ("rust-itoa" ,rust-itoa)
@@ -3227,7 +3150,7 @@ attributes.")
 
 (define-public rust-hyper-0.10
   (package
-    (inherit rust-hyper)
+    (inherit rust-hyper-0.12)
     (name "rust-hyper")
     (version "0.10.16")
     (source
@@ -3302,7 +3225,7 @@ attributes.")
     (arguments
      `(#:cargo-inputs
        (("rust-antidote" ,rust-antidote)
-        ("rust-hyper" ,rust-hyper)
+        ("rust-hyper" ,rust-hyper-0.12)
         ("rust-native-tls" ,rust-native-tls))))
     (home-page "https://github.com/sfackler/hyper-native-tls")
     (synopsis "native-tls support for Hyper 0.10.")
@@ -3329,7 +3252,7 @@ attributes.")
        (("rust-bytes" ,rust-bytes-0.4)
         ("rust-ct-logs" ,rust-ct-logs-0.6)
         ("rust-futures" ,rust-futures-0.1)
-        ("rust-hyper" ,rust-hyper)
+        ("rust-hyper" ,rust-hyper-0.12)
         ("rust-rustls" ,rust-rustls)
         ("rust-tokio-io" ,rust-tokio-io-0.1)
         ("rust-tokio-rustls" ,rust-tokio-rustls-0.12)
@@ -3365,7 +3288,7 @@ attributes.")
      `(#:cargo-inputs
        (("rust-bytes" ,rust-bytes-0.4)
         ("rust-futures" ,rust-futures-0.1)
-        ("rust-hyper" ,rust-hyper)
+        ("rust-hyper" ,rust-hyper-0.12)
         ("rust-native-tls" ,rust-native-tls)
         ("rust-tokio-io" ,rust-tokio-io-0.1))
        #:cargo-development-inputs
@@ -3404,14 +3327,14 @@ attributes.")
         ("rust-bincode" ,rust-bincode-1.1)
         ("rust-hyphenation-commons"
          ,rust-hyphenation-commons)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-pocket-resources" ,rust-pocket-resources)
         ("rust-quickcheck" ,rust-quickcheck-0.8)
         ("rust-serde" ,rust-serde-1.0)
         ("rust-unicode-normalization"
          ,rust-unicode-normalization)
         ("rust-unicode-segmentation"
-         ,rust-unicode-segmentation))))
+         ,rust-unicode-segmentation-1.6))))
     (home-page
      "https://github.com/tapeinosyne/hyphenation")
     (synopsis
@@ -3563,7 +3486,7 @@ attributes.")
         ("rust-pkg-config" ,rust-pkg-config-0.3)
         ("rust-reqwest" ,rust-reqwest-0.9)
         ("rust-tar" ,rust-tar)
-        ("rust-xz2" ,rust-xz2))
+        ("rust-xz2" ,rust-xz2-0.1))
        #:cargo-development-inputs
        (("rust-libc" ,rust-libc-0.2))))
     (inputs
@@ -3657,20 +3580,6 @@ attributes.")
        #:cargo-development-inputs
        (("rust-permutohedron" ,rust-permutohedron)
         ("rust-quickcheck" ,rust-quickcheck-0.5))))))
-
-(define-public rust-itoa-0.3
-  (package
-    (inherit rust-itoa-0.4)
-    (name "rust-itoa")
-    (version "0.3.4")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "itoa" version))
-       (file-name (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "136vwi6l2k1vrlvfx49lhficj813pk88xrcx1q3axqh1mwms6943"))))))
 
 (define-public rust-jemalloc-ctl-0.3
   (package
@@ -4319,26 +4228,6 @@ attributes.")
      "MIME/MediaType guessing by file extension. Uses a static map of known file extension -> MIME type mappings.")
     (license license:expat)))
 
-(define-public rust-mint
-  (package
-    (name "rust-mint")
-    (version "0.5.3")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "mint" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "01j14izcqvrcsxrhi53f0cw5k92k8q1zai0nbv2vy7bksrq5h4dr"))))
-    (build-system cargo-build-system)
-    (home-page "https://github.com/kvark/mint")
-    (synopsis "Math interoperability standard types")
-    (description
-     "Math interoperability standard types")
-    (license license:expat)))
-
 (define-public rust-native-tls
   (package
     (name "rust-native-tls")
@@ -4355,7 +4244,7 @@ attributes.")
     (build-system cargo-build-system)
     (arguments
      `(#:cargo-inputs
-       (("rust-lazy-static" ,rust-lazy-static-1.4)
+       (("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-libc" ,rust-libc-0.2)
         ("rust-log" ,rust-log-0.4)
         ("rust-openssl" ,rust-openssl-0.10)
@@ -4488,7 +4377,7 @@ attributes.")
          "01sfs72wrrfbicb2dz41w682d7qb7ahjygajg3zyfv7y0paz8cy4"))))
     (arguments
      `(#:cargo-inputs
-       (("rust-lazy-static" ,rust-lazy-static-1.4)
+       (("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-lexical-core" ,rust-lexical-core-0.4)
         ("rust-memchr" ,rust-memchr-2.2)
         ("rust-regex" ,rust-regex-1.3)
@@ -4673,7 +4562,7 @@ attributes.")
        (("rust-parking-lot" ,rust-parking-lot-0.9))
        #:cargo-development-inputs
        (("rust-crossbeam-utils" ,rust-crossbeam-utils-0.6)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-regex" ,rust-regex-1.3))))))
 
 (define-public rust-open-1.3
@@ -4781,7 +4670,7 @@ attributes.")
        #:cargo-development-inputs
        (("rust-fnv" ,rust-fnv)
         ("rust-itertools" ,rust-itertools-0.7)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-quickcheck" ,rust-quickcheck-0.6)
         ("rust-rand" ,rust-rand-0.4)
         ("rust-serde-test" ,rust-serde-test-1.0))))))
@@ -4802,7 +4691,7 @@ attributes.")
     (build-system cargo-build-system)
     (arguments
      `(#:cargo-inputs
-       (("rust-lazy-static" ,rust-lazy-static-1.4)
+       (("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-log" ,rust-log-0.4)
         ("rust-regex" ,rust-regex-1.3)
         ("rust-serde" ,rust-serde-1.0)
@@ -4883,7 +4772,7 @@ attributes.")
     (build-system cargo-build-system)
     (arguments
      `(#:cargo-development-inputs
-       (("rust-lazy-static" ,rust-lazy-static-1.4))))
+       (("rust-lazy-static" ,rust-lazy-static-1))))
     (home-page "https://github.com/rhysd/path-slash")
     (synopsis
      "Conversion to/from a file path from/to slash path")
@@ -5073,7 +4962,7 @@ attributes.")
      `(#:cargo-inputs
        (("rust-error-chain" ,rust-error-chain-0.12)
         ("rust-idna" ,rust-idna-0.2)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-regex" ,rust-regex)
         ("rust-url" ,rust-url-2.1)
         ("rust-native-tls" ,rust-native-tls))
@@ -5111,7 +5000,7 @@ attributes.")
        #:cargo-development-inputs
        (("rust-criterion" ,rust-criterion-0.2)
         ("rust-html5ever" ,rust-html5ever)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-regex" ,rust-regex)
         ("rust-tendril" ,rust-tendril-0.4))))))
 
@@ -5303,20 +5192,6 @@ attributes.")
      `(#:cargo-inputs
        (("rust-proc-macro2" ,rust-proc-macro2-0.3))))))
 
-(define-public rust-quote-0.3
-  (package
-    (inherit rust-quote-0.6)
-    (name "rust-quote")
-    (version "0.3.15")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "quote" version))
-       (file-name (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0yhnnix4dzsv8y4wwz4csbnqjfh73al33j35msr10py6cl5r4vks"))))))
-
 (define-public rust-rand-distr-0.2
   (package
     (name "rust-rand-distr")
@@ -5421,7 +5296,7 @@ attributes.")
         ("rust-rayon-core" ,rust-rayon-core-1.5))
        #:cargo-development-inputs
        (("rust-docopt" ,rust-docopt-1.1)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-serde" ,rust-serde-1.0)
         ("rust-serde-derive" ,rust-serde-derive-1.0))))))
 
@@ -5490,7 +5365,7 @@ attributes.")
         ("rust-utf8-ranges" ,rust-utf8-ranges-1.0))
        #:cargo-development-inputs
        (("rust-doc-comment" ,rust-doc-comment)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-quickcheck" ,rust-quickcheck-0.8)
         ("rust-rand" ,rust-rand-0.6))))))
 
@@ -5649,7 +5524,7 @@ attributes.")
         ("rust-hyper-rustls" ,rust-hyper-rustls-0.19)
         ("rust-hyper-tls" ,rust-hyper-tls-0.4)
         ("rust-js-sys" ,rust-js-sys-0.3)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-log" ,rust-log-0.4)
         ("rust-mime" ,rust-mime-0.3)
         ("rust-mime-guess" ,rust-mime-guess-2.0)
@@ -5793,7 +5668,7 @@ attributes.")
         ("rust-untrusted" ,rust-untrusted)
         ("rust-web-sys" ,rust-web-sys)
         ("rust-winapi" ,rust-winapi-0.3)
-        ("rust-lazy-static" ,rust-lazy-static-1.4))
+        ("rust-lazy-static" ,rust-lazy-static-1))
        #:cargo-development-inputs
        (("rust-libc" ,rust-libc-0.2)
         ("rust-wasm-bindgen-test" ,rust-wasm-bindgen-test-0.2))))
@@ -6952,7 +6827,7 @@ attributes.")
        #:cargo-development-inputs
        (("rust-futures-util-preview"
          ,rust-futures-util-preview-0.3)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-tokio" ,rust-tokio-0.1)
         ("rust-webpki-roots" ,rust-webpki-roots))))
     (home-page
@@ -7145,7 +7020,7 @@ attributes.")
         ("rust-failure" ,rust-failure-0.1)
         ("rust-futures" ,rust-futures-0.1)
         ("rust-idna" ,rust-idna-0.2)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-log" ,rust-log-0.4)
         ("rust-openssl" ,rust-openssl-0.10)
         ("rust-rand" ,rust-rand-0.6)
@@ -7191,7 +7066,7 @@ attributes.")
         ("rust-failure" ,rust-failure-0.1)
         ("rust-futures" ,rust-futures-0.1)
         ("rust-ipconfig" ,rust-ipconfig)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-log" ,rust-log-0.4)
         ("rust-lru-cache" ,rust-lru-cache)
         ("rust-resolv-conf" ,rust-resolv-conf)
@@ -7647,7 +7522,7 @@ attributes.")
     (arguments
      `(#:cargo-inputs
        (("rust-cgmath" ,rust-cgmath-0.16)
-        ("rust-lazy-static" ,rust-lazy-static-1.4)
+        ("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-rgb" ,rust-rgb)
         ("rust-serde" ,rust-serde-1.0)
         ("rust-winapi" ,rust-winapi-0.3))
@@ -7707,7 +7582,7 @@ attributes.")
     (build-system cargo-build-system)
     (arguments
      `(#:cargo-inputs
-       (("rust-lazy-static" ,rust-lazy-static-1.4)
+       (("rust-lazy-static" ,rust-lazy-static-1)
         ("rust-libc" ,rust-libc-0.2)
         ("rust-maybe-uninit" ,rust-maybe-uninit)
         ("rust-pkg-config" ,rust-pkg-config-0.3))
@@ -7721,26 +7596,7 @@ attributes.")
     (description "X11 library bindings for Rust")
     (license license:cc0)))
 
-(define-public rust-xml-rs
-  (package
-    (name "rust-xml-rs")
-    (version "0.8.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "xml-rs" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1db4v716rbpgjiasaim2s17rmvsfcq1qzwg6nji6mdf5k34i46sl"))))
-    (build-system cargo-build-system)
-    (home-page "https://github.com/netvl/xml-rs")
-    (synopsis "An XML library in pure Rust")
-    (description "An XML library in pure Rust")
-    (license license:expat)))
-
-(define-public rust-xz2
+(define-public rust-xz2-0.1
   (package
     (name "rust-xz2")
     (version "0.1.6")
