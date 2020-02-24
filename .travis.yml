@@ -32,6 +32,7 @@ env:
   - FILE: dfsg/main/presentty.scm
   - FILE: dfsg/main/rockchip.scm
   - FILE: dfsg/main/solvitaire.scm
+  - FILE: dfsg/main/vim.scm
   - FILE: dfsg/main/viper.scm
   - FILE: dfsg/main/xorriso.scm
   - FILE: dfsg/contrib/dropbox.scm
