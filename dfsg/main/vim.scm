@@ -19,7 +19,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (guix packages)
-  #:use-module (guix build-system gnu))
+  #:use-module (guix build-system copy))
 
 (define-public vim-asyncrun
   (package
@@ -34,22 +34,11 @@
               (sha256
                (base32
                 "1g82zk7fm8dhpac81xdbwmr33zsc8b1g4ip3j5xgvwrp28lw2wp3"))))
-    (build-system gnu-build-system)
+    (build-system copy-build-system)
     (arguments
-     '(#:tests? #f
-       #:phases
-       (modify-phases %standard-phases
-         (delete 'configure)
-         (delete 'build)
-         (replace 'install
-           (lambda* (#:key outputs #:allow-other-keys)
-             (let* ((out (assoc-ref outputs "out"))
-                    (vimfiles (string-append out "/share/vim/vimfiles")))
-               (install-file "plugin/asyncrun.vim"
-                             (string-append vimfiles "/plugin"))
-               (install-file "doc/asyncrun.txt"
-                             (string-append vimfiles "/doc"))
-               #t))))))
+     '(#:install-plan
+       '(("plugin" "share/vim/vimfiles/")
+         ("doc/" "share/vim/vimfiles/doc" #:include ("asyncrun.txt")))))
     (home-page "https://github.com/skywind3000/asyncrun.vim")
     (synopsis "Run Async Shell Commands in Vim")
     (description "This plugin takes the advantage of new APIs in Vim 8 (and
