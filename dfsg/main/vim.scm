@@ -24,7 +24,7 @@
 (define-public vim-asyncrun
   (package
     (name "vim-asyncrun")
-    (version "2.4.6")
+    (version "2.4.9")
     (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -33,7 +33,7 @@
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "1g82zk7fm8dhpac81xdbwmr33zsc8b1g4ip3j5xgvwrp28lw2wp3"))))
+                "0z64pkf37h3daqkry54ci3ars9wkrjskblgfpn29cwgmqg55n76n"))))
     (build-system copy-build-system)
     (arguments
      '(#:install-plan
