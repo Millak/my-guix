@@ -1084,27 +1084,6 @@
     (description "Bindings to Cocoa for macOS")
     (license #f)))
 
-(define-public rust-color-quant-1.0
-  (package
-    (name "rust-color-quant")
-    (version "1.0.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "color-quant" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1ga56jrafnjm80903nnqjkyii4bwd6a7visxh0g8hgi6cmrvbfqd"))))
-    (build-system cargo-build-system)
-    (home-page "https://github.com/PistonDevelopers/color_quant.git")
-    (synopsis
-     "Color quantization library to reduce n colors to 256 colors.")
-    (description
-     "Color quantization library to reduce n colors to 256 colors.")
-    (license license:expat)))
-
 (define-public rust-colored-1.9
   (package
     (name "rust-colored")
@@ -2217,33 +2196,6 @@
     (synopsis "gethostname for all platforms")
     (description "gethostname for all platforms")
     (license license:asl2.0)))
-
-(define-public rust-gif-0.10
-  (package
-    (name "rust-gif")
-    (version "0.10.3")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "gif" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1bw174f7civdfgryvc8pvyhicpr96hzdajnda4s3y8iv3ch907a7"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:cargo-inputs
-       (("rust-color-quant" ,rust-color-quant-1.0)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-lzw" ,rust-lzw))
-       #:cargo-development-inputs
-       (("rust-glob" ,rust-glob))))
-    (home-page
-     "https://github.com/image-rs/image-gif")
-    (synopsis "GIF de- and encoder")
-    (description "GIF de- and encoder")
-    (license #f)))
 
 (define-public rust-gimli-0.19
   (package
