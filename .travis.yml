@@ -21,6 +21,7 @@ env:
   - FILE: dfsg/main/epour.scm
   - FILE: dfsg/main/equate.scm
   - FILE: dfsg/main/fonts.scm
+  - FILE: dfsg/main/iplayer.scm
   - FILE: dfsg/main/mcron.scm
   - FILE: dfsg/main/minesviiper.scm
   - FILE: dfsg/main/mupdf.scm

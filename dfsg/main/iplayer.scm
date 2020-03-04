@@ -15,7 +15,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip iplayer)
+(define-module (dfsg main iplayer)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (guix packages)
@@ -28,7 +28,7 @@
 (define-public get-iplayer
   (package
     (name "get-iplayer")
-    (version "3.24")
+    (version "3.25")
     (source
       (origin
         (method git-fetch)
@@ -38,7 +38,7 @@
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "0yd84ncb6cjrk4v4kz3zrddkl7iwkm3zlfbjyswd9hanp8fvd4q3"))))
+          "1qjcxdpjr7ad82fvv17885ylw6as25dm0ghz7937g287h8y3qwr1"))))
     (build-system perl-build-system)
     (arguments
      `(#:tests? #f  ; no tests
