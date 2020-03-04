@@ -51,7 +51,7 @@
                (install-file "src/nyancat" bin)
                (install-file "nyancat.1" man))
              #t)))))
-    (home-page "http://nyancat.dakko.us/")
+    (home-page "https://nyancat.dakko.us/")
     (synopsis "Nyan cat telnet server")
     (description
      "This is an animated, color, ANSI-text telnet server that renders a loop

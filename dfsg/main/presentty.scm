@@ -52,11 +52,6 @@
      `(#:tests? #f ; Test suite hasn't withstood the test of time.
        #:phases
        (modify-phases %standard-phases
-         (add-after 'unpack 'relax-version-requirements
-           (lambda _
-             (substitute* "requirements.txt"
-               ((">.*") "\n"))
-             #t))
          (replace 'wrap
            (lambda* (#:key python inputs outputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))

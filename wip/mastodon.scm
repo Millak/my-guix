@@ -19,6 +19,7 @@
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix git-download)
+  #:use-module (guix build-system cmake)
   #:use-module (guix build-system meson)
   #:use-module (guix build-system python)
   #:use-module ((guix licenses) #:prefix license:)
@@ -33,6 +34,7 @@
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages python-web)
   #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages qt)
   #:use-module (gnu packages time))
 
 (define-public fern
@@ -117,27 +119,30 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
     (version "1.1.4")
     (source
       (origin
-        (method url-fetch)
-        (uri (pypi-uri "blurhash" version))
+        ;; Tests not included in pypi release and releases not tagged in git repo.
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/halcy/blurhash-python")
+               (commit "22e081ef1c24da1bb5c5eaa2c1d6649724deaef8")))
+        (file-name (git-file-name name version))
         (sha256
          (base32
-          "1vjcphfrqvbjv4c8vhrxgyfy163n50wmcbqp0yny85m8wmiv2mns"))))
+          "1qq6mhydlp7q3na4kmaq3871h43wh3pyfyxr4b79bia73wjdylxf"))))
     (build-system python-build-system)
     (arguments
-     '(;#:phases
-       ;(modify-phases %standard-phases
-       ;  (replace 'check
-       ;    (with-directory-excursion "tests"
-       ;                              (invoke "python" "test_blurhash.py"))))
-       #:tests? #f ; no tests in pypi release
-       ))
+     '(#:phases
+       (modify-phases %standard-phases
+         (replace 'check
+           (lambda _
+             (delete-file "setup.cfg")
+             (invoke "pytest"))))))
     (native-inputs
      `(("python-numpy" ,python-numpy)
        ("python-pillow" ,python-pillow)
        ("python-pytest" ,python-pytest)))
     (home-page "https://github.com/halcy/blurhash-python")
     (synopsis
-     "Pure-Python implementation of the blurhash algorithm.")
+     "Pure-Python implementation of the blurhash algorithm")
     (description
      "Pure-Python implementation of the blurhash algorithm.")
     (license license:expat)))
@@ -151,12 +156,20 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
     (version "1.1.0")
     (source
       (origin
-        (method url-fetch)
-        (uri (pypi-uri "http_ece" version))
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/web-push-libs/encrypted-content-encoding")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
         (sha256
          (base32
-          "1y5ln09ji4dwpzhxr77cggk02kghq7lql60a6969a5n2lwpvqblk"))))
+          "0bp4cc0xc123i72h80ax3qz3ixfwx3j7pw343kc7i6kdvfi8klx7"))))
     (build-system python-build-system)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'change-directory
+           (lambda _ (chdir "python") #t)))))
     (propagated-inputs
      `(("python-cryptography" ,python-cryptography)))
     (native-inputs
@@ -164,10 +177,10 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
        ("python-flake8" ,python-flake8)
        ("python-mock" ,python-mock)
        ("python-nose" ,python-nose)))
-    (home-page "https://github.com/martinthomson/encrypted-content-encoding")
+    (home-page "https://github.com/web-push-libs/encrypted-content-encoding")
     (synopsis "Encrypted Content Encoding for HTTP")
     (description
-     "Encrypted Content Encoding for HTTP")
+     "Encrypted Content Encoding for HTTP.")
     (license license:expat)))
 
 (define-public python2-http-ece
@@ -179,19 +192,29 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
     (version "1.0.2")
     (source
       (origin
-        (method url-fetch)
-        (uri (pypi-uri "pytest-vcr" version))
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/ktosiek/pytest-vcr")
+               (commit version)))
+        (file-name (git-file-name name version))
         (sha256
          (base32
-          "15hq5vwiixhb5n2mdvbmxfn977zkwjm769r74vcl7k5vbavm3vi3"))))
+          "1i6fin91mklvbi8jzfiswvwf1m91f43smpj36a17xrzk4gisfs6i"))))
     (build-system python-build-system)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (replace 'check
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (add-installed-pythonpath inputs outputs)
+             (invoke "pytest" "tests/"))))))
     (propagated-inputs
      `(("python-pytest" ,python-pytest)
        ("python-vcrpy" ,python-vcrpy)))
     (home-page "https://github.com/ktosiek/pytest-vcr")
     (synopsis "Plugin for managing VCR.py cassettes")
     (description
-     "Plugin for managing VCR.py cassettes")
+     "Plugin for managing VCR.py cassettes.")
     (license license:expat)))
 
 (define-public python2-pytest-vcr
@@ -207,10 +230,12 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
         (uri (git-reference
                (url "https://github.com/bleakgrey/tootle.git")
                (commit version)))
+               ;(commit "d8fc951fb0c0c0f85a3869c6abfc79b2c3d83215")))
         (file-name (git-file-name name version))
         (sha256
          (base32
           "1z3wyx316nns6gi7vlvcfmalhvxncmvcmmlgclbv6b6hwl5x2ysi"))))
+          ;"14fnxrvlllgnn3f0xzcg82ai2kwhk1lpagr2qr934h9yvh4zqhdn"))))
     (build-system meson-build-system)
     (arguments
      '(#:phases
@@ -221,23 +246,31 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
              (substitute* "meson/post_install.py"
                (("gtk-update-icon-cache") "true"))
              #t))
-        (add-after 'install 'wrap-program
-          (lambda* (#:key inputs outputs #:allow-other-keys)
-            (wrap-program (string-append (assoc-ref outputs "out")
-                                         "/bin/com.github.bleakgrey.tootle")
-            ;; For GtkFileChooserDialog.
-            `("GSETTINGS_SCHEMA_DIR" =
-              (,(string-append
-                  ;(assoc-ref inputs "gtk+")
-                  (assoc-ref outputs "out")
-                  "/share/glib-2.0/schemas")))))))))
+         ;(add-after 'unpack 'dont-use-strict-ssl
+         ;  (lambda _
+         ;    (substitute* "src/Network.vala"
+         ;      (("session.ssl_use_system_ca_file = true")
+         ;       "session.ssl_use_system_ca_file = false")
+         ;      (("session.ssl_strict = true") "session.ssl_strict = false"))
+         ;    #t))
+         (add-after 'install 'wrap-program
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (wrap-program (string-append (assoc-ref outputs "out")
+                                          "/bin/com.github.bleakgrey.tootle")
+             ;; For GtkFileChooserDialog.
+             `("GSETTINGS_SCHEMA_DIR" =
+               (,(string-append
+                   (assoc-ref outputs "out") ; not gtk+
+                   "/share/glib-2.0/schemas")))))))))
     (native-inputs
      `(("gettext" ,gettext-minimal)
        ("glib:bin" ,glib "bin")     ; for glib-compile-resources
        ("pkg-config" ,pkg-config)))
     (inputs
-     `(("gtk+" ,gtk+)
+     `(
+       ("glib-networking" ,glib-networking)
        ("granite" ,granite)
+       ("gtk+" ,gtk+)
        ("json-glib" ,json-glib)
        ("libgee" ,libgee)
        ("libsoup" ,libsoup)
@@ -250,7 +283,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
 (define-public granite
   (package
     (name "granite")
-    (version "5.2.5")
+    (version "5.3.0")
     (source
       (origin
         (method git-fetch)
@@ -260,7 +293,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "0z40vhcp2w8s8rnc56pzvjc4s77bln8k84rwwypivjmk3lhpw1vi"))))
+          "1gvrk8gh959bmq8w0kaym7sx13v763lk8x5hck00msgmyrsarfwa"))))
     (build-system meson-build-system)
     (arguments
      '(#:phases
@@ -285,3 +318,42 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
 things, it provides complex widgets and convenience functions designed for use
 in apps built for elementary OS.")
     (license license:lgpl3)))
+
+(define-public sweetfish
+  (package
+    (name "sweetfish")
+    (version "0.0.4")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/PG-MANA/Sweetfish")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "17gh7mh1vg2cg9kh1irsdyza0qig1y7yn3azdlpx6la9qcfakyrb"))))
+    (build-system cmake-build-system)
+    (arguments
+     '(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'more-translations
+           (lambda _
+             (copy-file "src/Translations/en_AU.ts"
+                        "src/Translations/en_US.ts")
+             (substitute* "src/Translations/CMakeLists.txt"
+               (("en_AU.ts") "en_AU.ts en_US.ts"))
+             (substitute* "src/Translations/en_US.ts"
+               (("en_AU") "en_US"))
+             #t)))
+       #:tests? #f))    ; No test target.
+    (native-inputs
+     `(("qttools" ,qttools)))
+    (inputs
+     `(;("phonon" ,phonon)
+       ("qtbase" ,qtbase)
+       ("qtmultimedia" ,qtmultimedia)))
+    (home-page "https://soft.taprix.org/product/sweetfish.html")
+    (synopsis "")
+    (description "")
+    (license license:asl2.0)))
