@@ -68,8 +68,7 @@
              (let* ((out (assoc-ref outputs "out"))
                     (bin (string-append out "/bin"))
                     (font (string-append out "/share/fonts/truetype"))
-                    (icon (string-append out "/share/icons/hicolor"))
-                    )
+                    (icon (string-append out "/share/icons/hicolor")))
                (mkdir-p (string-append icon "/16x16/apps"))
                (mkdir-p (string-append icon "/32x32/apps"))
                (mkdir-p (string-append icon "/48x48/apps"))
@@ -181,13 +180,11 @@
        '(#:tests? #f ; No test files.
          #:install-source? #f
          #:import-path "github.com/mewspring/spawn_mpq"))
-      (inputs
-       `(("go-github-com-egonelbre-exp-bit" ,go-github-com-egonelbre-exp-bit)
-         ("go-github-com-mewrev-pe" ,go-github-com-mewrev-pe)
+      (propagated-inputs
+       `(("go-github-com-mewrev-pe" ,go-github-com-mewrev-pe)
          ("go-github-com-mewkiz-pkg-httputil" ,go-github-com-mewkiz-pkg-httputil)
          ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-         ("go-github-com-sanctuary-exp-mpq" ,go-github-com-sanctuary-exp-mpq)
-         ("go-golang-org-x-net" ,go-golang-org-x-net)))
+         ("go-github-com-sanctuary-exp-mpq" ,go-github-com-sanctuary-exp-mpq)))
       (home-page "https://github.com/mewspring/spawn_mpq")
       (synopsis "Tool to extract spawn.mpq from diablosw.exe demo")
       (description
@@ -215,7 +212,7 @@
        '(#:tests? #f ; No test files.
          #:import-path "github.com/mewkiz/pkg/httputil"
          #:unpack-path "github.com/mewkiz/pkg"))
-      (inputs
+      (propagated-inputs
        `(("go-golang-org-x-net" ,go-golang-org-x-net)))
       (home-page "github.com/mewkiz/pkg")
       (synopsis "Small utility packages")
@@ -243,7 +240,7 @@ functions and commonly used features.")
       (arguments
        '(#:tests? #f ; No test files.
          #:import-path "github.com/mewrev/pe"))
-      (inputs
+      (propagated-inputs
        `(("go-github-com-pkg-errors" ,go-github-com-pkg-errors)))
       (home-page "https://github.com/mewkiz/pkg")
       (synopsis "Access to the Portable Executable (PE) file format")
@@ -272,7 +269,7 @@ Executable} (PE) file format.")
        '(#:tests? #f ; Tests fail: src/github.com/sanctuary/exp/mpq/decrypt_test.go:17:10: undefined: hash
          #:import-path "github.com/sanctuary/exp/mpq"
          #:unpack-path "github.com/sanctuary/exp"))
-      (inputs
+      (propagated-inputs
        `(("go-github-com-egonelbre-exp-bit" ,go-github-com-egonelbre-exp-bit)
          ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)))
       (home-page "https://github.com/sanctuary/exp")
