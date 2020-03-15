@@ -1,4 +1,4 @@
-;;; Copyright © 2019 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -153,37 +153,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
 (define-public python2-http-ece
   (package-with-python2 python-http-ece))
 
-(define-public python-pytest-vcr
-  (package
-    (name "python-pytest-vcr")
-    (version "1.0.2")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/ktosiek/pytest-vcr")
-               (commit version)))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "1i6fin91mklvbi8jzfiswvwf1m91f43smpj36a17xrzk4gisfs6i"))))
-    (build-system python-build-system)
-    (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-         (replace 'check
-           (lambda* (#:key inputs outputs #:allow-other-keys)
-             (add-installed-pythonpath inputs outputs)
-             (invoke "pytest" "tests/"))))))
-    (propagated-inputs
-     `(("python-pytest" ,python-pytest)
-       ("python-vcrpy" ,python-vcrpy)))
-    (home-page "https://github.com/ktosiek/pytest-vcr")
-    (synopsis "Plugin for managing VCR.py cassettes")
-    (description
-     "Plugin for managing VCR.py cassettes.")
-    (license license:expat)))
-
+;; python-pytest-vcr upstreamed in python-check.scm
 (define-public python2-pytest-vcr
   (package-with-python2 python-pytest-vcr))
 
