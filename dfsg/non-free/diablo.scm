@@ -51,7 +51,7 @@
          '(begin (delete-file-recursively "3rdParty/asio") #t))))
     (build-system cmake-build-system)
     (arguments
-     `(#:tests? #f ; No tests.
+     `(#:tests? #f  ; No tests.
        #:configure-flags (list "-DNIGHTLY_BUILD=ON" ; RelWithDebInfo
                                "-DSPAWN=ON")
        #:phases
@@ -154,9 +154,15 @@
     (native-inputs
      `(("diablosw.exe" ,diablosw.exe)
        ("spawn-mpq" ,spawn-mpq)))
-    (home-page "")
-    (synopsis "")
-    (description "")
+    (home-page "https://www.blizzard.com/en-us/games/legacy/")
+    (synopsis "Diablo I demo")
+    (description "Diablo is an action role-playing hack and slash video game
+developed by Blizzard North and released by Blizzard Entertainment in early
+January 1997.  Set in the fictional Kingdom of Khanduras in the mortal realm,
+Diablo makes the player take control of a lone hero battling to rid the world of
+Diablo, the Lord of Terror.  Beneath the fictional town of Tristram, the player
+journeys through sixteen randomly generated dungeon levels, ultimately entering
+Hell itself in order to face Diablo.")
     (license #f)))
 
 (define-public spawn-mpq
@@ -177,7 +183,7 @@
             "1qgbiim00d4h8i940l608ks0s05pnpjlralcvvxwq7pm8qqdzhcv"))))
       (build-system go-build-system)
       (arguments
-       '(#:tests? #f ; No test files.
+       '(#:tests? #f    ; No test files.
          #:install-source? #f
          #:import-path "github.com/mewspring/spawn_mpq"))
       (propagated-inputs
@@ -209,7 +215,7 @@
             "0qw7baq6189g48wgzbdp2ijvkjhmfs1fanzzr0fspn72nkbj548i"))))
       (build-system go-build-system)
       (arguments
-       '(#:tests? #f ; No test files.
+       '(#:tests? #f    ; No test files.
          #:import-path "github.com/mewkiz/pkg/httputil"
          #:unpack-path "github.com/mewkiz/pkg"))
       (propagated-inputs
@@ -238,7 +244,7 @@ functions and commonly used features.")
             "0zv7piadv3794bwg64r998i5zq5yx5ikxgzgmbr0qsxac6c8zsar"))))
       (build-system go-build-system)
       (arguments
-       '(#:tests? #f ; No test files.
+       '(#:tests? #f    ; No test files.
          #:import-path "github.com/mewrev/pe"))
       (propagated-inputs
        `(("go-github-com-pkg-errors" ,go-github-com-pkg-errors)))
@@ -266,7 +272,8 @@ Executable} (PE) file format.")
             "1njr05gp3d0r2192b6bmlzls49r0iw71ncin0rhn88s0lcx6l56b"))))
       (build-system go-build-system)
       (arguments
-       '(#:tests? #f ; Tests fail: src/github.com/sanctuary/exp/mpq/decrypt_test.go:17:10: undefined: hash
+       ;; Tests fail: src/github.com/sanctuary/exp/mpq/decrypt_test.go:17:10: undefined: hash
+       '(#:tests? #f
          #:import-path "github.com/sanctuary/exp/mpq"
          #:unpack-path "github.com/sanctuary/exp"))
       (propagated-inputs
