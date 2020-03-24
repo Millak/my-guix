@@ -162,11 +162,13 @@ January 1997.  Set in the fictional Kingdom of Khanduras in the mortal realm,
 Diablo makes the player take control of a lone hero battling to rid the world of
 Diablo, the Lord of Terror.  Beneath the fictional town of Tristram, the player
 journeys through sixteen randomly generated dungeon levels, ultimately entering
-Hell itself in order to face Diablo.")
+Hell itself in order to face Diablo.
+
+This is the public demo.")
     (license #f)))
 
 (define-public spawn-mpq
-  (let ((commit "58e8f5c50218efc41101803314a7e861537d6c61") ; January 1, 2020
+  (let ((commit "860ce57c4fba27e3bfb04f41faaba068464698bb") ; March 23, 2020
         (revision "1"))
     (package
       (name "spawn-mpq")
@@ -180,7 +182,7 @@ Hell itself in order to face Diablo.")
           (file-name (git-file-name name version))
           (sha256
            (base32
-            "1qgbiim00d4h8i940l608ks0s05pnpjlralcvvxwq7pm8qqdzhcv"))))
+            "1nq7dqvjjyfgbsvbq0fiss2fyim71yqa1qs246y7k95qcp7yi3vh"))))
       (build-system go-build-system)
       (arguments
        '(#:tests? #f    ; No test files.
@@ -195,7 +197,7 @@ Hell itself in order to face Diablo.")
       (synopsis "Tool to extract spawn.mpq from diablosw.exe demo")
       (description
        "Spawn-mpq is a tool to extract spawn.mpq from diablosw.exe demo.")
-      (license #f))))
+      (license license:unlicense))))
 
 (define-public go-github-com-mewkiz-pkg-httputil
   (let ((commit "518ade7978e2ce16b08e90878fb43cdeed230bde") ; Sept 19, 2019
