@@ -22,6 +22,7 @@ env:
   - FILE: dfsg/main/iplayer.scm
   - FILE: dfsg/main/mcron.scm
   - FILE: dfsg/main/minesviiper.scm
+  - FILE: dfsg/main/moreutils.scm
   - FILE: dfsg/main/mupdf.scm
   - FILE: dfsg/main/parallel.scm
   - FILE: dfsg/main/parcimonie.scm
