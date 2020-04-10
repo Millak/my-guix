@@ -28,7 +28,6 @@ env:
   - FILE: dfsg/main/solvitaire.scm
   - FILE: dfsg/main/vim.scm
   - FILE: dfsg/main/viper.scm
-  - FILE: dfsg/main/xorriso.scm
   - FILE: dfsg/contrib/dropbox.scm
 
 install: |
