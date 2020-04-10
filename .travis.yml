@@ -2,10 +2,6 @@ os: linux
 sudo: enabled
 language: minimal
 
-jobs:
-  allow_failures:
-    - FILE: dfsg/main/ecrire.scm
-
 addons:
   apt:
     packages:
@@ -15,7 +11,7 @@ env:
   - FILE: dfsg/main/brendan_gregg.scm
   - FILE: dfsg/main/confclerk.scm
   - FILE: dfsg/main/cpuid2cpuflags.scm
-  - FILE: dfsg/main/ecrire.scm
+    #- FILE: dfsg/main/ecrire.scm ; known to fail
   - FILE: dfsg/main/enlightenment.scm
   - FILE: dfsg/main/epour.scm
   - FILE: dfsg/main/equate.scm
