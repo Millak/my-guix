@@ -36,8 +36,7 @@ install: |
   echo -e 'y\ny' | sudo bash guix-install.sh
   sudo mkdir -p /var/guix/profiles/per-user/travis
   sudo chown travis:travis /var/guix/profiles/per-user/travis
-  # Make sure we have a substitute avaialable for 'guix pull'
-  guix pull --fallback -C guix-channel-with-substitute.scm
+  guix pull --fallback
 
 script: |
   export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
