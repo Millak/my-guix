@@ -1,4 +1,4 @@
-;;; Copyright © 2019 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -22,8 +22,8 @@
   #:use-module (guix build-system gnu))
 
 (define-public solvitaire
-  (let ((commit "2b1e08372df6471a3462aef71b5a52ce641b3aad")
-        (revision "3"))
+  (let ((commit "d040dc4d2832058e6289257528f6b9972313af8b")
+        (revision "4"))
     (package
       (name "solvitaire")
       (version (string-append "0.0.0-" revision "." (string-take commit 7)))
@@ -36,7 +36,7 @@
           (file-name (git-file-name name version))
           (sha256
            (base32
-            "171vfrmn2xl4jfbgsqsq0rz0jkpkx2mpminmxxg1fn5pmmy8pkrv"))))
+            "01jmnwi9xwwhfzakha5jwfkxvgky7dyrwx9kpgypkycp1nqsikb8"))))
       (build-system gnu-build-system)
       (arguments
        '(#:test-target "longtest"
@@ -55,7 +55,7 @@
       (home-page "https://gir.st/sol.htm")
       (synopsis "Solitaire in your terminal")
       (description
-       "Play klondike and spider solitaire in your unicode terminal.
+       "Play klondike, spider solitaire and freecell in your unicode terminal.
 
 Supports @code{vi} style keybindings, cursor keys and the mouse.")
       (license license:gpl3))))
