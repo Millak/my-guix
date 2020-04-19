@@ -1,4 +1,4 @@
-;;; Copyright © 2016, 2018, 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -27,11 +27,11 @@
   #:use-module (gnu packages pkg-config))
 
 (define-public e-express
-  (let ((commit "c3e3560039566af6ceb1a323d00e94e7d7bfc79d")
-        (revision "2"))
+  (let ((commit "c42d2480060a7700209abd1abefb8ef6522a5482")
+        (revision "1"))
     (package
       (name "e-express")
-      (version (git-version "0.0.1" revision commit))
+      (version "0.0.1")
       (source
         (origin
           (method git-fetch)
@@ -41,7 +41,7 @@
           (file-name (git-file-name name version))
           (sha256
            (base32
-            "1wwf44xbcisfff84zqv7dmb4gh170kr7jkzzxdzcncprdqw6fikb"))))
+            "07wf3x59p7790lfa1b1whxrp7qmj89z4l54ylcn7f250bif37nl8"))))
       (build-system gnu-build-system)
       (arguments
        '(#:phases
@@ -60,7 +60,7 @@
          ("pkg-config" ,pkg-config)))
       (inputs
        `(("efl" ,efl)))
-      (home-page "https://git.enlightenment.org/apps/express.git/")
+      (home-page "http://smhouston.us/express/")
       (synopsis "IRC client with enhanced media capabilities")
       (description "EFL-based IRC Client which operates similar to the
 Terminology interface.")
