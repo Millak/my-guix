@@ -1,4 +1,4 @@
-;;; Copyright © 2016 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -19,17 +19,16 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build utils)
   #:use-module (guix download)
-  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages file)
-  #:use-module (gnu packages kde)
-  #:use-module (gnu packages qt))
+  #:use-module (gnu packages qt)
+  #:use-module (gnu packages web))
 
 (define-public dianara
   (package
     (name "dianara")
-    (version "1.4.2")
+    (version "1.4.3")
     (source
       (origin
         (method url-fetch)
@@ -37,7 +36,7 @@
                "mirror://savannah/dianara/dianara-v" version ".tar.gz"))
         (sha256
          (base32
-          "1flkrcm26rwsl3mdkb484sihipv9swnlwvwgd50skiarczc466z6"))))
+          "13qzv72qmgjm00nsh95as95n0g3nrq8c06y423in5g3c1jagsab2"))))
     (build-system gnu-build-system)
     (arguments
      `(#:phases
@@ -49,7 +48,6 @@
                        (string-append "PREFIX=" out))))))))
     (inputs
      `(("file" ,file) ; libmagic
-       ("qca" ,qca)
        ("qoauth" ,qoauth)
        ("qtbase" ,qtbase)))
     (home-page "https://jancoding.wordpress.com/dianara/")

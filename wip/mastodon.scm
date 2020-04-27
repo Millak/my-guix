@@ -76,14 +76,14 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
 (define-public python-mastodon-py
   (package
     (name "python-mastodon-py")
-    (version "1.5.0")
+    (version "1.5.1")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "Mastodon.py" version))
         (sha256
          (base32
-          "0mypfz5k1phn7b2fk362w8zqh2wi3czf58g4zik64n17r8viww40"))))
+          "1vikvkzcij2gd730cssigxi38vlmzqmwdy58r3y2cwsxifnxpz9a"))))
     (build-system python-build-system)
     (propagated-inputs
      `(("python-blurhash" ,python-blurhash)
@@ -220,7 +220,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
 (define-public granite
   (package
     (name "granite")
-    (version "5.3.0")
+    (version "5.3.1")
     (source
       (origin
         (method git-fetch)
@@ -230,7 +230,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "1gvrk8gh959bmq8w0kaym7sx13v763lk8x5hck00msgmyrsarfwa"))))
+          "12f1n07cjlc7czf642ak6964wl4fsgakc39nnmiba22z5aahfpz9"))))
     (build-system meson-build-system)
     (arguments
      '(#:phases

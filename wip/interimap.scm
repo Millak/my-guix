@@ -1,4 +1,4 @@
-;;; Copyright © 2019 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -22,13 +22,14 @@
   #:use-module (guix utils)
   #:use-module (guix build-system perl)
   #:use-module (gnu packages databases)
+  #:use-module (gnu packages mail)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages tls))
 
 (define-public interimap
   (package
     (name "interimap")
-    (version "0.4")
+    (version "0.5")
     (source
       (origin
         (method git-fetch)
@@ -38,19 +39,28 @@
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "159n09g4a11pgr6qb23i5kz1f3p5jx9fs2w8j8kqddf6cj4yk6pj"))))
+          "0kydn57ma6m26xwjxzfbx3l28g8kx3m1h4c9r4dkkmhfyny92hvl"))))
     (build-system perl-build-system)
     (arguments
      `(#:phases
        (modify-phases %standard-phases
          (delete 'configure)
          (delete 'build)
+         (add-before 'check 'prepare-for-tests
+           (lambda _
+             (substitute* '("tests/run-all"
+                            "tests/run")
+               (("^PATH.*") "")
+               (("doveconf") (which "doveconf"))
+               (("/usr/sbin/dovecot") (which "dovecot")))
+             #t))
          (replace 'install
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out  (assoc-ref outputs "out"))
                     (bin  (string-append out "/bin"))
                     (doc  (string-append out "/share/doc/" ,name))
-                    (perl (string-append out "/lib/perl5/site_perl/" ,(package-version perl) "/Net/IMAP")))
+                    (perl (string-append out "/lib/perl5/site_perl/"
+                                         ,(package-version perl) "/Net/IMAP")))
                (install-file "interimap" bin)
                (install-file "pullimap" bin)
                (install-file "lib/Net/IMAP/InterIMAP.pm" perl)
@@ -65,7 +75,10 @@
                    ,(map (lambda (i) (string-append (assoc-ref inputs i)
                                                     "/lib/perl5/site_perl/"
                                                     ,(package-version perl)))
-                         '("perl-conf-libconfig" "perl-dbd-sqlite" "perl-dbi" "perl-net-ssleay"))))
+                         '("perl-conf-libconfig"
+                           "perl-dbd-sqlite"
+                           "perl-dbi"
+                           "perl-net-ssleay"))))
                #t)
              ;(let* ((out  (assoc-ref outputs "out"))
              ;       (bin  (string-append out "/bin/"))
@@ -76,12 +89,14 @@
              ;            (find-files bin "\\.*$"))
              ;  #t)
              )))
-       #:tests? #f)) ; no tests
+       #:tests? #f))    ; dovecot tries to create /var/lib/dovecot
     (inputs
      `(("perl-conf-libconfig" ,perl-conf-libconfig)
        ("perl-dbd-sqlite" ,perl-dbd-sqlite)
        ("perl-dbi" ,perl-dbi)
        ("perl-net-ssleay" ,perl-net-ssleay)))
+    (native-inputs
+     `(("dovecot" ,dovecot)))
     (home-page "https://guilhem.org/interimap/")
     (synopsis "Fast bidirectional synchronization for QRESYNC-capable IMAP servers")
     (description
@@ -91,8 +106,8 @@ mailbox and deliver them to an SMTP session.")
     (license license:gpl3+)))
 
 (define-public interimap-git
-  (let ((commit "67e0d741f21bd589a2cbb4d23f07f5fb5eae889b")
-        (revision "2"))
+  (let ((commit "ea57a0ab32b0863cfa1209423a5b4c8dd195f803")
+        (revision "1"))
     (package
       (inherit interimap)
       (name "interimap-git")
@@ -106,7 +121,7 @@ mailbox and deliver them to an SMTP session.")
           (file-name (git-file-name "interimap" version))
           (sha256
            (base32
-            "0h38jq1hjjwhh0crm9nf01f5dk5xl4lxaiz6bb0324q58llqviki"))))
+            "0wrlkypiqkarzyg0lvl9gza4zpk2vcapbzq9mywbd9fl232i0gxx"))))
       (arguments
        (substitute-keyword-arguments (package-arguments interimap)
          ((#:tests? _ #t) #f) ; tests require running dovecot service
