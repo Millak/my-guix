@@ -1,4 +1,4 @@
-;;; Copyright © 2016, 2017, 2019 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017, 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -42,13 +42,16 @@
     (build-system cmake-build-system)
     (arguments
      '(#:configure-flags '("-DENABLE_NLS:BOOL=TRUE")
-       #:tests? #f)) ; no tests
+       #:tests? #f))    ; no tests
     (native-inputs
      `(("gettext" ,gettext-minimal)
        ("pkg-config" ,pkg-config)))
     (inputs
      `(("efl" ,efl)))
     (home-page "https://www.enlightenment.org")
-    (synopsis "EFL simple text editor")
-    (description "EFL simple text editor")
-    (license license:gpl3+)))
+    (synopsis "Text editor for EFL/Enlightenment")
+    (description "Ecrire is a basic text editor written in EFL for the
+Enlightenment desktop environment and also Tizen.  It is intended to be a native
+EFL alternative to gedit (GTK/Gnome), kwrite (KDE/Plasma), and similar basic
+text editors.")
+    (license license:gpl3)))
