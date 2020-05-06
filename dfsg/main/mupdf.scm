@@ -1,4 +1,4 @@
-;;; Copyright © 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -17,14 +17,33 @@
 
 (define-module (dfsg main mupdf)
   #:use-module (guix packages)
+  #:use-module (guix download)
   #:use-module (guix utils)
-  #:use-module (gnu packages pdf)
-  )
+  #:use-module (gnu packages pdf))
 
 (define-public my-mupdf
   (package
     (inherit mupdf)
     (name "my-mupdf")
+    (version "1.17.0")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (string-append "https://mupdf.com/downloads/archive/mupdf-"
+                            version "-source.tar.xz"))
+        (sha256
+         (base32
+          "11k0phq49jvxz9l7l9ca1xwsc5h77dpav7dmasdqv8nrjcjzndf9"))
+        (modules '((guix build utils)))
+        (snippet
+         ;; We keep lcms2 since it is different than our lcms.
+         '(begin
+            (for-each
+              (lambda (dir)
+                (delete-file-recursively (string-append "thirdparty/" dir)))
+              '("curl" "freeglut" "freetype" "harfbuzz" "jbig2dec"
+                "libjpeg" "mujs" "openjpeg" "zlib"))
+            #t))))
     (arguments
       (substitute-keyword-arguments (package-arguments mupdf)
         ((#:phases phases)
