@@ -15,6 +15,7 @@ env:
   - FILE: dfsg/main/enlightenment.scm
   - FILE: dfsg/main/epour.scm
   - FILE: dfsg/main/equate.scm
+  - FILE: dfsg/main/eterm.scm
   - FILE: dfsg/main/iplayer.scm
   - FILE: dfsg/main/keybase.scm
   - FILE: dfsg/main/minesviiper.scm
