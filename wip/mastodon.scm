@@ -28,6 +28,7 @@
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
+  #:use-module (gnu packages pantheon)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-check)
@@ -107,7 +108,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
     (home-page "https://github.com/halcy/Mastodon.py")
     (synopsis "Python wrapper for the Mastodon API")
     (description
-     "Python wrapper for the Mastodon API")
+     "This package provides a python wrapper for the Mastodon API.")
     (license license:expat)))
 
 (define-public python2-mastodon-py
@@ -204,8 +205,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
        ("glib:bin" ,glib "bin")     ; for glib-compile-resources
        ("pkg-config" ,pkg-config)))
     (inputs
-     `(
-       ("glib-networking" ,glib-networking)
+     `(("glib-networking" ,glib-networking)
        ("granite" ,granite)
        ("gtk+" ,gtk+)
        ("json-glib" ,json-glib)
@@ -216,45 +216,6 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
     (synopsis "GTK3 client for Mastodon")
     (description "Simple Mastodon client designed for elementary OS.")
     (license license:gpl3+)))
-
-(define-public granite
-  (package
-    (name "granite")
-    (version "5.3.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/elementary/granite.git")
-               (commit version)))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "12f1n07cjlc7czf642ak6964wl4fsgakc39nnmiba22z5aahfpz9"))))
-    (build-system meson-build-system)
-    (arguments
-     '(#:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'skip-gtk-update-icon-cache
-           ;; Don't create 'icon-theme.cache'.
-           (lambda _
-             (substitute* "meson/post_install.py"
-               (("gtk-update-icon-cache") "true"))
-             #t)))))
-    (native-inputs
-     `(("gettext" ,gettext-minimal)
-       ("gobject-introspection" ,gobject-introspection)
-       ("pkg-config" ,pkg-config)))
-    (inputs
-     `(("gtk+" ,gtk+)
-       ("libgee" ,libgee)
-       ("vala" ,vala)))
-    (home-page "https://github.com/elementary/granite")
-    (synopsis "Library that extends GTK with common widgets and utilities")
-    (description "Granite is a companion library for GTK+ and GLib.  Among other
-things, it provides complex widgets and convenience functions designed for use
-in apps built for elementary OS.")
-    (license license:lgpl3)))
 
 (define-public sweetfish
   (package
