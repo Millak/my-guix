@@ -1,4 +1,4 @@
-;;; Copyright © 2016, 2017, 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017, 2018, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -30,7 +30,7 @@
         (revision "2"))
     (package
       (name "equate")
-      (version (string-append "0.0.0-" revision "." (string-take commit 7)))
+      (version (git-version "0.0.0" revision commit))
       (source
         (origin
           (method git-fetch)
@@ -42,13 +42,6 @@
            (base32
             "13958n8gaphb1bvvrvc74drw3wz46cpzvk4qasiyrziihgrj918d"))))
       (build-system gnu-build-system)
-      (arguments
-       '(#:phases
-         (modify-phases %standard-phases
-           (add-after 'unpack 'set-env
-             (lambda _
-               (setenv "NOCONFIGURE" "TRUE")
-               #t)))))
       (native-inputs
        `(("autoconf" ,autoconf)
          ("automake" ,automake)
