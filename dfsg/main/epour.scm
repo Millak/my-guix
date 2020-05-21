@@ -28,11 +28,7 @@
   #:use-module (gnu packages enlightenment)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages glib) ; intltool
-  #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages python)
-  #:use-module (gnu packages python-web)
-  #:use-module (gnu packages python-xyz)
-  #:use-module (srfi srfi-1))
+  #:use-module (gnu packages python-xyz))
 
 (define-public epour
   (package
@@ -63,7 +59,7 @@
      `(("intltool" ,intltool)
        ("python-distutils-extra" ,python-distutils-extra)))
     (inputs
-     `(("libtorrent-rasterbar-local" ,libtorrent-rasterbar-local)
+     `(("libtorrent-rasterbar" ,libtorrent-rasterbar)
        ("python-dbus" ,python-dbus)
        ("python-efl" ,python-efl)
        ("python-pyxdg" ,python-pyxdg)))
@@ -72,18 +68,3 @@
     (description "Epour is a BitTorrent client based on the @dfn{Enlightenment
 Foundation Libraries} (EFL) and rb-libtorrent.")
     (license license:gpl3+)))
-
-(define libtorrent-rasterbar-local
-  (package
-    (inherit libtorrent-rasterbar)
-    (arguments
-     (substitute-keyword-arguments (package-arguments libtorrent-rasterbar)
-       ((#:tests? _ #f) #f)))
-    (inputs
-     `(("boost" ,boost-with-python3)
-       ,@(alist-delete "boost"
-                        (package-inputs libtorrent-rasterbar))))
-    (native-inputs
-     `(("python" ,python-wrapper)
-       ,@(alist-delete "python"
-                        (package-native-inputs libtorrent-rasterbar))))))
