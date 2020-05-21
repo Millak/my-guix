@@ -1,4 +1,4 @@
-;;; Copyright © 2019 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -21,15 +21,19 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system meson)
+  #:use-module (gnu packages backup)
+  #:use-module (gnu packages djvu)
   #:use-module (gnu packages enlightenment)
-  #:use-module (gnu packages pdf))
+  #:use-module (gnu packages image)
+  #:use-module (gnu packages pdf)
+  #:use-module (gnu packages pkg-config))
 
 (define-public etui
-  (let ((commit "852e8aa62118399f23d6d3690368d731b9a3f339")
+  (let ((commit "fe278033519cec8852d83fe45af677457bde1325")
         (revision "1"))
   (package
     (name "etui")
-    (version (git-version "0.0.0" revision commit))
+    (version (git-version "0.0.4" revision commit))
     (source
       (origin
         (method git-fetch)
@@ -39,16 +43,30 @@
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "145kg29z97gbvabhwfdikcl87gd3pfa6qan6npx6gip0ljm4wwzg"))))
+          "12765smiw31n5bg588r8qgmm69438cv4nby3ss6m621ydv9zx5zm"))))
     (build-system meson-build-system)
     (arguments
-     '(#:configure-flags '("-Dlicense=agplv3")))
+     '(#:configure-flags
+       (let ((mupdf (assoc-ref %build-inputs "mupdf")))
+         (list "-Dlicense=agplv3"
+               (string-append "-Dmupdf-includedir=" mupdf "/include")
+               (string-append "-Dmupdf-libdir=" mupdf "/lib -lmupdf")))
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'set-home-directory
+           (lambda _
+             (setenv "HOME" (getcwd))
+             #t)))))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)))
     (inputs
-     `(
+     `(("djvulibre" ,djvulibre)
        ("efl" ,efl)
+       ("jbig2dec" ,jbig2dec)
+       ("libarchive" ,libarchive)
        ("mupdf" ,mupdf)
-       ))
+       ("openjpeg" ,openjpeg)))
     (home-page "https://github.com/vtorri/etui")
     (synopsis "Multiple Document Library and Viewer")
     (description "Multiple Document Library and Viewer")
-    (license license:gpl3+))))
+    (license license:agpl3+)))) ; because we link to mupdf
