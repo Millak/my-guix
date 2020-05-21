@@ -26,7 +26,7 @@
         (revision "4"))
     (package
       (name "solvitaire")
-      (version (string-append "0.0.0-" revision "." (string-take commit 7)))
+      (version (git-version "0.0.0" revision commit))
       (source
         (origin
           (method git-fetch)

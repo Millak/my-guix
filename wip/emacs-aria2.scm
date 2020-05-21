@@ -52,7 +52,7 @@ This mode tries to work well with evil-mode, just set aria2-add-evil-quirks to t
     (package
       (inherit emacs-aria2)
       (name "emacs-aria2el")
-      (version (string-append "0.0.0-" revision "." (string-take commit 7)))
+      (version (git-version "0.0.0" revision commit))
       (source
         (origin
           (method git-fetch)

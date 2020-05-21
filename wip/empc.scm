@@ -32,7 +32,7 @@
         (revision "2"))
   (package
     (name "empc")
-    (version (string-append "0.99.0.0-" revision "." (string-take commit 7)))
+    (version (git-version "0.99.0.0" revision commit))
     (source
       (origin
         (method git-fetch)
