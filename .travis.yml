@@ -25,6 +25,7 @@ env:
   - FILE: dfsg/main/parcimonie.scm
   - FILE: dfsg/main/pinentry-efl.scm
   - FILE: dfsg/main/presentty.scm
+  - FILE: dfsg/main/psd.scm
   - FILE: dfsg/main/solvitaire.scm
   - FILE: dfsg/main/vim.scm
   - FILE: dfsg/main/viper.scm
