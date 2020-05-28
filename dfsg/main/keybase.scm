@@ -29,7 +29,7 @@
 (define-public keybase
   (package
     (name "keybase")
-    (version "5.4.2")
+    (version "5.5.1")
     (source
       (origin
         (method url-fetch)
@@ -38,13 +38,13 @@
                version "/keybase-v" version ".tar.xz"))
         (sha256
          (base32
-          "040jn7g3nq4qpf8kvizs40gc2cbdxsy6nkx4qpsc8agk032cgnlc"))
+          "0x683v50wq8b2rk4nv2gmchav71fxnqvkfglrkzixvwcqqwvy2m7"))
         (modules '((guix build utils)))
         (snippet
          '(begin
             (with-directory-excursion "go/vendor"
               (delete-file-recursively "bazil.org")
-              ;(delete-file-recursively "camlistore.org/pkg/buildinfo")
+              (delete-file-recursively "camlistore.org/pkg/buildinfo")
               ;(delete-file-recursively "camlistore.org/pkg/images")
               (delete-file-recursively "github.com/BurntSushi")
               ;(delete-file-recursively "github.com/PuerkitoBio/goquery")
@@ -147,10 +147,11 @@
               ;(delete-file-recursively "github.com/stellar/go")
               ;(delete-file-recursively "github.com/steveyen/gtreap")
               ;(delete-file-recursively "github.com/stretchr/testify")
-              ;(delete-file-recursively "github.com/syndtr")
+              ;(delete-file-recursively "github.com/syndtr/goleveldb")
               ;(delete-file-recursively "github.com/temoto/robotstxt")
               ;(delete-file-recursively "github.com/tinylib/msgp")
               (delete-file-recursively "github.com/urfave")
+              ;(delete-file-recursively "github.com/vividcortex/ewma")
               (delete-file-recursively "github.com/willf")
               ;(delete-file-recursively "github.com/xanzy/ssh-agent")
               ;(delete-file-recursively "go.uber.org/zap/buffer")
@@ -225,6 +226,7 @@
                #t))))))
     (inputs
      `(("go-bazil-org-fuse" ,go-bazil-org-fuse)
+       ("go-camlistore-org-pkg-buildinfo" ,go-camlistore-org-pkg-buildinfo)
        ("go-github-com-blang-semver" ,go-github-com-blang-semver)
        ("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)
        ("go-github-com-gobwas-glob" ,go-github-com-gobwas-glob)
@@ -348,11 +350,11 @@ and does not use the C library from the project called FUSE.")
       (description "Go library to talk HTTP over Unix domain sockets/")
       (license license:expat))))
 
-(define-public go-camlistore-org-pkg
+(define-public go-camlistore-org-pkg-buildinfo
   (let ((commit "c55c8602d3cea4511081630e17bca7ed601abc44")
         (revision "1"))
     (package
-      (name "go-camlistore-org-pkg")
+      (name "go-camlistore-org-pkg-buildinfo")
       (version (git-version "0.9" revision commit))
       (source
        (origin
@@ -368,13 +370,31 @@ and does not use the C library from the project called FUSE.")
          (snippet
           '(begin
              (delete-file-recursively "vendor")
+             (delete-file-recursively "website")
+             (delete-file-recursively "server/camlistored")
+             (for-each make-file-writable (find-files "."))
              #t))))
       (build-system go-build-system)
       (arguments
-       '(;#:unpack-path "camlistore.org"
-         #:import-path "camlistore.org/pkg/images"))
+       '(#:import-path "camlistore.org/pkg/buildinfo"
+         #:unpack-path "camlistore.org"))
       (home-page "https://perkeep.org/pkg/")
       (synopsis "Go library for personal storage system")
       (description "Camlistore is your personal storage system for life: a way
 of storing, syncing, sharing, modelling and backing up content.")
       (license license:asl2.0))))
+
+(define-public go-camlistore-org-pkg-images
+  (package
+    (inherit go-camlistore-org-pkg-buildinfo)
+    (name "go-camlistore-org-pkg-images")
+    (arguments
+     '(#:import-path "camlistore.org/pkg/images"
+       #:unpack-path "camlistore.org"))
+    (propagated-inputs
+     `(
+       ;("go-github-com-nf-cr2" ,go-github-com-nf-cr2)
+       ;("go-github-com-rwcarlsen-goexif" ,go-github-com-rwcarlsen-goexif)
+       ;("go-go4-org-readerutil" ,go-go4-org-readerutil)
+       ("go-golang-org-x-image" ,go-golang-org-x-image)))
+    ))
