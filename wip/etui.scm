@@ -64,6 +64,7 @@
        ("efl" ,efl)
        ("jbig2dec" ,jbig2dec)
        ("libarchive" ,libarchive)
+       ("libtiff" ,libtiff)
        ("mupdf" ,mupdf)
        ("openjpeg" ,openjpeg)))
     (home-page "https://github.com/vtorri/etui")
