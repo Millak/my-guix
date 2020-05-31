@@ -19,30 +19,25 @@
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix utils)
-  #:use-module (gnu packages pdf))
+  #:use-module (gnu packages pdf)
+  #:use-module (srfi srfi-1))
 
 (define-public my-mupdf
   (package
     (inherit mupdf)
     (name "my-mupdf")
-    (version "1.17.0")
     (source
       (origin
-        (method url-fetch)
-        (uri (string-append "https://mupdf.com/downloads/archive/mupdf-"
-                            version "-source.tar.xz"))
-        (sha256
-         (base32
-          "11k0phq49jvxz9l7l9ca1xwsc5h77dpav7dmasdqv8nrjcjzndf9"))
-        (modules '((guix build utils)))
+        (inherit (package-source mupdf))
         (snippet
          ;; We keep lcms2 since it is different than our lcms.
+         ;; In contrast to upstream mupdf, we also keep mujs.
          '(begin
             (for-each
               (lambda (dir)
                 (delete-file-recursively (string-append "thirdparty/" dir)))
               '("curl" "freeglut" "freetype" "harfbuzz" "jbig2dec"
-                "libjpeg" "mujs" "openjpeg" "zlib"))
+                "libjpeg" "openjpeg" "zlib"))
             #t))))
     (arguments
       (substitute-keyword-arguments (package-arguments mupdf)
@@ -52,5 +47,25 @@
               (lambda* (#:key outputs #:allow-other-keys)
                 (let ((out (assoc-ref outputs "out")))
                   (with-directory-excursion (string-append out "/bin")
+                    (delete-file "mutool")
+                    (delete-file "muraster")
                     (symlink "mupdf-gl" "mupdf"))
-                  #t)))))))))
+                  #t)))))
+        ((#:make-flags flags)
+         `(delete "USE_SYSTEM_MUJS=yes" ,flags))))
+    (inputs
+     (fold alist-delete (package-inputs mupdf)
+           '("curl" "mujs" "openssl")))))
+
+(define-public my-mupdf-1.17
+  (package
+    (inherit my-mupdf)
+    (version "1.17.0")
+    (source
+      (origin
+        (inherit (package-source my-mupdf))
+        (uri (string-append "https://mupdf.com/downloads/archive/mupdf-"
+                            version "-source.tar.xz"))
+        (sha256
+         (base32
+          "11k0phq49jvxz9l7l9ca1xwsc5h77dpav7dmasdqv8nrjcjzndf9"))))))
