@@ -15,17 +15,17 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip etui)
+(define-module (dfsg main etui)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system meson)
+  #:use-module (dfsg main mupdf)
   #:use-module (gnu packages backup)
   #:use-module (gnu packages djvu)
   #:use-module (gnu packages enlightenment)
   #:use-module (gnu packages image)
-  #:use-module (gnu packages pdf)
   #:use-module (gnu packages pkg-config))
 
 (define-public etui
@@ -65,9 +65,9 @@
        ("jbig2dec" ,jbig2dec)
        ("libarchive" ,libarchive)
        ("libtiff" ,libtiff)
-       ("mupdf" ,mupdf)
+       ("mupdf" ,my-mupdf)
        ("openjpeg" ,openjpeg)))
     (home-page "https://github.com/vtorri/etui")
-    (synopsis "Multiple Document Library and Viewer")
-    (description "Multiple Document Library and Viewer")
+    (synopsis "Multi-document rendering library using the EFL")
+    (description "Multi-document rendering library using the EFL.")
     (license license:agpl3+)))) ; because we link to mupdf
