@@ -45,8 +45,7 @@
     (build-system go-build-system)
     (arguments
      '(#:import-path "github.com/jedisct1/go-minisign"
-       ;#:install-source? #f
-       ))
+       #:install-source? #f))
     (propagated-inputs
      `(("go-golang-org-x-crypto" ,go-golang-org-x-crypto)))
     (home-page "https://github.com/jedisct1/go-minisign")
@@ -73,11 +72,11 @@
        (("rust-getrandom" ,rust-getrandom-0.1)
         ("rust-rpassword" ,rust-rpassword-4)
         ("rust-scrypt" ,rust-scrypt-0.2))))
-      (home-page "https://github.com/jedisct1/rust-minisign")
-      (synopsis "Crate to sign files and verify signatures")
-      (description
-       "This package provides a crate to sign files and verify signatures.")
-      (license license:expat)))
+    (home-page "https://github.com/jedisct1/rust-minisign")
+    (synopsis "Crate to sign files and verify signatures")
+    (description
+     "This package provides a crate to sign files and verify signatures.")
+    (license license:expat)))
 
 (define-public rust-scrypt-0.2
   (package
