@@ -13,7 +13,6 @@ env:
   - FILE: dfsg/main/cpuid2cpuflags.scm
   - FILE: dfsg/main/ecrire.scm
   - FILE: dfsg/main/enlightenment.scm
-  - FILE: dfsg/main/epour.scm
   - FILE: dfsg/main/equate.scm
   - FILE: dfsg/main/eterm.scm
   - FILE: dfsg/main/etui.scm
