@@ -60,14 +60,14 @@ local filesystem.")
 (define-public python-dropbox
   (package
     (name "python-dropbox")
-    (version "9.4.0")
+    (version "10.2.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "dropbox" version))
         (sha256
          (base32
-          "0qid094qna6bl4zpd08f6snvipwjls1yadacvmwri11djgp0wvj3"))))
+          "11iz83nl7pxf7n434kfkr50hwcd2ryl32z3y4bkq5b8alxnr2wj3"))))
     (build-system python-build-system)
     (arguments '(#:tests? #f))  ; Tests require a network connection.
     (native-inputs
@@ -81,5 +81,5 @@ local filesystem.")
        ("python-urllib3" ,python-urllib3)))
     (home-page "https://www.dropbox.com/developers")
     (synopsis "Official Dropbox API Client")
-    (description "A Python SDK for integrating with the Dropbox API v2.")
+    (description "Python SDK for integrating with the Dropbox API v2.")
     (license license:expat)))
