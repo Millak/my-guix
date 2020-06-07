@@ -43,14 +43,18 @@
     (build-system meson-build-system)
     (arguments
      '(#:tests? #f  ; no tests
+       #:configure-flags '("-Dlogind=true")
        #:phases
        (modify-phases %standard-phases
          (add-after 'unpack 'fix-source
-           (lambda* (#:key inputs #:allow-other-keys)
-             (let ((pam (assoc-ref inputs "pam")))
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let ((pam (assoc-ref inputs "pam"))
+                   (out (assoc-ref outputs "out")))
                (substitute* "meson.build"
                  (("/usr/include/security")
-                  (string-append pam "/include/security")))
+                  (string-append pam "/include/security"))
+                 (("/usr/lib/systemd/system")
+                  (string-append out "/lib/systemd/system")))
                #t)))
          (add-after 'unpack 'set-home-dir
            (lambda _
@@ -71,3 +75,21 @@ working again for logging into X sessions and eventually Wayland sessions!
 
 The project has been resurrected from the dead to live on once again...")
     (license license:gpl3)))
+
+(define-public entrance-git
+  (let ((commit "2c02d1b1d5c7221059f81c5b6c89fe71f23640cc")
+        (revision "1"))
+    (package
+      (inherit entrance)
+      (name "entrance-git")
+      (version (git-version (package-version entrance) revision commit))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://github.com/Obsidian-StudiosInc/entrance")
+                 (commit commit)))
+          (file-name (git-file-name name version))
+          (sha256
+           (base32
+            "172wvlw0fkmqw6s72izgi9jnpjfhx8r0n7v1b71n3gj0sddglvma")))))))
