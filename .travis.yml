@@ -29,7 +29,6 @@ env:
   - FILE: dfsg/main/psd.scm
   - FILE: dfsg/main/signify.scm
   - FILE: dfsg/main/solvitaire.scm
-  - FILE: dfsg/main/vim.scm
   - FILE: dfsg/main/viper.scm
   - FILE: dfsg/contrib/dropbox.scm
 
