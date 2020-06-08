@@ -20,7 +20,6 @@ env:
   - FILE: dfsg/main/minesviiper.scm
   - FILE: dfsg/main/moreutils.scm
   - FILE: dfsg/main/mupdf.scm
-  - FILE: dfsg/main/parallel.scm
   - FILE: dfsg/main/parcimonie.scm
   - FILE: dfsg/main/pinentry-efl.scm
   - FILE: dfsg/main/presentty.scm
@@ -30,6 +29,7 @@ env:
   - FILE: dfsg/main/viper.scm
   - FILE: dfsg/contrib/dropbox.scm
   - FILE: dfsg/contrib/keybase.scm
+  - FILE: dfsg/non-free/parallel.scm
 
 install: |
   travis_retry wget http://guix.gnu.org/install.sh -O guix-install.sh
