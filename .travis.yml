@@ -17,7 +17,6 @@ env:
   - FILE: dfsg/main/eterm.scm
   - FILE: dfsg/main/etui.scm
   - FILE: dfsg/main/iplayer.scm
-  - FILE: dfsg/main/keybase.scm
   - FILE: dfsg/main/minesviiper.scm
   - FILE: dfsg/main/moreutils.scm
   - FILE: dfsg/main/mupdf.scm
@@ -30,6 +29,7 @@ env:
   - FILE: dfsg/main/solvitaire.scm
   - FILE: dfsg/main/viper.scm
   - FILE: dfsg/contrib/dropbox.scm
+  - FILE: dfsg/contrib/keybase.scm
 
 install: |
   travis_retry wget http://guix.gnu.org/install.sh -O guix-install.sh
