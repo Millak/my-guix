@@ -29,8 +29,8 @@
   #:use-module (gnu packages pkg-config))
 
 (define-public etui
-  (let ((commit "fe278033519cec8852d83fe45af677457bde1325")
-        (revision "1"))
+  (let ((commit "2a3b8c85d2ac5ed345a6c36c8c66f4772cc5e80c")
+        (revision "2"))
   (package
     (name "etui")
     (version (git-version "0.0.4" revision commit))
@@ -43,7 +43,7 @@
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "12765smiw31n5bg588r8qgmm69438cv4nby3ss6m621ydv9zx5zm"))))
+          "19bp8xyjm1b1s7v81mfhlq1sr7cw2jy3fxcgbcmsljiah7q6wl6i"))))
     (build-system meson-build-system)
     (arguments
      '(#:configure-flags
@@ -65,7 +65,7 @@
        ("jbig2dec" ,jbig2dec)
        ("libarchive" ,libarchive)
        ("libtiff" ,libtiff)
-       ("mupdf" ,my-mupdf)
+       ("mupdf" ,my-mupdf-1.17)
        ("openjpeg" ,openjpeg)))
     (home-page "https://github.com/vtorri/etui")
     (synopsis "Multi-document rendering library using the EFL")

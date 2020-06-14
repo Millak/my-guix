@@ -44,8 +44,7 @@
          '(begin (delete-file-recursively "vendor") #t))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/jedisct1/go-minisign"
-       #:install-source? #f))
+     '(#:import-path "github.com/jedisct1/go-minisign"))
     (propagated-inputs
      `(("go-golang-org-x-crypto" ,go-golang-org-x-crypto)))
     (home-page "https://github.com/jedisct1/go-minisign")
