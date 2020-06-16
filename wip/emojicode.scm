@@ -1,4 +1,4 @@
-;;; Copyright © 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -21,14 +21,15 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system cmake)
-  #:use-module (gnu packages gcc)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages llvm)
+  #:use-module (gnu packages ninja)
   #:use-module (gnu packages python))
 
 (define-public emojicode
   (package
     (name "emojicode")
-    (version "0.9")
+    (version "1.0-beta.2")
     (source
       (origin
         (method git-fetch)
@@ -38,13 +39,22 @@
           (file-name (git-file-name name version))
           (sha256
            (base32
-            "0wcfip96m749zglv62rgd9bagn1450fqkfxcrffxyq1hxyrrz39x"))))
+            "03jbaawmgpbii599hnzj3xrpn7aksmwjdbh4dig93iq4wxh2qahg"))))
     (build-system cmake-build-system)
     (arguments
      `(#:test-target "tests"
        ;#:configure-flags '((string-append "-DdefaultPackagesDirectory=" ...something
+       #:configure-flags '("-GNinja")
        #:phases
        (modify-phases %standard-phases
+         (replace 'build
+           (lambda _
+             (invoke "ninja" "-j" (number->string (parallel-job-count)))))
+         (replace 'check
+           (lambda* (#:key tests? test-target #:allow-other-keys)
+             (if tests?
+               (invoke "ninja" test-target "-j" (number->string (parallel-job-count)))
+               (format #t "No tests run\n"))))
          (replace 'install
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
@@ -60,15 +70,19 @@
                )
              #t)))))
     (native-inputs
-     `(;("gcc" ,gcc-7)
-       ;("gcc:lib" ,gcc-7 "lib")
-       ("clang" ,clang-6)
-       ("llvm" ,llvm-7)
-       ("python" ,python))) ; for the tests
+     `(("llvm" ,llvm-8)
+       ("ncurses" ,(@ (gnu packages ncurses) ncurses)) ; needed?
+       ("ninja" ,ninja)
+       ("python" ,python)
+       ("zlib" ,zlib)))
+    ;(native-search-paths
+    ;  (list (search-path-specification
+    ;          (variable "EMOJICODE_PACKAGES_PATH")
+    ;          (separator #f)              ;single entry
+    ;          (files '("lib/emojicode")))))
     (home-page "https://www.emojicode.org/")
     (synopsis "World's only programming language that's bursting with emojis")
     (description
-     "Emojicode is an open source, high-level, multi-paradigm programming
-language consisting of emojis.  It features Object-Orientation, Optionals,
-Generics and Closures.")
+     "Emojicode is a high-level, multi-paradigm programming language consisting
+of emojis.  It features Object-Orientation, Optionals, Generics and Closures.")
     (license license:artistic2.0)))
