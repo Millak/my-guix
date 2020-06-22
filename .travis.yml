@@ -20,6 +20,7 @@ env:
   - FILE: dfsg/main/minesviiper.scm
   - FILE: dfsg/main/moreutils.scm
   - FILE: dfsg/main/mupdf.scm
+  - FILE: dfsg/main/newsboat.scm
   - FILE: dfsg/main/parcimonie.scm
   - FILE: dfsg/main/pinentry-efl.scm
   - FILE: dfsg/main/presentty.scm
