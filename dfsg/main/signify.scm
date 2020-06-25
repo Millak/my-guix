@@ -130,10 +130,10 @@
         ("rust-md-5" ,rust-md-5-0.8)
         ("rust-sha2" ,rust-sha2-0.8))))
     (home-page "https://github.com/RustCrypto/MACs")
-    (synopsis
-     "Generic implementation of Hash-based Message Authentication Code (HMAC)")
+    (synopsis "Generic implementation of Hash-based Message Authentication Code")
     (description
-     "Generic implementation of Hash-based Message Authentication Code (HMAC).")
+     "This package provides a generic implementation of @acronym{HMAC,
+Hash-based Message Authentication Code}.")
     (license (list license:expat license:asl2.0))))
 
 (define-public rust-md-5-0.8
@@ -194,7 +194,9 @@
         ("rust-sha2" ,rust-sha2-0.8))))
     (home-page "https://github.com/RustCrypto/password-hashing")
     (synopsis "Generic implementation of PBKDF2")
-    (description "Generic implementation of PBKDF2.")
+    (description "This package contains a collection of password hashing
+algorithms, otherwise known as password-based key derivation functions, written
+in pure Rust.")
     (license (list license:expat license:asl2.0))))
 
 (define-public rust-md5-asm-0.4
@@ -216,7 +218,7 @@
        (("rust-cc" ,rust-cc-1.0))))
     (home-page "https://github.com/RustCrypto/asm-hashes")
     (synopsis "Assembly implementation of MD5 compression function")
-    (description
-     "Assembly implementation of MD5 compression function.")
+    (description "This package contains an assembly implementation of MD5
+compression function.")
     (supported-systems '("x86_64-linux" "i686-linux"))
     (license license:expat)))
