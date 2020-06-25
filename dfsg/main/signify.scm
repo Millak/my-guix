@@ -185,7 +185,7 @@
         ("rust-crypto-mac" ,rust-crypto-mac-0.7)
         ("rust-hmac" ,rust-hmac-0.7)
         ("rust-rand" ,rust-rand-0.5)
-        ("rust-rayon" ,rust-rayon-1.3)
+        ("rust-rayon" ,rust-rayon-1)
         ("rust-sha2" ,rust-sha2-0.8)
         ("rust-subtle" ,rust-subtle-1.0))
        #:cargo-development-inputs
