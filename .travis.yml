@@ -25,7 +25,6 @@ env:
   - FILE: dfsg/main/pinentry-efl.scm
   - FILE: dfsg/main/presentty.scm
   - FILE: dfsg/main/psd.scm
-  - FILE: dfsg/main/signify.scm
   - FILE: dfsg/main/solvitaire.scm
   - FILE: dfsg/main/viper.scm
   - FILE: dfsg/contrib/dropbox.scm
