@@ -28,6 +28,7 @@
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
+  #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages pantheon)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
@@ -220,7 +221,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
 (define-public sweetfish
   (package
     (name "sweetfish")
-    (version "0.0.4")
+    (version "0.0.6")
     (source
       (origin
         (method git-fetch)
@@ -230,7 +231,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "17gh7mh1vg2cg9kh1irsdyza0qig1y7yn3azdlpx6la9qcfakyrb"))))
+          "0hc714jyr42sbwd51zarkhmfdighnhjav20bp6xh5wdbk3qfbrkv"))))
     (build-system cmake-build-system)
     (arguments
      '(#:phases
@@ -243,12 +244,27 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
                (("en_AU.ts") "en_AU.ts en_US.ts"))
              (substitute* "src/Translations/en_US.ts"
                (("en_AU") "en_US"))
-             #t)))
+             #t))
+         ;(add-after 'install 'move-translations
+         ;  (lambda* (#:key outputs #:allow-other-keys)
+         ;    (let* ((out (assoc-ref outputs "out"))
+         ;           (lib (string-append out "/lib"))
+         ;           (en_AU (string-append out "/share/locale/en_AU/LC_MESSAGES"))
+         ;           (en_US (string-append out "/share/locale/en_US/LC_MESSAGES")))
+         ;      (mkdir-p en_AU)
+         ;      (mkdir-p en_US)
+         ;      (rename-file (string-append lib "/sweetfish/locales/en_AU.qm")
+         ;                   (string-append en_AU "/sweetfish.qm"))
+         ;      (rename-file (string-append lib "/sweetfish/locales/en_US.qm")
+         ;                   (string-append en_US "/sweetfish.qm"))
+         ;      (delete-file-recursively lib)
+         ;      #t)))
+         )
        #:tests? #f))    ; No test target.
     (native-inputs
      `(("qttools" ,qttools)))
     (inputs
-     `(;("phonon" ,phonon)
+     `(("phonon" ,phonon)
        ("qtbase" ,qtbase)
        ("qtmultimedia" ,qtmultimedia)))
     (home-page "https://soft.taprix.org/product/sweetfish.html")
