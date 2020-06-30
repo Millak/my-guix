@@ -28,7 +28,7 @@
 (define-public get-iplayer
   (package
     (name "get-iplayer")
-    (version "3.25")
+    (version "3.26")
     (source
       (origin
         (method git-fetch)
@@ -38,7 +38,7 @@
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "1qjcxdpjr7ad82fvv17885ylw6as25dm0ghz7937g287h8y3qwr1"))))
+          "0lsz5hz1ia5j612540rb0f31y7j2k5gf7x5i43l8k06b90wi73d6"))))
     (build-system perl-build-system)
     (arguments
      `(#:tests? #f  ; no tests
