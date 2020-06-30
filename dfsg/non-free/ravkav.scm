@@ -1,4 +1,4 @@
-;;; Copyright © 2017. 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2017. 2018, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -27,7 +27,7 @@
 (define-public ravkavonline
   (package
     (name "ravkavonline")
-    (version "2.4.1")
+    (version "2.5.2")
     (source
       (origin
         (method url-fetch)
@@ -35,7 +35,7 @@
                             "ravkavonline_" version "_amd64.deb"))
         (sha256
          (base32
-          "1hjm05mgg5dyi00d6rjwn58p0v19as6ib8323n94myr0wmzxa7nn"))))
+          "035pjyp7y1pgi1zb1vcp9x97axq6wrnn9cax4m54abh1jk8h89q0"))))
     (build-system gnu-build-system)
     (arguments
      `(#:phases
@@ -44,14 +44,12 @@
          (replace 'unpack
            (lambda* (#:key inputs #:allow-other-keys)
              (let ((source (assoc-ref inputs "source")))
-               (invoke "ar" "x" source "data.tar.gz"))))
-         (add-after 'unpack 'unpack-tarball
-           (lambda _
-             (invoke "tar" "xvf" "data.tar.gz")))
+               (invoke "ar" "x" source "data.tar.gz")
+               (invoke "tar" "xvf" "data.tar.gz"))))
          (replace 'build
            (lambda* (#:key inputs outputs #:allow-other-keys)
              (let* ((ravkav  "usr/bin/ravkavonline")
-                    (desk    "usr/share/applications/ravkavonline.desktop")
+                    (desktop "usr/share/applications/ravkavonline.desktop")
                     (out     (assoc-ref outputs "out"))
                     (libc    (assoc-ref inputs "libc"))
                     (ld-so   (string-append libc ,(glibc-dynamic-linker)))
@@ -59,8 +57,8 @@
                     (rpath   (string-append libpcsc "/lib")))
                  (invoke "patchelf" "--set-rpath" rpath ravkav)
                  (invoke "patchelf" "--set-interpreter" ld-so ravkav)
-                 (substitute* desk
-                   (("usr") out)))
+                 (substitute* desktop
+                   (("/usr") out)))
              #t))
          (replace 'install
            (lambda* (#:key outputs #:allow-other-keys)
