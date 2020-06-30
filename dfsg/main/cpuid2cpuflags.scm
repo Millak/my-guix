@@ -1,4 +1,4 @@
-;;; Copyright © 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -24,7 +24,7 @@
 (define-public cpuid2cpuflags
   (package
     (name "cpuid2cpuflags")
-    (version "8")
+    (version "10")
     (source
       (origin
         (method url-fetch)
@@ -33,7 +33,7 @@
                             "cpuid2cpuflags-" version ".tar.bz2"))
         (sha256
          (base32
-          "18gpgawpwx5xw8kf4mx3g3f85m0j4kwq92vjqa75dirfkhg3d3fv"))))
+          "0sxc4zvcxkh0gbmirq9x8w4li2f2iqds1jpcgxisysrs3lyblwhx"))))
     (build-system gnu-build-system)
     (home-page "https://github.com/mgorny/cpuid2cpuflags")
     (synopsis "Tool to generate CPU_FLAGS_* for your CPU")
