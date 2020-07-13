@@ -33,7 +33,7 @@
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/Obsidian-StudiosInc/ecrire.git")
+               (url "https://github.com/Obsidian-StudiosInc/ecrire")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256

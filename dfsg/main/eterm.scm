@@ -39,7 +39,7 @@
         (origin
           (method git-fetch)
           (uri (git-reference
-                 (url "https://git.enlightenment.org/apps/eterm.git")
+                 (url "https://git.enlightenment.org/apps/eterm")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256

@@ -34,7 +34,7 @@
          (base32
           "00slyi0aw03cp5s4c1xhavn9i1gz7d6d4cmv0g0dd3nx7m1ba3y0"))))
     (build-system emacs-build-system)
-    (home-page "https://gitlab.com/ukaszg/aria2.git")
+    (home-page "https://gitlab.com/ukaszg/aria2")
     (synopsis "Major mode for controlling aria2")
     (description "This is aria2, a major mode for controlling aria2c downloader
 
@@ -57,10 +57,10 @@ This mode tries to work well with evil-mode, just set aria2-add-evil-quirks to t
         (origin
           (method git-fetch)
           (uri (git-reference
-                 (url "https://github.com/LdBeth/aria2.el.git")
+                 (url "https://github.com/LdBeth/aria2.el")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256
            (base32
             "1i4iggk8n56ln0blrilpbwp95ayr11ayxyxypna0nx2yyv86pj50"))))
-      (home-page "https://github.com/LdBeth/aria2.el.git"))))
+      (home-page "https://github.com/LdBeth/aria2.el"))))

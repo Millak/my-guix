@@ -31,7 +31,7 @@
         (origin
           (method git-fetch)
           (uri (git-reference
-                 (url "https://github.com/girst/solvitaire.git")
+                 (url "https://github.com/girst/solvitaire")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256

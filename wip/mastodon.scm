@@ -50,7 +50,7 @@
         (origin
           (method git-fetch)
           (uri (git-reference
-                 (url "https://github.com/enkiv2/fern.git")
+                 (url "https://github.com/enkiv2/fern")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256
@@ -167,7 +167,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/bleakgrey/tootle.git")
+               (url "https://github.com/bleakgrey/tootle")
                (commit version)))
                ;(commit "d8fc951fb0c0c0f85a3869c6abfc79b2c3d83215")))
         (file-name (git-file-name name version))
