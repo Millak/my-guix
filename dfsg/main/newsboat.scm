@@ -111,7 +111,7 @@
   (package
     (inherit newsboat-2.19)
     (name "newsboat")
-    (version "2.20")
+    (version "2.20.1")
     (source
       (origin
         (method url-fetch)
@@ -119,7 +119,7 @@
                             "/newsboat-" version ".tar.xz"))
         (sha256
          (base32
-          "00p4lwawk8gazwz1bsq23lvf65lq4fawnlc61fbz129slgaxb9yk"))))
+          "0rimjikni96m52vhymgsg1b9g99af6ggyzd1lpvhgqsznxwj0y42"))))
     (arguments
      (substitute-keyword-arguments (package-arguments newsboat-2.19)
        ((#:cargo-inputs _)
