@@ -23,21 +23,18 @@
   #:use-module (guix build-system meson)
   #:use-module (guix build-system python)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (gnu packages check)
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages kde-frameworks)
+  #:use-module (gnu packages mastodon)
   #:use-module (gnu packages pantheon)
   #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages python)
   #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages python-web)
-  #:use-module (gnu packages python-xyz)
-  #:use-module (gnu packages qt)
-  #:use-module (gnu packages time))
+  #:use-module (gnu packages qt))
 
 (define-public fern
   (let ((commit "46067d64ffcc999ce8fe1a4feac76e45b3372438")
@@ -67,7 +64,7 @@
                  (setenv "PREFIX" out)
                  (invoke "make" "install"))))
            (delete 'build))))
-      (propagated-inputs
+      (inputs
        `(("mastodon-py" ,python2-mastodon-py)))
       (home-page "https://github.com/enkiv2/fern")
       (synopsis "Curses-based mastodon client")
@@ -75,43 +72,7 @@
 news readers & pine, with an emphasis on getting to 'timeline zero'.")
       (license license:bsd-3))))
 
-(define-public python-mastodon-py
-  (package
-    (name "python-mastodon-py")
-    (version "1.5.1")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "Mastodon.py" version))
-        (sha256
-         (base32
-          "1vikvkzcij2gd730cssigxi38vlmzqmwdy58r3y2cwsxifnxpz9a"))))
-    (build-system python-build-system)
-    (propagated-inputs
-     `(("python-blurhash" ,python-blurhash)
-       ("python-dateutil" ,python-dateutil)
-       ("python-decorator" ,python-decorator)
-       ("python-magic" ,python-magic)
-       ("python-pytz" ,python-pytz)
-       ("python-requests" ,python-requests)
-       ("python-six" ,python-six)))
-    (native-inputs
-     `(("python-blurhash" ,python-blurhash)
-       ("python-cryptography" ,python-cryptography)
-       ("python-http-ece" ,python-http-ece)
-       ("python-pytest" ,python-pytest)
-       ("python-pytest-cov" ,python-pytest-cov)
-       ("python-pytest-mock" ,python-pytest-mock)
-       ("python-pytest-runner" ,python-pytest-runner)
-       ("python-pytest-vcr" ,python-pytest-vcr)
-       ("python-requests-mock" ,python-requests-mock)
-       ("python-vcrpy" ,python-vcrpy)))
-    (home-page "https://github.com/halcy/Mastodon.py")
-    (synopsis "Python wrapper for the Mastodon API")
-    (description
-     "This package provides a python wrapper for the Mastodon API.")
-    (license license:expat)))
-
+;; python-mastodon-py upstreamed in mastodon.scm
 (define-public python2-mastodon-py
   (package-with-python2 python-mastodon-py))
 
@@ -119,39 +80,7 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
 (define-public python2-blurhash
   (package-with-python2 python-blurhash))
 
-(define-public python-http-ece
-  (package
-    (name "python-http-ece")
-    (version "1.1.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/web-push-libs/encrypted-content-encoding")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "0bp4cc0xc123i72h80ax3qz3ixfwx3j7pw343kc7i6kdvfi8klx7"))))
-    (build-system python-build-system)
-    (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'change-directory
-           (lambda _ (chdir "python") #t)))))
-    (propagated-inputs
-     `(("python-cryptography" ,python-cryptography)))
-    (native-inputs
-     `(("python-coverage" ,python-coverage)
-       ("python-flake8" ,python-flake8)
-       ("python-mock" ,python-mock)
-       ("python-nose" ,python-nose)))
-    (home-page "https://github.com/web-push-libs/encrypted-content-encoding")
-    (synopsis "Encrypted Content Encoding for HTTP")
-    (description
-     "Encrypted Content Encoding for HTTP.")
-    (license license:expat)))
-
+;; python-http-ece upstreamed in python-web.scm
 (define-public python2-http-ece
   (package-with-python2 python-http-ece))
 
