@@ -60,14 +60,14 @@ local filesystem.")
 (define-public python-dropbox
   (package
     (name "python-dropbox")
-    (version "10.2.0")
+    (version "10.3.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "dropbox" version))
         (sha256
          (base32
-          "11iz83nl7pxf7n434kfkr50hwcd2ryl32z3y4bkq5b8alxnr2wj3"))))
+          "082ylb6xn8xzix61lv2n8ya1k0gd494kr9vr2ys8ldbwxq9nyaaz"))))
     (build-system python-build-system)
     (arguments '(#:tests? #f))  ; Tests require a network connection.
     (native-inputs
