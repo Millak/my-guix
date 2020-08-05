@@ -9,7 +9,6 @@ addons:
 
 env:
   - FILE: dfsg/main/brendan_gregg.scm
-  - FILE: dfsg/main/confclerk.scm
   - FILE: dfsg/main/cpuid2cpuflags.scm
   - FILE: dfsg/main/dpkg.scm
   - FILE: dfsg/main/ecrire.scm
