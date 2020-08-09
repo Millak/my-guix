@@ -322,4 +322,4 @@ http library.")
     (synopsis "Wrapper to use Mycroft Precise Wake Word Listener")
     (description
      "Wrapper to use Mycroft Precise Wake Word Listener")
-    (license license:asl2.0))
+    (license license:asl2.0)))
