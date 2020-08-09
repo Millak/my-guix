@@ -25,12 +25,13 @@
   #:use-module (gnu packages audio)
   #:use-module (gnu packages check)
   #:use-module (gnu packages freedesktop)
+  #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-web)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages speech)
   #:use-module (gnu packages sphinx)
-  #:use-module (gnu packages xiph)
-  )
+  #:use-module (gnu packages time)
+  #:use-module (gnu packages xiph))
 
 (define-public mycroft-core
   (package
@@ -56,17 +57,17 @@
        ("python-PyAudio", python-pyaudio)
        ("python-pyee" ,python-pyee)
        ("python-SpeechRecognition" ,python-speechrecognition)
-       ;("python-tornado" ,python-tornado)
-       ;("python-websocket-client" ,python-websocket-client)
-       ;("python-requests-futures" ,python-requests-futures)
-       ;("python-pyserial" ,python-pyserial)
-       ;("python-psutil" ,python-psutil)
+       ("python-tornado" ,python-tornado)
+       ("python-websocket-client" ,python-websocket-client)
+       ("python-requests-futures" ,python-requests-futures)
+       ("python-pyserial" ,python-pyserial)
+       ("python-psutil" ,python-psutil)
        ;("python-pocketsphinx" ,python-pocketsphinx)
-       ;("python-inflection" ,python-inflection)
-       ;("python-pillow" ,python-pillow)
-       ;("python-dateutil" ,python-dateutil)
-       ;("python-fasteners" ,python-fasteners)
-       ;("python-PyYAML" ,python-pyyaml)
+       ("python-inflection" ,python-inflection)
+       ("python-pillow" ,python-pillow)
+       ("python-dateutil" ,python-dateutil)
+       ("python-fasteners" ,python-fasteners)
+       ("python-PyYAML" ,python-pyyaml)
 
        ;("python-lingua-franca" ,python-lingua-franca)
        ;("python-msm" ,python-msm)
@@ -75,7 +76,7 @@
        ;("python-padatious" ,python-padatious)
        ;("python-fann2" ,python-fann)
        ;("python-padaos" ,python-padaos)
-       ;("python-precise-runner" ,python-precise-runner)
+       ("python-precise-runner" ,python-precise-runner)
        ("python-petact" ,python-petact)
        ("python-pyxdg" ,python-pyxdg-0.26)
 
@@ -206,6 +207,7 @@ validation of Google Translate.")
     (build-system python-build-system)
     (native-inputs
      `(("python-mock" ,python-mock)
+       ("python-pytest" ,python-pytest)
        ("python-pytest-asyncio" ,python-pytest-asyncio)
        ("python-pytest-runner" ,python-pytest-runner)
        ("python-pytest-trio" ,python-pytest-trio)
@@ -219,122 +221,6 @@ the @code{EventEmitter} class from Node.js.  It also supplies a number of
 subclasses with added support for async and threaded programming in Python, such
 as async/await as seen in Python 3.5+.")
     (license license:expat)))
-
-(define-public python-pytest-trio
-  (package
-    (name "python-pytest-trio")
-    (version "0.6.0")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "pytest-trio" version))
-        (sha256
-         (base32
-          "1zm8didm9h5jkqhghl9bvqs7kr7sjci282c7grhk6yhpzn8a9w4v"))))
-    (build-system python-build-system)
-    (propagated-inputs
-     `(("python-async-generator" ,python-async-generator)
-       ("python-outcome" ,python-outcome)
-       ("python-pytest" ,python-pytest)
-       ("python-trio" ,python-trio)))
-    (native-inputs
-     `(("python-hypothesis" ,python-hypothesis)))
-    (home-page "https://github.com/python-trio/pytest-trio")
-    (synopsis "Pytest plugin for trio")
-    (description "This is a pytest plugin to help you test projects that use
-Trio, a library for concurrency and async I/O in Python.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public python-outcome
-  (package
-    (name "python-outcome")
-    (version "1.0.1")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "outcome" version))
-        (sha256
-         (base32
-          "0vxn04vspmlkkyijjkjnsc46f93ki8g62hr7ag10zpd7ic324y7w"))))
-    (build-system python-build-system)
-    (propagated-inputs
-     `(("python-attrs" ,python-attrs)))
-    (native-inputs
-     `(("python-async-generator" ,python-async-generator)
-       ("python-pytest" ,python-pytest)))
-    (home-page "https://github.com/python-trio/outcome")
-    (synopsis "Capture the outcome of Python function calls")
-    (description "Capture the outcome of Python function calls.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public python-trio
-  (package
-    (name "python-trio")
-    (version "0.16.0")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "trio" version))
-        (sha256
-         (base32
-          "0g6gkwz6i05rm9ym4l4imxakzld7qcgxhb21kprilchcav87s1nz"))))
-    (build-system python-build-system)
-    (arguments '(#:tests? #f))  ; AttributeError: module 'select' has no attribute 'kqueue'
-    (propagated-inputs
-     `(("python-async-generator" ,python-async-generator)
-       ("python-attrs" ,python-attrs)
-       ("python-idna" ,python-idna)
-       ("python-outcome" ,python-outcome)
-       ("python-sniffio" ,python-sniffio)
-       ("python-sortedcontainers" ,python-sortedcontainers)))
-    (home-page "https://github.com/python-trio/trio")
-    (synopsis "Python library for async concurrency and I/O")
-    (description
-     "A friendly Python library for async concurrency and I/O.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public python-sniffio
-  (package
-    (name "python-sniffio")
-    (version "1.1.0")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "sniffio" version))
-        (sha256
-         (base32
-          "08bsp2pp2dxzn9yzcafwzw8jlm0jf50as0ix8vfhxzk91w810f4f"))))
-    (build-system python-build-system)
-    (native-inputs
-     `(("python-curio" ,python-curio)
-       ("python-pytest" ,python-pytest)))
-    (home-page "https://github.com/python-trio/sniffio")
-    (synopsis "Sniff out which async library your code is running under")
-    (description
-     "Sniff out which async library your code is running under.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public python-curio
-  (package
-    (name "python-curio")
-    (version "1.2")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "curio" version))
-        (sha256
-         (base32
-          "16wkww6kh511b9bzsfhpvrv0766cc6ssgbzz4lgpjnrzzgx21wwh"))))
-    (build-system python-build-system)
-    (native-inputs
-     `(("python-pytest" ,python-pytest)
-       ("python-sphinx" ,python-sphinx)))
-    (home-page "https://github.com/dabeaz/curio")
-    (synopsis "Coroutine-based library for concurrent Python systems programming")
-    (description "Curio is a coroutine-based library for concurrent Python
-systems programming.  It provides standard programming abstractions such as as
-tasks, sockets, files, locks, and queues.")
-    (license license:bsd-3)))
 
 (define-public python-speechrecognition
   (package
@@ -359,25 +245,81 @@ tasks, sockets, files, locks, and queues.")
             #t))))
     (build-system python-build-system)
     (arguments
-      ;; alternate tests fail because it wants internet connectivity
-     '(#:phases
+     ;; alternate tests fail because it wants internet connectivity
+     '(#:tests? #f
+       #:phases
        (modify-phases %standard-phases
          (replace 'check
-           (lambda _
+           (lambda* (#:key tests? #:allow-other-keys)
              ;; standard tests fail because there's no attached microphone
-             (invoke "python" "-m" "unittest" "discover" "--verbose"))))))
+             (if tests?
+               (invoke "python" "-m" "unittest" "discover" "--verbose")
+               #t))))))
     (propagated-inputs
-     `(
-       ("python-pyaudio" ,python-pyaudio)
-       ))
+     `(("python-pyaudio" ,python-pyaudio)))
     (inputs
-     `(
-       ("flac" ,flac)
+     `(("flac" ,flac)
        ("pocketsphinx" ,pocketsphinx)
-       ("sphinxbase" ,sphinxbase)
-       ))
+       ("sphinxbase" ,sphinxbase)))
     (home-page "https://github.com/Uberi/speech_recognition")
     (synopsis "Speech recognition module for Python")
     (description "Library for performing speech recognition, with support for
 several engines and APIs, online and offline.")
     (license license:bsd-3)))
+
+(define-public python-requests-futures
+  (package
+    (name "python-requests-futures")
+    (version "1.0.0")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "requests-futures" version))
+        (sha256
+         (base32
+          "0j611g1wkn98qp2b16kqz7lfz29a153jyfm02r3h8n0rpw17am1m"))))
+    (build-system python-build-system)
+    (arguments
+     '(#:tests? #f))    ; Tests require network access.
+    (propagated-inputs
+     `(("python-requests" ,python-requests)))
+    (home-page
+     "https://github.com/ross/requests-futures")
+    (synopsis "Asynchronous Python HTTP for Humans")
+    (description "This package provides a small add-on for the Python requests
+http library.")
+    (license license:asl2.0)))
+
+(define-public python-precise-runner
+  (package
+    (name "python-precise-runner")
+    (version "0.3.1")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "precise-runner" version))
+        (sha256
+         (base32
+          "03dqjvw0mafxs5hakhvb3ah8f157n8632a54spss7w2bzc4l4ihs"))))
+    (build-system python-build-system)
+    (propagated-inputs
+     `(("python-pyaudio" ,python-pyaudio)))
+    ;; 'numpy==1.16',
+    ;; 'tensorflow>=1.13,<1.14',  # Must be on piwheels
+    ;; 'sonopy',
+    ;; 'pyaudio',
+    ;; 'keras<=2.1.5',
+    ;; 'h5py',
+    ;; 'wavio',
+    ;; 'typing',
+    ;; 'prettyparse>=1.1.0',
+    ;; 'precise-runner',
+    ;; 'attrs',
+    ;; 'fitipy<1.0',
+    ;; 'speechpy-fast',
+    ;; 'pyache'
+    (home-page "https://github.com/MycroftAI/mycroft-precise")
+    (synopsis "Wrapper to use Mycroft Precise Wake Word Listener")
+    (description
+     "Wrapper to use Mycroft Precise Wake Word Listener")
+    (license license:asl2.0))
