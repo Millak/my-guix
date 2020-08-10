@@ -35,7 +35,7 @@
         (origin
           (method git-fetch)
           (uri (git-reference
-                 (url "https://git.enlightenment.org/apps/equate")
+                 (url "https://git.enlightenment.org/apps/equate.git")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256
