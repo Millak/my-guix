@@ -7,40 +7,81 @@ addons:
     packages:
       - gnupg wget grep sed
 
-env:
-  - FILE: dfsg/main/brendan_gregg.scm
-  - FILE: dfsg/main/cpuid2cpuflags.scm
-  - FILE: dfsg/main/dpkg.scm
-  - FILE: dfsg/main/ecrire.scm
-  - FILE: dfsg/main/enlightenment.scm
-  - FILE: dfsg/main/equate.scm
-  - FILE: dfsg/main/eterm.scm
-  - FILE: dfsg/main/etui.scm
-  - FILE: dfsg/main/minesviiper.scm
-  - FILE: dfsg/main/moreutils.scm
-  - FILE: dfsg/main/mupdf.scm
-  - FILE: dfsg/main/parcimonie.scm
-  - FILE: dfsg/main/pinentry-efl.scm
-  - FILE: dfsg/main/pipx.scm
-  - FILE: dfsg/main/psd.scm
-  - FILE: dfsg/main/reprepro.scm
-  - FILE: dfsg/main/solvitaire.scm
-  - FILE: dfsg/main/viper.scm
-  - FILE: dfsg/contrib/dropbox.scm
-  - FILE: dfsg/contrib/keybase.scm
-  - FILE: dfsg/non-free/parallel.scm
-
-install: |
-  travis_retry wget http://guix.gnu.org/install.sh -O guix-install.sh
-  travis_retry wget "https://sv.gnu.org/people/viewgpg.php?user_id=15145" -qO - | gpg --import -
-  echo -e 'y\ny' | sudo bash guix-install.sh
-  sudo mkdir -p /var/guix/profiles/per-user/travis
-  sudo chown travis:travis /var/guix/profiles/per-user/travis
-  guix pull --fallback
-
-script: |
-  export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
-  GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public $FILE | cut -f2 -d' ')
+jobs:
+  include:
+    - stage: prepare
+      name: "Prepare Guix in the environment"
+      script: |
+        travis_retry wget http://guix.gnu.org/install.sh -O guix-install.sh
+        travis_retry wget "https://sv.gnu.org/people/viewgpg.php?user_id=15145" -qO - | gpg --import -
+        echo -e 'y\ny' | sudo bash guix-install.sh
+        sudo mkdir -p /var/guix/profiles/per-user/travis
+        sudo chown travis:travis /var/guix/profiles/per-user/travis
+        travis_retry guix pull --fallback
+    - stage: build
+      script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/brendan_gregg.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/cpuid2cpuflags.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/dpkg.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/ecrire.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/enlightenment.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/equate.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/eterm.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/etui.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/minesviiper.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/moreutils.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/mupdf.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/parcimonie.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/pinentry-efl.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/pipx.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/psd.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/reprepro.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/solvitaire.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/main/viper.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/contrib/dropbox.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/contrib/keybase.scm | cut -f2 -d' ')
+    - script: |
+        export PATH="~/.config/guix/current/bin${PATH:+:}$PATH"
+        GUIX_PACKAGE_PATH=. guix build --no-grafts --fallback $(grep define-public dfsg/non-free/parallel.scm | cut -f2 -d' ')
 
 notifications:
   email:
