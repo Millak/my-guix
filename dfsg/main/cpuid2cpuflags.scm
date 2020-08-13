@@ -24,7 +24,7 @@
 (define-public cpuid2cpuflags
   (package
     (name "cpuid2cpuflags")
-    (version "10")
+    (version "11")
     (source
       (origin
         (method url-fetch)
@@ -33,7 +33,7 @@
                             "cpuid2cpuflags-" version ".tar.bz2"))
         (sha256
          (base32
-          "0sxc4zvcxkh0gbmirq9x8w4li2f2iqds1jpcgxisysrs3lyblwhx"))))
+          "0v63sdch996bfmy6l6hkmqdas2akz3f5w82my4jn5y4h3ss22jsw"))))
     (build-system gnu-build-system)
     (home-page "https://github.com/mgorny/cpuid2cpuflags")
     (synopsis "Tool to generate CPU_FLAGS_* for your CPU")
