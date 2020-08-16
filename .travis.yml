@@ -27,7 +27,6 @@ env:
   - FILE: dfsg/main/reprepro.scm
   - FILE: dfsg/main/solvitaire.scm
   - FILE: dfsg/main/viper.scm
-  - FILE: dfsg/contrib/dropbox.scm
   - FILE: dfsg/contrib/keybase.scm
   - FILE: dfsg/non-free/parallel.scm
 
