@@ -24,6 +24,7 @@
   #:use-module (guix build-system python)
   #:use-module (gnu packages audio)
   #:use-module (gnu packages check)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-web)
@@ -31,6 +32,7 @@
   #:use-module (gnu packages speech)
   #:use-module (gnu packages sphinx)
   #:use-module (gnu packages time)
+  #:use-module (gnu packages version-control)
   #:use-module (gnu packages xiph))
 
 (define-public mycroft-core
@@ -69,8 +71,8 @@
        ("python-fasteners" ,python-fasteners)
        ("python-PyYAML" ,python-pyyaml)
 
-       ;("python-lingua-franca" ,python-lingua-franca)
-       ;("python-msm" ,python-msm)
+       ("python-lingua-franca" ,python-lingua-franca)
+       ("python-msm" ,python-msm)
        ;("python-msk" ,python-msk)
        ;("python-adapt-parser" ,python-adapt-parser)
        ;("python-padatious" ,python-padatious)
@@ -322,4 +324,119 @@ http library.")
     (synopsis "Wrapper to use Mycroft Precise Wake Word Listener")
     (description
      "Wrapper to use Mycroft Precise Wake Word Listener")
+    (license license:asl2.0)))
+
+(define-public python-lingua-franca
+  (package
+    (name "python-lingua-franca")
+    (version "0.2.2")
+    (source
+      (origin
+        ;; Some files are missing from PyPi.
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/MycroftAI/lingua-franca")
+               (commit version)))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "08fw9kz8760qpzm8bnbpal7kpkxk9dfjzcg3bdmk0pisymjg7ysx"))))
+    (build-system python-build-system)
+    (arguments
+     '(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-dependency-versions
+           (lambda _
+             (substitute* "requirements.txt"
+               (("==.*") "\n"))
+             #t)))))
+    (propagated-inputs
+     `(("python-dateutil" ,python-dateutil)))
+    (home-page "https://github.com/MycroftAI/lingua-franca")
+    (synopsis "Multilingual text parsing and formatting library")
+    (description
+     "Mycroft's multilingual text parsing and formatting library.")
+    (license license:asl2.0)))
+
+(define-public python-msm
+  (package
+    (name "python-msm")
+    (version "0.8.8")
+    (source
+      (origin
+        ;; Tests not included in release tarball.
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/MycroftAI/mycroft-skills-manager")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "0y2c8dyl3d59p1v49sr31wgrvjx0sxsqvsyhm2k55amkh7pxalnw"))))
+    (build-system python-build-system)
+    (arguments
+     '(#:tests? #f  ; Tests try to access the internet.
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'check
+           (lambda* (#:key inputs outputs tests? #:allow-other-keys)
+             (add-installed-pythonpath inputs outputs)
+             (if tests?
+               (invoke "pytest" "tests")
+               #t))))))
+    (propagated-inputs
+     `(("python-fasteners" ,python-fasteners)
+       ("python-gitpython" ,python-gitpython)
+       ("python-lazy" ,python-lazy)
+       ("python-pako" ,python-pako)
+       ("python-pyyaml" ,python-pyyaml)
+       ("python-requests" ,python-requests)))
+    (native-inputs
+     `(("python-pytest" ,python-pytest)))
+    (home-page "https://github.com/MycroftAI/mycroft-skills-manager")
+    (synopsis "Mycroft Skills Manager")
+    (description "Mycroft Skills Manager is a command line tool and a Python
+module for interacting with the mycroft-skills repository.  It allows querying
+the repository for information (skill listings, skill meta data, etc) and of
+course installing and removing skills from the system.")
+    (license license:asl2.0)))
+
+(define-public python-lazy
+  (package
+    (name "python-lazy")
+    (version "1.4")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "lazy" version ".zip"))
+        (sha256
+         (base32
+          "0hsvbzv92qv0qsq03idwxhvwpb83fjj521ij6mabh3qkmfjjfv9c"))))
+    (build-system python-build-system)
+    (native-inputs `(("unzip" ,unzip)))
+    (home-page "https://github.com/stefanholek/lazy")
+    (synopsis "Lazy attributes for Python objects")
+    (description
+     "Lazy attributes for Python objects")
+    (license license:bsd-2)))
+
+(define-public python-pako
+  (package
+    (name "python-pako")
+    (version "0.2.3")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "pako" version))
+        (sha256
+         (base32
+          "0y4pllaii6lc3859s7789iv9wgbsqk0khx7kfhlz19m2qpc5zrbb"))))
+    (build-system python-build-system)
+    (propagated-inputs
+     `(("python-appdirs" ,python-appdirs)))
+    (home-page "https://github.com/MycroftAI/pako")
+    (synopsis
+     "The universal package manager library")
+    (description
+     "The universal package manager library")
     (license license:asl2.0)))
