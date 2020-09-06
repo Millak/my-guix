@@ -336,30 +336,6 @@ a from-scratch implementation of the kernel-userspace communication protocol,
 and does not use the C library from the project called FUSE.")
       (license license:bsd-3))))
 
-(define-public go-github-com-tv42-httpunix
-  (let ((commit "2ba4b9c3382c77e7b9ea89d00746e6111d142a22")
-        (revision "1"))
-    (package
-      (name "go-github-com-tv42-httpunix")
-      (version (git-version "0.0.0" revision commit))
-      (source
-       (origin
-         (method git-fetch)
-         (uri (git-reference
-               (url "https://github.com/tv42/httpunix")
-               (commit commit)))
-         (file-name (git-file-name name version))
-         (sha256
-          (base32
-           "0xbwpip2hsfhd2kd878jn5ndl8y1i9658lggha4x3xb5m1rsds9w"))))
-      (build-system go-build-system)
-      (arguments
-       '(#:import-path "github.com/tv42/httpunix"))
-      (home-page "https://github.com/tv42/httpunix")
-      (synopsis "Go library to talk HTTP over Unix domain sockets")
-      (description "Go library to talk HTTP over Unix domain sockets/")
-      (license license:expat))))
-
 (define-public go-camlistore-org-pkg-buildinfo
   (let ((commit "c55c8602d3cea4511081630e17bca7ed601abc44")
         (revision "1"))
