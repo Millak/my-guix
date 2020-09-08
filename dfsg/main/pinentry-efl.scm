@@ -1,4 +1,4 @@
-;;; Copyright © 2018 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -28,9 +28,7 @@
       (substitute-keyword-arguments (package-arguments pinentry-efl)
         ((#:configure-flags _)
          `(list "--enable-pinentry-efl"
-                "--enable-pinentry-tty"
-                "--enable-pinentry-curses"
-                "--enable-pinentry-emacs"))
+                "--enable-fallback-curses"))
         ((#:phases phases)
          `(modify-phases ,phases
             (add-after 'install 'fix-symlink
