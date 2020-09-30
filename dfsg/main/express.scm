@@ -15,7 +15,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip express)
+(define-module (dfsg main express)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (guix packages)
@@ -50,6 +50,14 @@
              (lambda _
                ;; FATAL: Cannot create run dir '/homeless-shelter/.run' - errno=2
                (setenv "HOME" "/tmp")
+               #t))
+           (add-after 'configure 'unbundle-fonts
+             ;; Ideally we'd do this unbundling in a snippet but it has to be
+             ;; after the configure(!!) phase.
+             (lambda _
+               (delete-file-recursively "data/fonts")
+               (substitute* "data/Makefile"
+                 (("fonts") ""))
                #t)))))
       (native-inputs
        `(("autoconf" ,autoconf)

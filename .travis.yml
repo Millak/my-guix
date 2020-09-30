@@ -16,6 +16,7 @@ env:
   - FILE: dfsg/main/equate.scm
   - FILE: dfsg/main/eterm.scm
   - FILE: dfsg/main/etui.scm
+  - FILE: dfsg/main/express.scm
   - FILE: dfsg/main/minesviiper.scm
   - FILE: dfsg/main/moreutils.scm
   #- FILE: dfsg/main/mupdf.scm  # cannot find 'my-mupdf-1.17'
