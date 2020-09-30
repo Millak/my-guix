@@ -50,7 +50,7 @@
      `(("python-efl" ,python-efl)
        ("python-pyxdg" ,python-pyxdg)))
     (home-page "https://github.com/DaveMDS/edone")
-    (synopsis "GTD apptlication written in efl")
+    (synopsis "GTD apptlication written in EFL")
     (description "Edone is fully compliant with the Todo.txt specifications,
 this basically means that your todo items are stored in a simple and readable
 text file and that you can use any other compliant client to read/edit your

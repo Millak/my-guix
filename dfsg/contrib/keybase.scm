@@ -196,8 +196,7 @@
                (lambda (directory)
                  (invoke "go" "install"
                          "-tags" "production"
-                         ;"-v"
-                         "-x" "-ldflags=-s -w"
+                         "-v" "-x" "-ldflags=-s -w"
                          directory))
                (list import-path
                      "github.com/keybase/client/go/kbfs/kbfsfuse"
@@ -210,8 +209,7 @@
              (for-each
                (lambda (directory)
                  (invoke "go" "test"
-                         ;"-v"
-                         "-x" "-ldflags=-s -w"
+                         "-v" "-x" "-ldflags=-s -w"
                          directory))
                (list import-path
                      "github.com/keybase/client/go/kbfs/kbfsfuse"

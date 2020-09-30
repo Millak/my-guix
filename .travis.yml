@@ -18,7 +18,7 @@ env:
   - FILE: dfsg/main/etui.scm
   - FILE: dfsg/main/minesviiper.scm
   - FILE: dfsg/main/moreutils.scm
-  - FILE: dfsg/main/mupdf.scm
+  #- FILE: dfsg/main/mupdf.scm  # cannot find 'my-mupdf-1.17'
   - FILE: dfsg/main/parcimonie.scm
   - FILE: dfsg/main/pifs.scm
   - FILE: dfsg/main/pinentry-efl.scm
@@ -27,7 +27,7 @@ env:
   - FILE: dfsg/main/reprepro.scm
   - FILE: dfsg/main/solvitaire.scm
   - FILE: dfsg/main/viper.scm
-  - FILE: dfsg/contrib/keybase.scm
+    # - FILE: dfsg/contrib/keybase.scm  # log length too long
   - FILE: dfsg/non-free/parallel.scm
 
 install: |
