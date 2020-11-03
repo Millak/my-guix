@@ -29,7 +29,7 @@
 (define-public keybase
   (package
     (name "keybase")
-    (version "5.5.1")
+    (version "5.5.2")
     (source
       (origin
         (method url-fetch)
@@ -38,7 +38,7 @@
                version "/keybase-v" version ".tar.xz"))
         (sha256
          (base32
-          "0x683v50wq8b2rk4nv2gmchav71fxnqvkfglrkzixvwcqqwvy2m7"))
+          "006lqqrqag018a27aix5338faf2054h0bj7l3vmja0xm4knc0cwf"))
         (modules '((guix build utils)))
         (snippet
          '(begin
@@ -80,6 +80,7 @@
               ;(delete-file-recursively "github.com/glycerine/go-unsnap-stream")
               ;(delete-file-recursively "github.com/go-errors/errors")
               ;(delete-file-recursively "github.com/go-ole/go-ole")
+              ;(delete-file-recursively "github.com/go-sql-driver/mysql")
               (delete-file-recursively "github.com/gobwas")
               ;(delete-file-recursively "github.com/gocolly/colly")
               (delete-file-recursively "github.com/golang/groupcache/lru")
