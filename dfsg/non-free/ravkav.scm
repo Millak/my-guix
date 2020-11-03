@@ -1,4 +1,4 @@
-;;; Copyright © 2017. 2018, 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2017, 2018, 2020 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -68,10 +68,9 @@
                  (install-file "share/applications/ravkavonline.desktop"
                                (string-append out "/share/applications"))
                  (install-file "share/doc/ravkavonline/LICENSE.txt"
-                               (string-append out "/share/doc/ravkavonline")))
+                               (string-append out "/share/doc/" ,name "-" ,version)))
                #t))))
        #:substitutable? #f
-       #:strip-binaries? #f
        #:tests? #f))
     (native-inputs
      `(("patchelf" ,patchelf)))
