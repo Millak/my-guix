@@ -26,8 +26,8 @@
   #:use-module (gnu packages xml))
 
 (define-public rdrview
-  (let ((commit "00207dc516b035ae7760d005bd559077cc18e0b2")
-        (revision "0"))
+  (let ((commit "cb15d7f31199966b539228b104c519167e32a80d")
+        (revision "1"))
     (package
       (name "rdrview")
       (version (git-version "0.0.0" revision commit))
@@ -40,7 +40,7 @@
           (file-name (git-file-name name version))
           (sha256
            (base32
-            "0nkcsyl923zzrby8rdgsh97nzp7kg70j063frxh6bh3ikjd5sjgq"))))
+            "0rp6id1lirpbi96f5xp14b1x8y6rdvn406dbzh6kbd0d7sw3yahr"))))
       (build-system gnu-build-system)
       (arguments
        `(#:tests? #f              ; Test suite needs work.
@@ -49,15 +49,6 @@
          #:phases
          (modify-phases %standard-phases
            (delete 'configure)    ; no configure script.
-           (add-after 'unpack 'patch-source
-             ;; See https://github.com/eafer/rdrview/pull/2
-             (lambda* (#:key outputs #:allow-other-keys)
-               (let ((out (assoc-ref outputs "out")))
-                 (substitute* "Makefile"
-                   (("/usr") "${PREFIX}")
-                   (("^BINDIR") "PREFIX = /usr/local\nBINDIR")
-                   (("^clean") "check:\n\tcd tests && ./check\n\nclean")))
-               #t))
            (add-before 'check 'pre-check
              (lambda _
                (setenv "HOME" (getcwd))
