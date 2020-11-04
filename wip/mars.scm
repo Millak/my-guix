@@ -32,11 +32,9 @@
       (origin
         (method url-fetch)
           (uri (string-append "https://courses.missouristate.edu/KenVollmar/mars/MARS_"
-                              (string-map (lambda (c) (if (char=? c #\.) #\_ c))
-                                          version)
+                              (string-replace-substring version "." "_")
                               "_Aug2014/Mars"
-                              (string-map (lambda (c) (if (char=? c #\.) #\_ c))
-                                          version)
+                              (string-replace-substring version "." "_")
                               ".jar"))
           (sha256
            (base32
