@@ -1,4 +1,6 @@
 (channel
- (version 0)
- ;(news-file "news.txt")
- (url "https://git.sr.ht/~efraim/my-guix"))
+  (version 0)
+  ;(news-file "news.txt")
+  (url "https://git.sr.ht/~efraim/my-guix"))
+
+/* vim: set ft=scheme : */

@@ -1,4 +1,6 @@
 (authorizations
- (version 0)
- (("A28B F40C 3E55 1372 662D  14F7 41AA E7DC CA3D 8351"
-   (name "efraim"))))
+  (version 0)
+  (("A28B F40C 3E55 1372 662D  14F7 41AA E7DC CA3D 8351"
+    (name "efraim"))))
+
+/* vim: set ft=scheme : */
