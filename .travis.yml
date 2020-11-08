@@ -27,6 +27,7 @@ env:
   - FILE: dfsg/main/psd.scm
   - FILE: dfsg/main/rdrview.scm
   - FILE: dfsg/main/reprepro.scm
+  - FILE: dfsg/main/shepherd.scm
   - FILE: dfsg/main/solvitaire.scm
   - FILE: dfsg/main/viper.scm
     # - FILE: dfsg/contrib/keybase.scm  # log length too long
