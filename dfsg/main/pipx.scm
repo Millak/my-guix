@@ -26,18 +26,19 @@
 (define-public pipx
   (package
     (name "pipx")
-    (version "0.15.4.0")
+    (version "0.15.6.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "pipx" version))
         (sha256
          (base32
-          "1dawivwkg28nc6dajbz84yqqbqn1sy0hn4a89sx4bpzdqshqa0mr"))))
+          "07rbyimyc8mki262n6ya4y82n85d9w63sknb05b0xdinlaay480d"))))
     (build-system python-build-system)
     (arguments '(#:tests? #f))  ; tests not included
     (inputs
      `(("python-argcomplete" ,python-argcomplete)
+       ("python-packaging" ,python-packaging)
        ("python-userpath" ,python-userpath)))
     (home-page "https://github.com/pipxproject/pipx")
     (synopsis
