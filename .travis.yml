@@ -19,7 +19,6 @@ env:
   - FILE: dfsg/main/express.scm
   - FILE: dfsg/main/minesviiper.scm
   - FILE: dfsg/main/moreutils.scm
-  #- FILE: dfsg/main/mupdf.scm  # cannot find 'my-mupdf-1.17'
   - FILE: dfsg/main/parcimonie.scm
   - FILE: dfsg/main/pifs.scm
   - FILE: dfsg/main/pinentry-efl.scm

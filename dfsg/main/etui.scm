@@ -21,16 +21,16 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system meson)
-  #:use-module (dfsg main mupdf)
   #:use-module (gnu packages backup)
   #:use-module (gnu packages djvu)
   #:use-module (gnu packages enlightenment)
   #:use-module (gnu packages image)
+  #:use-module (gnu packages pdf)
   #:use-module (gnu packages pkg-config))
 
 (define-public etui
-  (let ((commit "2a3b8c85d2ac5ed345a6c36c8c66f4772cc5e80c")
-        (revision "2"))
+  (let ((commit "c0abb79292afd7f1964f82bdaf5622893b9806fc")
+        (revision "3"))
   (package
     (name "etui")
     (version (git-version "0.0.4" revision commit))
@@ -43,7 +43,7 @@
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "19bp8xyjm1b1s7v81mfhlq1sr7cw2jy3fxcgbcmsljiah7q6wl6i"))))
+          "1fhksdh8v1gnknkxpgx7307f2f4ncbdpdx4pvzgdhf8d0wcy3247"))))
     (build-system meson-build-system)
     (arguments
      '(#:configure-flags
@@ -56,6 +56,15 @@
          (add-after 'unpack 'set-home-directory
            (lambda _
              (setenv "HOME" (getcwd))
+             #t))
+         (add-after 'unpack 'make-mupdf-optional
+           ;; With our packaged mupdf being shared only we need to not look
+           ;; for the mupdf_third library.
+           (lambda _
+             (substitute* "src/modules/pdf/meson.build"
+               (("required : true") "required : false")
+               (("mupdf_third_a.found.*") "true\n")
+               ((", mupdf_third_a") ""))
              #t)))))
     (native-inputs
      `(("pkg-config" ,pkg-config)))
@@ -65,7 +74,7 @@
        ("jbig2dec" ,jbig2dec)
        ("libarchive" ,libarchive)
        ("libtiff" ,libtiff)
-       ("mupdf" ,my-mupdf-1.17)
+       ("mupdf" ,mupdf)
        ("openjpeg" ,openjpeg)))
     (home-page "https://github.com/vtorri/etui")
     (synopsis "Multi-document rendering library using the EFL")
