@@ -24,7 +24,6 @@ env:
   - FILE: dfsg/main/pipx.scm
   - FILE: dfsg/main/psd.scm
   - FILE: dfsg/main/rdrview.scm
-  - FILE: dfsg/main/reprepro.scm
   - FILE: dfsg/main/shepherd.scm
   - FILE: dfsg/main/solvitaire.scm
   - FILE: dfsg/main/viper.scm
