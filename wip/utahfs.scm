@@ -23,6 +23,8 @@
   #:use-module (guix packages)
   #:use-module (guix build-system go)
   #:use-module (gnu packages golang)
+  #:use-module (gnu packages linux)
+  #:use-module (gnu packages sqlite)
   #:use-module (gnu packages syncthing))
 
 ;; There are bug fixes since the last release.
@@ -42,12 +44,21 @@
           (sha256
            (base32
             "0cnp146crc3c6ngdldbzhph3rc8x71zxpcy1p4ann1r6vpkgp5db"))
-          ;(modules '((guix build utils)))
-          ;(snippet
-          ; '(begin
-          ;    (delete-file-recursively "vendor")
-          ;    #t))
-          ))
+          (modules '((guix build utils)))
+          (snippet
+           '(begin
+              ;; Check the Gopkg.toml
+              ;(delete-file-recursively "vendor")
+              ;(delete-file-recursively "vendor/cloud.google.com/go/storage") v1.10.0
+              (delete-file-recursively "vendor/github.com/aws/aws-sdk-go")  ;v1.34.32
+              (delete-file-recursively "vendor/github.com/jacobsa/fuse")
+              (delete-file-recursively "vendor/github.com/mattn/go-sqlite3")    ; remove?
+              (delete-file-recursively "vendor/github.com/prometheus/client_golang")    ; v1.7.1
+              (delete-file-recursively "vendor/golang.org/x/crypto")
+              (delete-file-recursively "vendor/gopkg.in/kothar/go-backblaze.v0")
+              (delete-file-recursively "vendor/gopkg.in/yaml.v2")
+              ;(delete-file-recursively "vendor/modernc.org/sqlite")    ; v1.7.3
+              #t))))
       (build-system go-build-system)
       (arguments
        `(#:install-source? #f
@@ -55,30 +66,22 @@
          #:phases
          (modify-phases %standard-phases
            (replace 'build
-             (lambda* (#:key import-path #:allow-other-keys)
+             (lambda* (#:key import-path build-flags #:allow-other-keys)
                (for-each
                  (lambda (directory)
-                   (invoke "go" "install"
-                           "-v" "-x" "-ldflags=-s -w"
-                           directory))
+                   ((assoc-ref %standard-phases 'build)
+                    #:build-flags build-flags
+                    #:import-path directory))
                  (list (string-append import-path "/cmd/utahfs-client")
                        (string-append import-path "/cmd/utahfs-server")))
-               #t))
-           (add-after 'install 'install-license
-             (lambda* (#:key import-path outputs #:allow-other-keys)
-               (let ((out (assoc-ref outputs "out")))
-                 (install-file (string-append "src/" import-path "/LICENSE")
-                               (string-append out "/share/doc/"
-                                              ,name "-" ,version "/"))
-                 #t))))))
+               #t)))))
       (inputs
-       `(;("go-github-com-aws-aws-sdk-go" ,go-github-com-aws-aws-sdk-go)
-         ;("go-github-com-jacobsa-fuse" ,go-github-com-jacobsa-fuse)
-         ;("go-github-com-mattn-go-sqlite3" ,go-github-com-mattn-go-sqlite3)
-         ;("go-github-com-prometheus-client_golang" ,go-github-com-prometheus-client_golang)
+       `(("go-github-com-aws-aws-sdk-go" ,go-github-com-aws-aws-sdk-go)
+         ("go-github-com-jacobsa-fuse" ,go-github-com-jacobsa-fuse)
+         ("go-github-com-mattn-go-sqlite3" ,go-github-com-mattn-go-sqlite3)
          ("go-github-com-prometheus-client-golang" ,go-github-com-prometheus-client-golang)
-         ;("go-gopkg-in-kothar-go-backblaze-v0" ,go-gopkg-in-kothar-go-backblaze-v0)
          ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+         ("go-gopkg-in-kothar-go-backblaze-v0" ,go-gopkg-in-kothar-go-backblaze-v0)
          ("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)))
       (home-page "https://github.com/cloudflare/utahfs")
       (synopsis "Encrypted storage system backed by cloud storage")
@@ -90,3 +93,255 @@ of space and minimizes the likelihood of any files being lost.  The files are
 encrypted such that the cloud storage provider knows almost nothing about
 what's being stored.")
       (license license:bsd-3))))
+
+(define-public go-github-com-jacobsa-fuse
+  (let ((commit "05606cde59ac2f1595bdd9bfc44385182e68bb45")
+        (revision "1"))
+    (package
+      (name "go-github-com-jacobsa-fuse")
+      (version (git-version "0.0.0" revision commit))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://github.com/jacobsa/fuse")
+                 (commit commit)))
+          (file-name (git-file-name name version))
+          (sha256
+           (base32
+            "0i23vsw3iky2vwzbcdp2aiwrzjm1c5w6y06brips1fq5cbdpszn6"))))
+      (build-system go-build-system)
+      (arguments
+       `(#:tests? #f    ; tests try to use fusermount
+         #:import-path "github.com/jacobsa/fuse"))
+      (inputs
+       `(("fuse" ,fuse)))
+      (propagated-inputs
+       `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
+      (home-page "https://github.com/jacobsa/fuse")
+      (synopsis "Go package for implementing a FUSE file system")
+      (description "This package allows for writing and mounting user-space
+file systems from Go.")
+      (license license:asl2.0))))
+
+(define-public go-github-com-mattn-go-sqlite3
+  (package
+    (name "go-github-com-mattn-go-sqlite3")
+    (version "1.10.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/mattn/go-sqlite3")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1zmz6asplixfihxhj11spgfs0v3xzb3nv0hlq6n6zsg781ni31xx"))))
+    (build-system go-build-system)
+    (arguments
+      `(#:build-flags '("--tags=libsqlite3")
+        #:import-path "github.com/mattn/go-sqlite3"))
+    (inputs
+     `(("sqlite" ,sqlite)))
+    (home-page "http://mattn.github.io/go-sqlite3/")
+    (synopsis "Go sqlite3 driver for go using database/sql")
+    (description "This package provides a sqlite3 driver conforming to the
+built-in database/sql interface written in Go.")
+    (license license:expat)))
+
+;; TODO: Figure out which, if any, go files are pre-generated
+(define-public go-github-com-aws-aws-sdk-go
+  (package
+    (name "go-github-com-aws-aws-sdk-go")
+    (version "1.20.20")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/aws/aws-sdk-go")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1mp0c9173328r67iica662013jnshiv8yg2p5zgs0kr5sh3ri0ws"))
+        (modules '((guix build utils)))
+        (snippet
+         '(begin (delete-file-recursively "vendor") #t))))
+    (build-system go-build-system)
+    (arguments
+      `(#:import-path "github.com/aws/aws-sdk-go"
+        #:phases
+        (modify-phases %standard-phases
+          (add-after 'unpack 'make-files-writable
+            (lambda* (#:key import-path #:allow-other-keys)
+              (for-each make-file-writable
+                        (find-files (string-append "src/" import-path)))
+              #t))
+          (add-after 'unpack 'adjust-failing-tests
+            (lambda* (#:key import-path #:allow-other-keys)
+              (with-directory-excursion (string-append "src/" import-path)
+                (substitute* "aws/credentials/processcreds/provider_test.go"
+                  (("/bin/sleep") (which "sleep")))
+                ;; expects a git repository.
+                (delete-file "models/apis/check_collisions_test.go")
+                #t)))
+          (replace 'build
+            (lambda* (#:key import-path #:allow-other-keys)
+              (with-directory-excursion (string-append "src/" import-path)
+                (invoke "make" "generate"))))
+          (replace 'check
+            (lambda* (#:key import-path #:allow-other-keys)
+              (with-directory-excursion (string-append "src/" import-path)
+                (invoke "make" "unit")))))))
+    (propagated-inputs
+     `(("go-github-com-jmespath-gojmespath" ,go-github-com-jmespath-gojmespath)))
+    (native-inputs
+     `(;; Needed to generate the code
+       ("go-golang-org-x-net" ,go-golang-org-x-net)
+       ;; Needed for the tests:
+       ("go-golang-org-x-text" ,go-golang-org-x-text)))
+    (home-page "https://aws.amazon.com/sdk-for-go/")
+    (synopsis "AWS SDK for the Go programming language")
+    (description
+     "@code{aws-sdk-go} is the official AWS SDK for the Go programming language.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-jmespath-gojmespath
+  (let ((commit "c2b33e8439af944379acbdd9c3a5fe0bc44bd8a5")
+        (revision "20180206201540"))
+    (package
+      (name "go-github-com-jmespath-gojmespath")
+      (version (git-version "0.2.2" revision commit))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://github.com/jmespath/go-jmespath")
+                 (commit commit)))
+          (file-name (git-file-name name version))
+          (sha256
+           (base32
+            "1r6w7ydx8ydryxk3sfhzsk8m6f1nsik9jg3i1zhi69v4kfl4d5cz"))))
+      (build-system go-build-system)
+      (arguments
+       `(#:import-path "github.com/jmespath/go-jmespath"))
+      (native-inputs
+       `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
+      (home-page "https://github.com/jmespath/go-jmespath")
+      (synopsis "Golang implementation of JMESPath")
+      (description "@code{go-jmespath} is a GO implementation of JMESPath, which
+is a query language for JSON.  It will take a JSON document and transform it
+into another JSON document through a JMESPath expression.")
+      (license license:asl2.0))))
+
+(define-public go-gopkg-in-kothar-go-backblaze-v0
+  (let ((commit "7594ed38700f5ca3fc7da8f8c7b91b0526ee66f2")
+        (revision "1"))
+    (package
+      (name "go-gopkg-in-kothar-go-backblaze-v0")
+      (version (git-version "0.0.0" revision commit))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://gopkg.in/kothar/go-backblaze.v0")
+                 (commit commit)))
+          (file-name (git-file-name name version))
+          (sha256
+           (base32
+            "0zgd5jwwdrqrnx828yxkzywh1dnwqi9y8pmq0vsndi6bwdp6dvkb"))))
+      (build-system go-build-system)
+      (arguments
+       `(#:import-path "gopkg.in/kothar/go-backblaze.v0"))
+      (propagated-inputs
+       `(("go-github-com-google-readahead" ,go-github-com-google-readahead)
+         ("go-github-com-pquerna-ffjson" ,go-github-com-pquerna-ffjson)))
+      (home-page "https://gopkg.in/kothar/go-backblaze.v0")
+      (synopsis "Golang client for Backblaze's B2 storage")
+      (description
+       "This package provides a Golang client for Backblaze's B2 storage.")
+      (license license:expat))))
+
+(define-public go-github-com-google-readahead
+  (let ((commit "eaceba16903255cb149d1efc316f6cc83d765268")
+        (revision "1"))
+    (package
+      (name "go-github-com-google-readahead")
+      (version (git-version "0.0.0" revision commit))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://github.com/google/readahead")
+                 (commit commit)))
+          (file-name (git-file-name name version))
+          (sha256
+           (base32
+            "19l6a29yyypgpqf7v5877ni0bqgxfp41q7ffp2xj57rvikimwiyb"))))
+      (build-system go-build-system)
+      (arguments
+       `(#:import-path "github.com/google/readahead"))
+      (propagated-inputs
+       `(("go-github-com-golang-glog" ,go-github-com-golang-glog)))
+      (home-page "https://github.com/google/readahead")
+      (synopsis "Enable concurrent reads from seekable or compressed files")
+      (description "Readahead is a package that provides readers that enable
+concurrent reads from seekable or compressed files.  It's useful when reading
+from a network file system.")
+      (license license:asl2.0))))
+
+(define-public go-github-com-golang-glog
+  (let ((commit "23def4e6c14b4da8ac2ed8007337bc5eb5007998")
+        (revision "1"))
+    (package
+      (name "go-github-com-golang-glog")
+      (version (git-version "0.0.0" revision commit))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://github.com/golang/glog")
+                 (commit commit)))
+          (file-name (git-file-name name version))
+          (sha256
+           (base32
+            "0jb2834rw5sykfr937fxi8hxi2zy80sj2bdn9b3jb4b26ksqng30"))))
+      (build-system go-build-system)
+      (arguments
+       `(#:import-path "github.com/golang/glog"))
+      (home-page "https://github.com/golang/glog")
+      (synopsis "Leveled execution logs for Go")
+      (description "This is an efficient pure Go implementation of leveled logs
+in the manner of the open source C++ package")
+      (license license:asl2.0))))
+
+(define-public go-github-com-pquerna-ffjson
+  (let ((commit "aa0246cd15f76c96de6b96f22a305bdfb2d1ec02")
+        (revision "1"))
+    (package
+      (name "go-github-com-pquerna-ffjson")
+      (version (git-version "0.0.0" revision commit))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://github.com/pquerna/ffjson")
+                 (commit commit)))
+          (file-name (git-file-name name version))
+          (sha256
+           (base32
+            "0mxmrvqmiinqhlaxncaqznxwfspf3p8bmg9vniz40dw5jpv24cwb"))))
+      (build-system go-build-system)
+      (arguments
+       `(#:import-path "github.com/pquerna/ffjson"))
+      (home-page "https://github.com/pquerna/ffjson")
+      (synopsis "Faster JSON serialization for Go")
+      (description "@code{ffjson} generates static @code{MarshalJSON} and
+@code{UnmarshalJSON} functions for structures in Go.  The generated functions
+reduce the reliance upon runtime reflection to do serialization and are
+generally 2 to 3 times faster.  In cases where ffjson doesn't understand a Type
+involved, it falls back to encoding/json, meaning it is a safe drop in
+replacement.  By using ffjson your JSON serialization just gets faster with no
+additional code changes.")
+      (license license:asl2.0))))
