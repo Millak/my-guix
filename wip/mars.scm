@@ -31,7 +31,8 @@
     (source
       (origin
         (method url-fetch)
-          (uri (string-append "https://courses.missouristate.edu/KenVollmar/mars/MARS_"
+          (uri (string-append "https://courses.missouristate.edu/KenVollmar/"
+                              "mars/MARS_"
                               (string-replace-substring version "." "_")
                               "_Aug2014/Mars"
                               (string-replace-substring version "." "_")

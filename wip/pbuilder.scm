@@ -66,10 +66,12 @@
                               "pbuilder-loadconfig"
                               "pdebuild"
                               )
-                 (("/usr/lib/pbuilder") (string-append out "/lib/pbuilder"))
+                 (("/usr/lib/pbuilder")
+                  (string-append out "/lib/pbuilder"))
                  )
                (substitute* "pbuildd/buildd-config.sh"
-                 (("/usr/share/doc/pbuilder") (string-append out "/share/doc/pbuilder"))
+                 (("/usr/share/doc/pbuilder")
+                  (string-append out "/share/doc/pbuilder"))
                  )
                #t)))
          (add-after 'install 'wrap-programs
@@ -78,13 +80,13 @@
                (for-each
                  (lambda (file)
                    (wrap-program file
-                                 `("PATH" ":" prefix (,(dirname (which "sed"))
-                                                       ,(dirname (which "readlink"))
-                                                       ,(dirname (which "dpkg-architecture"))
-                                                       ))))
+                    `("PATH" ":" prefix (,(dirname (which "sed"))
+                                          ,(dirname (which "readlink"))
+                                          ,(dirname (which "dpkg-architecture"))
+                                          ))))
                  (cons* (string-append out "/bin/pdebuild")
-                       (string-append out "/sbin/pbuilder")
-                       (find-files (string-append out "/lib/pbuilder") ".")))
+                        (string-append out "/sbin/pbuilder")
+                        (find-files (string-append out "/lib/pbuilder") ".")))
                #t)))
          )
        #:make-flags (list (string-append "DESTDIR=" (assoc-ref %outputs "out")))
