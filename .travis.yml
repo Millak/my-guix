@@ -28,6 +28,7 @@ env:
   - FILE: dfsg/main/solvitaire.scm
   - FILE: dfsg/main/viper.scm
     # - FILE: dfsg/contrib/keybase.scm  # log length too long
+  - FILE: dfsg/contrib/linode.scm
   - FILE: dfsg/non-free/parallel.scm
 
 install: |
