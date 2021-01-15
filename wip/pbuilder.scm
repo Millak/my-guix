@@ -1,4 +1,4 @@
-;;; Copyright © 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2020, 2021 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -27,8 +27,7 @@
   #:use-module (gnu packages linux)
   #:use-module (gnu packages man)
   #:use-module (gnu packages perl)
-  #:use-module (gnu packages xml)
-  )
+  #:use-module (gnu packages xml))
 
 ;; TODO: Wrap bins with Debian's devscripts
 (define-public pbuilder
@@ -57,22 +56,24 @@
                               "pbuildd/Makefile")
                  (("/usr") "")
                  ;; Skip documentation for now
-                 ((".*-C Documentation.*") "")
-                 )
-               (substitute* '(
-                              "debuild-pbuilder"
+                 ((".*-C Documentation.*") ""))
+               (substitute* '("debuild-pbuilder"
                               "pbuilder"
+                              "pbuilder-buildpackage"
                               "pbuilder-checkparams"
                               "pbuilder-loadconfig"
+                              "pbuilderrc"
                               "pdebuild"
-                              )
+                              "pdebuild-checkparams"
+                              "pdebuild-internal")
                  (("/usr/lib/pbuilder")
-                  (string-append out "/lib/pbuilder"))
-                 )
+                  (string-append out "/lib/pbuilder")))
                (substitute* "pbuildd/buildd-config.sh"
                  (("/usr/share/doc/pbuilder")
-                  (string-append out "/share/doc/pbuilder"))
-                 )
+                  (string-append out "/share/doc/pbuilder")))
+               (substitute* "pbuilderrc"
+                 (("dpkg --print-architecture")
+                  (string-append (which "dpkg") " --print-architecture")))
                #t)))
          (add-after 'install 'wrap-programs
            (lambda* (#:key inputs outputs #:allow-other-keys)
@@ -83,28 +84,24 @@
                     `("PATH" ":" prefix (,(dirname (which "sed"))
                                           ,(dirname (which "readlink"))
                                           ,(dirname (which "dpkg-architecture"))
-                                          ))))
+                                          ,(dirname (which "debootstrap"))))
+                    `("PERL5LIB" ":" prefix (,(getenv "PERL5LIB")))))
                  (cons* (string-append out "/bin/pdebuild")
                         (string-append out "/sbin/pbuilder")
-                        (find-files (string-append out "/lib/pbuilder") ".")))
-               #t)))
-         )
+                        (find-files (string-append out "/lib/pbuilder"))))
+               #t))))
        #:make-flags (list (string-append "DESTDIR=" (assoc-ref %outputs "out")))
-       #:tests? #f
-       ))
+       #:tests? #f))
     (inputs
-     `(
-       ))
+     `(("dpkg" ,dpkg)
+       ("debootstrap" ,debootstrap)
+       ("perl" ,perl)))
     (native-inputs
-     `(
-       ("dpkg" ,dpkg)
-       ("grep" ,grep)
+     `(("grep" ,grep)
        ("libxslt" ,libxslt)
        ("man-db" ,man-db)
-       ("perl" ,perl)
        ("po4a" ,po4a)
-       ("util-linux" ,util-linux)
-       ))
+       ("util-linux" ,util-linux)))
     (home-page "https://pbuilder-team.pages.debian.net/pbuilder/")
     (synopsis "Personal package builder for Debian packages")
     (description
