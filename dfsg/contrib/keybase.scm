@@ -1,4 +1,4 @@
-;;; Copyright © 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2020, 2021 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -29,7 +29,7 @@
 (define-public keybase
   (package
     (name "keybase")
-    (version "5.5.2")
+    (version "5.6.1")
     (source
       (origin
         (method url-fetch)
@@ -38,7 +38,7 @@
                version "/keybase-v" version ".tar.xz"))
         (sha256
          (base32
-          "006lqqrqag018a27aix5338faf2054h0bj7l3vmja0xm4knc0cwf"))
+          "10z5bnvkj7w71k4jidjpg7ndisl8kwbayspaaphm9mcyss2kq2nh"))
         (modules '((guix build utils)))
         (snippet
          '(begin
