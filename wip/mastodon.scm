@@ -17,21 +17,12 @@
 
 (define-module (wip mastodon)
   #:use-module (guix packages)
-  #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (guix build-system cmake)
-  #:use-module (guix build-system meson)
   #:use-module (guix build-system python)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (gnu packages freedesktop)
-  #:use-module (gnu packages gettext)
-  #:use-module (gnu packages glib)
-  #:use-module (gnu packages gnome)
-  #:use-module (gnu packages gtk)
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages mastodon)
-  #:use-module (gnu packages pantheon)
-  #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages python-web)
@@ -88,83 +79,6 @@ news readers & pine, with an emphasis on getting to 'timeline zero'.")
 ;; python-pytest-vcr upstreamed in python-check.scm
 (define-public python2-pytest-vcr
   (package-with-python2 python-pytest-vcr))
-
-(define-public tootle
-  (package
-    (name "tootle")
-    (version "1.0-alpha2")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/bleakgrey/tootle")
-               (commit version)))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "16xz58xasprza89j3ljrfpgvn05yc00p1ch96nyia99r1dyms9rx"))))
-    (build-system meson-build-system)
-    (arguments
-     '(#:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'skip-gtk-update-icon-cache
-           ;; Don't create 'icon-theme.cache'.
-           (lambda _
-             (substitute* "meson/post_install.py"
-               (("gtk-update-icon-cache") "true"))
-             #t))
-         (add-after 'unpack 'patch-source
-           (lambda _
-             (substitute* "src/Dialogs/NewAccount.vala"
-               (("xdg-mime") (which "xdg-mime")))
-             ;; Patch for building on glib < 2.64
-             (substitute* "src/Build.vala"
-               (("(os_name =).*" first _)
-                "os_name = \"GNU\";\n")
-               (("(os_ver =).*" first _)
-                "os_ver = \"Guix\";\n")
-               (("GLib.Environment.get_os_info.*")
-                "\"unknown\";\n"))
-             #t))
-         ;(add-after 'unpack 'dont-use-strict-ssl
-         ;  (lambda _
-         ;    (substitute* "src/Services/Network.vala"
-         ;      (("session.ssl_use_system_ca_file = true")
-         ;       "session.ssl_use_system_ca_file = false")
-         ;      (("session.ssl_strict = true") "session.ssl_strict = false"))
-         ;    #t))
-         (add-after 'install 'wrap-program
-           (lambda* (#:key inputs outputs #:allow-other-keys)
-             (let* ((out (assoc-ref outputs "out"))
-                    (bin (string-append out "/bin")))
-               (wrap-program (string-append bin "/com.github.bleakgrey.tootle")
-               ;; For GtkFileChooserDialog.
-               `("GSETTINGS_SCHEMA_DIR" =
-                 (,(string-append
-                     (assoc-ref outputs "out") ; not gtk+
-                     "/share/glib-2.0/schemas"))))
-               (rename-file (string-append bin "/com.github.bleakgrey.tootle")
-                            (string-append bin "/tootle"))
-               #t))))))
-    (native-inputs
-     `(("gettext" ,gettext-minimal)
-       ("glib:bin" ,glib "bin")     ; for glib-compile-resources
-       ("pkg-config" ,pkg-config)))
-    (inputs
-     `(("glib-networking" ,glib-networking)
-       ("gtk+" ,gtk+)
-       ("json-glib" ,json-glib)
-       ("libgee" ,libgee)
-       ("libhandy" ,libhandy)
-       ("libsoup" ,libsoup)
-       ("vala" ,vala-0.50)
-       ("xdg-utils" ,xdg-utils)))
-    (home-page "https://github.com/bleakgrey/tootle")
-    (synopsis "GTK3 client for Mastodon")
-    (description "Tootle is a GTK client for Mastodon.  It provides a clean,
-native interface that allows you to integrate Mastodon's social experience
-seamlessly with your desktop environment.")
-    (license license:gpl3+)))
 
 (define-public sweetfish
   (package
