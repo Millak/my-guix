@@ -25,8 +25,7 @@
   #:use-module (gnu packages dlang)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages sqlite)
-  )
+  #:use-module (gnu packages sqlite))
 
 ;; More recent versions need newer versions of D.
 (define-public onedrive

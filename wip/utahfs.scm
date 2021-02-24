@@ -124,32 +124,6 @@ what's being stored.")
 file systems from Go.")
       (license license:asl2.0))))
 
-(define-public go-github-com-mattn-go-sqlite3
-  (package
-    (name "go-github-com-mattn-go-sqlite3")
-    (version "1.10.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/mattn/go-sqlite3")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "1zmz6asplixfihxhj11spgfs0v3xzb3nv0hlq6n6zsg781ni31xx"))))
-    (build-system go-build-system)
-    (arguments
-      `(#:build-flags '("--tags=libsqlite3")
-        #:import-path "github.com/mattn/go-sqlite3"))
-    (inputs
-     `(("sqlite" ,sqlite)))
-    (home-page "http://mattn.github.io/go-sqlite3/")
-    (synopsis "Go sqlite3 driver for go using database/sql")
-    (description "This package provides a sqlite3 driver conforming to the
-built-in database/sql interface written in Go.")
-    (license license:expat)))
-
 ;; TODO: Figure out which, if any, go files are pre-generated
 (define-public go-github-com-aws-aws-sdk-go
   (package

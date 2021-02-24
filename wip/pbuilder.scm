@@ -33,7 +33,7 @@
 (define-public pbuilder
   (package
     (name "pbuilder")
-    (version "0.230.4")
+    (version "0.231")
     (source
       (origin
         (method git-fetch)
@@ -43,7 +43,7 @@
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "10hhjd1pk3gysafblvyyla08l82j483lddwz64phkvkgm91xq24l"))))
+          "0z6f1fgcrkfql9ayc3d0nxra2y6cn91xd5lvr0hd8gdlp9xdvxbc"))))
     (build-system gnu-build-system)
     (arguments
      '(#:phases
