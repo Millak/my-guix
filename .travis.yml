@@ -16,7 +16,7 @@ env:
   - FILE: dfsg/main/eterm.scm
   - FILE: dfsg/main/etui.scm
   - FILE: dfsg/main/express.scm
-  - FILE: dfsg/main/minesviiper.scm
+  - FILE: dfsg/main/girst.scm
   - FILE: dfsg/main/moreutils.scm
   - FILE: dfsg/main/parcimonie.scm
   - FILE: dfsg/main/pifs.scm
@@ -26,8 +26,6 @@ env:
   - FILE: dfsg/main/rdrview.scm
   - FILE: dfsg/main/shepherd.scm
   - FILE: dfsg/main/sigil.scm
-  - FILE: dfsg/main/solvitaire.scm
-  - FILE: dfsg/main/viper.scm
     # - FILE: dfsg/contrib/keybase.scm  # log length too long
   - FILE: dfsg/contrib/linode.scm
   - FILE: dfsg/contrib/onedrive.scm
