@@ -1,4 +1,4 @@
-;;; Copyright © 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2020, 2021 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -21,16 +21,22 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix utils)
+  #:use-module (guix build-system gnu)
   #:use-module (guix build-system python)
   #:use-module (gnu packages audio)
   #:use-module (gnu packages check)
   #:use-module (gnu packages compression)
+  #:use-module (gnu packages django)
   #:use-module (gnu packages freedesktop)
+  #:use-module (gnu packages linux)
+  #:use-module (gnu packages machine-learning)
+  #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-web)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages speech)
   #:use-module (gnu packages sphinx)
+  #:use-module (gnu packages swig)
   #:use-module (gnu packages time)
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages xiph))
@@ -38,7 +44,7 @@
 (define-public mycroft-core
   (package
     (name "mycroft-core")
-    (version "20.2.4")
+    (version "20.8.1")
     (source
       (origin
         (method git-fetch)
@@ -48,23 +54,40 @@
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "076m0rnaq5dg3s891vd2afk4h1fc35c0zdq5i11r0lrr9icls0aa"))))
+          "0hc1xbxgpi23l77d1avccn4hd31g0q1jz315z24h95w2calww3kz"))))
     (build-system python-build-system)
+    (arguments
+     `(#:tests? #f  ; tests try to connect to the internet and expect to play audio
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'use-loose-package-version-requirements
+           (lambda _
+             (setenv "MYCROFT_LOOSE_REQUIREMENTS" "TRUE")
+             #t))
+         (add-after 'unpack 'dont-use-var-tmp
+           (lambda _
+             (substitute* (find-files "." "\\.py$")
+               (("/var/tmp") "/tmp/mycroft"))
+             #t))
+         (add-before 'build 'set-home
+           (lambda _
+             (setenv "HOME" (getcwd))
+             #t))
+         )))
     (inputs
      `(
        ;; from requirements/requirements.txt
-       ("python-six" ,python-six)
        ("python-requests" ,python-requests)
        ("python-gTTS" ,python-gtts)
        ("python-PyAudio", python-pyaudio)
        ("python-pyee" ,python-pyee)
        ("python-SpeechRecognition" ,python-speechrecognition)
-       ("python-tornado" ,python-tornado)
+       ("python-tornado" ,python-tornado-6)
        ("python-websocket-client" ,python-websocket-client)
        ("python-requests-futures" ,python-requests-futures)
        ("python-pyserial" ,python-pyserial)
        ("python-psutil" ,python-psutil)
-       ;("python-pocketsphinx" ,python-pocketsphinx)
+       ("python-pocketsphinx" ,python-pocketsphinx)
        ("python-inflection" ,python-inflection)
        ("python-pillow" ,python-pillow)
        ("python-dateutil" ,python-dateutil)
@@ -73,14 +96,14 @@
 
        ("python-lingua-franca" ,python-lingua-franca)
        ("python-msm" ,python-msm)
-       ;("python-msk" ,python-msk)
-       ;("python-adapt-parser" ,python-adapt-parser)
-       ;("python-padatious" ,python-padatious)
-       ;("python-fann2" ,python-fann)
-       ;("python-padaos" ,python-padaos)
+       ("python-msk" ,python-msk)
+       ("python-adapt-parser" ,python-adapt-parser)
+       ("python-padatious" ,python-padatious)
+       ("python-fann2" ,python-fann2)
+       ("python-padaos" ,python-padaos)
        ("python-precise-runner" ,python-precise-runner)
        ("python-petact" ,python-petact)
-       ("python-pyxdg" ,python-pyxdg-0.26)
+       ("python-pyxdg" ,python-pyxdg)
 
        ;; requirements/extra-audiobackend.txt
        ;("python-pychromecast" ,python-pychromecast)
@@ -89,27 +112,68 @@
        ;; requirements/extra-stt.txt
        ;("python-google-api-python-client" ,python-google-api-python-client)
        ))
+    (native-inputs
+     `(
+       ;; requirements/tests.txt
+       ("python-coveralls" ,python-coveralls)
+       ("python-flake8" ,python-flake8)
+       ("python-pytest" ,python-pytest)
+       ("python-pytest-cov" ,python-pytest-cov)
+       ("python-cov-core" ,python-cov-core)
+       ("python-sphinx" ,python-sphinx)
+       ("python-sphinx-rtd-theme" ,python-sphinx-rtd-theme)
+       ;("python-behave" ,python-behave)
+       ;("python-allure-behave" ,python-allure-behave)
+       ;("python-vlc" ,python-vlc)
+       ))
     (home-page "https://mycroft.ai/")
-    (synopsis "")
-    (description "")
+    (synopsis "Mycroft Core, the Mycroft Artificial Intelligence platform")
+    (description "Mycroft Core, the Mycroft Artificial Intelligence platform.")
     (license license:asl2.0)))
 
-(define-public python-pyxdg-0.26
+(define-public mimic
   (package
-    (inherit python-pyxdg)
-    (version "0.26")
+    (name "mimic")
+    (version "1.3.0.1")
     (source
       (origin
-        (method url-fetch)
-        (uri (pypi-uri "pyxdg" version))
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/MycroftAI/mimic1")
+               (commit version)))
+        (file-name (git-file-name name version))
         (sha256
          (base32
-          "01hsvbwla1phr2bgqslk35npdzin86sq591jkjrk5v9jyp9jhagy"))))
+          "000000000000000000000000000000000yfyl90iwq3az120vjsx"))))
+    (build-system gnu-build-system)
     (arguments
-     (substitute-keyword-arguments (package-arguments python-pyxdg)
-       ((#:phases phases)
-        `(modify-phases ,phases
-           (delete 'check)))))))
+     `(
+       #:configure-flags '("--enable-shared")
+       ))
+    (native-inputs
+     `(
+       ("automake" ,automake)
+       ("pkg-config" ,pkg-config)
+       ))
+    (inputs
+     `(
+       ("pcre2" ,pcre2)
+       ("pulseaudio" ,pulseaudio)
+       ))
+    (home-page "https://mimic.mycroft.ai/")
+    (synopsis "Mycroft's TTS engine, based on CMU's Flite")
+    (description "Mimic is a fast, lightweight Text-to-speech engine developed
+by Mycroft A.I. and VocaliD, based on Carnegie Mellon University’s Flite
+(Festival-Lite) software. Mimic takes in text and reads it out loud to create a
+high quality voice.")
+    (license (list
+               #f                       ; lang/vid_gb_ap/*[ch], voices/mycroft_voice_4.0.flitevox; autogenerated files and Popey's voice
+               license:expat            ; unittests/cutest.h
+               license:public-domain    ; doc/alice
+               license:bsd-3            ; lang/cmulex/make_cmulex_helper.py, include/flite_hts_engine.h, src/hts/flite_hts_engine.c, src/hts/hts_engine_API, src/regex/
+               license:asl2.0           ; lang/cmu_grapheme_lex/grapheme_unitran_tables.c
+               ;license:flite            ; rest
+               ))))
 
 (define-public python-petact
   (package
@@ -131,20 +195,19 @@
 (define-public python-gtts
   (package
     (name "python-gtts")
-    (version "2.1.1")
+    (version "2.2.2")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "gTTS" version))
         (sha256
          (base32
-          "1zngj2d30pk1bdcni6f9mc991nnyzybdk0a2qx77sxk0nn0fi8ic"))))
+          "03qah9gxhx8m6apviqyffay2dpijm2k5h88ikzgndyvs6zc18dxm"))))
     (build-system python-build-system)
-    (arguments '(#:tests? #f))  ; tests try to connect to the internet
     (propagated-inputs
-     `(("python-beautifulsoup4" ,python-beautifulsoup4)
+     `(;("python-beautifulsoup4" ,python-beautifulsoup4)
        ("python-click" ,python-click)
-       ("python-gtts-token" ,python-gtts-token)
+       ;("python-gtts-token" ,python-gtts-token)
        ("python-requests" ,python-requests)
        ("python-six" ,python-six)))
     (native-inputs
@@ -153,8 +216,9 @@
        ("python-pytest" ,python-pytest)
        ("python-pytest-cov" ,python-pytest-cov)
        ("python-six" ,python-six)
-       ;("python-testfixtures" ,python-testfixtures)
-       ("python-twine" ,python-twine)))
+       ("python-testfixtures" ,python-testfixtures)
+       ;("python-twine" ,python-twine)
+       ))
     (home-page "https://github.com/pndurette/gTTS")
     (synopsis
      "gTTS (Google Text-to-Speech), a Python library and CLI tool to interface with Google Translate text-to-speech API")
@@ -165,7 +229,7 @@
 (define-public python-gtts-token
   (package
     (name "python-gtts-token")
-    (version "1.1.3")
+    (version "1.1.4")
     (source
       (origin
         (method git-fetch)
@@ -176,7 +240,7 @@
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "142y1rbyrr74jl3j92v891a0i3vbcyfp3hrsn59c3b3w6mj2nrx9"))))
+          "0vr52zc0jqyfvsccl67j1baims3cdx2is1y2lpx2kav9gadkn8hp"))))
     (build-system python-build-system)
     (arguments
      '(#:tests? #f  ; tests try to connect to the internet
@@ -184,9 +248,9 @@
        (modify-phases %standard-phases
          (replace 'check
            (lambda* (#:key tests? #:allow-other-keys)
-             (if tests?
-               (invoke "python" "-m" "unittest" "discover" "-v" "-s" "gtts_token/tests/")
-               #t))))))
+             (when tests?
+               (invoke "python" "-m" "unittest" "discover" "-v" "-s" "gtts_token/tests/"))
+             #t)))))
     (propagated-inputs
      `(("python-requests" ,python-requests)))
     (home-page "https://github.com/boudewijn26/gTTS-token")
@@ -198,14 +262,14 @@ validation of Google Translate.")
 (define-public python-pyee
   (package
     (name "python-pyee")
-    (version "7.0.2")
+    (version "8.1.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "pyee" version))
         (sha256
          (base32
-          "1n5kmqbmjk5xk1yhdz04izns231v2n9s15dqvgvvn619ngnd2269"))))
+          "0cgxbdr4zmil03wwr5fv58789i51gka8a9fxm1dgkf5xs9dwrnlj"))))
     (build-system python-build-system)
     (native-inputs
      `(("python-mock" ,python-mock)
@@ -254,9 +318,9 @@ as async/await as seen in Python 3.5+.")
          (replace 'check
            (lambda* (#:key tests? #:allow-other-keys)
              ;; standard tests fail because there's no attached microphone
-             (if tests?
-               (invoke "python" "-m" "unittest" "discover" "--verbose")
-               #t))))))
+             (when tests?
+               (invoke "python" "-m" "unittest" "discover" "--verbose"))
+             #t)))))
     (propagated-inputs
      `(("python-pyaudio" ,python-pyaudio)))
     (inputs
@@ -285,8 +349,7 @@ several engines and APIs, online and offline.")
      '(#:tests? #f))    ; Tests require network access.
     (propagated-inputs
      `(("python-requests" ,python-requests)))
-    (home-page
-     "https://github.com/ross/requests-futures")
+    (home-page "https://github.com/ross/requests-futures")
     (synopsis "Asynchronous Python HTTP for Humans")
     (description "This package provides a small add-on for the Python requests
 http library.")
@@ -329,18 +392,23 @@ http library.")
 (define-public python-lingua-franca
   (package
     (name "python-lingua-franca")
-    (version "0.2.2")
+    (version "0.3.1")
     (source
       (origin
-        ;; Some files are missing from PyPi.
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/MycroftAI/lingua-franca")
-               (commit version)))
-        (file-name (git-file-name name version))
+        (method url-fetch)
+        (uri (pypi-uri "lingua_franca" version))
         (sha256
          (base32
-          "08fw9kz8760qpzm8bnbpal7kpkxk9dfjzcg3bdmk0pisymjg7ysx"))))
+          "1b9r5l49hrjdlj5nggmy76s3g2ish0z5lg7a79ma54yh2kzbpljf"))))
+        ;; Some files are missing from PyPi.
+        ;(method git-fetch)
+        ;(uri (git-reference
+        ;       (url "https://github.com/MycroftAI/lingua-franca")
+        ;       (commit version)))
+        ;(file-name (git-file-name name version))
+        ;(sha256
+        ; (base32
+        ;  "000000000000000000000000000000000cg3bdmk0pisymjg7ysx"))))
     (build-system python-build-system)
     (arguments
      '(#:phases
@@ -348,7 +416,7 @@ http library.")
          (add-after 'unpack 'fix-dependency-versions
            (lambda _
              (substitute* "requirements.txt"
-               (("==.*") "\n"))
+               (("==") ">="))
              #t)))))
     (propagated-inputs
      `(("python-dateutil" ,python-dateutil)))
@@ -361,18 +429,24 @@ http library.")
 (define-public python-msm
   (package
     (name "python-msm")
-    (version "0.8.8")
+    (version "0.9.0")
     (source
       (origin
+        ;(method url-fetch)
+        ;(uri (pypi-uri "msm" version))
+        ;(sha256
+        ; (base32
+        ;  "0dc7mgg3nsd3bqyg1gg0jplldpjl7gyfs09gmzq6k9hah29xbgiz"))))
         ;; Tests not included in release tarball.
+        ;; Some files not included in the release tarball.
         (method git-fetch)
         (uri (git-reference
                (url "https://github.com/MycroftAI/mycroft-skills-manager")
-               (commit (string-append "v" version))))
+               (commit (string-append "release/v" version))))
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "0y2c8dyl3d59p1v49sr31wgrvjx0sxsqvsyhm2k55amkh7pxalnw"))))
+          "0n2x3qkzbgk6ycgj5fl3f99dyvk33c85mnjlxbl0p8djrqkwg78l"))))
     (build-system python-build-system)
     (arguments
      '(#:tests? #f  ; Tests try to access the internet.
@@ -381,14 +455,16 @@ http library.")
          (replace 'check
            (lambda* (#:key inputs outputs tests? #:allow-other-keys)
              (add-installed-pythonpath inputs outputs)
-             (if tests?
-               (invoke "pytest" "tests")
-               #t))))))
+             (when tests?
+               (setenv "HOME" (getcwd))
+               (invoke "pytest" "tests"))
+             #t)))))
     (propagated-inputs
      `(("python-fasteners" ,python-fasteners)
        ("python-gitpython" ,python-gitpython)
        ("python-lazy" ,python-lazy)
        ("python-pako" ,python-pako)
+       ("python-pyxdg" ,python-pyxdg)
        ("python-pyyaml" ,python-pyyaml)
        ("python-requests" ,python-requests)))
     (native-inputs
@@ -423,14 +499,13 @@ course installing and removing skills from the system.")
 (define-public python-pako
   (package
     (name "python-pako")
-    (version "0.2.3")
+    (version "0.3.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "pako" version))
         (sha256
-         (base32
-          "0y4pllaii6lc3859s7789iv9wgbsqk0khx7kfhlz19m2qpc5zrbb"))))
+         (base32 "1izr1ymi94pn0wxsjs1xbbkz9dg2gqcjy4qh3afhc0b73l91rgga"))))
     (build-system python-build-system)
     (propagated-inputs
      `(("python-appdirs" ,python-appdirs)))
@@ -440,3 +515,218 @@ course installing and removing skills from the system.")
     (description
      "The universal package manager library")
     (license license:asl2.0)))
+
+(define-public python-testfixtures
+  (package
+    (name "python-testfixtures")
+    (version "6.17.1")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "testfixtures" version))
+        (sha256
+         (base32
+          "1nlv2hz20czjp4a811ichl5kwg99rh84l0mw9wq4rk3idzfs1hsy"))))
+    (build-system python-build-system)
+    (arguments
+     `(#:tests? #f))    ; Lets come back to this later. Need DJANGO_SETTINGS_MODULE
+    (native-inputs
+     `(("python-django" ,python-django)
+       ("python-mock" ,python-mock)
+       ("python-pytest" ,python-pytest)
+       ("python-pytest-cov" ,python-pytest-cov)
+       ;("python-pytest-django" ,python-pytest-django)
+       ("python-sybil" ,python-sybil)
+       ("python-twisted" ,python-twisted)
+       ("python-zope-component" ,python-zope-component)))
+    (home-page "https://github.com/Simplistix/testfixtures")
+    (synopsis
+      "A collection of helpers and mock objects for unit tests and doc tests.")
+    (description
+      "A collection of helpers and mock objects for unit tests and doc tests.")
+    (license license:expat)))
+
+(define-public python-sybil
+  (package
+    (name "python-sybil")
+    (version "2.0.1")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "sybil" version))
+        (sha256
+         (base32
+          "091mvh08l40yh15008nhkazdqw64r9yyvw1jq4ir42v98vi72zar"))))
+    (build-system python-build-system)
+    (arguments
+     `(#:tests? #f))    ; AttributeError: 'NoneType' object has no attribute 'setup'
+    (native-inputs
+     `(("python-pytest" ,python-pytest)
+       ("python-pytest-cov" ,python-pytest-cov)))
+    (home-page "https://github.com/cjw296/sybil")
+    (synopsis
+      "Automated testing for the examples in your documentation.")
+    (description
+      "Automated testing for the examples in your documentation.")
+    (license license:expat)))
+
+(define-public python-padaos
+  (package
+    (name "python-padaos")
+    (version "0.1.10")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "padaos" version))
+        (sha256
+         (base32
+          "0wkd6p3ggf3ffsg3j47fgfcfmmj5k7h5rak88mbkr1r6r35mzh1a"))))
+    (build-system python-build-system)
+    (home-page "https://github.com/MatthewScholefield/padaos")
+    (synopsis
+      "A rigid, lightweight, dead-simple intent parser")
+    (description
+      "A rigid, lightweight, dead-simple intent parser")
+    (license license:expat)))
+
+(define-public python-fann2
+  (package
+    (name "python-fann2")
+    (version "1.1.2")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "fann2" version))
+        (sha256
+         (base32
+          "07nlpncl5cx2kzdy3r91g3i1bsnl7n6f7zracwh87q28mmjhmjnd"))))
+    (build-system python-build-system)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'patch-fann-location
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* "setup.py"
+               (("/usr/pkg/lib")
+                (string-append (assoc-ref inputs "fann") "/lib")))
+             #t)))))
+    (inputs
+     `(("fann" ,fann)))
+    (native-inputs
+     `(("swig" ,swig)))
+    (home-page "https://github.com/FutureLinkCorporation/fann2")
+    (synopsis
+      "Fast Artificial Neural Network Library (FANN) Python bindings.")
+    (description
+      "Fast Artificial Neural Network Library (FANN) Python bindings.")
+    (license license:lgpl2.1)))
+
+(define-public python-padatious
+  (package
+    (name "python-padatious")
+    (version "0.4.8")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "padatious" version))
+        (sha256
+         (base32
+          "0xbgf75kxclacgairid8m948hrrngcxhykr1wkvav32fp58z4wg4"))))
+    (build-system python-build-system)
+    (propagated-inputs
+     `(("python-fann2" ,python-fann2)
+       ("python-padaos" ,python-padaos)
+       ("python-xxhash" ,python-xxhash)))
+    (home-page "https://github.com/MycroftAI/padatious")
+    (synopsis "A neural network intent parser")
+    (description "A neural network intent parser")
+    (license #f)))
+
+(define-public python-xxhash
+  (package
+    (name "python-xxhash")
+    (version "2.0.0")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "xxhash" version))
+        (sha256
+         (base32
+          "0g225kk6hj9ab8ggiw5s157jkqh2f2wd8v3g8nhnyiy1aj2q3jjq"))))
+    (build-system python-build-system)
+    (home-page "https://github.com/ifduyue/python-xxhash")
+    (synopsis "Python binding for xxHash")
+    (description "Python binding for xxHash")
+    (license license:bsd-3)))
+
+(define-public python-adapt-parser
+  (package
+    (name "python-adapt-parser")
+    (version "0.3.7")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "adapt-parser" version))
+        (sha256
+         (base32
+          "0h9kwdycf4x042xwy7hb9978y917ismx9f3zg55z65iv1ksff17c"))))
+    (build-system python-build-system)
+    (propagated-inputs
+     `(("python-pyee" ,python-pyee)
+       ("python-six" ,python-six)))
+    (home-page "https://github.com/MycroftAI/adapt")
+    (synopsis "A text-to-intent parsing framework.")
+    (description
+      "A text-to-intent parsing framework.")
+    (license #f)))
+
+(define-public python-msk
+  (package
+    (name "python-msk")
+    (version "0.3.16")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "msk" version))
+        (sha256
+         (base32
+          "11zf2s5wdglzki2r05plx6j9gykwvbpdn8fbr3fnjz4g0vy1g9y6"))))
+    (build-system python-build-system)
+    (propagated-inputs
+     `(("python-colorama" ,python-colorama)
+       ("python-gitpython" ,python-gitpython)
+       ("python-msm" ,python-msm)
+       ("python-pygithub" ,python-pygithub)
+       ("python-requests" ,python-requests)))
+    (home-page "https://github.com/MycroftAI/mycroft-skills-kit")
+    (synopsis "Mycroft Skills Kit")
+    (description "Mycroft Skills Kit")
+    (license #f)))
+
+;; TODO: Unbundle sphinxbase
+(define-public python-pocketsphinx
+  (package
+    (name "python-pocketsphinx")
+    (version "0.1.15")
+    (source
+      (origin
+        ;; Not all files included in git repo.
+        (method url-fetch)
+        (uri (pypi-uri "pocketsphinx" version))
+        (sha256
+         (base32
+          "0qwvix2bq7n2g7kp1kcfa8z3j3yi35f5p0f9rai6zgkxbis91lil"))))
+    (build-system python-build-system)
+    (arguments
+     `(#:tests? #f))    ; No tests included in release tarball.
+    (inputs
+     `(("alsa-lib" ,alsa-lib)
+       ("pulseaudio" ,pulseaudio)))
+    (native-inputs
+     `(("swig" ,swig)))
+    (home-page "https://github.com/bambocher/pocketsphinx-python")
+    (synopsis
+      "Python interface to CMU Sphinxbase and Pocketsphinx libraries")
+    (description
+      "Python interface to CMU Sphinxbase and Pocketsphinx libraries")
+    (license license:bsd-3)))
