@@ -24,12 +24,15 @@
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system python)
   #:use-module (gnu packages audio)
+  #:use-module (gnu packages autotools)
   #:use-module (gnu packages check)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages django)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages machine-learning)
+  #:use-module (gnu packages pcre)
+  #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-web)
@@ -144,22 +147,19 @@
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "000000000000000000000000000000000yfyl90iwq3az120vjsx"))))
+          "1agwgby9ql8r3x5rd1rgx3xp9y4cdg4pi3kqlz3vanv9na8nf3id"))))
     (build-system gnu-build-system)
     (arguments
-     `(
-       #:configure-flags '("--enable-shared")
-       ))
+     `(#:configure-flags '("--enable-shared")))
     (native-inputs
-     `(
+     `(("autoconf" ,autoconf)
        ("automake" ,automake)
-       ("pkg-config" ,pkg-config)
-       ))
+       ("libtool" ,libtool)
+       ("pkg-config" ,pkg-config)))
     (inputs
-     `(
+     `(("alsa-lib" ,alsa-lib)
        ("pcre2" ,pcre2)
-       ("pulseaudio" ,pulseaudio)
-       ))
+       ("pulseaudio" ,pulseaudio)))
     (home-page "https://mimic.mycroft.ai/")
     (synopsis "Mycroft's TTS engine, based on CMU's Flite")
     (description "Mimic is a fast, lightweight Text-to-speech engine developed
@@ -172,7 +172,7 @@ high quality voice.")
                license:public-domain    ; doc/alice
                license:bsd-3            ; lang/cmulex/make_cmulex_helper.py, include/flite_hts_engine.h, src/hts/flite_hts_engine.c, src/hts/hts_engine_API, src/regex/
                license:asl2.0           ; lang/cmu_grapheme_lex/grapheme_unitran_tables.c
-               ;license:flite            ; rest
+               (license:non-copyleft "flite") ; rest
                ))))
 
 (define-public python-petact
@@ -204,26 +204,33 @@ high quality voice.")
          (base32
           "03qah9gxhx8m6apviqyffay2dpijm2k5h88ikzgndyvs6zc18dxm"))))
     (build-system python-build-system)
+    (arguments
+     `(#:tests? #f  ; Most tests require network access.
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'check
+           (lambda* (#:key tests? #:allow-other-keys)
+             (when tests?
+               (invoke "pytest" "-v" "-s" "gtts"))
+             #t)))))
     (propagated-inputs
-     `(;("python-beautifulsoup4" ,python-beautifulsoup4)
-       ("python-click" ,python-click)
-       ;("python-gtts-token" ,python-gtts-token)
+     `(("python-click" ,python-click)
        ("python-requests" ,python-requests)
-       ("python-six" ,python-six)))
+       ("python-six" ,python-six)
+       ;; Is this needed?
+       ("python-gtts-token" ,python-gtts-token)))
     (native-inputs
      `(("python-flake8" ,python-flake8)
        ("python-mock" ,python-mock)
        ("python-pytest" ,python-pytest)
        ("python-pytest-cov" ,python-pytest-cov)
        ("python-six" ,python-six)
-       ("python-testfixtures" ,python-testfixtures)
-       ;("python-twine" ,python-twine)
-       ))
+       ("python-testfixtures" ,python-testfixtures)))
     (home-page "https://github.com/pndurette/gTTS")
-    (synopsis
-     "gTTS (Google Text-to-Speech), a Python library and CLI tool to interface with Google Translate text-to-speech API")
+    (synopsis "Python library and CLI tool fpr Google Translate text-to-speech API")
     (description
-     "gTTS (Google Text-to-Speech), a Python library and CLI tool to interface with Google Translate text-to-speech API")
+     "This package provides @acronym{gTTS, Google Text-to-Speech}, a Python
+library and CLI tool to interface with Google Translate text-to-speech API.")
     (license license:expat)))
 
 (define-public python-gtts-token
@@ -249,7 +256,8 @@ high quality voice.")
          (replace 'check
            (lambda* (#:key tests? #:allow-other-keys)
              (when tests?
-               (invoke "python" "-m" "unittest" "discover" "-v" "-s" "gtts_token/tests/"))
+               (invoke "python" "-m" "unittest" "discover"
+                       "-v" "-s" "gtts_token/tests/"))
              #t)))))
     (propagated-inputs
      `(("python-requests" ,python-requests)))
@@ -311,13 +319,13 @@ as async/await as seen in Python 3.5+.")
             #t))))
     (build-system python-build-system)
     (arguments
-     ;; alternate tests fail because it wants internet connectivity
+     ;; Standard tests fail because there's no attached microphone.
+     ;; Unit tests fail because it wants internet connectivity.
      '(#:tests? #f
        #:phases
        (modify-phases %standard-phases
          (replace 'check
            (lambda* (#:key tests? #:allow-other-keys)
-             ;; standard tests fail because there's no attached microphone
              (when tests?
                (invoke "python" "-m" "unittest" "discover" "--verbose"))
              #t)))))
@@ -400,15 +408,6 @@ http library.")
         (sha256
          (base32
           "1b9r5l49hrjdlj5nggmy76s3g2ish0z5lg7a79ma54yh2kzbpljf"))))
-        ;; Some files are missing from PyPi.
-        ;(method git-fetch)
-        ;(uri (git-reference
-        ;       (url "https://github.com/MycroftAI/lingua-franca")
-        ;       (commit version)))
-        ;(file-name (git-file-name name version))
-        ;(sha256
-        ; (base32
-        ;  "000000000000000000000000000000000cg3bdmk0pisymjg7ysx"))))
     (build-system python-build-system)
     (arguments
      '(#:phases
@@ -432,12 +431,6 @@ http library.")
     (version "0.9.0")
     (source
       (origin
-        ;(method url-fetch)
-        ;(uri (pypi-uri "msm" version))
-        ;(sha256
-        ; (base32
-        ;  "0dc7mgg3nsd3bqyg1gg0jplldpjl7gyfs09gmzq6k9hah29xbgiz"))))
-        ;; Tests not included in release tarball.
         ;; Some files not included in the release tarball.
         (method git-fetch)
         (uri (git-reference
@@ -710,7 +703,7 @@ course installing and removing skills from the system.")
     (version "0.1.15")
     (source
       (origin
-        ;; Not all files included in git repo.
+        ;; Not all bundled files included in git repo.
         (method url-fetch)
         (uri (pypi-uri "pocketsphinx" version))
         (sha256
