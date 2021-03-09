@@ -1,4 +1,4 @@
-;;; Copyright © 2016, 2018, 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2018, 2019, 2020, 2021 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -20,15 +20,14 @@
   #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils)
-  #:use-module (guix build-system gnu)
-  #:use-module (gnu packages autotools)
+  #:use-module (guix build-system meson)
   #:use-module (gnu packages enlightenment)
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages pkg-config))
 
 (define-public express-irc
-  (let ((commit "c42d2480060a7700209abd1abefb8ef6522a5482")
-        (revision "2"))
+  (let ((commit "ec9f9c95150da86925b9e3cf0ad9017fc2c8a531")
+        (revision "3"))
     (package
       (name "express-irc")
       (version (git-version "0.0.1" revision commit))
@@ -41,8 +40,15 @@
           (file-name (git-file-name name version))
           (sha256
            (base32
-            "07wf3x59p7790lfa1b1whxrp7qmj89z4l54ylcn7f250bif37nl8"))))
-      (build-system gnu-build-system)
+            "1c8dgz975ng2vlcb4dj8d2m90fam9m5c7xx7lv64yn5ppwh0qgq2"))
+          (modules '((guix build utils)))
+          (snippet
+           '(begin
+              (delete-file-recursively "data/fonts")
+              (substitute* "meson.build"
+                ((".*data/fonts.*") ""))
+              #t))))
+      (build-system meson-build-system)
       (arguments
        '(#:phases
          (modify-phases %standard-phases
@@ -50,20 +56,9 @@
              (lambda _
                ;; FATAL: Cannot create run dir '/homeless-shelter/.run' - errno=2
                (setenv "HOME" "/tmp")
-               #t))
-           (add-after 'configure 'unbundle-fonts
-             ;; Ideally we'd do this unbundling in a snippet but it has to be
-             ;; after the configure(!!) phase.
-             (lambda _
-               (delete-file-recursively "data/fonts")
-               (substitute* "data/Makefile"
-                 (("fonts") ""))
                #t)))))
       (native-inputs
-       `(("autoconf" ,autoconf)
-         ("automake" ,automake)
-         ("gettext" ,gettext-minimal)
-         ("libtool" ,libtool)
+       `(("gettext" ,gettext-minimal)
          ("pkg-config" ,pkg-config)))
       (inputs
        `(("efl" ,efl)))
