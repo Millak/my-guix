@@ -26,8 +26,8 @@
   #:use-module (gnu packages xml))
 
 (define-public rdrview
-  (let ((commit "cb15d7f31199966b539228b104c519167e32a80d")
-        (revision "1"))
+  (let ((commit "b887583e9181437c6d6124a31a24c6188dbdfe6b")
+        (revision "2"))
     (package
       (name "rdrview")
       (version (git-version "0.0.0" revision commit))
@@ -40,7 +40,7 @@
           (file-name (git-file-name name version))
           (sha256
            (base32
-            "0rp6id1lirpbi96f5xp14b1x8y6rdvn406dbzh6kbd0d7sw3yahr"))))
+            "0a42ianxjiqf541i9l7jl5840gf9nk9ccwy0lm4wkam6rpk6yaxl"))))
       (build-system gnu-build-system)
       (arguments
        `(#:tests? #f              ; Test suite needs work.
