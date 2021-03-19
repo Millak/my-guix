@@ -63,19 +63,21 @@
              '(begin
                 (for-each delete-file-recursively
                           '(
-                            "db/sqlite3"
-                            "ipc/chromium/src/third_party"
-                            "modules/freetype2"
-                            "js/src/ctypes/libffi"
-                            ;"intl/icu"
+            ;                ;"db/sqlite3"
+            ;                "ipc/chromium/src/third_party"
+            ;                "modules/freetype2"
+            ;                "modules/zlib"
+            ;                "js/src/ctypes/libffi"
+            ;                ;"intl/icu"
                             "security/nss"
+                            "security/sandbox/chromium-shim/base/third_party"
                             ))
                 #t))
             ))
       (build-system gnu-build-system)
       (arguments
        `(#:tests? #f          ; no check target
-         #:out-of-source? #t  ; must be built outside of the source directory
+         ;#:out-of-source? #t  ; must be built outside of the source directory
          #:configure-flags
          (list "--disable-crashreporter"
                "--disable-tests"
@@ -92,41 +94,36 @@
                "--enable-dbus"
                ;"--disable-gio"
                ;"--disable-pulseaudio"
-               ;"--enable-strip"
-               ;"--enable-install-strip"
+               "--enable-strip"
+               "--enable-install-strip"
                "--enable-application=browser"
                "--with-branding=browser/branding/arcticfox"
                "--enable-optimize=-O2"
 
                "--with-distribution-id=org.gnu"
-               "--disable-debug-symbols"
-               "--with-system-jpeg"        ; must be libjpeg-turbo
+               ;"--disable-debug-symbols"
+               ;"--with-system-jpeg"        ; must be libjpeg-turbo
                "--with-system-nspr"
                "--with-system-nss"
-               ;"--with-system-icu"
-               "--with-system-libevent"
-               "--with-system-zlib"
-               "--with-system-bz2"
-               "--with-system-webp"
-               "--with-system-cairo"
-               "--with-system-sqlite"
-               ;; UNBUNDLE-ME! "--with-system-ogg"
-               ;; UNBUNDLE-ME! "--with-system-vorbis"
-               ;; UNBUNDLE-ME! "--with-system-theora" ; wants theora-1.2, not yet released
-               "--with-system-libvpx"
-               ;; UNBUNDLE-ME! "--with-system-harfbuzz"
-               ;; UNBUNDLE-ME! "--with-system-graphite2"
-               "--enable-system-pixman"
-               "--enable-system-ffi"
+               ;;"--with-system-icu"
+               ;;"--with-system-libevent"
+               ;"--with-system-zlib"
+               ;"--with-system-bz2"
+               ;"--with-system-webp"
+               ;"--with-system-cairo"
+               ;"--with-system-sqlite"
+               ;;; UNBUNDLE-ME! "--with-system-ogg"
+               ;;; UNBUNDLE-ME! "--with-system-vorbis"
+               ;;; UNBUNDLE-ME! "--with-system-theora" ; wants theora-1.2, not yet released
+               ;"--with-system-libvpx"
+               ;;; UNBUNDLE-ME! "--with-system-harfbuzz"
+               ;;; UNBUNDLE-ME! "--with-system-graphite2"
+               ;"--enable-system-pixman"
+               ;"--enable-system-ffi"
                )
          #:phases
          (modify-phases %standard-phases
-           (replace 'bootstrap
-             (lambda _
-               (substitute* (find-files "build/autoconf")
-                 (("#!/bin/sh") (string-append "#!" (which "sh")))
-                 (("#! /bin/sh") (string-append "#! " (which "sh"))))
-               (invoke "autoreconf" "--verbose" "--force" "-i")))
+           (delete 'bootstrap)
            (replace 'configure
              ;; configure does not work followed by both "SHELL=..." and
              ;; "CONFIG_SHELL=..."; set environment variables instead
@@ -136,66 +133,74 @@
                       (abs-srcdir (getcwd))
                       (srcdir (string-append "../" (basename abs-srcdir)))
                       (flags `(,(string-append "--prefix=" out)
-                               ;,(string-append "--with-l10n-base="
-                               ;                abs-srcdir "/l10n")
                                ,@configure-flags)))
+                 ;; Write the configure-flags to .mozconfig for use with ./mach
+                 (with-output-to-file ".mozconfig"
+                   (lambda _
+                     (format #t "export LDFLAGS=\"-Wl,-rpath=~a/lib/arcticfox-~a\"~@
+                             mk_add_options MOZ_MAKE_FLAGS=\"-s -j~a\"~@
+                             ~{ac_add_options ~a\n~} ~%"
+                             out ,version (number->string (parallel-job-count)) flags)))
                  (setenv "SHELL" bash)
                  (setenv "CONFIG_SHELL" bash)
-                 (setenv "_CONFIG_SHELL" bash)
-                 (setenv "AUTOCONF" (which "autoconf")) ; must be autoconf-2.13
+                 (setenv "AUTOCONF" (which "autoconf"))     ; must be autoconf-2.13
                  (setenv "CC" ,(cc-for-target))  ; apparently needed when Stylo is enabled
                  (setenv "MOZ_BUILD_DATE" "20210130000000") ; avoid timestamp
-                 (mkdir "../build")
-                 (chdir "../build")
                  (format #t "build directory: ~s~%" (getcwd))
-                 (format #t "configure flags: ~s~%" flags)
-                 (apply invoke bash
-                        (string-append srcdir "/configure")
-                        flags)
-                 ;(symlink "mozcfg-amd64linux" ".mozconfig")
-                 )))
+                 (format #t "configure flags: ~s~%" flags))))
            (replace 'build
              (lambda _ (invoke "./mach" "build")))
            (replace 'install
-             (lambda _ (invoke "./mach" "install")))
-           )))
+             (lambda* (#:key outputs #:allow-other-keys)
+               (let ((out (assoc-ref outputs "out")))
+                 ;(invoke "./mach" "package")
+                 (invoke "./mach" "install")
+                 ;(delete-file-recursively (string-append out "/lib/arcticfox-devel-" ,version))
+                 ;(delete-file (string-append out "/bin/arcticfox"))
+                 ;(symlink (string-append out "/bin/arcticfox")
+                 ;         (string-append out "/lib/arcticfox-" ,version "/arcticfox"))
+               #t)))
+           )
+           #:strip-binaries? #f
+           ))
       (native-inputs
-       `(
-         ("autoconf" ,autoconf-2.13)
+       `(("autoconf" ,((@@ (gnu packages autotools) make-autoconf-wrapper) autoconf-2.13))
          ("automake" ,automake)
-         ("gettext" ,(@ (gnu packages gettext) gettext-minimal))
-         ("libtool" ,libtool)
-         ;("m4" ,(@ (gnu packages m4) m4))
+         ;("gettext" ,(@ (gnu packages gettext) gettext-minimal))
+         ;("libtool" ,libtool)
          ("perl" ,perl)
          ("pkg-config" ,pkg-config)
          ("python" ,python-2)
          ("which" ,(@ (gnu packages base) which))
-         ("yasm" ,yasm)
-         ))
+         ("yasm" ,yasm)))
       (inputs
-       `(
-         ("alsa-lib" ,alsa-lib)
-         ("bzip2" ,bzip2)
+       `(("alsa-lib" ,alsa-lib)
+         ;("bzip2" ,bzip2)
          ("dbus-glib" ,dbus-glib)
-         ("gdk-pixbuf" ,gdk-pixbuf)
+         ;("gdk-pixbuf" ,gdk-pixbuf+svg)
          ("glib" ,glib)
          ("gtk" ,gtk+-2)
          ;("icu4c" ,icu4c)
-         ("libjpeg-turbo" ,libjpeg-turbo)
-         ("libevent" ,libevent)
-         ("libffi" ,libffi)
-         ("libvpx" ,libvpx)
-         ("libwebp" ,libwebp)
+         ;("libjpeg-turbo" ,libjpeg-turbo)
+         ;("libevent" ,libevent)
+         ;("libffi" ,libffi)
+         ;("libvpx" ,libvpx)
+         ;("libwebp" ,libwebp)
          ("libxt" ,libxt)
          ("nspr" ,nspr)
          ("nss" ,nss)
-         ("pango" ,pango)
          ("pulseaudio" ,pulseaudio)
          ("unzip" ,unzip)
          ("zip" ,zip)
-         ("zlib" ,zlib)
+         ;("zlib" ,zlib)
          ))
       (home-page "https://github.com/wicknix/Arctic-Fox")
-      (synopsis "")
-      (description "")
+      (synopsis " Web Browser for Mac OS X 10.6+, Windows XP, and PowerPC Linux")
+      (description "Arctic Fox aims to be a desktop oriented browser with phone
+support removed, or no longer updated in the tree.  The goal here is to
+implement specific security updates and bug fixes to keep this browser as up to
+date as possible for aging systems. Examples would be Mac OSX 10.6-10.8,
+PowerPC's running Linux, Windows XP, etc.  Arctic Fox will build for Mac OS X
+10.6 and up, Windows XP, i386/x86_64/PowerPC Linux, and more than likely any
+other UNIX/BSD varient.")
       (license license:mpl2.0))))
