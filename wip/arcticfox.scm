@@ -26,18 +26,20 @@
   #:use-module (gnu packages assembly)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages compression)
+  #:use-module (gnu packages gl)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gtk)
-  #:use-module (gnu packages icu4c)
   #:use-module (gnu packages image)
   #:use-module (gnu packages libevent)
   #:use-module (gnu packages libffi)
+  #:use-module (gnu packages libreoffice)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages nss)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages python)
+  #:use-module (gnu packages sqlite)
   #:use-module (gnu packages video)
   #:use-module (gnu packages xorg)
   )
@@ -58,26 +60,29 @@
             (sha256
              (base32
               "07mh8apn84ywxsxdncyqrvylgmym8r7sf2lgjwzpaylr79jk8s76"))
-            (modules '((guix build utils)))
-            (snippet
-             '(begin
-                (for-each delete-file-recursively
-                          '(
+            ;(modules '((guix build utils)))
+            ;(snippet
+            ; '(begin
+            ;    (for-each delete-file-recursively
+            ;              '(
             ;                ;"db/sqlite3"
-            ;                "ipc/chromium/src/third_party"
+            ;                ;"ipc/chromium/src/third_party" ; libevent
+            ;                "media/libjpeg"
+            ;                "media/libpng"
+            ;                ;"media/libvpx"
+            ;                ;"media/libwebp"
             ;                "modules/freetype2"
+            ;                "modules/libbz2"
             ;                "modules/zlib"
-            ;                "js/src/ctypes/libffi"
-            ;                ;"intl/icu"
-                            "security/nss"
-                            "security/sandbox/chromium-shim/base/third_party"
-                            ))
-                #t))
+            ;                ;"js/src/ctypes/libffi"
+            ;                "security/nss"
+            ;                "security/sandbox/chromium-shim/base/third_party"
+            ;                ))
+            ;    #t))
             ))
       (build-system gnu-build-system)
       (arguments
        `(#:tests? #f          ; no check target
-         ;#:out-of-source? #t  ; must be built outside of the source directory
          #:configure-flags
          (list "--disable-crashreporter"
                "--disable-tests"
@@ -92,35 +97,28 @@
                "--disable-eme"
                "--disable-gamepad"
                "--enable-dbus"
-               ;"--disable-gio"
-               ;"--disable-pulseaudio"
-               "--enable-strip"
-               "--enable-install-strip"
+               ;"--enable-strip"
+               ;"--enable-install-strip"
                "--enable-application=browser"
                "--with-branding=browser/branding/arcticfox"
                "--enable-optimize=-O2"
 
                "--with-distribution-id=org.gnu"
-               ;"--disable-debug-symbols"
-               ;"--with-system-jpeg"        ; must be libjpeg-turbo
+               ;"--enable-default-toolkit=cairo-gtk3"
+               "--with-system-bz2"
+               "--with-system-jpeg"        ; must be libjpeg-turbo
+               ;"--with-system-libevent"    ; seems to be incompatable
+               "--with-system-libvpx"
                "--with-system-nspr"
                "--with-system-nss"
-               ;;"--with-system-icu"
-               ;;"--with-system-libevent"
-               ;"--with-system-zlib"
-               ;"--with-system-bz2"
-               ;"--with-system-webp"
-               ;"--with-system-cairo"
-               ;"--with-system-sqlite"
-               ;;; UNBUNDLE-ME! "--with-system-ogg"
-               ;;; UNBUNDLE-ME! "--with-system-vorbis"
-               ;;; UNBUNDLE-ME! "--with-system-theora" ; wants theora-1.2, not yet released
-               ;"--with-system-libvpx"
-               ;;; UNBUNDLE-ME! "--with-system-harfbuzz"
-               ;;; UNBUNDLE-ME! "--with-system-graphite2"
-               ;"--enable-system-pixman"
-               ;"--enable-system-ffi"
-               )
+               "--with-system-png"
+               "--with-system-webp"
+               "--with-system-zlib"
+               ;"--disable-debug-symbols"
+               "--enable-system-cairo"
+               "--enable-system-hunspell"
+               "--enable-system-pixman"
+               "--enable-system-sqlite")
          #:phases
          (modify-phases %standard-phases
            (delete 'bootstrap)
@@ -160,8 +158,25 @@
                  ;(symlink (string-append out "/bin/arcticfox")
                  ;         (string-append out "/lib/arcticfox-" ,version "/arcticfox"))
                #t)))
+           (add-after 'install 'wrap-program
+             (lambda* (#:key inputs outputs #:allow-other-keys)
+               (let* ((out (assoc-ref outputs "out"))
+                      (lib (string-append out "/lib"))
+                      (gtk (assoc-ref inputs "gtk+"))
+                      (gtk-share (string-append gtk "/share"))
+                      (mesa (assoc-ref inputs "mesa"))
+                      (mesa-lib (string-append mesa "/lib"))
+                      ;(pulseaudio (assoc-ref inputs "pulseaudio"))
+                      ;(pulseaudio-lib (string-append pulseaudio "/lib"))
+                      ;(libxscrnsaver (assoc-ref inputs "libxscrnsaver"))
+                      ;(libxscrnsaver-lib (string-append libxscrnsaver "/lib"))
+                      )
+                 (wrap-program (car (find-files lib "^arcticfox$"))
+                   `("XDG_DATA_DIRS" prefix (,gtk-share))
+                   ;`("LD_LIBRARY_PATH" prefix (,pulseaudio-lib ,mesa-lib ,libxscrnsaver-lib)))
+                   `("LD_LIBRARY_PATH" prefix (,mesa-lib)))
+               #t)))
            )
-           #:strip-binaries? #f
            ))
       (native-inputs
        `(("autoconf" ,((@@ (gnu packages autotools) make-autoconf-wrapper) autoconf-2.13))
@@ -180,16 +195,20 @@
          ;("gdk-pixbuf" ,gdk-pixbuf+svg)
          ("glib" ,glib)
          ("gtk" ,gtk+-2)
-         ;("icu4c" ,icu4c)
-         ;("libjpeg-turbo" ,libjpeg-turbo)
+         ("gtk+" ,gtk+)
+         ("hunspell" ,hunspell)
+         ("libpng" ,libpng-apng)
+         ("libjpeg-turbo" ,libjpeg-turbo)
          ;("libevent" ,libevent)
          ;("libffi" ,libffi)
-         ;("libvpx" ,libvpx)
-         ;("libwebp" ,libwebp)
+         ("libvpx" ,libvpx)
+         ("libwebp" ,libwebp)
          ("libxt" ,libxt)
+         ("mesa" ,mesa)
          ("nspr" ,nspr)
          ("nss" ,nss)
          ("pulseaudio" ,pulseaudio)
+         ("sqlite" ,sqlite)
          ("unzip" ,unzip)
          ("zip" ,zip)
          ;("zlib" ,zlib)
