@@ -74,7 +74,7 @@
               ;(delete-file-recursively "github.com/eapache/queue")
               (delete-file-recursively "github.com/edsrzf/mmap-go")
               (delete-file-recursively "github.com/emirpasic/gods")
-              ;(delete-file-recursively "github.com/etcd-io/bbolt")
+              ;(delete-file-recursively "github.com/etcd-io/bbolt") ; go-go-etcd-io-bbolt
               ;(delete-file-recursively "github.com/gammazero/deque")
               ;(delete-file-recursively "github.com/gammazero/workerpool")
               ;(delete-file-recursively "github.com/glycerine/go-unsnap-stream")
@@ -230,8 +230,8 @@
        ("go-github-com-blang-semver" ,go-github-com-blang-semver)
        ("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)
        ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
-       ("go-github-com-emirpasic-gods" ,go-github-com-emirpasic-gods)
        ("go-github-com-edsrzf-mmap-go" ,go-github-com-edsrzf-mmap-go)
+       ("go-github-com-emirpasic-gods" ,go-github-com-emirpasic-gods)
        ("go-github-com-gobwas-glob" ,go-github-com-gobwas-glob)
        ("go-github-com-golang-groupcache-lru" ,go-github-com-golang-groupcache-lru)
        ("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto)
@@ -262,6 +262,7 @@
        ("go-golang-org-x-sys" ,go-golang-org-x-sys)
        ("go-golang-org-x-text" ,go-golang-org-x-text)
        ("go-golang-org-x-time" ,go-golang-org-x-time)
+       ;("go-go-etcd-io-bbolt" ,go-go-etcd-io-bbolt)
        ("go-go-uber-org-zap" ,go-go-uber-org-zap)
        ("go-google-golang-org-appengine" ,go-google-golang-org-appengine)))
     (home-page "https://keybase.io")
@@ -407,3 +408,30 @@ of storing, syncing, sharing, modelling and backing up content.")
       (description "This packages provides a Go implementation of mmap.")
       (home-page "https://github.com/edsrzf/mmap-go")
       (license license:bsd-3))))
+
+(define-public go-go-etcd-io-bbolt
+  (package
+    (name "go-go-etcd-io-bbolt")
+    (version "1.3.5")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/etcd-io/bbolt.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1h64gipvcg7060byv5wjlf524kqwj12p3v08kfh4ygv46vpm8p2r"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "go.etcd.io/bbolt"))
+    (inputs
+     `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
+    (home-page "https://github.com/etcd-io/bbolt")
+    (synopsis "Embedded key/value database for Go")
+    (description "Bolt is a pure Go key/value store inspired by Howard Chu's
+LMDB project.  The goal of the project is to provide a simple, fast, and
+reliable database for projects that don't require a full database server such as
+Postgres or MySQL.")
+    (license license:expat)))
