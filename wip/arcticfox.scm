@@ -41,15 +41,14 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages video)
-  #:use-module (gnu packages xorg)
-  )
+  #:use-module (gnu packages xorg))
 
 (define-public arcticfox
   (let ((commit "0be1cbd77b3c44a6f2d7368cec1b818e6778e018") ; Jan 30, 2021
         (revision "1"))
     (package
       (name "arcticfox")
-      (version "27.11.0")
+      (version (git-version "27.11.0" revision commit))
       (source
         (origin
           (method git-fetch)
@@ -82,7 +81,7 @@
             ))
       (build-system gnu-build-system)
       (arguments
-       `(#:tests? #f          ; no check target
+       `(#:tests? #f          ; check target removed?
          #:configure-flags
          (list "--disable-crashreporter"
                "--disable-tests"
@@ -135,28 +134,31 @@
                  ;; Write the configure-flags to .mozconfig for use with ./mach
                  (with-output-to-file ".mozconfig"
                    (lambda _
-                     (format #t "export LDFLAGS=\"-Wl,-rpath=~a/lib/arcticfox-~a\"~@
+                     (format #t ";export LDFLAGS=\"-Wl,-rpath=~a/lib/arcticfox-~a\"~@
                              mk_add_options MOZ_MAKE_FLAGS=\"-s -j~a\"~@
                              ~{ac_add_options ~a\n~} ~%"
-                             out ,version (number->string (parallel-job-count)) flags)))
+                             ;out ,version
+                             (number->string (parallel-job-count)) flags)))
                  (setenv "SHELL" bash)
                  (setenv "CONFIG_SHELL" bash)
                  (setenv "AUTOCONF" (which "autoconf"))     ; must be autoconf-2.13
                  (setenv "CC" ,(cc-for-target))  ; apparently needed when Stylo is enabled
                  (setenv "MOZ_BUILD_DATE" "20210130000000") ; avoid timestamp
                  (format #t "build directory: ~s~%" (getcwd))
-                 (format #t "configure flags: ~s~%" flags))))
+                 (format #t "configure flags: ~s~%" flags)
+                 (invoke "./mach" "configure"))))
            (replace 'build
              (lambda _ (invoke "./mach" "build")))
+           (replace 'check
+             (lambda* (#:key tests? #:allow-other-keys)
+               (when tests?
+                 (invoke "./mach" "test"))
+               #t))
            (replace 'install
              (lambda* (#:key outputs #:allow-other-keys)
                (let ((out (assoc-ref outputs "out")))
                  ;(invoke "./mach" "package")
                  (invoke "./mach" "install")
-                 ;(delete-file-recursively (string-append out "/lib/arcticfox-devel-" ,version))
-                 ;(delete-file (string-append out "/bin/arcticfox"))
-                 ;(symlink (string-append out "/bin/arcticfox")
-                 ;         (string-append out "/lib/arcticfox-" ,version "/arcticfox"))
                #t)))
            (add-after 'install 'wrap-program
              (lambda* (#:key inputs outputs #:allow-other-keys)
@@ -179,7 +181,8 @@
            )
            ))
       (native-inputs
-       `(("autoconf" ,((@@ (gnu packages autotools) make-autoconf-wrapper) autoconf-2.13))
+       `(("autoconf" ,((@@ (gnu packages autotools)
+                           make-autoconf-wrapper) autoconf-2.13))
          ("automake" ,automake)
          ;("gettext" ,(@ (gnu packages gettext) gettext-minimal))
          ;("libtool" ,libtool)
@@ -218,7 +221,7 @@
       (description "Arctic Fox aims to be a desktop oriented browser with phone
 support removed, or no longer updated in the tree.  The goal here is to
 implement specific security updates and bug fixes to keep this browser as up to
-date as possible for aging systems. Examples would be Mac OSX 10.6-10.8,
+date as possible for aging systems.  Examples would be Mac OSX 10.6-10.8,
 PowerPC's running Linux, Windows XP, etc.  Arctic Fox will build for Mac OS X
 10.6 and up, Windows XP, i386/x86_64/PowerPC Linux, and more than likely any
 other UNIX/BSD varient.")
