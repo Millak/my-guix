@@ -1,4 +1,4 @@
-;;; Copyright © 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2020, 2021 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -20,7 +20,7 @@
   #:use-module (guix git-download)
   #:use-module (guix download)
   #:use-module (guix packages)
-  #:use-module (guix build-system cmake)
+  #:use-module (guix build-system qt)
   #:use-module (guix build-system minify)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages javascript)
@@ -36,7 +36,7 @@
 (define-public sigil
   (package
     (name "sigil")
-    (version "1.4.3")
+    (version "1.5.1")
     (source
       (origin
         (method git-fetch)
@@ -46,31 +46,39 @@
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "0jf0lphxks8dcf8qrm4dr1l635mvvs508rrhpsdh6pfvk15ijjgg"))
+          "1nck5gh62acm7zdi1q73vmgvgpx0gscwpds19mhwvqr2hp7him4g"))
         (modules '((guix build utils)))
         (snippet
          '(begin
+            ;; Don't check for updates
+            (substitute* "src/main.cpp"
+              ((".*UpdateChecker.*") "")
+              ((".*CheckForUpdate.*") ""))
+
             (with-directory-excursion "3rdparty"
               (for-each delete-file-recursively
                         '("extra" "hunspell" "minizip" "pcre" "zlib")))
             (delete-file-recursively "src/Resource_Files/dictionaries")
             ;(delete-file-recursively "src/Resource_Files/polyfills/")   ; mathjax
-            ;(delete-file "src/Resource_Files/polyfills/ML.zip")
+            (delete-file "src/Resource_Files/polyfills/ML.zip")
             (with-directory-excursion "src/Resource_Files/javascript"
               (delete-file "jquery-2.2.4.min.js")
               (delete-file "jquery.scrollTo-1.4.2-min.js")
               (delete-file "jquery.scrollTo-2.1.2-min.js"))
             #t))))
-    (build-system cmake-build-system)
+    (build-system qt-build-system)
     (arguments
      `(#:tests? #f  ; no tests
        #:configure-flags
        (list "-DUSE_SYSTEM_LIBS=1"
              "-DSYSTEM_LIBS_REQUIRED=1"
              "-DINSTALL_BUNDLED_DICTS=0"
-             ;; Tries to install file to mathjax/config/local
-             ;(string-append "-DMATHJAX_DIR="
-             ;               (assoc-ref %build-inputs "js-mathjax"))
+             ;; Tries to install file to [mathjax]/config/local.
+             ;; Set [mathjax] to the correct folder structure, not
+             ;; to the mathjax package location.
+             (string-append "-DMATHJAX_DIR="
+                            (assoc-ref %outputs "out")
+                            "/share/javascript/mathjax")
              "-DINSTALL_HICOLOR_ICONS=1")
        #:phases
        (modify-phases %standard-phases
@@ -92,7 +100,8 @@
                             qtwebengine
                             "/lib/qt5/libexec/QtWebEngineProcess")))
                  `("PYTHONPATH" ":" prefix (,(getenv "PYTHONPATH"))))
-               #t))))))
+               #t)))
+         )))
     (native-inputs
      `(("pkg-config" ,pkg-config)
        ("qttools" ,qttools)
@@ -104,13 +113,16 @@
            (sha256
             (base32
              "13jglpbvm4cjqpbi82fsq8bi0b0ynwxd1nh8yvc19zqzyjb5vf05"))))))
+    (propagated-inputs
+     ;; Needed so when sigil is installed the mathjax addon will be in the correct folder.
+     `(("js-mathjax" ,js-mathjax)))
     (inputs
      `(("hunspell" ,hunspell)
-       ("js-mathjax" ,js-mathjax)
        ("js-jquery-scrollto" ,js-jquery-scrollto)
        ("minizip" ,minizip)
        ("pcre" ,pcre)
        ("python" ,python)
+       ("python:tk" ,python "tk")
        ("python-chardet" ,python-chardet)
        ("python-css-parser" ,python-css-parser)
        ("python-cssselect" ,python-cssselect)
