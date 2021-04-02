@@ -43,6 +43,7 @@
     (build-system cmake-build-system)
     (arguments
      `(#:test-target "tests"
+       ;#:build-type "Release"
        ;#:configure-flags '((string-append "-DdefaultPackagesDirectory=" ...something
        #:configure-flags '("-GNinja")
        #:phases
@@ -70,11 +71,13 @@
                )
              #t)))))
     (native-inputs
-     `(("llvm" ,llvm-8)
+     `(;("llvm" ,llvm-8)
+       ("clang-toolchain" ,clang-toolchain-8)
        ("ncurses" ,(@ (gnu packages ncurses) ncurses)) ; needed?
        ("ninja" ,ninja)
        ("python" ,python)
-       ("zlib" ,zlib)))
+       ("zlib" ,zlib)
+       ("zlib" ,zlib "static")))
     ;(native-search-paths
     ;  (list (search-path-specification
     ;          (variable "EMOJICODE_PACKAGES_PATH")
