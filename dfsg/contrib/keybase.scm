@@ -49,9 +49,9 @@
               (delete-file-recursively "camlistore.org/pkg/images")
               (delete-file-recursively "github.com/BurntSushi")
               (delete-file-recursively "github.com/PuerkitoBio/goquery")
-              ;(delete-file-recursively "github.com/RoaringBitmap/roaring")
-              ;(delete-file-recursively "github.com/StackExchange/wmi")
-              ;(delete-file-recursively "github.com/akavel/rsrc")
+              (delete-file-recursively "github.com/RoaringBitmap/roaring")
+              (delete-file-recursively "github.com/StackExchange/wmi")
+              (delete-file-recursively "github.com/akavel/rsrc")
               (delete-file-recursively "github.com/andybalholm/cascadia")
               (delete-file-recursively "github.com/antchfx/htmlquery")
               (delete-file-recursively "github.com/antchfx/xmlquery")
@@ -59,29 +59,29 @@
               (delete-file-recursively "github.com/araddon/dateparse")
               (delete-file-recursively "github.com/asaskevich/govalidator")
               (delete-file-recursively "github.com/blang")
-              ;(delete-file-recursively "github.com/blevesearch/bleve")
-              ;(delete-file-recursively "github.com/blevesearch/go-porterstemmer")
-              ;(delete-file-recursively "github.com/blevesearch/segment")
+              (delete-file-recursively "github.com/blevesearch/bleve")
+              (delete-file-recursively "github.com/blevesearch/go-porterstemmer")
+              (delete-file-recursively "github.com/blevesearch/segment")
               (delete-file-recursively "github.com/btcsuite/btcutil")
               (delete-file-recursively "github.com/buger/jsonparser")
-              ;(delete-file-recursively "github.com/coreos/go-systemd")
-              ;(delete-file-recursively "github.com/coreos/pkg")
-              ;(delete-file-recursively "github.com/couchbase/vellum")
+              (delete-file-recursively "github.com/coreos/go-systemd")
+              (delete-file-recursively "github.com/coreos/pkg")
+              (delete-file-recursively "github.com/couchbase/vellum")
               (delete-file-recursively "github.com/davecgh/go-spew")
-              ;(delete-file-recursively "github.com/deckarep/golang-set")
+              (delete-file-recursively "github.com/deckarep/golang-set")
               (delete-file-recursively "github.com/docopt/docopt-go")
-              ;(delete-file-recursively "github.com/dustin/go-humanize")
-              ;(delete-file-recursively "github.com/eapache/channels")
-              ;(delete-file-recursively "github.com/eapache/queue")
+              (delete-file-recursively "github.com/dustin/go-humanize")
+              (delete-file-recursively "github.com/eapache/channels")
+              (delete-file-recursively "github.com/eapache/queue")
               (delete-file-recursively "github.com/edsrzf/mmap-go")
               (delete-file-recursively "github.com/emirpasic/gods")
-              ;(delete-file-recursively "github.com/etcd-io/bbolt") ; go-go-etcd-io-bbolt
-              ;(delete-file-recursively "github.com/gammazero/deque")
-              ;(delete-file-recursively "github.com/gammazero/workerpool")
-              ;(delete-file-recursively "github.com/glycerine/go-unsnap-stream")
+              (delete-file-recursively "github.com/etcd-io/bbolt")
+              (delete-file-recursively "github.com/gammazero/deque")
+              (delete-file-recursively "github.com/gammazero/workerpool")
+              (delete-file-recursively "github.com/glycerine/go-unsnap-stream")
               (delete-file-recursively "github.com/go-errors/errors")
-              ;(delete-file-recursively "github.com/go-ole/go-ole")
-              ;(delete-file-recursively "github.com/go-sql-driver/mysql")
+              (delete-file-recursively "github.com/go-ole/go-ole")
+              (delete-file-recursively "github.com/go-sql-driver/mysql")
               (delete-file-recursively "github.com/gobwas")
               (delete-file-recursively "github.com/gocolly/colly")
               (delete-file-recursively "github.com/golang/groupcache/lru")
@@ -122,48 +122,47 @@
               ;(delete-file-recursively "github.com/keybase/stellarnet")
               ;(delete-file-recursively "github.com/keybase/xurls")
               (delete-file-recursively "github.com/kr")
-              ;(delete-file-recursively "github.com/kyokomi/emoji")
+              (delete-file-recursively "github.com/kyokomi/emoji")
               (delete-file-recursively "github.com/lib")
               (delete-file-recursively "github.com/manucorporat/sse")
               (delete-file-recursively "github.com/mattn")
               (delete-file-recursively "github.com/miekg/dns")
               (delete-file-recursively "github.com/mitchellh")
-              ;(delete-file-recursively "github.com/mschoch/smat")
-              ;(delete-file-recursively "github.com/nf/cr2")
+              (delete-file-recursively "github.com/mschoch/smat")
+              (delete-file-recursively "github.com/nf/cr2")
               (delete-file-recursively "github.com/nfnt/resize")
-              ;(delete-file-recursively "github.com/pelletier/go-buffruneio")
-              ;(delete-file-recursively "github.com/philhofer/fwd")
+              (delete-file-recursively "github.com/pelletier/go-buffruneio")
+              (delete-file-recursively "github.com/philhofer/fwd")
               (delete-file-recursively "github.com/pkg/errors")
               (delete-file-recursively "github.com/pmezard")
-              ;(delete-file-recursively "github.com/qrtz/nativemessaging")
-              ;(delete-file-recursively "github.com/rcrowley")
+              (delete-file-recursively "github.com/qrtz/nativemessaging")
+              ;(delete-file-recursively "github.com/rcrowley")  ; undefined build failure
               (delete-file-recursively "github.com/rwcarlsen/goexif")
               (delete-file-recursively "github.com/saintfish/chardet")
               (delete-file-recursively "github.com/sergi/go-diff")
               (delete-file-recursively "github.com/shirou")
               (delete-file-recursively "github.com/shopspring/decimal")
-              ;(delete-file-recursively "github.com/src-d/gcfg")
+              (delete-file-recursively "github.com/src-d/gcfg")
               (delete-file-recursively "github.com/stathat")
-              ;(delete-file-recursively "github.com/stellar/go-xdr")
-              ;(delete-file-recursively "github.com/stellar/go")
-              ;(delete-file-recursively "github.com/steveyen/gtreap")
+              (delete-file-recursively "github.com/stellar/go-xdr")
+              ;(delete-file-recursively "github.com/stellar/go")    ; missing deprecated folders
+              (delete-file-recursively "github.com/steveyen/gtreap")
               (delete-file-recursively "github.com/stretchr/testify")
-              ;(delete-file-recursively "github.com/syndtr/goleveldb")
+              ;(delete-file-recursively "github.com/syndtr/goleveldb")  ; keybase fork, undefined build failure
               (delete-file-recursively "github.com/temoto/robotstxt")
-              ;(delete-file-recursively "github.com/tinylib/msgp")
+              (delete-file-recursively "github.com/tinylib/msgp")
               (delete-file-recursively "github.com/urfave")
-              ;(delete-file-recursively "github.com/vividcortex/ewma")
+              (delete-file-recursively "github.com/vividcortex/ewma")
               (delete-file-recursively "github.com/willf")
               (delete-file-recursively "github.com/xanzy/ssh-agent")
               (delete-file-recursively "go.uber.org/zap")
               (delete-file-recursively "golang.org/x")
               (delete-file-recursively "google.golang.org")
-              ;(delete-file-recursively "gopkg.in/src-d/go-billy.v4")
-              ;(delete-file-recursively "gopkg.in/src-d/go-git.v4")
+              (delete-file-recursively "gopkg.in/src-d/go-billy.v4")
+              ;(delete-file-recursively "gopkg.in/src-d/go-git.v4") ; keybase fork, undefined build failure
               (delete-file-recursively "rsc.io/qr/coding")
               (delete-file-recursively "rsc.io/qr/gf256")
-              (delete-file-recursively "stathat.com/c/ramcache")
-              )
+              (delete-file-recursively "stathat.com/c/ramcache"))
 
             (for-each delete-file-recursively
                       (list "osx"
@@ -175,18 +174,21 @@
                             "packaging"))
             ;; Delete everything vendored EXCEPT for keybase code
             ;; Use the bundled code from other keybase repositories.
-            ;(rename-file "go/vendor/github.com/keybase" "go-vendor-keybase")
+            ;(mkdir-p "go-vendor/github.com/stellar")
+            ;(mkdir-p "go-vendor/gopkg.in/src-d")
+            ;(rename-file "go/vendor/github.com/keybase" "go-vendor/github.com/keybase")
+            ;(rename-file "go/vendor/github.com/rcrowley" "go-vendor/github.com/rcrowley")              ; undefined build failure
+            ;(rename-file "go/vendor/github.com/stellar/go" "go-vendor/github.com/stellar/go")          ; missing deprecated folders
+            ;(rename-file "go/vendor/github.com/syndtr" "go-vendor/github.com/syndtr")                  ; keybase fork, undefined build failure
+            ;(rename-file "go/vendor/gopkg.in/src-d/go-git.v4" "go-vendor/gopkg.in/src-d/go-git.v4")    ; keybase fork; undefined build failure
             ;(delete-file-recursively "go/vendor")
-            ;(mkdir-p "go/vendor/github.com/keybase")
-            ;(rename-file "go-vendor-keybase" "go/vendor/github.com/keybase")
-            ;; Replace github.com/keybase/stellarnet
-            ;(delete-file-recursively "go/vendor/github.com/keybase/stellarnet")
-            ;; Adjust some broken imports?
-            ;; Both of these changes break the build.
-            ;(substitute* (find-files "go/stellar" "\\.go$")
-            ;  ((".*stellar/go/build.*") ""))
-            ;(substitute* "go/stellar/global.go"
-            ;  (("go/clients/horizon") "go/clients/horizonclient"))
+            ;(mkdir-p "go/vendor/github.com/stellar")
+            ;(mkdir-p "go/vendor/gopkg.in/src-d")
+            ;(rename-file "go-vendor/github.com/keybase" "go/vendor/github.com/keybase")
+            ;(rename-file "go-vendor/github.com/rcrowley" "go/vendor/github.com/rcrowley")
+            ;(rename-file "go-vendor/github.com/stellar/go" "go/vendor/github.com/stellar/go")
+            ;(rename-file "go-vendor/github.com/syndtr" "go/vendor/github.com/syndtr")
+            ;(rename-file "go-vendor/gopkg.in/src-d/go-git.v4" "go/vendor/gopkg.in/src-d/go-git.v4")
             #t))))
     (build-system go-build-system)
     (arguments
@@ -231,64 +233,41 @@
                #t))))))
     (inputs
      `(("go-bazil-org-fuse" ,go-bazil-org-fuse)
-       ("go-camlistore-org-pkg-buildinfo" ,go-camlistore-org-pkg-buildinfo)
+       ("go-camlistore-org-pkg-buildinfo" ,go-camlistore-org-pkg-buildinfo) ; camlistore/pkg/images
        ("go-camlistore-org-pkg-images" ,go-camlistore-org-pkg-images)
-       ("go-github-com-andybalholm-cascadia" ,go-github-com-andybalholm-cascadia)
        ("go-github-com-antchfx-htmlquery" ,go-github-com-antchfx-htmlquery)
        ("go-github-com-antchfx-xmlquery" ,go-github-com-antchfx-xmlquery)
        ("go-github-com-araddon-dateparse" ,go-github-com-araddon-dateparse)
        ("go-github-com-blang-semver" ,go-github-com-blang-semver)
+       ("go-github-com-blevesearch-bleve" ,go-github-com-blevesearch-bleve)
        ("go-github-com-btcsuite-btcutil" ,go-github-com-btcsuite-btcutil)
        ("go-github-com-buger-jsonparser" ,go-github-com-buger-jsonparser)
-       ("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)
        ("go-github-com-coreos-go-systemd-activation" ,go-github-com-coreos-go-systemd-activation)
        ("go-github-com-coreos-go-systemd-daemon" ,go-github-com-coreos-go-systemd-daemon)
-       ("go-github-com-coreos-go-systemd-internal-dlopen" ,go-github-com-coreos-go-systemd-internal-dlopen)
        ("go-github-com-coreos-go-systemd-util" ,go-github-com-coreos-go-systemd-util)
-       ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
        ("go-github-com-deckarep-golang-set" ,go-github-com-deckarep-golang-set)
        ("go-github-com-dustin-go-humanize" ,go-github-com-dustin-go-humanize)
-
-       ("go-github-com-edsrzf-mmap-go" ,go-github-com-edsrzf-mmap-go)   ; out
-       ("go-github-com-emirpasic-gods" ,go-github-com-emirpasic-gods)   ; out
-
+       ("go-github-com-eapache-channels" ,go-github-com-eapache-channels)
+       ("go-github-com-gammazero-workerpool" ,go-github-com-gammazero-workerpool)
        ("go-github-com-gobwas-glob" ,go-github-com-gobwas-glob)
        ("go-github-com-gocolly-colly-debug" ,go-github-com-gocolly-colly-debug)
        ("go-github-com-gocolly-colly-storage" ,go-github-com-gocolly-colly-storage)
        ("go-github-com-go-errors-errors" ,go-github-com-go-errors-errors)
        ("go-github-com-golang-groupcache-lru" ,go-github-com-golang-groupcache-lru)
-
-       ;("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto) ; out
-       ;("go-github-com-golang-snappy" ,go-github-com-golang-snappy) ; out
-       ("go-github-com-jbenet-go-context" ,go-github-com-jbenet-go-context) ; out
-       ("go-github-com-kevinburke-ssh-config" ,go-github-com-kevinburke-ssh-config) ; out
-
        ("go-github-com-golang-groupcache-singleflight" ,go-github-com-golang-groupcache-singleflight)
        ("go-github-com-golang-mock-gomock" ,go-github-com-golang-mock-gomock)
        ("go-github-com-hashicorp-golang-lru" ,go-github-com-hashicorp-golang-lru)
        ("go-github-com-kennygrant-sanitize" ,go-github-com-kennygrant-sanitize)
        ("go-github-com-kr-text" ,go-github-com-kr-text)
-
-       ;("go-github-com-lib-pq" ,go-github-com-lib-pq)  ; out
-
        ("go-github-com-kyokomi-emoji" ,go-github-com-kyokomi-emoji)
        ("go-github-com-mattn-go-isatty" ,go-github-com-mattn-go-isatty)
-
-       ("go-github-com-mitchellh-go-homedir" ,go-github-com-mitchellh-go-homedir)   ; out
-
        ("go-github-com-miekg-dns" ,go-github-com-miekg-dns)
        ("go-github-com-nfnt-resize" ,go-github-com-nfnt-resize)
        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-
-       ;("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)  ; out
-
        ("go-github-com-puerkitobio-goquery" ,go-github-com-puerkitobio-goquery)
-
-       ;("go-github-com-rcrowley-go-metrics" ,go-github-com-rcrowley-go-metrics)    ; out
-       ("go-github-com-sergi-go-diff" ,go-github-com-sergi-go-diff) ; out
-       ("go-github-com-shirou-gopsutil" ,go-github-com-shirou-gopsutil) ; out
-       ;("go-github-com-stathat-go" ,go-github-com-stathat-go)   ; out
-
+       ("go-github-com-qrtz-nativemessaging" ,go-github-com-qrtz-nativemessaging)
+       ("go-github-com-rcrowley-go-metrics" ,go-github-com-rcrowley-go-metrics)
+       ("go-github-com-shirou-gopsutil" ,go-github-com-shirou-gopsutil)
        ("go-github-com-saintfish-chardet" ,go-github-com-saintfish-chardet)
        ("go-github-com-shopspring-decimal" ,go-github-com-shopspring-decimal)
        ("go-github-com-stellar-go-address" ,go-github-com-stellar-go-address)
@@ -317,33 +296,20 @@
        ("go-github-com-stellar-go-txnbuild" ,go-github-com-stellar-go-txnbuild)
        ("go-github-com-stellar-go-xdr" ,go-github-com-stellar-go-xdr)
        ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-       ("go-github-com-syndtr-goleveldb" ,go-github-com-syndtr-goleveldb)
-
-       ;("go-github-com-urfave-cli" ,go-github-com-urfave-cli)   ; out
-       ("go-github-com-willf-bitset" ,go-github-com-willf-bitset)   ; out
-       ("go-github-com-xanzy-ssh-agent" ,go-github-com-xanzy-ssh-agent) ; out
-
+       ("go-github-com-syndtr-goleveldb" ,go-github-com-syndtr-goleveldb)  ; use keybase fork instead
+       ("go-github-com-vividcortex-ewma" ,go-github-com-vividcortex-ewma)
        ("go-github-com-temoto-robotstxt" ,go-github-com-temoto-robotstxt)
        ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-
-       ;("go-golang-org-x-image" ,go-golang-org-x-image)    ; out
-
        ("go-golang-org-x-net" ,go-golang-org-x-net)
        ("go-golang.org-x-sync-errgroup" ,go-golang.org-x-sync-errgroup)
        ("go-golang.org-x-sync-semaphore" ,go-golang.org-x-sync-semaphore)
-
-       ;("go-golang-org-x-sys" ,go-golang-org-x-sys)    ; out
-
        ("go-golang-org-x-text" ,go-golang-org-x-text)
        ("go-golang-org-x-time" ,go-golang-org-x-time)
-
-       ;("go-go-etcd-io-bbolt" ,go-go-etcd-io-bbolt)    ; out
-       ;("go-go-uber-org-zap" ,go-go-uber-org-zap)   ; out
-       ;("go-google-golang-org-appengine" ,go-google-golang-org-appengine)   ; out
-
        ("go-google-golang-org-appengine-internal" ,go-google-golang-org-appengine-internal)
        ("go-google-golang-org-appengine-urlfetch" ,go-google-golang-org-appengine-urlfetch)
-       ("go-rsc-io-qr" ,go-rsc-io-qr)
+       ("go-gopkg-in-src-d-go-billy-v4" ,go-gopkg-in-src-d-go-billy-v4)
+       ("go-gopkg-in-src-d-go-git-v4" ,go-gopkg-in-src-d-go-git-v4) ; use keybase fork instead
+       ("go-rsc-io-qr" ,go-rsc-io-qr)   ; itself?
        ("go-stathat-com-c-ramcache" ,go-stathat-com-c-ramcache)))
     (home-page "https://keybase.io")
     (synopsis "Secure messaging and file-sharing")
@@ -776,7 +742,7 @@ Postgres or MySQL.")
 (define-public go-github-com-coreos-go-systemd-activation
   (package
     (name "go-github-com-coreos-go-systemd-activation")
-    (version "0.0.0-20191104093116-d3cd4ed1dbcf")
+    (version "0.0.0-20170731111925-d21964639418")
     (source
       (origin
         (method git-fetch)
@@ -786,7 +752,7 @@ Postgres or MySQL.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "193mgqn7n4gbb8jb5kyn6ml4lbvh4xs55qpjnisaz7j945ik3kd8"))))
+          "1kcgnsm9l1kk8nfv1lkvkrjghy1aavhzv7d9f6l5qi2wqyvj48dw"))))
     (build-system go-build-system)
     (arguments
      '(#:unpack-path "github.com/coreos/go-systemd"
@@ -813,20 +779,35 @@ Postgres or MySQL.")
     (arguments
      '(#:unpack-path "github.com/coreos/go-systemd"
        #:import-path "github.com/coreos/go-systemd/util"))
+    (propagated-inputs
+     `(
+       ("go-github-com-coreos-pkg-dlopen" ,go-github-com-coreos-pkg-dlopen)
+       ))
     (synopsis "go-systemd")
     (description #f)))
 
-(define-public go-github-com-coreos-go-systemd-internal-dlopen
+(define-public go-github-com-coreos-pkg-dlopen
   (package
-    (inherit go-github-com-coreos-go-systemd-activation)
-    (name "go-github-com-coreos-go-systemd-internal-dlopen")
+    (name "go-github-com-coreos-pkg-dlopen")
+    (version "0.0.0-20170901145554-459346e834d8")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/coreos/pkg.git")
+               (commit (go-version->git-ref version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "0j8qqw9wwjzidb8nm29dprj320z7wil11cn9wp53awkpw1y4bgq1"))))
+    (build-system go-build-system)
     (arguments
-     '(#:unpack-path "github.com/coreos/go-systemd"
-       #:import-path "github.com/coreos/go-systemd/internal/dlopen"
-       ;; src/github.com/coreos/go-systemd/internal/dlopen/dlopen_test.go:54:15: undefined: strlen
-       #:tests? #f))
-    (synopsis "go-systemd")
-    (description #f)))
+     '(#:unpack-path "github.com/coreos/pkg"
+       #:import-path "github.com/coreos/pkg/dlopen"))
+    (home-page "https://github.com/coreos/pkg")
+    (synopsis #f)
+    (description #f)
+    (license license:asl2.0)))
 
 (define-public go-github-com-deckarep-golang-set
   (package
@@ -853,17 +834,17 @@ Postgres or MySQL.")
 (define-public go-github-com-dustin-go-humanize
   (package
     (name "go-github-com-dustin-go-humanize")
-    (version "1.0.0")
+    (version "0.0.0-20150824013810-c20a8bde38c8")
     (source
       (origin
         (method git-fetch)
         (uri (git-reference
                (url "https://github.com/dustin/go-humanize.git")
-               (commit (string-append "v" version))))
+               (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "1kqf1kavdyvjk7f8kx62pnm7fbypn9z1vbf8v2qdh3y7z7a0cbl3"))))
+          "0543bdyvg6x45wbiz6v13vl48wh0l61mk65ac0ha8p8sfvajglx3"))))
     (build-system go-build-system)
     (arguments
      '(#:import-path "github.com/dustin/go-humanize"))
@@ -1085,7 +1066,7 @@ Postgres or MySQL.")
 (define-public go-github-com-kyokomi-emoji
   (package
     (name "go-github-com-kyokomi-emoji")
-    (version "1.5.1")
+    (version "2.2.2")
     (source
       (origin
         (method git-fetch)
@@ -1095,7 +1076,7 @@ Postgres or MySQL.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "005rxyxlqcd2sfjn686xb52l11wn2w0g5jv042ka6pnsx24r812a"))))
+          "0n3wpqqlvqfxy1cw1apswilyfnnc18qgr615k04r8pvzw2vx1icn"))))
     (build-system go-build-system)
     (arguments
      '(#:import-path "github.com/kyokomi/emoji"))
@@ -1284,8 +1265,8 @@ Postgres or MySQL.")
      '(#:unpack-path "google.golang.org/appengine"
        #:import-path "google.golang.org/appengine/urlfetch"))
     (propagated-inputs
-     `(("go-golang-org-x-net" ,go-golang-org-x-net)
-       ("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto)))
+     `(("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto)
+       ("go-golang-org-x-net" ,go-golang-org-x-net)))
     (home-page "https://google.golang.org/appengine")
     (synopsis "Go App Engine packages")
     (description #f)
@@ -2184,3 +2165,591 @@ Postgres or MySQL.")
     (synopsis "stellarnet")
     (description #f)
     (license license:bsd-3)))
+
+(define-public go-github-com-vividcortex-ewma
+  (package
+    (name "go-github-com-vividcortex-ewma")
+    (version "1.1.1")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/VividCortex/ewma.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "14v2dy5gqchjn7k0sd6cx59ms42v681r6xz7cb1kspp4b28a74rw"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/vividcortex/ewma"
+       ;; src/github.com/vividcortex/ewma/ewma_test.go:39:3: Errorf format %d has arg e.Value() of wrong type float64
+       #:tests? #f))
+    (home-page "https://github.com/vividcortex/ewma")
+    (synopsis "EWMA")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-qrtz-nativemessaging
+  (package
+    (name "go-github-com-qrtz-nativemessaging")
+    (version "0.0.0-20161221035708-f4769a80e040")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/qrtz/nativemessaging.git")
+               (commit (go-version->git-ref version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1gp4wdg5rvcxhnzv55pwd8qvxdk9cq5i0cpcwlx35vqn6v28nyvc"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/qrtz/nativemessaging"))
+    (home-page "https://github.com/qrtz/nativemessaging")
+    (synopsis "nativemessaging")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-eapache-channels
+  (package
+    (name "go-github-com-eapache-channels")
+    (version "1.1.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/eapache/channels.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "179ryd2rqsccnv5nk35f8j4nfbqr8cgb2bjm0j8isvf5nzks8s9y"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/eapache/channels"))
+    (propagated-inputs
+     `(("go-github-com-eapache-queue" ,go-github-com-eapache-queue)))
+    (home-page "https://github.com/eapache/channels")
+    (synopsis "channels")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-eapache-queue
+  (package
+    (name "go-github-com-eapache-queue")
+    (version "1.1.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/eapache/queue.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "07dp54n94gn3gsvdcki56yqh7py7wqqigxbamhxwgbr05n61fqyg"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/eapache/queue"))
+    (home-page "https://github.com/eapache/queue")
+    (synopsis "Queue")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-gammazero-workerpool
+  (package
+    (name "go-github-com-gammazero-workerpool")
+    (version "1.1.1")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/gammazero/workerpool.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "121dwkcx1azpn5xqjfn277kg063hx4wfns3jn1vjbvykws2h0ma7"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/gammazero/workerpool"))
+    (propagated-inputs
+     `(("go-github-com-gammazero-deque" ,go-github-com-gammazero-deque)))
+    (home-page "https://github.com/gammazero/workerpool")
+    (synopsis "workerpool")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-gammazero-deque
+  (package
+    (name "go-github-com-gammazero-deque")
+    (version "0.0.0-20201010052221-3932da5530cc")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/gammazero/deque.git")
+               (commit (go-version->git-ref version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1wc4b8li1hsxggm5f9x7km9jmplnkchxp6wkhx1ljnxnrxzs5h09"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/gammazero/deque"))
+    (home-page "https://github.com/gammazero/deque")
+    (synopsis "deque")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-gopkg-in-src-d-go-billy-v4
+  (package
+    (inherit go-github-com-go-git-go-billy)
+    (name "go-gopkg-in-src-d-go-billy")
+    (version "4.3.2")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://gopkg.in/src-d/go-billy.v4")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "0jcyi4ink2njgflp3f2mbl5b86p2w0rh945k5xplcl158i5wkrc6"))))
+    (arguments
+     '(#:import-path "gopkg.in/src-d/go-billy.v4"))
+    (native-inputs
+     `(("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)))))
+
+(define-public go-gopkg-in-src-d-go-git-v4
+  (package
+    (name "go-gopkg-in-src-d-go-git-v4")
+    (version "4.13.1")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://gopkg.in/src-d/go-git.v4")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "0n4x7r69qrmpss51b3wd3vj4b9jmip4archz3fbqk6q1yyd1pxjb"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "gopkg.in/src-d/go-git.v4"
+       ;; Circular dependencies with test dependencies.
+       #:tests? #f))
+    (propagated-inputs
+     `(("go-github-com-emirpasic-gods" ,go-github-com-emirpasic-gods)
+       ("go-github-com-jbenet-go-context" ,go-github-com-jbenet-go-context)
+       ("go-github-com-kevinburke-ssh-config" ,go-github-com-kevinburke-ssh-config)
+       ("go-github-com-mitchellh-go-homedir" ,go-github-com-mitchellh-go-homedir)
+       ("go-github-com-sergi-go-diff" ,go-github-com-sergi-go-diff)
+       ("go-github-com-src-d-gcfg" ,go-github-com-src-d-gcfg)
+       ("go-github-com-xanzy-ssh-agent" ,go-github-com-xanzy-ssh-agent)
+       ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+       ("go-golang-org-x-net" ,go-golang-org-x-net)
+       ("go-gopkg-in-src-d-go-billy-v4" ,go-gopkg-in-src-d-go-billy-v4)))
+    (native-inputs
+     `(("go-golang-org-x-text" ,go-golang-org-x-text)
+       ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
+       ;; Creates circular dependency chain
+       ;("go-gopkg-in-src-d-go-git-fixtures-v3" ,go-gopkg-in-src-d-go-git-fixtures-v3)
+       ))
+    (home-page "https://gopkg.in/src-d/go-git.v4")
+    (synopsis #f)
+    (description #f)
+    (license license:asl2.0)))
+
+(define-public go-github-com-src-d-gcfg
+  (package
+    (name "go-github-com-src-d-gcfg")
+    (version "1.4.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/src-d/gcfg.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "044j95skmyrwjw5fwjk6ka32rjgsg0ar0mfp9np19sh1acwv4x4r"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/src-d/gcfg"))
+    (propagated-inputs
+     `(("go-gopkg-in-warnings" ,go-gopkg-in-warnings)))
+    (native-inputs
+     `(("go-github-com-pkg-errors" ,go-github-com-pkg-errors)))
+    (home-page "https://github.com/src-d/gcfg")
+    (synopsis #f)
+    (description #f)
+    (license license:bsd-3)))
+
+(define-public go-gopkg-in-src-d-go-git-fixtures-v3
+  (package
+    (name "go-gopkg-in-src-d-go-git-fixtures-v3")
+    (version "3.5.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://gopkg.in/src-d/go-git-fixtures.v3")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "0ckvfzj9nhvxi3aznid1wbw0yq5s3k2mfhlqmaz2ll8myzr97w96"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "gopkg.in/src-d/go-git-fixtures.v3"
+       ;; Fails to find self during test phase
+       #:tests? #f))
+    (propagated-inputs
+     `(("go-github-com-alcortesm-tgz" ,go-github-com-alcortesm-tgz)
+       ("go-golang-org-x-sys" ,go-golang-org-x-sys)
+       ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
+       ("go-gopkg-in-src-d-go-billy-v4" ,go-gopkg-in-src-d-go-billy-v4)
+       ("go-gopkg-in-src-d-go-git-v4" ,go-gopkg-in-src-d-go-git-v4)))
+    (home-page "https://gopkg.in/src-d/go-git-fixtures.v3")
+    (synopsis "go-git-fixtures")
+    (description #f)
+    (license license:asl2.0)))
+
+(define-public go-github-com-blevesearch-bleve
+  (package
+    (name "go-github-com-blevesearch-bleve")
+    (version "0.8.2")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/blevesearch/bleve.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "12cwzxzizqf30dxds6yvl8bvb8i58f9jpln3608c6i79kl048xc1"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/blevesearch/bleve"))
+    (propagated-inputs
+     `(("go-github-com-roaringbitmap-roaring" ,go-github-com-roaringbitmap-roaring)
+       ("go-github-com-blevesearch-go-porterstemmer" ,go-github-com-blevesearch-go-porterstemmer)
+       ("go-github-com-blevesearch-segment" ,go-github-com-blevesearch-segment)
+       ("go-github-com-blevesearch-snowballstem" ,go-github-com-blevesearch-snowballstem)
+       ("go-github-com-couchbase-vellum" ,go-github-com-couchbase-vellum)
+       ("go-github-com-edsrzf-mmap-go" ,go-github-com-edsrzf-mmap-go)
+       ("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto)
+       ("go-github-com-golang-snappy" ,go-github-com-golang-snappy)
+       ("go-github-com-steveyen-gtreap" ,go-github-com-steveyen-gtreap)
+       ("go-go-etcd-io-bbolt" ,go-go-etcd-io-bbolt)))
+    (home-page "https://github.com/blevesearch/bleve")
+    (synopsis "bleve")
+    (description #f)
+    (license license:asl2.0)))
+
+(define-public go-github-com-blevesearch-go-porterstemmer
+  (package
+    (name "go-github-com-blevesearch-go-porterstemmer")
+    (version "1.0.3")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/blevesearch/go-porterstemmer.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "0nj448j7kj31vg76xa7nh2i6iz4b4fnvarh0dgsl11ay1pmfhj45"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/blevesearch/go-porterstemmer"
+       ;; Tests require network access.
+       #:tests? #f))
+    (home-page "https://github.com/blevesearch/go-porterstemmer")
+    (synopsis "This fork...")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-blevesearch-segment
+  (package
+    (name "go-github-com-blevesearch-segment")
+    (version "0.9.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/blevesearch/segment.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1p8n2p047x3lyahfhly92qm8b90yc6p1yksns73amlrn6fwdhcyx"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/blevesearch/segment"))
+    (home-page "https://github.com/blevesearch/segment")
+    (synopsis "segment")
+    (description #f)
+    (license license:asl2.0)))
+
+(define-public go-github-com-blevesearch-snowballstem
+  (package
+    (name "go-github-com-blevesearch-snowballstem")
+    (version "0.9.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/blevesearch/snowballstem.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1yzglihjjn588xmmkaawqhc95pkk1cyc4bq7ipw7jqfw2np1f2rm"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/blevesearch/snowballstem"))
+    (home-page "https://github.com/blevesearch/snowballstem")
+    (synopsis "snowballstem")
+    (description #f)
+    (license license:bsd-3)))
+
+(define-public go-github-com-steveyen-gtreap
+  (package
+    (name "go-github-com-steveyen-gtreap")
+    (version "0.1.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/steveyen/gtreap.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "0qim822f4f6r6ks1z3qvzxljjv6kzrz3bm5bixg6sjz1c2cqvj2j"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/steveyen/gtreap"))
+    (home-page "https://github.com/steveyen/gtreap")
+    (synopsis "gtreap")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-couchbase-vellum
+  (package
+    (name "go-github-com-couchbase-vellum")
+    (version "1.0.2")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/couchbase/vellum.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1an304lm3q6y5f18c17rs8nv7kg9fd13mj6p7h2qf6ndjr7hzypg"))
+        (modules '((guix build utils)))
+        (snippet
+         '(begin
+            (delete-file-recursively "vendor")
+            #t))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/couchbase/vellum"))
+    (propagated-inputs
+     `(("go-github-com-blevesearch-mmap-go" ,go-github-com-blevesearch-mmap-go)
+       ("go-github-com-spf13-cobra" ,go-github-com-spf13-cobra)
+       ("go-github-com-willf-bitset" ,go-github-com-willf-bitset)
+       ("go-golang-org-x-sys" ,go-golang-org-x-sys)))
+    (home-page "https://github.com/couchbase/vellum")
+    (synopsis "vellum")
+    (description #f)
+    (license license:asl2.0)))
+
+(define-public go-github-com-roaringbitmap-roaring
+  (package
+    (name "go-github-com-roaringbitmap-roaring")
+    (version "0.5.5")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/RoaringBitmap/roaring.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1i4ymfm983yadlbhpcmvlci88931wz23kh6j9z656b08fww97rpx"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/RoaringBitmap/roaring"))
+    (propagated-inputs
+     `(("go-github-com-glycerine-go-unsnap-stream" ,go-github-com-glycerine-go-unsnap-stream)
+       ("go-github-com-tinylib-msgp" ,go-github-com-tinylib-msgp)))
+    (native-inputs
+     `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+       ("go-github-com-willf-bitset" ,go-github-com-willf-bitset)))
+    (home-page "https://github.com/RoaringBitmap/roaring")
+    (synopsis "roaring")
+    (description #f)
+    (license license:asl2.0)))
+
+(define-public go-github-com-blevesearch-mmap-go
+  (package
+    (name "go-github-com-blevesearch-mmap-go")
+    (version "1.0.2")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/blevesearch/mmap-go.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1x1p28nzcibhg25dnn1ixz0jgkmil79sklwwva75bn598wmcw4vy"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/blevesearch/mmap-go"))
+    (propagated-inputs
+     `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
+    (home-page "https://github.com/blevesearch/mmap-go")
+    (synopsis "mmap-go")
+    (description #f)
+    (license license:bsd-3)))
+
+(define-public go-github-com-tinylib-msgp
+  (package
+    (name "go-github-com-tinylib-msgp")
+    (version "1.1.5")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/tinylib/msgp.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1yi5agsmdx4q6d5g8jjbif3lfrkqjjmwqf8fkdqix78x4gs673ra"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/tinylib/msgp"))
+    (propagated-inputs
+     `(("go-github-com-philhofer-fwd" ,go-github-com-philhofer-fwd)
+       ("go-github-com-ttacon-chalk" ,go-github-com-ttacon-chalk)
+       ("go-golang-org-x-tools" ,go-golang-org-x-tools)))
+    (home-page "https://github.com/tinylib/msgp")
+    (synopsis "MessagePack Code Generator")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-glycerine-go-unsnap-stream
+  (package
+    (name "go-github-com-glycerine-go-unsnap-stream")
+    (version "0.0.0-20210130063903-47dfef350d96")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/glycerine/go-unsnap-stream.git")
+               (commit (go-version->git-ref version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1sqpjify17sjff92f8biwb9vnn443shk3zr9myzm8qscjpzkby3w"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/glycerine/go-unsnap-stream"
+       #:phases
+       (modify-phases %standard-phases
+         (add-before 'build 'patch-source
+           (lambda _
+             (substitute* (find-files "." "unsnap_test.go")
+               (("/usr/bin/diff") (which "diff")))
+             #t)))))
+    (propagated-inputs
+     `(("go-github-com-golang-snappy" ,go-github-com-golang-snappy)))
+    (native-inputs
+     `(("go-github-com-glycerine-goconvey" ,go-github-com-glycerine-goconvey)
+       ("go-github.com-jtolds-gls" ,go-github.com-jtolds-gls)))
+    (home-page "https://github.com/glycerine/go-unsnap-stream")
+    (synopsis "go-unsnap-stream")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-philhofer-fwd
+  (package
+    (name "go-github-com-philhofer-fwd")
+    (version "1.1.1")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/philhofer/fwd.git")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1z88ry83lf01mv69kd2jwbhngh24qwhhknj3l5jn2kz5nycq6bkx"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/philhofer/fwd"))
+    (home-page "https://github.com/philhofer/fwd")
+    (synopsis "fwd")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-ttacon-chalk
+  (package
+    (name "go-github-com-ttacon-chalk")
+    (version "0.0.0-20160626202418-22c06c80ed31")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/ttacon/chalk.git")
+               (commit (go-version->git-ref version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1yacf9w6vp36hkhl9lq3gk7c551jcsbs348ivv2h3lwkhznldiwl"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/ttacon/chalk"))
+    (home-page "https://github.com/ttacon/chalk")
+    (synopsis "chalk")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-glycerine-goconvey
+  (package
+    (name "go-github-com-glycerine-goconvey")
+    (version "0.0.0-20190410193231-58a59202ab31")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/glycerine/goconvey.git")
+               (commit (go-version->git-ref version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "014cj82z42gaw863nrfmw39ff1z103n0aj5bs1fpx2iawgw5i6qh"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/glycerine/goconvey"))
+    (home-page "https://github.com/glycerine/goconvey")
+    (synopsis "GoConvey is awesome Go testing")
+    (description #f)
+    (license license:expat)))
