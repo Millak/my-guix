@@ -87,7 +87,7 @@
               (delete-file-recursively "github.com/golang/groupcache/lru")
               (delete-file-recursively "github.com/golang/groupcache")
               (delete-file-recursively "github.com/golang/mock")
-              ;(delete-file-recursively "github.com/golang/protobuf")
+              (delete-file-recursively "github.com/golang/protobuf")
               (delete-file-recursively "github.com/golang/snappy")
               (delete-file-recursively "github.com/hashicorp/golang-lru")
               (delete-file-recursively "github.com/jbenet/go-context")
@@ -249,8 +249,8 @@
        ("go-github-com-deckarep-golang-set" ,go-github-com-deckarep-golang-set)
        ("go-github-com-dustin-go-humanize" ,go-github-com-dustin-go-humanize)
 
-       ("go-github-com-edsrzf-mmap-go" ,go-github-com-edsrzf-mmap-go)
-       ("go-github-com-emirpasic-gods" ,go-github-com-emirpasic-gods)
+       ("go-github-com-edsrzf-mmap-go" ,go-github-com-edsrzf-mmap-go)   ; out
+       ("go-github-com-emirpasic-gods" ,go-github-com-emirpasic-gods)   ; out
 
        ("go-github-com-gobwas-glob" ,go-github-com-gobwas-glob)
        ("go-github-com-gocolly-colly-debug" ,go-github-com-gocolly-colly-debug)
@@ -258,10 +258,10 @@
        ("go-github-com-go-errors-errors" ,go-github-com-go-errors-errors)
        ("go-github-com-golang-groupcache-lru" ,go-github-com-golang-groupcache-lru)
 
-       ("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto)
-       ("go-github-com-golang-snappy" ,go-github-com-golang-snappy)
-       ("go-github-com-jbenet-go-context" ,go-github-com-jbenet-go-context)
-       ("go-github-com-kevinburke-ssh-config" ,go-github-com-kevinburke-ssh-config)
+       ;("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto) ; out
+       ;("go-github-com-golang-snappy" ,go-github-com-golang-snappy) ; out
+       ("go-github-com-jbenet-go-context" ,go-github-com-jbenet-go-context) ; out
+       ("go-github-com-kevinburke-ssh-config" ,go-github-com-kevinburke-ssh-config) ; out
 
        ("go-github-com-golang-groupcache-singleflight" ,go-github-com-golang-groupcache-singleflight)
        ("go-github-com-golang-mock-gomock" ,go-github-com-golang-mock-gomock)
@@ -269,25 +269,25 @@
        ("go-github-com-kennygrant-sanitize" ,go-github-com-kennygrant-sanitize)
        ("go-github-com-kr-text" ,go-github-com-kr-text)
 
-       ("go-github-com-lib-pq" ,go-github-com-lib-pq)
+       ;("go-github-com-lib-pq" ,go-github-com-lib-pq)  ; out
 
        ("go-github-com-kyokomi-emoji" ,go-github-com-kyokomi-emoji)
        ("go-github-com-mattn-go-isatty" ,go-github-com-mattn-go-isatty)
 
-       ("go-github-com-mitchellh-go-homedir" ,go-github-com-mitchellh-go-homedir)
+       ("go-github-com-mitchellh-go-homedir" ,go-github-com-mitchellh-go-homedir)   ; out
 
        ("go-github-com-miekg-dns" ,go-github-com-miekg-dns)
        ("go-github-com-nfnt-resize" ,go-github-com-nfnt-resize)
        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
 
-       ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+       ;("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)  ; out
 
        ("go-github-com-puerkitobio-goquery" ,go-github-com-puerkitobio-goquery)
 
-       ;("go-github-com-rcrowley-go-metrics" ,go-github-com-rcrowley-go-metrics)
-       ("go-github-com-sergi-go-diff" ,go-github-com-sergi-go-diff)
-       ("go-github-com-shirou-gopsutil" ,go-github-com-shirou-gopsutil)
-       ("go-github-com-stathat-go" ,go-github-com-stathat-go)
+       ;("go-github-com-rcrowley-go-metrics" ,go-github-com-rcrowley-go-metrics)    ; out
+       ("go-github-com-sergi-go-diff" ,go-github-com-sergi-go-diff) ; out
+       ("go-github-com-shirou-gopsutil" ,go-github-com-shirou-gopsutil) ; out
+       ;("go-github-com-stathat-go" ,go-github-com-stathat-go)   ; out
 
        ("go-github-com-saintfish-chardet" ,go-github-com-saintfish-chardet)
        ("go-github-com-shopspring-decimal" ,go-github-com-shopspring-decimal)
@@ -319,27 +319,27 @@
        ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
        ("go-github-com-syndtr-goleveldb" ,go-github-com-syndtr-goleveldb)
 
-       ("go-github-com-urfave-cli" ,go-github-com-urfave-cli)
-       ("go-github-com-willf-bitset" ,go-github-com-willf-bitset)
-       ("go-github-com-xanzy-ssh-agent" ,go-github-com-xanzy-ssh-agent)
+       ;("go-github-com-urfave-cli" ,go-github-com-urfave-cli)   ; out
+       ("go-github-com-willf-bitset" ,go-github-com-willf-bitset)   ; out
+       ("go-github-com-xanzy-ssh-agent" ,go-github-com-xanzy-ssh-agent) ; out
 
        ("go-github-com-temoto-robotstxt" ,go-github-com-temoto-robotstxt)
        ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
 
-       ;("go-golang-org-x-image" ,go-golang-org-x-image)
+       ;("go-golang-org-x-image" ,go-golang-org-x-image)    ; out
 
        ("go-golang-org-x-net" ,go-golang-org-x-net)
        ("go-golang.org-x-sync-errgroup" ,go-golang.org-x-sync-errgroup)
        ("go-golang.org-x-sync-semaphore" ,go-golang.org-x-sync-semaphore)
 
-       ;("go-golang-org-x-sys" ,go-golang-org-x-sys)
+       ;("go-golang-org-x-sys" ,go-golang-org-x-sys)    ; out
 
        ("go-golang-org-x-text" ,go-golang-org-x-text)
        ("go-golang-org-x-time" ,go-golang-org-x-time)
 
-       ;("go-go-etcd-io-bbolt" ,go-go-etcd-io-bbolt)
-       ("go-go-uber-org-zap" ,go-go-uber-org-zap)
-       ("go-google-golang-org-appengine" ,go-google-golang-org-appengine)
+       ;("go-go-etcd-io-bbolt" ,go-go-etcd-io-bbolt)    ; out
+       ;("go-go-uber-org-zap" ,go-go-uber-org-zap)   ; out
+       ;("go-google-golang-org-appengine" ,go-google-golang-org-appengine)   ; out
 
        ("go-google-golang-org-appengine-internal" ,go-google-golang-org-appengine-internal)
        ("go-google-golang-org-appengine-urlfetch" ,go-google-golang-org-appengine-urlfetch)
