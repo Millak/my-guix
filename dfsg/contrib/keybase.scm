@@ -23,10 +23,10 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system go)
+  #:use-module (gnu packages check)
   #:use-module (gnu packages golang)
   #:use-module (gnu packages syncthing))
 
-;; TODO: Unbundle all the go dependencies.
 (define-public keybase
   (package
     (name "keybase")
@@ -160,8 +160,7 @@
               (delete-file-recursively "google.golang.org")
               (delete-file-recursively "gopkg.in/src-d/go-billy.v4")
               ;(delete-file-recursively "gopkg.in/src-d/go-git.v4") ; keybase fork, undefined build failure
-              (delete-file-recursively "rsc.io/qr/coding")
-              (delete-file-recursively "rsc.io/qr/gf256")
+              (delete-file-recursively "rsc.io/qr")
               (delete-file-recursively "stathat.com/c/ramcache"))
 
             (for-each delete-file-recursively
@@ -172,39 +171,40 @@
                             "pvl-tools"
                             "media"
                             "packaging"))
-            ;; Delete everything vendored EXCEPT for keybase code
+            ;; Delete everything vendored EXCEPT for keybase code.
             ;; Use the bundled code from other keybase repositories.
-            ;(mkdir-p "go-vendor/github.com/stellar")
-            ;(mkdir-p "go-vendor/gopkg.in/src-d")
-            ;(rename-file "go/vendor/github.com/keybase" "go-vendor/github.com/keybase")
-            ;(rename-file "go/vendor/github.com/rcrowley" "go-vendor/github.com/rcrowley")              ; undefined build failure
-            ;(rename-file "go/vendor/github.com/stellar/go" "go-vendor/github.com/stellar/go")          ; missing deprecated folders
-            ;(rename-file "go/vendor/github.com/syndtr" "go-vendor/github.com/syndtr")                  ; keybase fork, undefined build failure
-            ;(rename-file "go/vendor/gopkg.in/src-d/go-git.v4" "go-vendor/gopkg.in/src-d/go-git.v4")    ; keybase fork; undefined build failure
-            ;(delete-file-recursively "go/vendor")
-            ;(mkdir-p "go/vendor/github.com/stellar")
-            ;(mkdir-p "go/vendor/gopkg.in/src-d")
-            ;(rename-file "go-vendor/github.com/keybase" "go/vendor/github.com/keybase")
-            ;(rename-file "go-vendor/github.com/rcrowley" "go/vendor/github.com/rcrowley")
-            ;(rename-file "go-vendor/github.com/stellar/go" "go/vendor/github.com/stellar/go")
-            ;(rename-file "go-vendor/github.com/syndtr" "go/vendor/github.com/syndtr")
-            ;(rename-file "go-vendor/gopkg.in/src-d/go-git.v4" "go/vendor/gopkg.in/src-d/go-git.v4")
+            (mkdir-p "go-vendor/github.com/stellar")
+            (mkdir-p "go-vendor/gopkg.in/src-d")
+            (rename-file "go/vendor/github.com/keybase" "go-vendor/github.com/keybase")
+            (rename-file "go/vendor/github.com/rcrowley" "go-vendor/github.com/rcrowley")              ; wrong version(?), undefined build failure
+            (rename-file "go/vendor/github.com/stellar/go" "go-vendor/github.com/stellar/go")          ; missing deprecated folders
+            (rename-file "go/vendor/github.com/syndtr" "go-vendor/github.com/syndtr")                  ; keybase fork, undefined build failure
+            (rename-file "go/vendor/gopkg.in/src-d/go-git.v4" "go-vendor/gopkg.in/src-d/go-git.v4")    ; keybase fork; undefined build failure
+            (delete-file-recursively "go/vendor")
+            (mkdir-p "go/vendor/github.com/stellar")
+            (mkdir-p "go/vendor/gopkg.in/src-d")
+            (rename-file "go-vendor/github.com/keybase" "go/vendor/github.com/keybase")
+            (rename-file "go-vendor/github.com/rcrowley" "go/vendor/github.com/rcrowley")
+            (rename-file "go-vendor/github.com/stellar/go" "go/vendor/github.com/stellar/go")
+            (rename-file "go-vendor/github.com/syndtr" "go/vendor/github.com/syndtr")
+            (rename-file "go-vendor/gopkg.in/src-d/go-git.v4" "go/vendor/gopkg.in/src-d/go-git.v4")
+            (delete-file-recursively "go-vendor")
             #t))))
     (build-system go-build-system)
     (arguments
      `(#:install-source? #f
        #:import-path "github.com/keybase/client/go/keybase"
        #:unpack-path "github.com/keybase/client"
+       #:build-flags '("-tags" "production")
        #:phases
        (modify-phases %standard-phases
          (replace 'build
-           (lambda* (#:key import-path #:allow-other-keys)
+           (lambda* (#:key import-path build-flags #:allow-other-keys)
              (for-each
                (lambda (directory)
-                 (invoke "go" "install"
-                         "-tags" "production"
-                         "-v" "-x" "-ldflags=-s -w"
-                         directory))
+                 ((assoc-ref %standard-phases 'build)
+                  #:build-flags build-flags
+                  #:import-path directory))
                (list import-path
                      "github.com/keybase/client/go/kbfs/kbfsfuse"
                      "github.com/keybase/client/go/kbfs/kbfsgit/git-remote-keybase"
@@ -212,12 +212,12 @@
                      "github.com/keybase/client/go/kbnm"))
              #t))
          (replace 'check
-           (lambda* (#:key import-path #:allow-other-keys)
+           (lambda* (#:key tests? import-path #:allow-other-keys)
              (for-each
                (lambda (directory)
-                 (invoke "go" "test"
-                         "-v" "-x" "-ldflags=-s -w"
-                         directory))
+                 ((assoc-ref %standard-phases 'check)
+                  #:tests? tests?
+                  #:import-path directory))
                (list import-path
                      "github.com/keybase/client/go/kbfs/kbfsfuse"
                      "github.com/keybase/client/go/kbfs/kbfsgit/git-remote-keybase"
@@ -309,7 +309,7 @@
        ("go-google-golang-org-appengine-urlfetch" ,go-google-golang-org-appengine-urlfetch)
        ("go-gopkg-in-src-d-go-billy-v4" ,go-gopkg-in-src-d-go-billy-v4)
        ("go-gopkg-in-src-d-go-git-v4" ,go-gopkg-in-src-d-go-git-v4) ; use keybase fork instead
-       ("go-rsc-io-qr" ,go-rsc-io-qr)   ; itself?
+       ("go-rsc-io-qr" ,go-rsc-io-qr)
        ("go-stathat-com-c-ramcache" ,go-stathat-com-c-ramcache)))
     (home-page "https://keybase.io")
     (synopsis "Secure messaging and file-sharing")
@@ -451,8 +451,9 @@ of storing, syncing, sharing, modelling and backing up content.")
        ;; src/github.com/nf/cr2/reader_test.go:55:4: Error call has possible formatting directive %v
        #:tests? #f))
     (home-page "https://github.com/nf/cr2")
-    (synopsis #f)
-    (description #f)
+    (synopsis "Basic Camera Raw 2 reader")
+    (description "This package implements rudimentary support for reading
+@acronym{CR, Canon Camera Raw 2} files.")
     (license license:bsd-3)))
 
 (define-public go-github-com-rwcarlsen-goexif
@@ -475,23 +476,22 @@ of storing, syncing, sharing, modelling and backing up content.")
        #:phases
        (modify-phases %standard-phases
          (replace 'build
-           (lambda* (#:key import-path #:allow-other-keys)
+           (lambda* (#:key import-path build-flags #:allow-other-keys)
              (for-each
                (lambda (directory)
-                 (invoke "go" "install"
-                         "-tags" "production"
-                         "-v" "-x" "-ldflags=-s -w"
-                         directory))
+                 ((assoc-ref %standard-phases 'build)
+                  #:build-flags build-flags
+                  #:import-path directory))
                (list "github.com/rwcarlsen/goexif/exif"
                      "github.com/rwcarlsen/goexif/tiff"))
              #t))
          (replace 'check
-           (lambda* (#:key import-path #:allow-other-keys)
+           (lambda* (#:key tests? import-path #:allow-other-keys)
              (for-each
                (lambda (directory)
-                 (invoke "go" "test"
-                         "-v" "-x" "-ldflags=-s -w"
-                         directory))
+                 ((assoc-ref %standard-phases 'check)
+                  #:tests? tests?
+                  #:import-path directory))
                (list "github.com/rwcarlsen/goexif/exif"
                      "github.com/rwcarlsen/goexif/tiff"))
              #t)))))
@@ -636,7 +636,7 @@ Postgres or MySQL.")
     (build-system go-build-system)
     (arguments
      '(#:import-path "github.com/btcsuite/btcutil"))
-    (inputs
+    (propagated-inputs
      `(("go-github-com-btcsuite-btcd-btcec" ,go-github-com-btcsuite-btcd-btcec)
        ("go-github-com-btcsuite-btcd-chaincfg" ,go-github-com-btcsuite-btcd-chaincfg)
        ("go-github-com-btcsuite-btcd-wire" ,go-github-com-btcsuite-btcd-wire)
@@ -709,7 +709,7 @@ Postgres or MySQL.")
      '(#:import-path "github.com/jessevdk/go-flags"
        ;; Manpage tests fail due to SOURCE_DATE_EPOCH.
        #:tests? #f))
-    (inputs
+    (propagated-inputs
      `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
     (home-page "https://github.com/jessevdk/go-flags")
     (synopsis
@@ -780,9 +780,7 @@ Postgres or MySQL.")
      '(#:unpack-path "github.com/coreos/go-systemd"
        #:import-path "github.com/coreos/go-systemd/util"))
     (propagated-inputs
-     `(
-       ("go-github-com-coreos-pkg-dlopen" ,go-github-com-coreos-pkg-dlopen)
-       ))
+     `(("go-github-com-coreos-pkg-dlopen" ,go-github-com-coreos-pkg-dlopen)))
     (synopsis "go-systemd")
     (description #f)))
 
@@ -948,10 +946,10 @@ Postgres or MySQL.")
     (arguments
      '(#:import-path "github.com/antchfx/htmlquery"))
     (propagated-inputs
-     `(("go-golang-org-x-text" ,go-golang-org-x-text)
-       ("go-golang-org-x-net" ,go-golang-org-x-net)
+     `(("go-github-com-antchfx-xpath" ,go-github-com-antchfx-xpath)
        ("go-github-com-golang-groupcache-lru" ,go-github-com-golang-groupcache-lru)
-       ("go-github-com-antchfx-xpath" ,go-github-com-antchfx-xpath)))
+       ("go-golang-org-x-net" ,go-golang-org-x-net)
+       ("go-golang-org-x-text" ,go-golang-org-x-text)))
     (home-page "https://github.com/antchfx/htmlquery")
     (synopsis "htmlquery")
     (description #f)
@@ -997,10 +995,10 @@ Postgres or MySQL.")
     (arguments
      '(#:import-path "github.com/antchfx/xmlquery"))
     (propagated-inputs
-     `(("go-golang-org-x-text" ,go-golang-org-x-text)
-       ("go-golang-org-x-net" ,go-golang-org-x-net)
+     `(("go-github-com-antchfx-xpath" ,go-github-com-antchfx-xpath)
        ("go-github-com-golang-groupcache-lru" ,go-github-com-golang-groupcache-lru)
-       ("go-github-com-antchfx-xpath" ,go-github-com-antchfx-xpath)))
+       ("go-golang-org-x-net" ,go-golang-org-x-net)
+       ("go-golang-org-x-text" ,go-golang-org-x-text)))
     (home-page "https://github.com/antchfx/xmlquery")
     (synopsis "xmlquery")
     (description #f)
@@ -1280,8 +1278,8 @@ Postgres or MySQL.")
      '(#:unpack-path "google.golang.org/appengine"
        #:import-path "google.golang.org/appengine/internal"))
     (propagated-inputs
-     `(("go-golang-org-x-net" ,go-golang-org-x-net)
-       ("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto)))
+     `(("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto)
+       ("go-golang-org-x-net" ,go-golang-org-x-net)))
     (synopsis "Go App Engine packages")
     (description #f)))
 
@@ -1520,13 +1518,13 @@ Postgres or MySQL.")
 (define-public go-github-com-asaskevich-govalidator
   (package
     (name "go-github-com-asaskevich-govalidator")
-    (version "0.0.0-20210307081110-f21760c49a8d")
+    (version "11.0.0")
     (source
       (origin
         (method git-fetch)
         (uri (git-reference
                (url "https://github.com/asaskevich/govalidator.git")
-               (commit (go-version->git-ref version))))
+               (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
          (base32
@@ -1534,7 +1532,7 @@ Postgres or MySQL.")
     (build-system go-build-system)
     (arguments
      '(#:import-path "github.com/asaskevich/govalidator"
-       ;; TODO: Fix tests.
+       ;; Email validation is hard. TestIsExistingEmail has multiple bug reports.
        #:tests? #f))
     (home-page "https://github.com/asaskevich/govalidator")
     (synopsis "govalidator")
@@ -1582,8 +1580,8 @@ Postgres or MySQL.")
     (arguments
      '(#:import-path "github.com/onsi/ginkgo"))
     (propagated-inputs
-     `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
-       ("go-github-com-nxadm-tail" ,go-github-com-nxadm-tail)))
+     `(("go-github-com-nxadm-tail" ,go-github-com-nxadm-tail)
+       ("go-golang-org-x-sys" ,go-golang-org-x-sys)))
     (home-page "https://github.com/onsi/ginkgo")
     (synopsis #f)
     (description #f)
@@ -1629,9 +1627,9 @@ Postgres or MySQL.")
     (arguments
      '(#:import-path "github.com/onsi/gomega"))
     (propagated-inputs
-     `(("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
+     `(("go-golang-org-x-net" ,go-golang-org-x-net)
        ("go-golang-org-x-text" ,go-golang-org-x-text)
-       ("go-golang-org-x-net" ,go-golang-org-x-net)))
+       ("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)))
     (home-page "https://github.com/onsi/gomega")
     (synopsis #f)
     (description #f)
@@ -1698,8 +1696,7 @@ Postgres or MySQL.")
     (build-system go-build-system)
     (arguments
      '(#:import-path "github.com/manucorporat/sse"
-       ;; TODO: fix tests.
-       ;; FAIL: TestEncodeOnlyData (0.00s)
+       ;; https://github.com/manucorporat/sse/issues/3
        #:tests? #f))
     (native-inputs
      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
@@ -2079,7 +2076,12 @@ Postgres or MySQL.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "0qnymi0027mb8kxm24mmd22bvjrdkc56c7f4q3lbdf93x1vxbbc2"))))
+          "0qnymi0027mb8kxm24mmd22bvjrdkc56c7f4q3lbdf93x1vxbbc2"))
+        (modules '((guix build utils)))
+        (snippet
+         '(begin
+            (delete-file-recursively "vendor")
+            #t))))
     (build-system go-build-system)
     (arguments
      '(#:import-path "github.com/yudai/gojsondiff"))
@@ -2088,9 +2090,61 @@ Postgres or MySQL.")
        ("go-github-com-yudai-golcs" ,go-github-com-yudai-golcs)))
     (native-inputs
      `(("go-github-com-onsi-ginkgo" ,go-github-com-onsi-ginkgo)
-       ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)))
+       ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
+       ("go-github-com-yudai-pp" ,go-github-com-yudai-pp)))
     (home-page "https://github.com/yudai/gojsondiff")
     (synopsis "Go JSON Diff (and Patch)")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-yudai-pp
+  (package
+    (name "go-github-com-yudai-pp")
+    (version "2.0.1-20150810000000-be8315415630")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/yudai/pp.git")
+               (commit (go-version->git-ref version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "0jbhgcxabq9jikwxkrcrp0q4xpl9fisx9rvzgxp5ma97phflw5gb"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/yudai/pp"
+       ;; Tests haven't withstood the test of time.
+       #:tests? #f))
+    (propagated-inputs
+     `(("go-github-com-mattn-go-colorable" ,go-github-com-mattn-go-colorable)
+       ("go-github-com-mattn-go-isatty" ,go-github-com-mattn-go-isatty)))
+    (native-inputs
+     `(("go-github-com-k0kubun-colorstring" ,go-github-com-k0kubun-colorstring)))
+    (home-page "https://github.com/yudai/pp")
+    (synopsis "Colored pretty printer for Go language")
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-k0kubun-colorstring
+  (package
+    (name "go-github-com-k0kubun-colorstring")
+    (version "0.0.0-20150214042306-9440f1994b88")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/k0kubun/colorstring.git")
+               (commit (go-version->git-ref version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "0isskya7ky4k9znrh85crfc2pxwyfz2s8j1a5cbjb8b8zf2v0qbj"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/k0kubun/colorstring"))
+    (home-page "https://github.com/k0kubun/colorstring")
+    (synopsis "colorstring")
     (description #f)
     (license license:expat)))
 
@@ -2129,12 +2183,17 @@ Postgres or MySQL.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "15bpx33d3ygya8dg8hbsn24h7acpajl27006pj8lw1c0bfvbnrl0"))))
+          "15bpx33d3ygya8dg8hbsn24h7acpajl27006pj8lw1c0bfvbnrl0"))
+        (modules '((guix build utils)))
+        (snippet
+         '(begin
+            (delete-file-recursively "vendor")
+            #t))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "moul.io/http2curl"
-       ;; TODO: Fix tests, unbundle everything
-       #:tests? #f))
+     '(#:import-path "moul.io/http2curl"))
+    (native-inputs
+     `(("go-github.com-smartystreets-goconvey" ,go-github.com-smartystreets-goconvey)))
     (home-page "https://moul.io/http2curl")
     (synopsis "http2curl")
     (description #f)
@@ -2179,12 +2238,18 @@ Postgres or MySQL.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "14v2dy5gqchjn7k0sd6cx59ms42v681r6xz7cb1kspp4b28a74rw"))))
+          "14v2dy5gqchjn7k0sd6cx59ms42v681r6xz7cb1kspp4b28a74rw"))
+        (modules '((guix build utils)))
+        (snippet
+         '(begin
+            ;; Should be float (%f) not digit (%d)
+            ;; https://github.com/VividCortex/ewma/pull/17
+            (substitute* "ewma_test.go"
+              (("%d") "%f"))
+            #t))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/vividcortex/ewma"
-       ;; src/github.com/vividcortex/ewma/ewma_test.go:39:3: Errorf format %d has arg e.Value() of wrong type float64
-       #:tests? #f))
+     '(#:import-path "github.com/vividcortex/ewma"))
     (home-page "https://github.com/vividcortex/ewma")
     (synopsis "EWMA")
     (description #f)
@@ -2408,8 +2473,9 @@ Postgres or MySQL.")
     (build-system go-build-system)
     (arguments
      '(#:import-path "gopkg.in/src-d/go-git-fixtures.v3"
-       ;; Fails to find self during test phase
-       #:tests? #f))
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'reset-gzip-timestamps))))
     (propagated-inputs
      `(("go-github-com-alcortesm-tgz" ,go-github-com-alcortesm-tgz)
        ("go-golang-org-x-sys" ,go-golang-org-x-sys)
@@ -2439,14 +2505,14 @@ Postgres or MySQL.")
     (arguments
      '(#:import-path "github.com/blevesearch/bleve"))
     (propagated-inputs
-     `(("go-github-com-roaringbitmap-roaring" ,go-github-com-roaringbitmap-roaring)
-       ("go-github-com-blevesearch-go-porterstemmer" ,go-github-com-blevesearch-go-porterstemmer)
+     `(("go-github-com-blevesearch-go-porterstemmer" ,go-github-com-blevesearch-go-porterstemmer)
        ("go-github-com-blevesearch-segment" ,go-github-com-blevesearch-segment)
        ("go-github-com-blevesearch-snowballstem" ,go-github-com-blevesearch-snowballstem)
        ("go-github-com-couchbase-vellum" ,go-github-com-couchbase-vellum)
        ("go-github-com-edsrzf-mmap-go" ,go-github-com-edsrzf-mmap-go)
        ("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto)
        ("go-github-com-golang-snappy" ,go-github-com-golang-snappy)
+       ("go-github-com-roaringbitmap-roaring" ,go-github-com-roaringbitmap-roaring)
        ("go-github-com-steveyen-gtreap" ,go-github-com-steveyen-gtreap)
        ("go-go-etcd-io-bbolt" ,go-go-etcd-io-bbolt)))
     (home-page "https://github.com/blevesearch/bleve")
@@ -2674,8 +2740,8 @@ Postgres or MySQL.")
        #:phases
        (modify-phases %standard-phases
          (add-before 'build 'patch-source
-           (lambda _
-             (substitute* (find-files "." "unsnap_test.go")
+           (lambda* (#:key import-path #:allow-other-keys)
+             (substitute* (string-append "src/" import-path "/unsnap_test.go")
                (("/usr/bin/diff") (which "diff")))
              #t)))))
     (propagated-inputs
