@@ -24,7 +24,6 @@ env:
   - FILE: dfsg/main/pipx.scm
   - FILE: dfsg/main/psd.scm
   - FILE: dfsg/main/rdrview.scm
-  - FILE: dfsg/main/shepherd.scm
   - FILE: dfsg/main/sigil.scm
     # - FILE: dfsg/contrib/keybase.scm  # log length too long
   - FILE: dfsg/contrib/linode.scm
