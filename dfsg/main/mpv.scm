@@ -24,8 +24,8 @@
   #:use-module (gnu packages curl))
 
 (define-public mpv-sponsorblock-minimal
-  (let ((commit "b297fbac31070a47e2b55d146de4160110730a9e")
-        (revision "1"))
+  (let ((commit "3b253990727d8e8da119b11b868d7b5c23bc5e11")
+        (revision "2"))
   (package
     (name "mpv-sponsorblock-minimal")
     (version (git-version "0" revision commit))
@@ -37,8 +37,7 @@
                (commit commit)))
         (file-name (git-file-name name version))
         (sha256
-         (base32
-          "0k9s8yjijmfwm3z3kb4m8b28fj6nax5yx7yyl374ax9s0slg17k5"))))
+         (base32 "1fkkikdm4aslrmrrgz4zgpyg3vna4sr33jw86sj333vj6kpayyi0"))))
     (build-system trivial-build-system)
     (arguments
      `(#:modules ((guix build utils))
