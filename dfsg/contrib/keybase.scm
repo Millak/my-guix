@@ -562,7 +562,9 @@ of storing, syncing, sharing, modelling and backing up content.")
           "1h64gipvcg7060byv5wjlf524kqwj12p3v08kfh4ygv46vpm8p2r"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "go.etcd.io/bbolt"))
+     `(#:import-path "go.etcd.io/bbolt"
+       ;; Extending the test timeout to 30 minutes still times out on aarch64.
+       #:tests? ,(not target-arm?)))
     (propagated-inputs
      `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
     (home-page "https://github.com/etcd-io/bbolt")
