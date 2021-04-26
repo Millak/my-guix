@@ -1,4 +1,4 @@
-;;; Copyright © 2017, 2018, 2019 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2017, 2018, 2019, 2021 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -19,6 +19,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
+  #:use-module (guix utils)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system trivial)
   #:use-module (gnu packages linux)
@@ -650,14 +651,14 @@ supersymmetric 31ROT13.")
           "04fciciykphswj12vwlbvii3sjcqqf2j6kiqynsg5n14qyghr6cl"))))
     (build-system gnu-build-system)
     (arguments
-     '(#:tests? #f ; no test suite
+     `(#:tests? #f ; no test suite
        #:phases
        (modify-phases %standard-phases
          (delete 'configure)
          (delete 'unpack)
          (replace 'build
            (lambda* (#:key source #:allow-other-keys)
-             (invoke "gcc" "-o" "mkzombie" source)))
+             (invoke ,(cc-for-target) "-o" "mkzombie" source)))
          (replace 'install
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out  (assoc-ref outputs "out"))

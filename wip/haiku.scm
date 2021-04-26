@@ -53,7 +53,7 @@
     (source haiku-buildtools-source)
     (build-system gnu-build-system)
     (arguments
-     '(#:tests? #f
+     `(#:tests? #f
        #:phases
        (modify-phases %standard-phases
          (delete 'configure)
@@ -64,9 +64,10 @@
              #t))
          (add-after 'change-directory 'patch-source
            (lambda _
-             (setenv "CC" (which "gcc"))
+             (setenv "CC" ,(cc-for-target))
              (substitute* "Makefile"
-               (("CC = cc") "CC = gcc"))
+               (("CC = cc")
+                (string-append "CC = " ,(cc-for-target))))
              (substitute* "execunix.c"
                (("# define USE_POSIX_SPAWN") ""))
              (mkdir-p "bin.linuxx86")
