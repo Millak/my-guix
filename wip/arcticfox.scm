@@ -26,6 +26,7 @@
   #:use-module (gnu packages assembly)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages compression)
+  #:use-module (gnu packages gcc)
   #:use-module (gnu packages gl)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gtk)
@@ -81,7 +82,7 @@
             ))
       (build-system gnu-build-system)
       (arguments
-       `(#:tests? #f          ; check target removed?
+       `(#:tests? #f          ; check target removed
          #:configure-flags
          (list "--disable-crashreporter"
                "--disable-tests"
@@ -96,11 +97,13 @@
                "--disable-eme"
                "--disable-gamepad"
                "--enable-dbus"
-               ;"--enable-strip"
-               ;"--enable-install-strip"
+               "--enable-strip"
+               "--enable-install-strip"
                "--enable-application=browser"
                "--with-branding=browser/branding/arcticfox"
                "--enable-optimize=-O2"
+
+               "--with-pthreads"
 
                "--with-distribution-id=org.gnu"
                ;"--enable-default-toolkit=cairo-gtk3"
@@ -117,14 +120,15 @@
                "--enable-system-cairo"
                "--enable-system-hunspell"
                "--enable-system-pixman"
-               "--enable-system-sqlite")
+               "--enable-system-sqlite"
+               )
          #:phases
          (modify-phases %standard-phases
            (delete 'bootstrap)
            (replace 'configure
              ;; configure does not work followed by both "SHELL=..." and
              ;; "CONFIG_SHELL=..."; set environment variables instead
-             (lambda* (#:key outputs configure-flags #:allow-other-keys)
+             (lambda* (#:key inputs outputs configure-flags #:allow-other-keys)
                (let* ((out (assoc-ref outputs "out"))
                       (bash (which "bash"))
                       (abs-srcdir (getcwd))
@@ -134,15 +138,18 @@
                  ;; Write the configure-flags to .mozconfig for use with ./mach
                  (with-output-to-file ".mozconfig"
                    (lambda _
-                     (format #t ";export LDFLAGS=\"-Wl,-rpath=~a/lib/arcticfox-~a\"~@
+                     (format #t "export LDFLAGS=\"-Wl,-rpath=~a/lib/arcticfox-~a\"~@
                              mk_add_options MOZ_MAKE_FLAGS=\"-s -j~a\"~@
                              ~{ac_add_options ~a\n~} ~%"
-                             ;out ,version
+                             out ,(version-major+minor+point version)
                              (number->string (parallel-job-count)) flags)))
                  (setenv "SHELL" bash)
                  (setenv "CONFIG_SHELL" bash)
-                 (setenv "AUTOCONF" (which "autoconf"))     ; must be autoconf-2.13
+                 (setenv "AUTOCONF"
+                         (string-append (assoc-ref inputs "autoconf")
+                                        "/bin/autoconf"))     ; must be autoconf-2.13
                  (setenv "CC" ,(cc-for-target))  ; apparently needed when Stylo is enabled
+                 (setenv "CXX" ,(cxx-for-target))
                  (setenv "MOZ_BUILD_DATE" "20210130000000") ; avoid timestamp
                  (format #t "build directory: ~s~%" (getcwd))
                  (format #t "configure flags: ~s~%" flags)
@@ -157,27 +164,26 @@
            (replace 'install
              (lambda* (#:key outputs #:allow-other-keys)
                (let ((out (assoc-ref outputs "out")))
-                 ;(invoke "./mach" "package")
                  (invoke "./mach" "install")
                #t)))
-           (add-after 'install 'wrap-program
-             (lambda* (#:key inputs outputs #:allow-other-keys)
-               (let* ((out (assoc-ref outputs "out"))
-                      (lib (string-append out "/lib"))
-                      (gtk (assoc-ref inputs "gtk+"))
-                      (gtk-share (string-append gtk "/share"))
-                      (mesa (assoc-ref inputs "mesa"))
-                      (mesa-lib (string-append mesa "/lib"))
-                      ;(pulseaudio (assoc-ref inputs "pulseaudio"))
-                      ;(pulseaudio-lib (string-append pulseaudio "/lib"))
-                      ;(libxscrnsaver (assoc-ref inputs "libxscrnsaver"))
-                      ;(libxscrnsaver-lib (string-append libxscrnsaver "/lib"))
-                      )
-                 (wrap-program (car (find-files lib "^arcticfox$"))
-                   `("XDG_DATA_DIRS" prefix (,gtk-share))
-                   ;`("LD_LIBRARY_PATH" prefix (,pulseaudio-lib ,mesa-lib ,libxscrnsaver-lib)))
-                   `("LD_LIBRARY_PATH" prefix (,mesa-lib)))
-               #t)))
+           ;(add-after 'install 'wrap-program
+           ;  (lambda* (#:key inputs outputs #:allow-other-keys)
+           ;    (let* ((out (assoc-ref outputs "out"))
+           ;           (lib (string-append out "/lib"))
+           ;           (gtk (assoc-ref inputs "gtk+"))
+           ;           (gtk-share (string-append gtk "/share"))
+           ;           (mesa (assoc-ref inputs "mesa"))
+           ;           (mesa-lib (string-append mesa "/lib"))
+           ;           (pulseaudio (assoc-ref inputs "pulseaudio"))
+           ;           (pulseaudio-lib (string-append pulseaudio "/lib"))
+           ;           )
+           ;      (wrap-program (car (find-files lib "^arcticfox$"))
+           ;        `("XDG_DATA_DIRS" prefix (,gtk-share))
+           ;        ;`("LD_LIBRARY_PATH" prefix (,pulseaudio-lib ,mesa-lib))
+           ;        ;`("LD_LIBRARY_PATH" prefix (,pulseaudio-lib))
+           ;        ;`("LD_LIBRARY_PATH" prefix (,mesa-lib))
+           ;        )
+           ;    #t)))
            )
            ))
       (native-inputs
@@ -185,6 +191,7 @@
                            make-autoconf-wrapper) autoconf-2.13))
          ("automake" ,automake)
          ;("gettext" ,(@ (gnu packages gettext) gettext-minimal))
+         ("gcc" ,gcc-6)     ; not gcc-7
          ;("libtool" ,libtool)
          ("perl" ,perl)
          ("pkg-config" ,pkg-config)
@@ -195,7 +202,7 @@
        `(("alsa-lib" ,alsa-lib)
          ;("bzip2" ,bzip2)
          ("dbus-glib" ,dbus-glib)
-         ;("gdk-pixbuf" ,gdk-pixbuf+svg)
+         ("gdk-pixbuf" ,gdk-pixbuf+svg)
          ("glib" ,glib)
          ("gtk" ,gtk+-2)
          ("gtk+" ,gtk+)
@@ -214,8 +221,7 @@
          ("sqlite" ,sqlite)
          ("unzip" ,unzip)
          ("zip" ,zip)
-         ;("zlib" ,zlib)
-         ))
+         ("zlib" ,zlib)))
       (home-page "https://github.com/wicknix/Arctic-Fox")
       (synopsis " Web Browser for Mac OS X 10.6+, Windows XP, and PowerPC Linux")
       (description "Arctic Fox aims to be a desktop oriented browser with phone
