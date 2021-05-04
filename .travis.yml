@@ -34,6 +34,7 @@ env:
 install: |
   travis_retry wget http://guix.gnu.org/install.sh -O guix-install.sh
   travis_retry wget "https://sv.gnu.org/people/viewgpg.php?user_id=15145" -qO - | gpg --import -
+  travis_retry wget "https://sv.gnu.org/people/viewgpg.php?user_id=127547" -qO - | gpg --import -
   echo -e 'y\ny' | sudo bash guix-install.sh
   sudo mkdir -p /var/guix/profiles/per-user/travis
   sudo chown travis:travis /var/guix/profiles/per-user/travis
