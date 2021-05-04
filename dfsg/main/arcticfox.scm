@@ -15,7 +15,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip arcticfox)
+(define-module (dfsg main arcticfox)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build utils)
   #:use-module (guix git-download)
@@ -30,6 +30,7 @@
   #:use-module (gnu packages gl)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gtk)
+  #:use-module (gnu packages icu4c)
   #:use-module (gnu packages image)
   #:use-module (gnu packages libevent)
   #:use-module (gnu packages libffi)
@@ -42,6 +43,7 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages video)
+  #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xorg))
 
 (define-public arcticfox
@@ -60,26 +62,30 @@
             (sha256
              (base32
               "07mh8apn84ywxsxdncyqrvylgmym8r7sf2lgjwzpaylr79jk8s76"))
-            ;(modules '((guix build utils)))
-            ;(snippet
-            ; '(begin
-            ;    (for-each delete-file-recursively
-            ;              '(
-            ;                ;"db/sqlite3"
-            ;                ;"ipc/chromium/src/third_party" ; libevent
-            ;                "media/libjpeg"
-            ;                "media/libpng"
-            ;                ;"media/libvpx"
-            ;                ;"media/libwebp"
-            ;                "modules/freetype2"
-            ;                "modules/libbz2"
-            ;                "modules/zlib"
-            ;                ;"js/src/ctypes/libffi"
-            ;                "security/nss"
-            ;                "security/sandbox/chromium-shim/base/third_party"
-            ;                ))
-            ;    #t))
-            ))
+            (modules '((guix build utils)))
+            (snippet
+             '(begin
+                (for-each delete-file-recursively
+                          '(;"db/sqlite3"
+                            "gfx/cairo"
+                            ;"gfx/graphite2"
+                            ;"gfx/harfbuzz"
+                            ;"intl/icu"
+                            ;"ipc/chromium/src/third_party" ; libevent
+                            "media/libjpeg"
+                            ;"media/libogg"
+                            ;"media/libopus"
+                            ;"media/libpng"
+                            ;"media/libvpx"
+                            ;"media/libwebp"
+                            "memory/jemalloc"
+                            "modules/freetype2"
+                            "modules/libbz2"
+                            "modules/zlib"
+                            "js/src/ctypes/libffi"
+                            "security/nss"
+                            "security/sandbox/chromium-shim/base/third_party"))
+                #t))))
       (build-system gnu-build-system)
       (arguments
        `(#:tests? #f          ; check target removed
@@ -103,25 +109,27 @@
                "--with-branding=browser/branding/arcticfox"
                "--enable-optimize=-O2"
 
-               "--with-pthreads"
-
                "--with-distribution-id=org.gnu"
-               ;"--enable-default-toolkit=cairo-gtk3"
+               ;; We can set the default toolkit to cairo-gtk3 OR use the system
+               ;; libpng-apng. The bundled version is 1.6.28, which is too old
+               ;; to play nicely with our packaged version.
+               "--enable-default-toolkit=cairo-gtk3"
                "--with-system-bz2"
-               "--with-system-jpeg"        ; must be libjpeg-turbo
+               "--with-system-icu"
+               "--with-system-jpeg"         ; must be libjpeg-turbo
                ;"--with-system-libevent"    ; seems to be incompatable
                "--with-system-libvpx"
                "--with-system-nspr"
                "--with-system-nss"
-               "--with-system-png"
-               "--with-system-webp"
+               ;"--with-system-png"         ; see note above
+               ;"--with-system-webp"        ; not picked up
                "--with-system-zlib"
-               ;"--disable-debug-symbols"
+               "--disable-debug-symbols"
                "--enable-system-cairo"
+               "--enable-system-ffi"
                "--enable-system-hunspell"
                "--enable-system-pixman"
-               "--enable-system-sqlite"
-               )
+               "--enable-system-sqlite")    ; lacking SQLITE_THREADSAFE
          #:phases
          (modify-phases %standard-phases
            (delete 'bootstrap)
@@ -166,69 +174,60 @@
                (let ((out (assoc-ref outputs "out")))
                  (invoke "./mach" "install")
                #t)))
-           ;(add-after 'install 'wrap-program
-           ;  (lambda* (#:key inputs outputs #:allow-other-keys)
-           ;    (let* ((out (assoc-ref outputs "out"))
-           ;           (lib (string-append out "/lib"))
-           ;           (gtk (assoc-ref inputs "gtk+"))
-           ;           (gtk-share (string-append gtk "/share"))
-           ;           (mesa (assoc-ref inputs "mesa"))
-           ;           (mesa-lib (string-append mesa "/lib"))
-           ;           (pulseaudio (assoc-ref inputs "pulseaudio"))
-           ;           (pulseaudio-lib (string-append pulseaudio "/lib"))
-           ;           )
-           ;      (wrap-program (car (find-files lib "^arcticfox$"))
-           ;        `("XDG_DATA_DIRS" prefix (,gtk-share))
-           ;        ;`("LD_LIBRARY_PATH" prefix (,pulseaudio-lib ,mesa-lib))
-           ;        ;`("LD_LIBRARY_PATH" prefix (,pulseaudio-lib))
-           ;        ;`("LD_LIBRARY_PATH" prefix (,mesa-lib))
-           ;        )
-           ;    #t)))
-           )
-           ))
+           (add-after 'install 'wrap-program
+             (lambda* (#:key inputs outputs #:allow-other-keys)
+               (let* ((out (assoc-ref outputs "out"))
+                      (lib (string-append out "/lib"))
+                      (gtk (assoc-ref inputs "gtk+"))
+                      (gtk-share (string-append gtk "/share"))
+                      (mesa (assoc-ref inputs "mesa"))
+                      (mesa-lib (string-append mesa "/lib"))
+                      (pulseaudio (assoc-ref inputs "pulseaudio"))
+                      (pulseaudio-lib (string-append pulseaudio "/lib")))
+                 (wrap-program (car (find-files lib "^arcticfox$"))
+                   `("XDG_DATA_DIRS" prefix (,gtk-share))
+                   `("LD_LIBRARY_PATH" prefix (,pulseaudio-lib ,mesa-lib)))
+               #t))))))
       (native-inputs
        `(("autoconf" ,((@@ (gnu packages autotools)
                            make-autoconf-wrapper) autoconf-2.13))
          ("automake" ,automake)
-         ;("gettext" ,(@ (gnu packages gettext) gettext-minimal))
          ("gcc" ,gcc-6)     ; not gcc-7
-         ;("libtool" ,libtool)
          ("perl" ,perl)
          ("pkg-config" ,pkg-config)
          ("python" ,python-2)
+         ("unzip" ,unzip)
          ("which" ,(@ (gnu packages base) which))
-         ("yasm" ,yasm)))
+         ("yasm" ,yasm)
+         ("zip" ,zip)))
       (inputs
        `(("alsa-lib" ,alsa-lib)
-         ;("bzip2" ,bzip2)
+         ("cairo" ,cairo)
          ("dbus-glib" ,dbus-glib)
          ("gdk-pixbuf" ,gdk-pixbuf+svg)
          ("glib" ,glib)
          ("gtk" ,gtk+-2)
          ("gtk+" ,gtk+)
          ("hunspell" ,hunspell)
-         ("libpng" ,libpng-apng)
+         ("icu4c" ,icu4c)
+         ;("libpng" ,libpng-apng)
          ("libjpeg-turbo" ,libjpeg-turbo)
          ;("libevent" ,libevent)
-         ;("libffi" ,libffi)
+         ("libffi" ,libffi)
          ("libvpx" ,libvpx)
-         ("libwebp" ,libwebp)
+         ;("libwebp" ,libwebp)
          ("libxt" ,libxt)
          ("mesa" ,mesa)
          ("nspr" ,nspr)
          ("nss" ,nss)
+         ("pixman" ,pixman)
          ("pulseaudio" ,pulseaudio)
+         ("python" ,python-2)
          ("sqlite" ,sqlite)
-         ("unzip" ,unzip)
-         ("zip" ,zip)
          ("zlib" ,zlib)))
       (home-page "https://github.com/wicknix/Arctic-Fox")
-      (synopsis " Web Browser for Mac OS X 10.6+, Windows XP, and PowerPC Linux")
-      (description "Arctic Fox aims to be a desktop oriented browser with phone
-support removed, or no longer updated in the tree.  The goal here is to
-implement specific security updates and bug fixes to keep this browser as up to
-date as possible for aging systems.  Examples would be Mac OSX 10.6-10.8,
-PowerPC's running Linux, Windows XP, etc.  Arctic Fox will build for Mac OS X
-10.6 and up, Windows XP, i386/x86_64/PowerPC Linux, and more than likely any
-other UNIX/BSD varient.")
+      (synopsis "Web Browser for older machines")
+      (description "Arctic Fox aims to be a desktop oriented browser for older
+devices.  It's goal is to implement specific security updates and bug fixes to
+keep this browser as up to date as possible for aging systems.")
       (license license:mpl2.0))))
