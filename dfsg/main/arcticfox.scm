@@ -110,9 +110,6 @@
                "--enable-optimize=-O2"
 
                "--with-distribution-id=org.gnu"
-               ;; We can set the default toolkit to cairo-gtk3 OR use the system
-               ;; libpng-apng. The bundled version is 1.6.28, which is too old
-               ;; to play nicely with our packaged version.
                "--enable-default-toolkit=cairo-gtk3"
                "--with-system-bz2"
                "--with-system-icu"
@@ -121,7 +118,7 @@
                "--with-system-libvpx"
                "--with-system-nspr"
                "--with-system-nss"
-               ;"--with-system-png"         ; see note above
+               "--with-system-png"
                ;"--with-system-webp"        ; not picked up
                "--with-system-zlib"
                "--disable-debug-symbols"
@@ -182,11 +179,13 @@
                       (gtk-share (string-append gtk "/share"))
                       (mesa (assoc-ref inputs "mesa"))
                       (mesa-lib (string-append mesa "/lib"))
+                      (libpng (assoc-ref inputs "libpng"))
+                      (libpng-lib (string-append libpng "/lib"))
                       (pulseaudio (assoc-ref inputs "pulseaudio"))
                       (pulseaudio-lib (string-append pulseaudio "/lib")))
                  (wrap-program (car (find-files lib "^arcticfox$"))
                    `("XDG_DATA_DIRS" prefix (,gtk-share))
-                   `("LD_LIBRARY_PATH" prefix (,pulseaudio-lib ,mesa-lib)))
+                   `("LD_LIBRARY_PATH" prefix (,pulseaudio-lib ,mesa-lib ,libpng-lib)))
                #t))))))
       (native-inputs
        `(("autoconf" ,((@@ (gnu packages autotools)
@@ -210,7 +209,7 @@
          ("gtk+" ,gtk+)
          ("hunspell" ,hunspell)
          ("icu4c" ,icu4c)
-         ;("libpng" ,libpng-apng)
+         ("libpng" ,libpng-apng)
          ("libjpeg-turbo" ,libjpeg-turbo)
          ;("libevent" ,libevent)
          ("libffi" ,libffi)
