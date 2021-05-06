@@ -126,10 +126,17 @@
                "--enable-system-ffi"
                "--enable-system-hunspell"
                "--enable-system-pixman"
-               "--enable-system-sqlite")    ; lacking SQLITE_THREADSAFE
+               "--enable-system-sqlite")    ; lacking SQLITE_THREADSAFE?
          #:phases
          (modify-phases %standard-phases
            (delete 'bootstrap)
+           (add-after 'unpack 'link-ffmpeg
+             (lambda* (#:key inputs #:allow-other-keys)
+               (let ((ffmpeg (assoc-ref inputs "ffmpeg")))
+                 (substitute* "dom/media/platforms/ffmpeg/FFmpegRuntimeLinker.cpp"
+                   (("libavcodec\\.so" all)
+                    (string-append ffmpeg "/lib/" all)))
+                 #t)))
            (replace 'configure
              ;; configure does not work followed by both "SHELL=..." and
              ;; "CONFIG_SHELL=..."; set environment variables instead
@@ -153,7 +160,7 @@
                  (setenv "AUTOCONF"
                          (string-append (assoc-ref inputs "autoconf")
                                         "/bin/autoconf"))     ; must be autoconf-2.13
-                 (setenv "CC" ,(cc-for-target))  ; apparently needed when Stylo is enabled
+                 (setenv "CC" ,(cc-for-target))
                  (setenv "CXX" ,(cxx-for-target))
                  (setenv "MOZ_BUILD_DATE" "20210130000000") ; avoid timestamp
                  (format #t "build directory: ~s~%" (getcwd))
@@ -171,6 +178,33 @@
                (let ((out (assoc-ref outputs "out")))
                  (invoke "./mach" "install")
                #t)))
+           (add-after 'install 'install-desktop-file
+             (lambda* (#:key outputs #:allow-other-keys)
+               (let* ((out (assoc-ref outputs "out"))
+                      (apps (string-append out "/share/applications")))
+                 (mkdir-p apps)
+                 (with-output-to-file (string-append apps "/arcticfox.desktop")
+                   (lambda _
+                     (format #t
+                             "[Desktop Entry]~@
+                             Name=Arcticfox~@
+                             Version=1.0~@
+                             Exec=~a/bin/arcticfox %u~@
+                             Icon=arcticfox~@
+                             Comment=Browse the World Wide Web~@
+                             GenericName=Web Browser~@
+                             Keywords=Internet;WWW;Browser;Web;Explorer~@
+                             Terminal=false~@
+                             X-MultipleArgs=false~@
+                             Type=Application~@
+                             Categories=Network;WebBrowser;~@
+                             MimeType=text/html;text/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;text/mml;x-scheme-handler/http;x-scheme-handler/https;~@
+                             StartupNotify=true~@
+                             [Desktop Action new-window]~@
+                             Name=Open a New Window~@
+                             Exec=~@*~a/bin/arcticfox -new-window%"
+                             out))))
+                        #t))
            (add-after 'install 'wrap-program
              (lambda* (#:key inputs outputs #:allow-other-keys)
                (let* ((out (assoc-ref outputs "out"))
@@ -203,6 +237,7 @@
        `(("alsa-lib" ,alsa-lib)
          ("cairo" ,cairo)
          ("dbus-glib" ,dbus-glib)
+         ("ffmpeg" ,ffmpeg)
          ("gdk-pixbuf" ,gdk-pixbuf+svg)
          ("glib" ,glib)
          ("gtk" ,gtk+-2)
