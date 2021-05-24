@@ -46,20 +46,16 @@
     (arguments
      `(#:tests? #f      ; No tests
        #:configure-flags '("--enable-completions"
-                           ;,(string-append "--with-zsh-completion-dir="
-                           ;                (assoc-ref %outputs "out")
-                           ;                "/share/zsh/site-functions")
                            "--enable-notifications")
        #:phases
        (modify-phases %standard-phases
          (replace 'install
            (lambda* (#:key outputs #:allow-other-keys)
-             (let* ((out (assoc-ref outputs "out"))
-                    (bin (string-append out "/bin"))
+             (let* ((out  (assoc-ref outputs "out"))
+                    (bin  (string-append out "/bin"))
                     (man1 (string-append out "/share/man/man1"))
-                    (zsh (string-append out "/share/zsh/site-functions"))
-                    (bash (string-append out "/etc/bash_completion.d"))
-                    )
+                    (zsh  (string-append out "/share/zsh/site-functions"))
+                    (bash (string-append out "/etc/bash_completion.d")))
                (install-file "onedrive" bin)
                (install-file "onedrive.1" man1)
                (mkdir-p zsh)
