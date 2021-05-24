@@ -112,7 +112,7 @@
                "--with-distribution-id=org.gnu"
                "--enable-default-toolkit=cairo-gtk3"
                "--with-system-bz2"
-               "--with-system-icu"
+               ;"--with-system-icu"         ; linker error on i686-linux
                "--with-system-jpeg"         ; must be libjpeg-turbo
                ;"--with-system-libevent"    ; seems to be incompatable
                "--with-system-libvpx"
@@ -243,7 +243,7 @@
          ("gtk" ,gtk+-2)
          ("gtk+" ,gtk+)
          ("hunspell" ,hunspell)
-         ("icu4c" ,icu4c)
+         ;("icu4c" ,icu4c)
          ("libpng" ,libpng-apng)
          ("libjpeg-turbo" ,libjpeg-turbo)
          ;("libevent" ,libevent)
