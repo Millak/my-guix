@@ -73,5 +73,4 @@
     (description
      "@code{ih} is a Python command-line tool for generating cross-stitch
 patterns from source images.")
-    ;; The licenses issue can be fixed by removing demo/ and test/ and skipping tests.
     (license license:bsd-3)))
