@@ -107,7 +107,7 @@
               ;(delete-file-recursively "github.com/keybase/go-logging")
               ;(delete-file-recursively "github.com/keybase/go-merkle-tree")
               ;(delete-file-recursively "github.com/keybase/go-porterstemmer")
-              ;(delete-file-recursively "github.com/keybase/go-ps")
+              (delete-file-recursively "github.com/keybase/go-ps")
               ;(delete-file-recursively "github.com/keybase/go-triplesec-insecure")
               ;(delete-file-recursively "github.com/keybase/go-triplesec")
               ;(delete-file-recursively "github.com/keybase/go-updater")
@@ -258,6 +258,7 @@
        ("go-github-com-golang-mock-gomock" ,go-github-com-golang-mock-gomock)
        ("go-github-com-hashicorp-golang-lru" ,go-github-com-hashicorp-golang-lru)
        ("go-github-com-kennygrant-sanitize" ,go-github-com-kennygrant-sanitize)
+       ("go-github-com-keybase-go-ps" ,go-github-com-keybase-go-ps)
        ("go-github-com-kr-text" ,go-github-com-kr-text)
        ("go-github-com-kyokomi-emoji" ,go-github-com-kyokomi-emoji)
        ("go-github-com-mattn-go-isatty" ,go-github-com-mattn-go-isatty)
@@ -808,28 +809,6 @@ Postgres or MySQL.")
     (synopsis #f)
     (description #f)
     (license license:asl2.0)))
-
-(define-public go-github-com-deckarep-golang-set
-  (package
-    (name "go-github-com-deckarep-golang-set")
-    (version "1.7.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/deckarep/golang-set.git")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "0y64c0p6a7ww5jp6adm6fm97vsni86njw8wkwxfmciy466vhl0lf"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/deckarep/golang-set"))
-    (home-page "https://github.com/deckarep/golang-set")
-    (synopsis #f)
-    (description #f)
-    (license license:expat)))
 
 (define-public go-github-com-dustin-go-humanize
   (package
