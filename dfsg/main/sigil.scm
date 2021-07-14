@@ -22,6 +22,7 @@
   #:use-module (guix packages)
   #:use-module (guix build-system qt)
   #:use-module (guix build-system minify)
+  #:use-module (gnu packages bash)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages javascript)
   #:use-module (gnu packages libreoffice)
@@ -36,7 +37,7 @@
 (define-public sigil
   (package
     (name "sigil")
-    (version "1.5.1")
+    (version "1.6.0")
     (source
       (origin
         (method git-fetch)
@@ -45,16 +46,10 @@
                (commit version)))
         (file-name (git-file-name name version))
         (sha256
-         (base32
-          "1nck5gh62acm7zdi1q73vmgvgpx0gscwpds19mhwvqr2hp7him4g"))
+         (base32 "18h63icw3i0mx773508pb01r7v97269kma64mmn9s9gahxi65aql"))
         (modules '((guix build utils)))
         (snippet
          '(begin
-            ;; Don't check for updates
-            (substitute* "src/main.cpp"
-              ((".*UpdateChecker.*") "")
-              ((".*CheckForUpdate.*") ""))
-
             (with-directory-excursion "3rdparty"
               (for-each delete-file-recursively
                         '("extra" "hunspell" "minizip" "pcre" "zlib")))
@@ -73,6 +68,7 @@
        (list "-DUSE_SYSTEM_LIBS=1"
              "-DSYSTEM_LIBS_REQUIRED=1"
              "-DINSTALL_BUNDLED_DICTS=0"
+             "-DDISABLE_UPDATECHECK=1"
              ;; Tries to install file to [mathjax]/config/local.
              ;; Set [mathjax] to the correct folder structure, not
              ;; to the mathjax package location.
@@ -92,13 +88,8 @@
              #t))
          (add-after 'install 'wrap-binary
            (lambda* (#:key inputs outputs #:allow-other-keys)
-             (let ((out (assoc-ref outputs "out"))
-                   (qtwebengine (assoc-ref inputs "qtwebengine")))
+             (let ((out (assoc-ref outputs "out")))
                (wrap-program (string-append out "/bin/sigil")
-                 `("QTWEBENGINEPROCESS_PATH" =
-                   ,(list (string-append
-                            qtwebengine
-                            "/lib/qt5/libexec/QtWebEngineProcess")))
                  `("PYTHONPATH" ":" prefix (,(getenv "PYTHONPATH"))))
                #t)))
          )))
@@ -111,13 +102,13 @@
            (method url-fetch)
            (uri (string-append "https://code.jquery.com/jquery-2.2.4.min.js"))
            (sha256
-            (base32
-             "13jglpbvm4cjqpbi82fsq8bi0b0ynwxd1nh8yvc19zqzyjb5vf05"))))))
+            (base32 "13jglpbvm4cjqpbi82fsq8bi0b0ynwxd1nh8yvc19zqzyjb5vf05"))))))
     (propagated-inputs
      ;; Needed so when sigil is installed the mathjax addon will be in the correct folder.
      `(("js-mathjax" ,js-mathjax)))
     (inputs
-     `(("hunspell" ,hunspell)
+     `(("bash-minimal" ,bash-minimal)   ; for wrap-program
+       ("hunspell" ,hunspell)
        ("js-jquery-scrollto" ,js-jquery-scrollto)
        ("minizip" ,minizip)
        ("pcre" ,pcre)
@@ -131,12 +122,14 @@
        ("python-lxml" ,python-lxml)
        ("python-pillow" ,python-pillow)
        ("python-pyqt" ,python-pyqt)
+       ("python-pyqtwebengine" ,python-pyqtwebengine)
        ("python-regex" ,python-regex)
        ("python-six" ,python-six)
-       ("qtbase" ,qtbase)
+       ("qtbase" ,qtbase-5)
        ("qtdeclarative" ,qtdeclarative)
        ("qtwebchannel" ,qtwebchannel)
-       ("qtwebengine" ,qtwebengine)))
+       ("qtwebengine" ,qtwebengine)
+       ("zlib" ,zlib)))
     (home-page "https://sigil-ebook.com/")
     (synopsis "EPUB ebook editor")
     (description "Sigil is an ebook editor that uses Qt.  It is designed to edit
