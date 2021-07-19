@@ -69,13 +69,13 @@
              "-DSYSTEM_LIBS_REQUIRED=1"
              "-DINSTALL_BUNDLED_DICTS=0"
              "-DDISABLE_UPDATECHECK=1"
+             "-DINSTALL_HICOLOR_ICONS=1"
              ;; Tries to install file to [mathjax]/config/local.
              ;; Set [mathjax] to the correct folder structure, not
              ;; to the mathjax package location.
              (string-append "-DMATHJAX_DIR="
                             (assoc-ref %outputs "out")
-                            "/share/javascript/mathjax")
-             "-DINSTALL_HICOLOR_ICONS=1")
+                            "/share/javascript/mathjax"))
        #:phases
        (modify-phases %standard-phases
          (add-after 'unpack 'replace-javascript-libraries
@@ -91,6 +91,14 @@
              (let ((out (assoc-ref outputs "out")))
                (wrap-program (string-append out "/bin/sigil")
                  `("PYTHONPATH" ":" prefix (,(getenv "PYTHONPATH"))))
+               #t)))
+         (add-after 'install 'compile-python-bytecode
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               (invoke "python3" "-m" "compileall"
+                       (string-append out "/share/sigil/plugin_launchers/python/"))
+               (invoke "python3" "-m" "compileall"
+                       (string-append out "/share/sigil/python3lib/"))
                #t)))
          )))
     (native-inputs
