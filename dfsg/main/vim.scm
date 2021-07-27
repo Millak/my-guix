@@ -112,7 +112,8 @@ uncommenting sections of text.")
       (license license:vim))))
 
 (define-public vim-gemivim
-  (let ((commit "1c05b93943835547bb5d221e4d97d9a8d11efdd2")
+  ;; No releases have been tagged.
+  (let ((commit "a6a090918733cd6b58f360ad63c599f8e3f9727b")
         (revision "1"))
     (package
       (name "vim-gemivim")
@@ -125,7 +126,7 @@ uncommenting sections of text.")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256
-           (base32 "0rx5raq7z1p2whbsfmr7m0719zw4wcrkgyziwc87qh6ri5bqr0rh"))))
+           (base32 "1jc9i1zl98j856v8dj4pqbfymx7rjkqzk68hzzfn71rjwlzxf7gy"))))
       (build-system copy-build-system)
       (arguments
        `(#:install-plan
@@ -141,10 +142,10 @@ uncommenting sections of text.")
                #t)))))
       (inputs
        `(("gmni" ,gmni)))
-      (home-page "https://sr.ht/%7Ek1nkreet/gemivim/")
+      (home-page "https://sr.ht/~k1nkreet/gemivim")
       (synopsis "VIM plugin for browsing Gemini pages")
       (description "This is a simple VIM plugin for browsing Gemini pages.
-It uses gmni as a gemini client and supports:
+It uses @code{gmni} as a gemini client and supports:
 @itemize
 @item Get gemini content by given URL
 @item Netrw gx-like open gemini link under cursor
@@ -155,3 +156,58 @@ Since plugin does nothing but storing content in temporary files and opening
 them in buffers, one could find quite convenient to use whole power of VIM with
 search, jumplists, tabs, whatever to browse efficiently.")
       (license license:gpl2))))
+
+(define-public vim-gemini-vim
+  ;; No releases have been tagged.
+  (let ((commit "d5d2767dbcfd7ceb8dd53f13162458a824e650c9")
+        (revision "1"))
+    (package
+      (name "vim-gemini-vim")
+      (version (git-version "0.0.0" revision commit))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://git.sr.ht/~torresjrjr/gemini.vim")
+                 (commit commit)))
+          (file-name (git-file-name name version))
+          (sha256
+           (base32 "0yg1fis9xlsdarxkh8grrnxvz3mgf9h6gxchv3zlg203xd825k81"))))
+      (build-system copy-build-system)
+      (arguments
+       `(#:install-plan
+         '(("ftdetect" "share/vim/vimfiles/")
+           ("syntax" "share/vim/vimfiles/"))))
+      (home-page "https://git.sr.ht/~torresjrjr/gemini.vim")
+      (synopsis "Vim syntax highlighting plugin for Gemini")
+      (description "This Vim plugin provides a Vim syntax highlighting plugin
+for Gemini Text, the text/gemini media type, as defined in the Gemini protocol
+specification.")
+      (license license:gpl3))))
+
+(define-public vim-gemini-vim-syntax
+  ;; No releases have been tagged.
+  (let ((commit "596d1f36b386e5b2cc1af4f2f8285134626878d1")
+        (revision "1"))
+    (package
+      (name "vim-gemini-vim-syntax")
+      (version (git-version "0.0.0" revision commit))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://tildegit.org/sloum/gemini-vim-syntax")
+                 (commit commit)))
+          (file-name (git-file-name name version))
+          (sha256
+           (base32 "1h5cq9fbv53nsjj66xrqmdiv0i1gqcvd0mfks3sdlnj0lzhbpip0"))))
+      (build-system copy-build-system)
+      (arguments
+       `(#:install-plan
+         '(("ftdetect" "share/vim/vimfiles/")
+           ("syntax" "share/vim/vimfiles/"))))
+      (home-page "https://tildegit.org/sloum/gemini-vim-syntax")
+      (synopsis "Vim syntax highlighting for text/gemini files")
+      (description "This Vim plugin provides a basic syntax highlighting for the
+Gemini protocol's text/gemini format.")
+      (license license:unlicense))))
