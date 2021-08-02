@@ -246,7 +246,7 @@
        ("go-github-com-coreos-go-systemd-daemon" ,go-github-com-coreos-go-systemd-daemon)
        ("go-github-com-coreos-go-systemd-util" ,go-github-com-coreos-go-systemd-util)
        ("go-github-com-deckarep-golang-set" ,go-github-com-deckarep-golang-set)
-       ("go-github-com-dustin-go-humanize" ,go-github-com-dustin-go-humanize)
+       ("go-github-com-dustin-go-humanize" ,go-github-com-dustin-go-humanize-20150824)
        ("go-github-com-eapache-channels" ,go-github-com-eapache-channels)
        ("go-github-com-gammazero-workerpool" ,go-github-com-gammazero-workerpool)
        ("go-github-com-gobwas-glob" ,go-github-com-gobwas-glob)
@@ -810,8 +810,10 @@ Postgres or MySQL.")
     (description #f)
     (license license:asl2.0)))
 
-(define-public go-github-com-dustin-go-humanize
+;; Keybase needs this older version
+(define-public go-github-com-dustin-go-humanize-20150824
   (package
+    (inherit go-github-com-dustin-go-humanize)
     (name "go-github-com-dustin-go-humanize")
     (version "0.0.0-20150824013810-c20a8bde38c8")
     (source
@@ -823,14 +825,7 @@ Postgres or MySQL.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "0543bdyvg6x45wbiz6v13vl48wh0l61mk65ac0ha8p8sfvajglx3"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/dustin/go-humanize"))
-    (home-page "https://github.com/dustin/go-humanize")
-    (synopsis "Humane Units")
-    (description #f)
-    (license license:expat)))
+          "0543bdyvg6x45wbiz6v13vl48wh0l61mk65ac0ha8p8sfvajglx3"))))))
 
 (define-public go-github-com-go-errors-errors
   (package
@@ -1900,31 +1895,6 @@ Postgres or MySQL.")
     (synopsis #f)
     (description #f)
     (license license:expat)))
-
-(define-public go-github-com-klauspost-compress
-  (package
-    (name "go-github-com-klauspost-compress")
-    (version "1.11.13")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/klauspost/compress.git")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "19l2rbh6vg0ly4qp2gn5lf39ijggf7asav7lxziikkhjqqb4223j"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/klauspost/compress"
-       #:phases
-       (modify-phases %standard-phases
-         (delete 'reset-gzip-timestamps))))
-    (home-page "https://github.com/klauspost/compress")
-    (synopsis "compress")
-    (description #f)
-    (license license:bsd-3)))
 
 (define-public go-github-com-valyala-bytebufferpool
   (package
