@@ -54,7 +54,8 @@
                  (wrap-program
                    (string-append (assoc-ref outputs "out")
                                   "/share/gtags/script/pygments_parser.py")
-                   `("PYTHONPATH" ":" prefix (,(getenv "PYTHONPATH"))))
+                   `("PYTHONPATH" ":" prefix (,(or (getenv "PYTHONPATH")
+                                                   (getenv "GUIX_PYTHONPATH")))))
                  #t))))))
       (inputs
        `(("bash" ,bash-minimal)         ; for wrap-program
