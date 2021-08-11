@@ -21,9 +21,10 @@
 
 (define-public openssl-native
   (package/inherit openssl
-    (name "openssl")
+    (name "ssl-ntv")
     (arguments
      `(#:make-flags (list "CFLAGS=-march=native -Wall -O3")
+       ;#:configure-flags (list "enable-ec_nistp_64_gcc_128 +-march=native")
        #:substitutable? #f
        ,@(package-arguments openssl)))))
 
