@@ -159,7 +159,7 @@ search, jumplists, tabs, whatever to browse efficiently.")
 
 (define-public vim-gemini-vim
   ;; No releases have been tagged.
-  (let ((commit "d5d2767dbcfd7ceb8dd53f13162458a824e650c9")
+  (let ((commit "f300c54174fc0db8fb68f1bc04307b58612e9630")
         (revision "1"))
     (package
       (name "vim-gemini-vim")
@@ -172,7 +172,7 @@ search, jumplists, tabs, whatever to browse efficiently.")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256
-           (base32 "0yg1fis9xlsdarxkh8grrnxvz3mgf9h6gxchv3zlg203xd825k81"))))
+           (base32 "05ffhhfahjqwxyrqmsinsahrs15wknzl2qbj8mznyv319mn2civ2"))))
       (build-system copy-build-system)
       (arguments
        `(#:install-plan
