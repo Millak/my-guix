@@ -30,7 +30,7 @@
 (define-public keybase
   (package
     (name "keybase")
-    (version "5.7.1")
+    (version "5.8.1")
     (source
       (origin
         (method url-fetch)
@@ -39,7 +39,7 @@
                version "/keybase-v" version ".tar.xz"))
         (sha256
          (base32
-          "07j3s0glfmpl2k9zaacv1b687xnblyd64m3n9a5bjc3ms8nx5w13"))
+          "0wccxgfmchwhd4zzi0g1wmyxdrxmbl2zispbj8744aff0lhpk2ay"))
         (modules '((guix build utils)))
         (snippet
          '(begin
