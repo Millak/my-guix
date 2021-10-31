@@ -76,6 +76,6 @@
 webpage, as done by the \"Reader View\" feature of most modern browsers.  It's
 intended to be used with terminal RSS readers, to make the articles more
 readable on web browsers such as @code{lynx}.  The code is closely adapted from
-the @curl{https://github.com/mozilla/readability, Firefox version} and the
+the @url{https://github.com/mozilla/readability, Firefox version} and the
 output is expected to be mostly equivalent.")
       (license license:asl2.0))))
