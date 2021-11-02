@@ -20,37 +20,8 @@
   #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils)
-  #:use-module (guix build-system cargo)
   #:use-module (guix build-system copy)
-  #:use-module (gnu packages crates-io)
   #:use-module (gnu packages web-browsers))
-
-(define-public gvlc
-  (let ((commit "456446e7fa898fed82fef0d0c2dd0adf9b4b3b89")
-        (revision "1"))
-    (package
-      (name "gvlc")
-      (version (git-version "0.0.0" revision commit))
-      (source
-        (origin
-          (method git-fetch)
-          (uri (git-reference
-                 (url "https://github.com/wafelack/gvlc")
-                 (commit commit)))
-          (file-name (git-file-name name version))
-          (sha256
-           (base32
-            "15y6kmlvrxncxv7p8y4yhd2w10ir9jsqnxrbli330jy85iqrlkgv"))))
-      (build-system cargo-build-system)
-      (arguments
-       `(#:install-source? #f
-         #:cargo-inputs
-         (("rust-clap" ,rust-clap-2))))
-      (home-page "https://github.com/wafelack/gvlc")
-      (synopsis "Gentle Vim Lisp Compiler")
-      (description "The Gentle Vim Lisp Compiler is a compiler for the Vim Lisp
-programming language.")
-      (license license:gpl3+))))
 
 (define-public vim-commentary
   ;; Last tagged release was 2016.
