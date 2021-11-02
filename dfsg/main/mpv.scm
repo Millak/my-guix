@@ -75,8 +75,7 @@ sponsored segments of YouTube videos.")
           (method git-fetch)
           (uri (git-reference
                  (url "https://github.com/CrendKing/mpv-twitch-chat")
-                 (commit commit)
-                 ))
+                 (commit commit)))
           (file-name (git-file-name name version))
           (sha256
            (base32 "0qajfvykc9jbbgf9v2684gihywfnnvpvzrdrhaabpcvnk27byb52"))))
@@ -98,7 +97,8 @@ sponsored segments of YouTube videos.")
                (("\"curl\"") (string-append "\"" curl "/bin/curl\""))
                (("^package\\.path.*") "")
                (("local json .*")
-                (string-append "local json = loadfile(\"" lua-json "/share/lua/5.2/json.lua\")()")))))))
+                (string-append "local json = loadfile(\"" lua-json
+                               "/share/lua/5.2/json.lua\")()")))))))
       (inputs
        `(("curl" ,curl-minimal)
          ("lua-json" ,lua5.2-json)))
@@ -134,9 +134,10 @@ JSON as subtitle.  This script converts it into a SubRip subtitle track so that
          (delete 'configure)
          (delete 'build)
          (replace 'check
-           (lambda _
-             (with-directory-excursion "test"
-               (invoke "lua" "test.lua"))))
+           (lambda* (#:key tests? #:allow-other-keys)
+             (when tests?
+               (with-directory-excursion "test"
+                 (invoke "lua" "test.lua")))))
          (replace 'install
            (lambda* (#:key outputs #:allow-other-keys)
              (let ((out (assoc-ref outputs "out"))
