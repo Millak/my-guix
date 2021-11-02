@@ -1,4 +1,4 @@
-;;; Copyright © 2017, 2018, 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2017, 2018, 2020, 2021 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -40,7 +40,7 @@
     (arguments
      `(#:phases
        (modify-phases %standard-phases
-         (delete 'configure)
+         (delete 'configure)        ; No configure script.
          (replace 'unpack
            (lambda* (#:key inputs #:allow-other-keys)
              (let ((source (assoc-ref inputs "source")))
@@ -70,8 +70,9 @@
                  (install-file "share/doc/ravkavonline/LICENSE.txt"
                                (string-append out "/share/doc/" ,name "-" ,version)))
                #t))))
-       #:substitutable? #f
-       #:tests? #f))
+       #:substitutable? #f          ; Non-redistributable.
+       #:strip-binaries? #f         ; Causes seg faults.
+       #:tests? #f))                ; No tests.
     (native-inputs
      `(("patchelf" ,patchelf)))
     (inputs
