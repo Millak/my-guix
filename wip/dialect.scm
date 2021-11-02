@@ -38,7 +38,7 @@
 (define-public dialect
   (package
     (name "dialect")
-    (version "1.3.0")
+    (version "1.4.1")
     (source
       (origin
         (method git-fetch)
@@ -49,7 +49,7 @@
                (recursive? #t)))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "15xixpggqvxv44ddbis6m6r1f7dalb4rand8wcf34xx43iz538k5"))))
+         (base32 "0nm39prxfbm9yxmih8k4jv2mdbsd3si7bllgh8a30zdym627myhh"))))
     (build-system meson-build-system)
     (arguments
      `(#:glib-or-gtk? #t
@@ -63,12 +63,11 @@
              #t))
          (add-after 'install 'wrap-binary
            (lambda* (#:key inputs outputs #:allow-other-keys)
-             (let*
-               ((out (assoc-ref outputs "out"))
-                (pylib (string-append out "/lib/python"
-                                      ,(version-major+minor
-                                         (package-version python))
-                                      "/site-packages")))
+             (let* ((out (assoc-ref outputs "out"))
+                    (pylib (string-append out "/lib/python"
+                                          ,(version-major+minor
+                                             (package-version python))
+                                          "/site-packages")))
                (wrap-program (string-append out "/bin/dialect")
                  `("GI_TYPELIB_PATH" = (,(getenv "GI_TYPELIB_PATH")))
                  `("PYTHONPATH" = (,(getenv "PYTHONPATH") ,pylib))))
@@ -79,6 +78,7 @@
        ("gobject-introspection" ,gobject-introspection)
        ("gtk+" ,gtk+)
        ("libhandy" ,libhandy)
+       ("python-dbus" ,python-dbus)
        ("python-googletrans" ,python-googletrans)
        ("python-gtts" ,python-gtts)
        ("python-pygobject" ,python-pygobject)))
@@ -132,9 +132,9 @@
                (invoke "pytest" "-v" "googletrans" "tests/test_utils.py"))
              #t)))))
     (propagated-inputs
-     `(("python-httpx" ,python-httpx)))
+     `(("python-httpx" ,python-httpx-0.13)))
     (native-inputs
-     `(("python-coveralls" ,python-coveralls)
+     `(("python-mock" ,python-mock)
        ("python-pytest" ,python-pytest)))
     (home-page "https://github.com/ssut/py-googletrans")
     (synopsis "Google Translate API for Python")
@@ -145,23 +145,29 @@
 (define-public python-gtts
   (package
     (name "python-gtts")
-    (version "2.2.2")
+    (version "2.2.3")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "gTTS" version))
         (sha256
-         (base32
-          "03qah9gxhx8m6apviqyffay2dpijm2k5h88ikzgndyvs6zc18dxm"))))
+        (base32 "0g467h1501kxw4zniym03xkz3766bdp6j2j5l04p11ki4h8smkw8"))))
     (build-system python-build-system)
     (arguments
-     `(#:tests? #f  ; Most tests require network access.
-       #:phases
+     `(#:phases
        (modify-phases %standard-phases
+         (add-after 'unpack 'adjust-test-suite
+           (lambda _
+             ;; This test does use the network.
+             (substitute* "gtts/tests/test_tts.py"
+               (("def test_bad_fp_type" all)
+                (string-append "@pytest.mark.net\n" all)))
+             #t))
          (replace 'check
            (lambda* (#:key tests? #:allow-other-keys)
              (when tests?
-               (invoke "pytest" "-v" "-s" "gtts"))
+               (invoke "pytest" "-v" "-s" "gtts"
+                       "-m" "not net"))
              #t)))))
     (propagated-inputs
      `(("python-click" ,python-click)
