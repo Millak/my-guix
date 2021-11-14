@@ -59,5 +59,5 @@
       (description "πfs is a revolutionary new file system that, instead of
 wasting space storing your data on your hard drive, stores your data in π!
 You'll never run out of space again - π holds every file that could possibly
-exist!  They said 100% compression was impossible? You're looking at it!")
+exist!  They said 100% compression was impossible?  You're looking at it!")
       (license license:gpl3+))))

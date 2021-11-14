@@ -57,6 +57,17 @@
                  (("/usr") "")
                  ;; Skip documentation for now
                  ((".*-C Documentation.*") ""))
+               (substitute* '("pbuilder-checkparams"
+                              "pbuilder-loadconfig"
+                              "pbuilder-satisfydepends-apt"
+                              "pbuilder-satisfydepends-aptitude"
+                              "pbuilder-satisfydepends-classic")
+                 (("\\$\\{PBUILDER_PKGLIBDIR:-\\$PBUILDER_ROOT/usr/lib/pbuilder\\}")
+                  (string-append out "/lib/pbuilder"))
+                 (("\\$\\{PBUILDER_PKGDATADIR:-\\$PBUILDER_ROOT/usr/share/pbuilder\\}")
+                  (string-append out "/share/pbuilder"))
+                 (("\\$\\{PBUILDER_SYSCONFDIR:-\\$PBUILDER_ROOT/etc\\}")
+                  (string-append out "/etc")))
                (substitute* '("debuild-pbuilder"
                               "pbuilder"
                               "pbuilder-buildpackage"

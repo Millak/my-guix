@@ -132,7 +132,7 @@
                (invoke "pytest" "-v" "googletrans" "tests/test_utils.py"))
              #t)))))
     (propagated-inputs
-     `(("python-httpx" ,python-httpx-0.13)))
+     `(("python-httpx" ,python-httpx)))
     (native-inputs
      `(("python-mock" ,python-mock)
        ("python-pytest" ,python-pytest)))
