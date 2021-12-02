@@ -2176,36 +2176,6 @@ Postgres or MySQL.")
     (description #f)
     (license license:bsd-3)))
 
-(define-public go-github-com-vividcortex-ewma
-  (package
-    (name "go-github-com-vividcortex-ewma")
-    (version "1.1.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/VividCortex/ewma.git")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "14v2dy5gqchjn7k0sd6cx59ms42v681r6xz7cb1kspp4b28a74rw"))
-        (modules '((guix build utils)))
-        (snippet
-         '(begin
-            ;; Should be float (%f) not digit (%d)
-            ;; https://github.com/VividCortex/ewma/pull/17
-            (substitute* "ewma_test.go"
-              (("%d") "%f"))
-            #t))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/vividcortex/ewma"))
-    (home-page "https://github.com/vividcortex/ewma")
-    (synopsis "EWMA")
-    (description #f)
-    (license license:expat)))
-
 (define-public go-github-com-qrtz-nativemessaging
   (package
     (name "go-github-com-qrtz-nativemessaging")
