@@ -1313,15 +1313,20 @@ Postgres or MySQL.")
        ("go-github-com-sirupsen-logrus" ,go-github-com-sirupsen-logrus)))))
 
 (define-public go-github-com-stellar-go-xdr
-  (package (inherit (go-github-com-stellar-go-package "xdr"))
-    (propagated-inputs
-     `(("go-github-com-lib-pq" ,go-github-com-lib-pq)
-       ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-       ("go-github-com-stellar-go-xdr-xdr3" ,go-github-com-stellar-go-xdr-xdr3)))
-    (native-inputs
-     `(("go-github-com-onsi-ginkgo" ,go-github-com-onsi-ginkgo)
-       ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
-       ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))))
+  (let ((base (go-github-com-stellar-go-package "xdr")))
+    (package (inherit base)
+      (propagated-inputs
+       `(("go-github-com-lib-pq" ,go-github-com-lib-pq)
+         ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
+         ("go-github-com-stellar-go-xdr-xdr3" ,go-github-com-stellar-go-xdr-xdr3)))
+      (native-inputs
+       `(("go-github-com-onsi-ginkgo" ,go-github-com-onsi-ginkgo)
+         ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
+         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
+      (arguments
+       ;; Tests expect a 64-bit system.
+       `(#:tests? ,(target-64bit?)
+         ,@(package-arguments base))))))
 
 (define-public go-github-com-stellar-go-crc16
   (package (inherit (go-github-com-stellar-go-package "crc16"))))
@@ -2115,7 +2120,10 @@ Postgres or MySQL.")
           "0mx6wc5fz05yhvg03vvps93bc5mw4vnng98fhmixd47385qb29pq"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/yudai/golcs"))
+     '(#:import-path "github.com/yudai/golcs"
+       ;; https://github.com/yudai/golcs/issues/3
+       ;; Tests are known to be flakey and to fail on 32-bit systems or fast systems.
+       #:tests? #f))
     (home-page "https://github.com/yudai/golcs")
     (synopsis "Go Longest Common Subsequence (LCS)")
     (description #f)
