@@ -79,3 +79,52 @@ Business, OneDrive for Office365 and SharePoint and fully supports Azure
 National Cloud Deployments.  It supports one-way and two-way sync capabilities
 and securely connects to Microsoft OneDrive services.")
     (license license:gpl3)))
+
+;; Directed to this package by Microsoft, from OneDrive Free Client in Office sidebar, with an image of Tux.
+;; This package seems to be an older starting point for the other onedrive client.
+(define-public onedrive-skilion
+  (package
+    (name "onedrive-skilion")
+    (version "1.1.4")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/skilion/onedrive")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "1ighgvq4fcrj2kfbazamw72kn1nrdzn3xfkfhd41i3ar6429wrch"))))
+    (build-system gnu-build-system)
+    (arguments
+     `(#:test-target "unittest"
+       #:make-flags (list
+                      (string-append "DC = " (assoc-ref %build-inputs "ldc")
+                                     "/bin/ldmd2")
+                      (string-append "PREFIX = " (assoc-ref %outputs "out")))
+       #:phases
+       (modify-phases %standard-phases
+          (delete 'configure)       ; No configure script.
+          (add-after 'unpack 'patch-sources
+            (lambda _
+              (with-output-to-file "version"
+                (lambda ()
+                  (display ,version)
+                  (newline)))
+              (substitute* "Makefile"
+                ((" version ") "")
+                (("/usr/lib") "$(PREFIX)/lib"))))
+          (add-before 'install 'remove-test-binary
+            (lambda _
+              (when (file-exists? "onedrive")
+                (delete-file "onedrive")))))))
+    (inputs
+     `(("curl" ,curl-minimal)
+       ("ldc" ,ldc)
+       ("sqlite" ,sqlite)))
+    (home-page "https://github.com/skilion/onedrive")
+    (synopsis "OneDrive Client")
+    (description
+     "This package provides a complete tool to interact with OneDrive on Linux.")
+    (license license:gpl3)))
