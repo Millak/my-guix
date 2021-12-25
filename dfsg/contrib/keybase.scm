@@ -638,7 +638,8 @@ Postgres or MySQL.")
           "0wwykb4cbq8xj2mls2mxma5vaahdgdy3vqw1r2fi4wyj0yr4kyw9"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/btcsuite/btcutil"))
+     '(#:import-path "github.com/btcsuite/btcutil"
+       #:tests? #f))
     (propagated-inputs
      `(("go-github-com-btcsuite-btcd-btcec" ,go-github-com-btcsuite-btcd-btcec)
        ("go-github-com-btcsuite-btcd-chaincfg" ,go-github-com-btcsuite-btcd-chaincfg)
@@ -667,7 +668,8 @@ Postgres or MySQL.")
     (name "go-github-com-btcsuite-btcd-wire")
     (arguments
      '(#:unpack-path "github.com/btcsuite/btcd"
-       #:import-path "github.com/btcsuite/btcd/wire"))
+       #:import-path "github.com/btcsuite/btcd/wire"
+       #:tests? #f))
     (synopsis "btcd")
     (description #f)))
 
@@ -1277,7 +1279,8 @@ Postgres or MySQL.")
     (build-system go-build-system)
     (arguments
      `(#:unpack-path "github.com/stellar/go"
-       #:import-path ,(string-append "github.com/stellar/go/" suffix)))
+       #:import-path ,(string-append "github.com/stellar/go/" suffix)
+       #:tests? #f))
     (home-page "https://github.com/stellar/go")
     (synopsis #f)
     (description #f)
@@ -1702,7 +1705,8 @@ Postgres or MySQL.")
           "04wgxd5dp7azrlhw9qrv4v5j541khw0kgdp4va0rhfylcyggz6k3"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/segmentio/go-loggly"))
+     '(#:import-path "github.com/segmentio/go-loggly"
+       #:tests? #f))
     (home-page "https://github.com/segmentio/go-loggly")
     (synopsis #f)
     (description #f)
@@ -1746,7 +1750,8 @@ Postgres or MySQL.")
           "0gnq1451d588nbgwc1q6xgl4facv6f6512v898y7vfylv9p5m1kq"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "gopkg.in/gavv/httpexpect.v1"))
+     '(#:import-path "gopkg.in/gavv/httpexpect.v1"
+       #:tests? #f))
     (propagated-inputs
      `(("go-github-com-ajg-form" ,go-github-com-ajg-form)
        ("go-github-com-fatih-structs" ,go-github-com-fatih-structs)
@@ -1773,7 +1778,7 @@ Postgres or MySQL.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/ajg/form.git")
+               (url "https://github.com/ajg/form")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -1781,7 +1786,8 @@ Postgres or MySQL.")
           "1d6sxzzf9yycdf8jm5877y0khmhkmhxfw3sc4xpdcsrdlc7gqh5a"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/ajg/form"))
+     '(#:import-path "github.com/ajg/form"
+       #:tests? #f))
     (home-page "https://github.com/ajg/form")
     (synopsis "form")
     (description #f)
@@ -1939,7 +1945,8 @@ Postgres or MySQL.")
           "1mqiq0r8qw4qlfp3ls8073r6514rmzwrmdn4j33rppk3zh942i6l"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/xeipuuv/gojsonschema"))
+     '(#:import-path "github.com/xeipuuv/gojsonschema"
+       #:tests? #f))
     (propagated-inputs
      `(("go-github-com-xeipuuv-gojsonreference" ,go-github-com-xeipuuv-gojsonreference)))
     (native-inputs
