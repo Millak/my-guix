@@ -52,19 +52,19 @@
      `(#:tests? #f  ; Tests expect a configuration file and network access.
        #:phases
        (modify-phases %standard-phases
+         ;; Loading the module works, but also launches the CLI.
+         (delete 'sanity-check)
          (add-after 'unpack 'patch-sources
            (lambda _
              (substitute* "setup.py"
-               (("\\,\\\"enum34\\\"") ""))
-             #t))
+               (("\\,\\\"enum34\\\"") ""))))
          (replace 'check
            (lambda* (#:key tests? outputs #:allow-other-keys)
              (if tests?
                (with-directory-excursion "test"
                  (setenv "PATH" (string-append (assoc-ref outputs "out")
                                                "/bin:" (getenv "PATH")))
-                 (invoke "sh" "test-runner.sh" "--force")))
-             #t)))))
+                 (invoke "sh" "test-runner.sh" "--force"))))))))
     (inputs
      `(("python-colorclass" ,python-colorclass)
        ("python-pyyaml" ,python-pyyaml)
