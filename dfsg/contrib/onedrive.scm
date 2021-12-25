@@ -20,18 +20,22 @@
   #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils)
+  #:use-module (guix gexp)
   #:use-module (guix build-system gnu)
+  #:use-module (gnu packages base)
+  #:use-module (gnu packages bash)
   #:use-module (gnu packages curl)
   #:use-module (gnu packages dlang)
+  #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
+  #:use-module (gnu packages gtk)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages sqlite))
 
-;; More recent versions need newer versions of D.
 (define-public onedrive
   (package
     (name "onedrive")
-    (version "2.3.4")
+    (version "2.4.14")
     (source
       (origin
         (method git-fetch)
@@ -41,90 +45,47 @@
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "1f9i86izvmylch03wjh2lf4dy9k6777w3is9f416w31nxs90rxpw"))))
+          "050blfh96zn51zfiggkyqjg2lhsby5nmgvvky50kyrmhzd5447yf"))))
     (build-system gnu-build-system)
     (arguments
-     `(#:tests? #f      ; No tests
-       #:configure-flags '("--enable-completions"
-                           "--enable-notifications")
+     (list
+       #:tests? #f              ; Tests require a OneDrive account.
+       #:validate-runpath? #f   ; We know it fails, hence the LD_PRELOAD.
+       #:configure-flags
+       #~(list "--enable-completions"
+               "--enable-notifications"
+               (string-append "--with-zsh-completion-dir="
+                              #$output "/share/zsh/site-functions")
+               (string-append "--with-fish-completion-dir="
+                              #$output "/share/fish/vendor_completions.d"))
+       #:make-flags #~(list (string-append "CC=" #$(cc-for-target)))
        #:phases
-       (modify-phases %standard-phases
-         (replace 'install
-           (lambda* (#:key outputs #:allow-other-keys)
-             (let* ((out  (assoc-ref outputs "out"))
-                    (bin  (string-append out "/bin"))
-                    (man1 (string-append out "/share/man/man1"))
-                    (zsh  (string-append out "/share/zsh/site-functions"))
-                    (bash (string-append out "/etc/bash_completion.d")))
-               (install-file "onedrive" bin)
-               (install-file "onedrive.1" man1)
-               (mkdir-p zsh)
-               (copy-file "contrib/completions/complete.zsh"
-                          (string-append zsh "/_onedrive"))
-               (mkdir-p bash)
-               (copy-file "contrib/completions/complete.bash"
-                          (string-append bash "/onedrive"))
-               #t))))))
+       #~(modify-phases %standard-phases
+         (add-after 'install 'wrap-program
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (wrap-program (string-append #$output "/bin/onedrive")
+               `("LD_PRELOAD" ":" prefix
+                 (,(string-append #$curl-minimal "/lib/libcurl.so.4")
+                   ,(string-append #$sqlite "/lib/libsqlite3.so.0")
+                   ;; These ones for libnotify
+                   ,(string-append #$libnotify "/lib/libnotify.so.4")
+                   ,(string-append #$gdk-pixbuf "/lib/libgdk_pixbuf-2.0.so.0")
+                   ,(string-append #$glib "/lib/libgio-2.0.so.0")
+                   ,(string-append #$glib "/lib/libgobject-2.0.so.0")
+                   ,(string-append #$glib "/lib/libglib-2.0.so.0")))))))))
     (native-inputs
-     `(("pkg-config" ,pkg-config)))
+     (list pkg-config))
     (inputs
-     `(("curl" ,curl-minimal)
-       ("ldc" ,ldc)
-       ("libnotify" ,libnotify)
-       ("sqlite" ,sqlite)))
+     (list bash-minimal
+           binutils-gold    ; Apparently really does want ld.gold
+           curl-minimal
+           ldc
+           libnotify
+           sqlite))
     (home-page "https://abraunegg.github.io")
-    (synopsis "Unofficial OneDrive Client")
+    (synopsis "Client for OneDrive")
     (description "OneDrive Client which supports OneDrive Personal, OneDrive for
 Business, OneDrive for Office365 and SharePoint and fully supports Azure
 National Cloud Deployments.  It supports one-way and two-way sync capabilities
 and securely connects to Microsoft OneDrive services.")
-    (license license:gpl3)))
-
-;; Directed to this package by Microsoft, from OneDrive Free Client in Office sidebar, with an image of Tux.
-;; This package seems to be an older starting point for the other onedrive client.
-(define-public onedrive-skilion
-  (package
-    (name "onedrive-skilion")
-    (version "1.1.4")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/skilion/onedrive")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "1ighgvq4fcrj2kfbazamw72kn1nrdzn3xfkfhd41i3ar6429wrch"))))
-    (build-system gnu-build-system)
-    (arguments
-     `(#:test-target "unittest"
-       #:make-flags (list
-                      (string-append "DC = " (assoc-ref %build-inputs "ldc")
-                                     "/bin/ldmd2")
-                      (string-append "PREFIX = " (assoc-ref %outputs "out")))
-       #:phases
-       (modify-phases %standard-phases
-          (delete 'configure)       ; No configure script.
-          (add-after 'unpack 'patch-sources
-            (lambda _
-              (with-output-to-file "version"
-                (lambda ()
-                  (display ,version)
-                  (newline)))
-              (substitute* "Makefile"
-                ((" version ") "")
-                (("/usr/lib") "$(PREFIX)/lib"))))
-          (add-before 'install 'remove-test-binary
-            (lambda _
-              (when (file-exists? "onedrive")
-                (delete-file "onedrive")))))))
-    (inputs
-     `(("curl" ,curl-minimal)
-       ("ldc" ,ldc)
-       ("sqlite" ,sqlite)))
-    (home-page "https://github.com/skilion/onedrive")
-    (synopsis "OneDrive Client")
-    (description
-     "This package provides a complete tool to interact with OneDrive on Linux.")
     (license license:gpl3)))
