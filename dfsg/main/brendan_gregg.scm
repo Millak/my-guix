@@ -32,7 +32,7 @@
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/baud")
+        (uri "https://www.brendangregg.com/Specials/baud")
         (sha256
          (base32
           "04zah2yyby7g0jwqhrvxvjhfxhkq2r8k4ixxx79d059dkzdvyhvr"))))
@@ -53,7 +53,7 @@
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Run commands safley at their native baud")
     (description "This allows older commands to be executed safely at their
 original native baud.  Commands are now often run over high speed telnet or ssh
@@ -76,7 +76,7 @@ fastcommands(5), that lists commands that are high speed link safe.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/ishadm")
+        (uri "https://www.brendangregg.com/Specials/ishadm")
         (sha256
          (base32
           "1mr3a46qxzbn00gaqgfbwcjd3lxgbgnirvv8xj60vdja63s10g8z"))))
@@ -103,7 +103,7 @@ fastcommands(5), that lists commands that are high speed link safe.")
     (inputs
      `(("net-tools" ,net-tools)
        ("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Information Super Highway Administration")
     (description "This checks and enables network routes to the Information
 Super Highway to ensure maximum Internet performance.  Must be run as root to
@@ -118,7 +118,7 @@ update the routes.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/turbo")
+        (uri "https://www.brendangregg.com/Specials/turbo")
         (sha256
          (base32
           "0liq55l3nnd77pd2zs0rcgk2afszgzkxjcambl7v405ylgxl04b6"))))
@@ -139,7 +139,7 @@ update the routes.")
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Toggle the turbo button")
     (description "Once upon a time computers were made with a physical turbo
 button that doubled the CPU speed.  These days we need to make do with a
@@ -154,7 +154,7 @@ script.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/icmpcharger")
+        (uri "https://www.brendangregg.com/Specials/icmpcharger")
         (sha256
          (base32
           "1i9jlly3758mz4pagxcnrjs50a6anr9npkjraixanhd1ga76wl0b"))))
@@ -181,7 +181,7 @@ script.")
     (inputs
      `(("headers" ,linux-libre-headers)
        ("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "ICMP driver trickle charger")
     (description "This trickle charges the ICMP driver by sending a series of
 ICMP packets to localhost at regular intervals.  This program autodetects the
@@ -206,7 +206,7 @@ L1, L2 and TLB caches with ICMP driver entries.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/bottom")
+        (uri "https://www.brendangregg.com/Specials/bottom")
         (sha256
          (base32
           "1ziarv1whhqv43w0k6zbvqs7w25py5izb16w1ipm278raxqqwgq7"))))
@@ -227,7 +227,7 @@ L1, L2 and TLB caches with ICMP driver entries.")
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Display bottom processes")
     (description "This is the opposite of @code{top}, it displays processes
 that are using the least CPU.  It is the companion to the \"prstat\" command.")
@@ -240,7 +240,7 @@ that are using the least CPU.  It is the companion to the \"prstat\" command.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/ltzip")
+        (uri "https://www.brendangregg.com/Specials/ltzip")
         (sha256
          (base32
           "0gr25mh0daklc590lk324mn3i5mdj1zaipjnr8jxlvv92nk9l8n6"))))
@@ -261,7 +261,7 @@ that are using the least CPU.  It is the companion to the \"prstat\" command.")
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Lossy Text Compression")
     (description "This program compresses text files using a unique lossy text
 compression algorithm.  Decompression is not possible.  The result file has a
@@ -278,7 +278,7 @@ bytes - and weigh less when stored on disk.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/ltunzip")
+        (uri "https://www.brendangregg.com/Specials/ltunzip")
         (sha256
          (base32
           "154fk9lw2450ij3b78rbqy3wl88wjbg0afmnvlamk1n2qgz7k3bv"))))
@@ -299,7 +299,7 @@ bytes - and weigh less when stored on disk.")
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Lossy Text Uncompression")
     (description "This program uncompresses text files that were compressed
 using @dfn{the lossy text compression tool} (ltzip).  Like @code{ltzip},
@@ -315,7 +315,7 @@ The result file has a \".un\" extension, and  the original ltz file remains.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/maybe")
+        (uri "https://www.brendangregg.com/Specials/maybe")
         (sha256
          (base32
           "195hylz46lh8z0skl0hwsrsk64qn0bx0fwb9z3dcnrfjymi266ss"))))
@@ -336,7 +336,7 @@ The result file has a \".un\" extension, and  the original ltz file remains.")
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Sometimes true, sometimes false")
     (description "Maybe is a companion to @code{/usr/bin/true} and
 @code{/usr/bin/false}.")
@@ -349,7 +349,7 @@ The result file has a \".un\" extension, and  the original ltz file remains.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/onstat")
+        (uri "https://www.brendangregg.com/Specials/onstat")
         (sha256
          (base32
           "1gd5issqwacl4ypgibj6b1hmclslv54mz0xc361f7zmsss5ywrdr"))))
@@ -370,7 +370,7 @@ The result file has a \".un\" extension, and  the original ltz file remains.")
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Server on status")
     (description "Onstat tells you if your server is switched on.  A common
 problem is when staff attempt to use a server or desktop when the power is not
@@ -384,7 +384,7 @@ switched on.  This may help diagnose such a situation.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/cdrewind")
+        (uri "https://www.brendangregg.com/Specials/cdrewind")
         (sha256
          (base32
           "18sai89dv46v746s8xpjis77lk885ri2y8h9xmrsrwd36ggbn6v7"))))
@@ -405,7 +405,7 @@ switched on.  This may help diagnose such a situation.")
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Rewind CDROMs before ejection")
     (description "Many Unix based operating systems neglect to rewind CDROMs
 fully before ejection.  This may leave some CDROMs positioned incorrectly when
@@ -427,7 +427,7 @@ through to servers.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/psss")
+        (uri "https://www.brendangregg.com/Specials/psss")
         (sha256
          (base32
           "1xrxyw13aab1d8d2ibs3ajd6l5hl9my342682ppj4scxqg60gkcn"))))
@@ -448,7 +448,7 @@ through to servers.")
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/Specials/psss_chart.html")
+    (home-page "https://www.brendangregg.com/Specials/psss_chart.html")
     (synopsis "Process Status with StarSign")
     (description "@code{psss} is ps with StarSign, and inserts a field to
 display the starsign of the process.
@@ -464,7 +464,7 @@ this program currently does not use.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/lsss")
+        (uri "https://www.brendangregg.com/Specials/lsss")
         (sha256
          (base32
           "00czx5wih03s8djpsj021aabin04m6b9gwpwxazzmkyvrxhv19i6"))))
@@ -485,8 +485,8 @@ this program currently does not use.")
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
-    (synopsis "@code{ls} with StarSign")
+    (home-page "https://www.brendangregg.com/specials.html")
+    (synopsis "StarSign version of @code{ls}")
     (description "@code{lsss} is ls with StarSign, an improved @code{ls}
 command.  This runs the @code{ls} command and inserts a field to display the
 starsign of each file.")
@@ -499,7 +499,7 @@ starsign of each file.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/gwhiz")
+        (uri "https://www.brendangregg.com/Specials/gwhiz")
         (sha256
          (base32
           "1rkggpn6ydxil1r9d9li8kdh8g54l7rzc3smb3wk6rk473flmd11"))))
@@ -520,7 +520,7 @@ starsign of each file.")
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Whiz files or output streams")
     (description "@code{gwhiz} will whiz files or commands, making them easier
 to read so that you do not miss important details.  If your terminal supports
@@ -534,7 +534,7 @@ color, @code{gwhiz} can highlight in colour using the \"-c\" option.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/l33t")
+        (uri "https://www.brendangregg.com/Specials/l33t")
         (sha256
          (base32
           "08rl0qk4vfijncaykfjsc6g94ih7c0qv642h3vpwfyvanqdydg0j"))))
@@ -555,7 +555,7 @@ color, @code{gwhiz} can highlight in colour using the \"-c\" option.")
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Auto l33t converter")
     (description "This program converts text to l33t-speak.  This is helpful to
 convert text that has been written in a formal and confusing manner, into text
@@ -569,7 +569,7 @@ that is easy to follow.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/3rot13")
+        (uri "https://www.brendangregg.com/Specials/3rot13")
         (sha256
          (base32
           "1znn983c05ma4ck31b0irwdpf3m6dy83nlgmc2l8x35k47q2rm35"))))
@@ -590,7 +590,7 @@ that is easy to follow.")
            (chmod dest #o555)))))
     (native-inputs `(("source" ,source)))
     (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Heavyweight encryption algorithm: Triple ROT13")
     (description "This implements a new encryption algorithm, 3ROT13.  This is a
 symmetric cypher that has a number of desirable features over existing
@@ -608,7 +608,7 @@ a higher performance be desired this code can be reworked in C.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/nrot13")
+        (uri "https://www.brendangregg.com/Specials/nrot13")
         (sha256
          (base32
           "0xq76d39hglf53mp24g0sdl2688by0yyh9v69rc4xi5sbzmdxaya"))))
@@ -645,7 +645,7 @@ supersymmetric 31ROT13.")
     (source
       (origin
         (method url-fetch)
-        (uri "http://www.brendangregg.com/Specials/mkzombie.c")
+        (uri "https://www.brendangregg.com/Specials/mkzombie.c")
         (sha256
          (base32
           "04fciciykphswj12vwlbvii3sjcqqf2j6kiqynsg5n14qyghr6cl"))))
@@ -661,12 +661,9 @@ supersymmetric 31ROT13.")
              (invoke ,(cc-for-target) "-o" "mkzombie" source)))
          (replace 'install
            (lambda* (#:key outputs #:allow-other-keys)
-             (let* ((out  (assoc-ref outputs "out"))
-                    (dest (string-append out "/bin/mkzombie")))
-               (mkdir-p (string-append out "/bin"))
-               (copy-file "mkzombie" dest))
-             #t)))))
-    (home-page "http://www.brendangregg.com/specials.html")
+             (let ((out  (assoc-ref outputs "out")))
+               (install-file "mkzombie" (string-append out "/bin"))))))))
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Make zombie processes")
     (description "This program creates one or more zombies and a daemon their
 leader.  It can be used to replenish system zombies, or to feed the init
