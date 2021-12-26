@@ -20,6 +20,7 @@
   #:use-module (guix git-download)
   #:use-module (guix download)
   #:use-module (guix packages)
+  #:use-module (guix gexp)
   #:use-module (guix build-system qt)
   #:use-module (guix build-system minify)
   #:use-module (gnu packages bash)
@@ -37,7 +38,7 @@
 (define-public sigil
   (package
     (name "sigil")
-    (version "1.6.0")
+    (version "1.8.0")
     (source
       (origin
         (method git-fetch)
@@ -46,7 +47,7 @@
                (commit version)))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "18h63icw3i0mx773508pb01r7v97269kma64mmn9s9gahxi65aql"))
+         (base32 "0wqfryzgbnablwllp4gr82s4qcf51kmm4c1n4dpj351v474q6qxj"))
         (modules '((guix build utils)))
         (snippet
          '(begin
@@ -59,64 +60,57 @@
             (with-directory-excursion "src/Resource_Files/javascript"
               (delete-file "jquery-2.2.4.min.js")
               (delete-file "jquery.scrollTo-1.4.2-min.js")
-              (delete-file "jquery.scrollTo-2.1.2-min.js"))
-            #t))))
+              (delete-file "jquery.scrollTo-2.1.2-min.js"))))))
     (build-system qt-build-system)
     (arguments
-     `(#:tests? #f  ; no tests
+     (list
+       #:tests? #f  ; no tests
        #:configure-flags
-       (list "-DUSE_SYSTEM_LIBS=1"
-             "-DSYSTEM_LIBS_REQUIRED=1"
-             "-DINSTALL_BUNDLED_DICTS=0"
-             "-DDISABLE_UPDATECHECK=1"
-             "-DINSTALL_HICOLOR_ICONS=1"
-             ;; Tries to install file to [mathjax]/config/local.
-             ;; Set [mathjax] to the correct folder structure, not
-             ;; to the mathjax package location.
-             (string-append "-DMATHJAX_DIR="
-                            (assoc-ref %outputs "out")
-                            "/share/javascript/mathjax"))
+       #~(list "-DUSE_SYSTEM_LIBS=1"
+               "-DUSE_NEWER_FINDPYTHON3=1"
+               "-DSYSTEM_LIBS_REQUIRED=1"
+               "-DINSTALL_BUNDLED_DICTS=0"
+               "-DINSTALL_HICOLOR_ICONS=1"
+               "-DDISABLE_UPDATE_CHECK=1"
+               ;; Tries to install file to [mathjax]/config/local.
+               ;; Set [mathjax] to the correct folder structure, not
+               ;; to the mathjax package location.
+               (string-append "-DMATHJAX_DIR=" #$output
+                              "/share/javascript/mathjax"))
        #:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'replace-javascript-libraries
-           (lambda* (#:key inputs #:allow-other-keys)
-             (symlink (assoc-ref inputs "jquery-2.2.4.min.js")
-                      "src/Resource_Files/javascript/jquery-2.2.4.min.js")
-             (symlink (string-append (assoc-ref inputs "js-jquery-scrollto")
-                                     "/share/javascript/jquery.scrollTo.min.js")
-                      "src/Resource_Files/javascript/jquery.scrollTo-2.1.2-min.js")
-             #t))
-         (add-after 'install 'wrap-binary
-           (lambda* (#:key inputs outputs #:allow-other-keys)
-             (let ((out (assoc-ref outputs "out")))
-               (wrap-program (string-append out "/bin/sigil")
-                 `("PYTHONPATH" ":" prefix (,(getenv "PYTHONPATH"))))
-               #t)))
-         (add-after 'install 'compile-python-bytecode
-           (lambda* (#:key outputs #:allow-other-keys)
-             (let ((out (assoc-ref outputs "out")))
-               (invoke "python3" "-m" "compileall"
-                       (string-append out "/share/sigil/plugin_launchers/python/"))
-               (invoke "python3" "-m" "compileall"
-                       (string-append out "/share/sigil/python3lib/"))
-               #t)))
-         )))
+       #~(modify-phases %standard-phases
+           (add-after 'unpack 'replace-javascript-libraries
+             (lambda* (#:key inputs #:allow-other-keys)
+               (symlink
+                 (search-input-file inputs
+                                    "/share/javascript/jquery.min.js")
+                 "src/Resource_Files/javascript/jquery-2.2.4.min.js")
+               (symlink
+                 (search-input-file inputs
+                                    "/share/javascript/jquery.scrollTo.min.js")
+                 "src/Resource_Files/javascript/jquery.scrollTo-2.1.2-min.js")))
+           (add-after 'install 'wrap-binary
+             (lambda* (#:key inputs outputs #:allow-other-keys)
+               (let ((out (assoc-ref outputs "out")))
+                 (wrap-program (string-append out "/bin/sigil")
+                   `("GUIX_PYTHONPATH" ":" prefix (,(getenv "GUIX_PYTHONPATH")))))))
+           (add-after 'install 'compile-python-bytecode
+             (lambda* (#:key outputs #:allow-other-keys)
+               (let ((out (assoc-ref outputs "out")))
+                 (invoke "python3" "-m" "compileall"
+                         (string-append out "/share/sigil/plugin_launchers/python/"))
+                 (invoke "python3" "-m" "compileall"
+                         (string-append out "/share/sigil/python3lib/"))))))))
     (native-inputs
-     `(("pkg-config" ,pkg-config)
-       ("qttools" ,qttools)
-
-       ("jquery-2.2.4.min.js"
-        ,(origin
-           (method url-fetch)
-           (uri (string-append "https://code.jquery.com/jquery-2.2.4.min.js"))
-           (sha256
-            (base32 "13jglpbvm4cjqpbi82fsq8bi0b0ynwxd1nh8yvc19zqzyjb5vf05"))))))
+     (list pkg-config
+           qttools))
     (propagated-inputs
      ;; Needed so when sigil is installed the mathjax addon will be in the correct folder.
-     `(("js-mathjax" ,js-mathjax)))
+     (list js-mathjax))
     (inputs
      `(("bash-minimal" ,bash-minimal)   ; for wrap-program
        ("hunspell" ,hunspell)
+       ("js-jquery" ,js-jquery)
        ("js-jquery-scrollto" ,js-jquery-scrollto)
        ("minizip" ,minizip)
        ("pcre" ,pcre)
@@ -148,6 +142,35 @@ books in ePub format (both ePub 2 and ePub 3).")
               (files '("share/hunspell")))))
     (license license:gpl3+)))
 
+(define-public js-jquery
+  (package
+    (name "js-jquery")
+    (version "2.2.4")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/jquery/jquery")
+               (commit version)))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32
+          "12x6k47kjbp3r8dipbjq70v32izxdakyr150pkxv5b29pp0p4sgx"))
+        ;(modules '((guix build utils)))
+        ;(snippet
+        ; '(begin
+        ;    (delete-file-recursively "dist")))
+        ))
+    (build-system minify-build-system)
+    (arguments `(#:javascript-files '("dist/jquery.js")))
+    (home-page "https://jquery.com/")
+    (synopsis "jQuery JavaScript Library")
+    (description "jQuery is a fast, small, and feature-rich JavaScript library.
+It makes things like HTML document traversal and manipulation, event handling,
+animation, and Ajax much simpler with an easy-to-use API that works across a
+multitude of browsers.")
+    (license license:expat)))
+
 (define-public js-jquery-scrollto
   (package
     (name "js-jquery-scrollto")
@@ -165,7 +188,7 @@ books in ePub format (both ePub 2 and ePub 3).")
         (modules '((guix build utils)))
         (snippet
          '(begin
-            (delete-file "jquery.scrollTo.min.js") #t))))
+            (delete-file "jquery.scrollTo.min.js")))))
     (build-system minify-build-system)
     (arguments `(#:javascript-files '("jquery.scrollTo.js")))
     (home-page "http://demos.flesler.com/jquery/scrollTo/")
