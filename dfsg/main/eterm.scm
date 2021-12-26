@@ -1,4 +1,4 @@
-;;; Copyright © 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2020, 2021 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -39,7 +39,7 @@
         (origin
           (method git-fetch)
           (uri (git-reference
-                 (url "https://git.enlightenment.org/apps/eterm")
+                 (url "https://git.enlightenment.org/apps/eterm.git")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256
@@ -49,8 +49,7 @@
           (snippet
            '(begin
               (substitute* "src/options.c"
-                ((".*Built on.*") ""))
-              #t))))
+                ((".*Built on.*") ""))))))
       (build-system gnu-build-system)
       (arguments
        '(#:configure-flags '("--disable-static")))

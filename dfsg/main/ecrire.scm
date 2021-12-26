@@ -1,4 +1,4 @@
-;;; Copyright © 2016, 2017, 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2016, 2017, 2019, 2020, 2021 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -44,10 +44,10 @@
      '(#:configure-flags '("-DENABLE_NLS:BOOL=TRUE")
        #:tests? #f))    ; no tests
     (native-inputs
-     `(("gettext" ,gettext-minimal)
-       ("pkg-config" ,pkg-config)))
+     (list gettext-minimal
+           pkg-config))
     (inputs
-     `(("efl" ,efl)))
+     (list efl))
     (home-page "https://www.enlightenment.org")
     (synopsis "Text editor for EFL/Enlightenment")
     (description "Ecrire is a basic text editor written in EFL for the

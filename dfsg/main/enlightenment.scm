@@ -1,4 +1,4 @@
-;;; Copyright © 2019 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2019, 2021 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -51,18 +51,16 @@
            (lambda* (#:key outputs #:allow-other-keys)
              (let ((out (assoc-ref outputs "out")))
                (substitute* "meson.build"
-                 ((".e/e/modules") "lib/enlightenment/modules"))
-               #t)))
+                 ((".e/e/modules") "lib/enlightenment/modules")))))
          (add-after 'unpack 'set-home-dir
            (lambda _
-             (setenv "HOME" (getenv "TMPDIR"))
-             #t)))))
+             (setenv "HOME" (getenv "TMPDIR")))))))
     (native-inputs
-     `(("gettext" ,gettext-minimal)
-       ("pkg-config" ,pkg-config)))
+     (list gettext-minimal
+           pkg-config))
     (inputs
-     `(("efl" ,efl)
-       ("enlightenment" ,enlightenment)))
+     (list efl
+           enlightenment))
     (home-page "https://github.com/Obsidian-StudiosInc/clipboard")
     (synopsis "Clipboard module for E21+ desktop")
     (description "This is a clipboard module we created for the Bodhi Linux's

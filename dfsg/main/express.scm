@@ -46,8 +46,7 @@
            '(begin
               (delete-file-recursively "data/fonts")
               (substitute* "meson.build"
-                ((".*data/fonts.*") ""))
-              #t))))
+                ((".*data/fonts.*") ""))))))
       (build-system meson-build-system)
       (arguments
        '(#:phases
@@ -55,13 +54,12 @@
            (add-after 'unpack 'setenv
              (lambda _
                ;; FATAL: Cannot create run dir '/homeless-shelter/.run' - errno=2
-               (setenv "HOME" "/tmp")
-               #t)))))
+               (setenv "HOME" "/tmp"))))))
       (native-inputs
-       `(("gettext" ,gettext-minimal)
-         ("pkg-config" ,pkg-config)))
+       (list gettext-minimal
+             pkg-config))
       (inputs
-       `(("efl" ,efl)))
+       (list efl))
       (home-page "https://git.enlightenment.org/apps/express.git/")
       (synopsis "IRC client with enhanced media capabilities")
       (description "EFL-based IRC Client which operates similar to the

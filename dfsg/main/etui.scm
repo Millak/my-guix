@@ -1,4 +1,4 @@
-;;; Copyright © 2019, 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2019, 2020, 2021 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -55,8 +55,7 @@
        (modify-phases %standard-phases
          (add-after 'unpack 'set-home-directory
            (lambda _
-             (setenv "HOME" (getcwd))
-             #t))
+             (setenv "HOME" (getcwd))))
          (add-after 'unpack 'make-mupdf-optional
            ;; With our packaged mupdf being shared only we need to not look
            ;; for the mupdf_third library.
@@ -64,8 +63,7 @@
              (substitute* "src/modules/pdf/meson.build"
                (("required : true") "required : false")
                (("mupdf_third_a.found.*") "true\n")
-               ((", mupdf_third_a") ""))
-             #t)))))
+               ((", mupdf_third_a") "")))))))
     (native-inputs
      `(("pkg-config" ,pkg-config)))
     (inputs
