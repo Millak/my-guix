@@ -94,158 +94,157 @@
                (wrap-program bin
                  `("PATH" ":" prefix (,(string-append git "/bin"))))))))))
     (native-inputs
-     (list node))
+     (list go-github-com-stretchr-testify
+           node))
     (inputs
-     (list
-       bash-minimal
-       git
-       go-github-com-zeripath-jwt
-       go-github-com-6543-go-version
-       ;go-xorm-io-xorm
-       go-xorm-io-builder
-       go-strk-kbt-io-projects-go-libravatar
-       go-mvdan-cc-xurls-v2
-       go-gopkg-in-yaml-v2
-       go-gopkg-in-ini-v1
-       go-gopkg-in-gomail-v2
-       go-gopkg-in-alexcesaro-quotedprintable-v3
-       go-golang-org-x-tools
-       go-golang-org-x-time
-       go-golang-org-x-text
-       go-golang-org-x-sys
-       go-golang-org-x-oauth2
-       go-golang-org-x-net
-       go-golang-org-x-crypto
-       go-go-uber-org-zap
-       go-go-uber-org-multierr
-       go-go-jolheiser-com-pwn
-       go-go-jolheiser-com-hcaptcha
-       go-github-com-yuin-goldmark-meta
-       go-github-com-yuin-goldmark-highlighting
-       go-github-com-yuin-goldmark
-       go-github-com-yohcop-openid-go
-       go-github-com-xanzy-ssh-agent
-       go-github-com-xanzy-go-gitlab
-       go-github-com-willf-bitset
-       go-github-com-urfave-cli
-       go-github-com-unrolled-render
-       go-github-com-unknwon-paginater
-       go-github-com-unknwon-i18n
-       go-github-com-unknwon-com
-       go-github-com-ulikunitz-xz
-       go-github-com-tstranex-u2f
-       go-github-com-tinylib-msgp
-       go-github-com-syndtr-goleveldb
-       go-github-com-stretchr-testify
-       ;go-github-com-ssor-bom              ; TODO: import
-       go-github-com-spf13-afero
-       go-github-com-shurcool-vfsgen
-       go-github-com-shurcool-httpfs
-       go-github-com-sergi-go-diff
-       go-github-com-russross-blackfriday-v2
-       go-github-com-rivo-uniseg
-       go-github-com-quasoft-websspi
-       go-github-com-prometheus-procfs
-       go-github-com-prometheus-common
-       go-github-com-prometheus-client-golang
-       go-github-com-pquerna-otp
-       go-github-com-pkg-errors
-       go-github-com-pierrec-lz4-v4
-       go-github-com-pelletier-go-toml
-       go-github-com-olivere-elastic-v7
-       go-github-com-oliamb-cutter
-       go-github-com-olekukonko-tablewriter
-       go-github-com-niklasfasching-go-org
-       go-github-com-nfnt-resize
-       ;go-github-com-msteinert-pam     ; TODO: import
-       go-github-com-mrjones-oauth
-       go-github-com-mitchellh-go-homedir
-       go-github-com-minio-sha256-simd
-       go-github-com-minio-minio-go-v7
-       go-github-com-minio-md5-simd
-       go-github-com-miekg-dns
-       go-github-com-microcosm-cc-bluemonday
-       go-github-com-mholt-archiver-v3
-       go-github-com-mholt-acmez
-       go-github-com-mgechev-revive
-       go-github-com-mgechev-dots
-       go-github-com-mattn-go-sqlite3
-       go-github-com-mattn-go-runewidth
-       go-github-com-mattn-go-isatty
-       go-github-com-markbates-goth
-       go-github-com-mailru-easyjson
-       go-github-com-lunny-dingtalk-webhook
-       go-github-com-libdns-libdns
-       go-github-com-lib-pq
-       go-github-com-lafriks-xormstore
-       go-github-com-klauspost-pgzip
-       go-github-com-klauspost-compress
-       go-github-com-keybase-go-crypto
-       go-github-com-kevinburke-ssh-config
-       go-github-com-kballard-go-shellquote
-       go-github-com-json-iterator-go
-       go-github-com-jaytaylor-html2text
-       go-github-com-issue9-identicon
-       go-github-com-issue9-assert
-       go-github-com-imdario-mergo
-       go-github-com-huandu-xstrings
-       go-github-com-hashicorp-go-retryablehttp
-       go-github-com-hashicorp-go-cleanhttp
-       go-github-com-gorilla-sessions
-       go-github-com-gorilla-mux
-       go-github-com-gorilla-context
-       go-github-com-google-uuid
-       go-github-com-google-go-github-v32
-       go-github-com-golang-snappy
-       go-github-com-gogs-go-gogs-client
-       go-github-com-gogs-cron
-       go-github-com-gogs-chardet
-       go-github-com-gobwas-glob
-       go-github-com-go-testfixtures-testfixtures-v3
-       go-github-com-go-swagger-go-swagger
-       go-github-com-go-sql-driver-mysql
-       go-github-com-go-redis-redis-v8
-       go-github-com-go-openapi-validate
-       go-github-com-go-openapi-errors
-       go-github-com-go-ldap-ldap-v3
-       go-github-com-go-git-go-git-v5
-       go-github-com-go-git-go-billy-v5
-       go-github-com-go-enry-go-enry-v2
-       go-github-com-go-chi-cors
-       go-github-com-go-chi-chi
-       go-github-com-go-asn1-ber-asn1-ber
-       go-github-com-glycerine-go-unsnap-stream
-       go-github-com-gliderlabs-ssh
-       go-github-com-ethantkoenig-rupture
-       go-github-com-emirpasic-gods
-       go-github-com-editorconfig-editorconfig-core-go-v2
-       go-github-com-dustin-go-humanize
-       go-github-com-dlclark-regexp2
-       go-github-com-denisenkom-go-mssqldb
-       go-github-com-cpuguy83-go-md2man-v2
-       go-github-com-couchbase-goutils
-       go-github-com-couchbase-gomemcached
-       go-github-com-couchbase-go-couchbase
-       go-github-com-chi-middleware-proxy
-       go-github-com-caddyserver-certmagic
-       go-github-com-bradfitz-gomemcache
-       go-github-com-boombuler-barcode
-       go-github-com-blevesearch-bleve-v2
-       go-github-com-anmitsu-go-shlex
-       go-github-com-andybalholm-brotli
-       go-github-com-alecthomas-chroma
-       go-github-com-roaringbitmap-roaring
-       go-github-com-puerkitobio-goquery
-       go-github-com-nytimes-gziphandler
-       go-github-com-microsoft-go-winio
-       go-gitea-com-lunny-levelqueue
-       go-gitea-com-go-chi-session
-       go-gitea-com-go-chi-captcha
-       go-gitea-com-go-chi-cache
-       go-gitea-com-go-chi-binding
-       ;go-code-gitea-io-sdk-gitea      ; TODO: import
-       go-code-gitea-io-gitea-vet
-       go-cloud-google-com-go))
+     (list bash-minimal
+           git
+           go-github-com-zeripath-jwt
+           go-github-com-6543-go-version
+           go-xorm-io-xorm
+           go-xorm-io-builder
+           go-strk-kbt-io-projects-go-libravatar
+           go-mvdan-cc-xurls-v2
+           go-gopkg-in-yaml-v2
+           go-gopkg-in-ini-v1
+           go-gopkg-in-gomail-v2
+           go-gopkg-in-alexcesaro-quotedprintable-v3
+           go-golang-org-x-tools
+           go-golang-org-x-time
+           go-golang-org-x-text
+           go-golang-org-x-sys
+           go-golang-org-x-oauth2
+           go-golang-org-x-net
+           go-golang-org-x-crypto
+           go-go-uber-org-zap
+           go-go-uber-org-multierr
+           go-go-jolheiser-com-pwn
+           go-go-jolheiser-com-hcaptcha
+           go-github-com-yuin-goldmark-meta
+           go-github-com-yuin-goldmark-highlighting
+           go-github-com-yuin-goldmark
+           go-github-com-yohcop-openid-go
+           go-github-com-xanzy-ssh-agent
+           go-github-com-xanzy-go-gitlab
+           go-github-com-willf-bitset
+           go-github-com-urfave-cli
+           go-github-com-unrolled-render
+           go-github-com-unknwon-paginater
+           go-github-com-unknwon-i18n
+           go-github-com-unknwon-com
+           go-github-com-ulikunitz-xz
+           go-github-com-tstranex-u2f
+           go-github-com-tinylib-msgp
+           go-github-com-syndtr-goleveldb
+           go-github-com-ssor-bom
+           go-github-com-spf13-afero
+           go-github-com-shurcool-vfsgen
+           go-github-com-shurcool-httpfs
+           go-github-com-sergi-go-diff
+           go-github-com-russross-blackfriday-v2
+           go-github-com-rivo-uniseg
+           go-github-com-quasoft-websspi
+           go-github-com-prometheus-procfs
+           go-github-com-prometheus-common
+           go-github-com-prometheus-client-golang
+           go-github-com-pquerna-otp
+           go-github-com-pkg-errors
+           go-github-com-pierrec-lz4-v4
+           go-github-com-pelletier-go-toml
+           go-github-com-olivere-elastic-v7
+           go-github-com-oliamb-cutter
+           go-github-com-olekukonko-tablewriter
+           go-github-com-niklasfasching-go-org
+           go-github-com-nfnt-resize
+           ;go-github-com-msteinert-pam     ; TODO: import
+           go-github-com-mrjones-oauth
+           go-github-com-mitchellh-go-homedir
+           go-github-com-minio-sha256-simd
+           go-github-com-minio-minio-go-v7
+           go-github-com-minio-md5-simd
+           go-github-com-miekg-dns
+           go-github-com-microcosm-cc-bluemonday
+           go-github-com-mholt-archiver-v3
+           go-github-com-mholt-acmez
+           go-github-com-mgechev-revive
+           go-github-com-mgechev-dots
+           go-github-com-mattn-go-sqlite3
+           go-github-com-mattn-go-runewidth
+           go-github-com-mattn-go-isatty
+           go-github-com-markbates-goth
+           go-github-com-mailru-easyjson
+           go-github-com-lunny-dingtalk-webhook
+           go-github-com-libdns-libdns
+           go-github-com-lib-pq
+           go-github-com-lafriks-xormstore
+           go-github-com-klauspost-pgzip
+           go-github-com-klauspost-compress
+           go-github-com-keybase-go-crypto
+           go-github-com-kevinburke-ssh-config
+           go-github-com-kballard-go-shellquote
+           go-github-com-json-iterator-go
+           go-github-com-jaytaylor-html2text
+           go-github-com-issue9-identicon
+           go-github-com-issue9-assert
+           go-github-com-imdario-mergo
+           go-github-com-huandu-xstrings
+           go-github-com-hashicorp-go-retryablehttp
+           go-github-com-hashicorp-go-cleanhttp
+           go-github-com-gorilla-sessions
+           go-github-com-gorilla-mux
+           go-github-com-gorilla-context
+           go-github-com-google-uuid
+           go-github-com-google-go-github-v32
+           go-github-com-golang-snappy
+           go-github-com-gogs-go-gogs-client
+           go-github-com-gogs-cron
+           go-github-com-gogs-chardet
+           go-github-com-gobwas-glob
+           go-github-com-go-testfixtures-testfixtures-v3
+           go-github-com-go-swagger-go-swagger
+           go-github-com-go-sql-driver-mysql
+           go-github-com-go-redis-redis-v8
+           go-github-com-go-openapi-validate
+           go-github-com-go-openapi-errors
+           go-github-com-go-ldap-ldap-v3
+           go-github-com-go-git-go-git-v5
+           go-github-com-go-git-go-billy-v5
+           go-github-com-go-enry-go-enry-v2
+           go-github-com-go-chi-cors
+           go-github-com-go-chi-chi
+           go-github-com-go-asn1-ber-asn1-ber
+           go-github-com-glycerine-go-unsnap-stream
+           go-github-com-gliderlabs-ssh
+           go-github-com-ethantkoenig-rupture
+           go-github-com-emirpasic-gods
+           go-github-com-editorconfig-editorconfig-core-go-v2
+           go-github-com-dustin-go-humanize
+           go-github-com-dlclark-regexp2
+           go-github-com-denisenkom-go-mssqldb
+           go-github-com-cpuguy83-go-md2man-v2
+           go-github-com-couchbase-goutils
+           go-github-com-couchbase-gomemcached
+           go-github-com-couchbase-go-couchbase
+           go-github-com-chi-middleware-proxy
+           go-github-com-caddyserver-certmagic
+           go-github-com-bradfitz-gomemcache
+           go-github-com-boombuler-barcode
+           go-github-com-blevesearch-bleve-v2
+           go-github-com-anmitsu-go-shlex
+           go-github-com-andybalholm-brotli
+           go-github-com-alecthomas-chroma
+           go-github-com-roaringbitmap-roaring
+           go-github-com-puerkitobio-goquery
+           go-github-com-nytimes-gziphandler
+           go-github-com-microsoft-go-winio
+           go-gitea-com-lunny-levelqueue
+           go-gitea-com-go-chi-session
+           go-gitea-com-go-chi-captcha
+           go-gitea-com-go-chi-cache
+           go-gitea-com-go-chi-binding
+           ;go-code-gitea-io-sdk-gitea      ; TODO: import
+           go-code-gitea-io-gitea-vet
+           go-cloud-google-com-go))
     (home-page "https://gitea.io/")
     (synopsis "Self-hosted git service")
     (description
@@ -269,7 +268,8 @@
          (base32 "1f5b3l79jwp6nifj9pz12ddjz7z1r85pfrrdkix6hv0f7fb6vnbg"))))
     (build-system go-build-system)
     (arguments '(#:import-path "code.gitea.io/gitea-vet"))
-    (propagated-inputs `(("go-golang-org-x-tools" ,go-golang-org-x-tools)))
+    (propagated-inputs
+     (list go-golang-org-x-tools))
     (home-page "https://code.gitea.io/gitea-vet")
     (synopsis "gitea-vet")
     (description "@code{go vet} tool for Gitea.")
@@ -292,9 +292,10 @@
     (arguments '(#:import-path "gitea.com/go-chi/binding"))
     (propagated-inputs
      (list go-github-com-unknwon-com
-           go-github-com-stretchr-testify
            go-github-com-goccy-go-json
            go-github-com-go-chi-chi-v5))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://gitea.com/go-chi/binding")
     (synopsis "License")
     (description
@@ -458,10 +459,10 @@ validation for Chi.")
     (build-system go-build-system)
     (arguments '(#:import-path "gitea.com/go-chi/captcha"))
     (propagated-inputs
-     `(("go-github-com-unknwon-com" ,go-github-com-unknwon-com)
-       ("go-github-com-smartystreets-goconvey" ,go-github-com-smartystreets-goconvey)
-       ("go-github-com-go-chi-chi-v5" ,go-github-com-go-chi-chi-v5)
-       ("go-gitea-com-go-chi-cache" ,go-gitea-com-go-chi-cache)))
+     (list go-github-com-unknwon-com
+           go-github-com-smartystreets-goconvey
+           go-github-com-go-chi-chi-v5
+           go-gitea-com-go-chi-cache))
     (home-page "https://gitea.com/go-chi/captcha")
     (synopsis "captcha")
     (description
@@ -936,8 +937,7 @@ list, hash, zset, set.")
         (sha256
          (base32 "107wb2kcg67iggfx1bjmm5nhy8cg96zi1iw7nkv9dydivnvalbbd"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/siddontang/rdb"))
+    (arguments '(#:import-path "github.com/siddontang/rdb"))
     (propagated-inputs
      (list go-github-com-cupcake-rdb))
     (home-page "https://github.com/siddontang/rdb")
@@ -959,8 +959,7 @@ list, hash, zset, set.")
         (sha256
          (base32 "1m5dmjlb85z6518fpvcyl9ljz6zivq9is4mxzbfylkssmavrqmb7"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "gitea.com/go-chi/session"))
+    (arguments '(#:import-path "gitea.com/go-chi/session"))
     ;; This seems to be an acurate list of what is *needed* to build the package
     (propagated-inputs
      (list ;go-gopkg-in-ini-v1
@@ -1006,12 +1005,12 @@ list, hash, zset, set.")
         (sha256
          (base32 "0ppgr841qp7z2gp93ymkw7xy56jdb6h2r9zy8nn4v3d3lxr0gl0n"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "gitea.com/lunny/levelqueue"))
+    (arguments '(#:import-path "gitea.com/lunny/levelqueue"))
     (propagated-inputs
      (list go-github-com-syndtr-goleveldb
-           go-github-com-stretchr-testify
            go-github-com-golang-snappy))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://gitea.com/lunny/levelqueue")
     (synopsis "levelqueue")
     (description
@@ -1032,9 +1031,8 @@ list, hash, zset, set.")
         (sha256
          (base32 "0rhrjlw220hnymzfccm0yir3pc9dpj7h3gwzhzq2cbsb3hhsqvyy"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/NYTimes/gziphandler"))
-    (propagated-inputs
+    (arguments '(#:import-path "github.com/NYTimes/gziphandler"))
+    (native-inputs
      (list go-github-com-stretchr-testify))
     (home-page "https://github.com/NYTimes/gziphandler")
     (synopsis "Gzip Handler")
@@ -1122,8 +1120,7 @@ HTTP->HTTPS redirects, and more.")
         (sha256
          (base32 "0rzrsxz4xj0973c6nxklvq2vmg2m795snhk25836i0gnd1jnx79k"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/go-chi/chi/v5"))
+    (arguments '(#:import-path "github.com/go-chi/chi/v5"))
     (home-page "https://github.com/go-chi/chi")
     (synopsis #f)
     (description
@@ -1145,8 +1142,7 @@ services.")
         (sha256
          (base32 "0pslb4x8jhblgg7sfahrsiv7r4ay5aizgrqkrpfpwzsnhw88fl6h"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/chi-middleware/proxy"))
+    (arguments '(#:import-path "github.com/chi-middleware/proxy"))
     (propagated-inputs
      (list go-github-com-go-chi-chi-v5))
     (native-inputs
@@ -1171,8 +1167,7 @@ services.")
         (sha256
          (base32 "0dpy8148a1fz47yibn8mzl29savqg4jkfvyp8vvgsi0zp7jmwj89"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/couchbase/go-couchbase"))
+    (arguments '(#:import-path "github.com/couchbase/go-couchbase"))
     (propagated-inputs
      (list go-github-com-couchbase-gomemcached
            go-github-com-couchbase-goutils))
@@ -1195,8 +1190,7 @@ services.")
         (sha256
          (base32 "10w74gc05x5naspls39sv2r92krrg31mk266w3lyqqwc0s3fxysl"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/couchbase/gomemcached"))
+    (arguments '(#:import-path "github.com/couchbase/gomemcached"))
     (native-inputs
      (list go-github-com-stretchr-testify))
     (home-page "https://github.com/couchbase/gomemcached")
@@ -1275,8 +1269,7 @@ services.")
         (sha256
          (base32 "051ljpzf1f5nh631lvn53ziclkzmx5lza8545mkk6wxdfnfdcx8f"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/cpuguy83/go-md2man/v2"))
+    (arguments '(#:import-path "github.com/cpuguy83/go-md2man/v2"))
     (propagated-inputs
      (list go-github-com-russross-blackfriday-v2))
     (home-page "https://github.com/cpuguy83/go-md2man")
@@ -1298,8 +1291,7 @@ services.")
         (sha256
          (base32 "15j8gq2kxgccwkjaa1yyam1z4lghm32q638w43c6ghn6mhmvxsxf"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/editorconfig/editorconfig-core-go/v2"))
+    (arguments '(#:import-path "github.com/editorconfig/editorconfig-core-go/v2"))
     (propagated-inputs
      (list go-gopkg-in-ini-v1
            go-golang-org-x-mod
@@ -1352,8 +1344,7 @@ or pull requests.  For now I plan on maintaining this fork as necessary.")
         (sha256
          (base32 "1p8n2p047x3lyahfhly92qm8b90yc6p1yksns73amlrn6fwdhcyx"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/blevesearch/segment"))
+    (arguments  '(#:import-path "github.com/blevesearch/segment"))
     (home-page "https://github.com/blevesearch/segment")
     (synopsis "segment")
     (description
@@ -1376,8 +1367,7 @@ described in Unicode Standard Annex #29
         (sha256
          (base32 "1yzglihjjn588xmmkaawqhc95pkk1cyc4bq7ipw7jqfw2np1f2rm"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/blevesearch/snowballstem"))
+    (arguments '(#:import-path "github.com/blevesearch/snowballstem"))
     (home-page "https://github.com/blevesearch/snowballstem")
     (synopsis "snowballstem")
     (description
@@ -1422,8 +1412,7 @@ reused in other contexts.")
         (sha256
          (base32 "158mpby3lidxqb3dnia3m11h5p071xwv8kh0nn1xf4sl98c7aqq2"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/blevesearch/zapx/v11"))
+    (arguments '(#:import-path "github.com/blevesearch/zapx/v11"))
     (propagated-inputs
      (list go-github-com-spf13-cobra
            go-github-com-golang-snappy
@@ -1516,8 +1505,7 @@ instead depends only on the indepenent interface modules:")
         (sha256
          (base32 "00h97j2dx49652l21rbgih8cx2acpnspi9gzirsavbwji2grfh3z"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/blevesearch/zapx/v14"))
+    (arguments '(#:import-path "github.com/blevesearch/zapx/v14"))
     (propagated-inputs
      (list go-github-com-spf13-cobra
            go-github-com-golang-snappy
@@ -1548,12 +1536,12 @@ instead depends only on the indepenent interface modules:")
         (sha256
          (base32 "0fpm6z725hvk09w5l7sxy0rzb0gwjz9404s2s7i8r6i6xp1fp470"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/RoaringBitmap/roaring"))
+    (arguments '(#:import-path "github.com/RoaringBitmap/roaring"))
     (propagated-inputs
-     (list go-github-com-stretchr-testify
-           go-github-com-mschoch-smat
+     (list go-github-com-mschoch-smat
            go-github-com-bits-and-blooms-bitset))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/RoaringBitmap/roaring")
     (synopsis "roaring")
     (description
@@ -1577,8 +1565,7 @@ suited to represent sets of integers over relatively small ranges.  See
         (sha256
          (base32 "0fyp83cvlrivw33hsgjfbc7jr6vlnkdaf4brdcn84ln3f9p5888j"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/blevesearch/scorch_segment_api/v2"))
+    (arguments '(#:import-path "github.com/blevesearch/scorch_segment_api/v2"))
     (propagated-inputs
      (list go-github-com-davecgh-go-spew
            go-github-com-blevesearch-bleve-index-api
@@ -1602,8 +1589,7 @@ suited to represent sets of integers over relatively small ranges.  See
         (sha256
          (base32 "0fiwz9v2b1xydgyajc7d1b2qnpsd664sijshz2f44gs8nvh8n6zi"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/bits-and-blooms/bitset"))
+    (arguments '(#:import-path "github.com/bits-and-blooms/bitset"))
     (home-page "https://github.com/bits-and-blooms/bitset")
     (synopsis "bitset")
     (description
@@ -1629,8 +1615,7 @@ boolean values.  It should be more efficient than map[uint] bool.")
          '(begin
             (delete-file-recursively "vendor")))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/blevesearch/vellum"))
+    (arguments '(#:import-path "github.com/blevesearch/vellum"))
     (propagated-inputs
      (list go-github-com-spf13-cobra
            go-github-com-blevesearch-mmap-go
@@ -1656,8 +1641,7 @@ boolean values.  It should be more efficient than map[uint] bool.")
         (sha256
          (base32 "1gyc7i3svxj517yx964h91a4pmcvqk6zsm8kc1cn4y71ikxk6jx5"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/blevesearch/zapx/v15"))
+    (arguments '(#:import-path "github.com/blevesearch/zapx/v15"))
     (propagated-inputs
      (list go-golang-org-x-sys
            go-github-com-spf13-cobra
@@ -1689,8 +1673,7 @@ instead depends only on the indepenent interface modules:")
         (sha256
          (base32 "0lmrz1cqy2qc83rsgvcjpwl458pkpa7ksncjy4iy484493szvbxz"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/blevesearch/mmap-go"))
+    (arguments '(#:import-path "github.com/blevesearch/mmap-go"))
     (propagated-inputs
      (list go-golang-org-x-sys))
     (home-page "https://github.com/blevesearch/mmap-go")
@@ -1716,8 +1699,7 @@ every little platform detail.  This specifically means:")
         (sha256
          (base32 "05nhcp5i8l9ndcf18bn58qgm6vh10d59xnxz6qikk0sajyy4r2s1"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/couchbase/ghistogram"))
+    (arguments '(#:import-path "github.com/couchbase/ghistogram"))
     (home-page "https://github.com/couchbase/ghistogram")
     (synopsis "ghistogram")
     (description
@@ -1738,8 +1720,7 @@ every little platform detail.  This specifically means:")
         (sha256
          (base32 "1qcb2jjg37krxmc915kqynghd6n26w2wxwgcafvxcwn8g0jx96qd"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/mschoch/smat"))
+    (arguments '(#:import-path "github.com/mschoch/smat"))
     (home-page "https://github.com/mschoch/smat")
     (synopsis "smat â\x80\x93 State Machine Assisted Testing")
     (description
@@ -1789,8 +1770,7 @@ they should occur.  Actions mutate the context and transition to another state."
         (sha256
          (base32 "1frx5m042zgys7fkv6wj4pcg2ba63486v82pv4vlqaw9c3bxgibv"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/kljensen/snowball"))
+    (arguments '(#:import-path "github.com/kljensen/snowball"))
     (home-page "https://github.com/kljensen/snowball")
     (synopsis "Snowball")
     (description
@@ -1817,7 +1797,7 @@ processing.")
     (home-page "https://github.com/steveyen/gtreap")
     (synopsis "gtreap")
     (description
-      "gtreap is an immutable treap implementation in the Go Language")
+     "gtreap is an immutable treap implementation in the Go Language")
     (license license:expat)))
 
 (define-public go-go-etcd-io-bbolt
@@ -1866,8 +1846,7 @@ Postgres or MySQL.")
          '(begin
             (delete-file-recursively "cmd/bleve/vendor")))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/blevesearch/bleve/v2"))
+    (arguments '(#:import-path "github.com/blevesearch/bleve/v2"))
     (propagated-inputs
      (list go-golang-org-x-text
            go-go-etcd-io-bbolt
@@ -1911,8 +1890,7 @@ Postgres or MySQL.")
         (sha256
          (base32 "1fnfy1jj1qxk2gjvq4rrqj6yw8mmlibvhfm5qxv239sr23g42114"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/blevesearch/bleve_index_api"))
+    (arguments '(#:import-path "github.com/blevesearch/bleve_index_api"))
     (home-page "https://github.com/blevesearch/bleve_index_api")
     (synopsis "Bleve Index API")
     (description "Bleve supports a pluggable Index interface.")
@@ -1932,12 +1910,12 @@ Postgres or MySQL.")
         (sha256
          (base32 "1qc2rv4i1292f1fw3mfvf6zn9wy4nvbj6dla4lycdxdqvv066pd8"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/ethantkoenig/rupture"))
+    (arguments '(#:import-path "github.com/ethantkoenig/rupture"))
     (propagated-inputs
-     (list go-github-com-stretchr-testify
-           go-github-com-blevesearch-bleve-index-api
+     (list go-github-com-blevesearch-bleve-index-api
            go-github-com-blevesearch-bleve-v2))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/ethantkoenig/rupture")
     (synopsis "rupture")
     (description
@@ -1967,8 +1945,7 @@ Postgres or MySQL.")
          (add-before 'build 'patch-source
            (lambda* (#:key import-path #:allow-other-keys)
              (substitute* (string-append "src/" import-path "/unsnap_test.go")
-               (("/usr/bin/diff") (which "diff")))
-             #t)))))
+               (("/usr/bin/diff") (which "diff"))))))))
     (propagated-inputs
      (list go-github-com-golang-snappy))
     (native-inputs
@@ -1997,8 +1974,7 @@ specified here:
          (base32
           "014cj82z42gaw863nrfmw39ff1z103n0aj5bs1fpx2iawgw5i6qh"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/glycerine/goconvey"))
+    (arguments '(#:import-path "github.com/glycerine/goconvey"))
     (home-page "https://github.com/glycerine/goconvey")
     (synopsis "GoConvey is awesome Go testing")
     (description #f)
@@ -2018,8 +1994,7 @@ specified here:
         (sha256
          (base32 "1jpa4r5h15gkpfmb6xq1hamv0q20i8bdpw3kh7dw4n1v7pshjsr8"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/go-chi/chi"))
+    (arguments '(#:import-path "github.com/go-chi/chi"))
     (home-page "https://github.com/go-chi/chi")
     (synopsis #f)
     (description
@@ -2041,8 +2016,7 @@ services.")
         (sha256
          (base32 "0p566jkmb88v8gqknphzqs5p1hznk5y6n0qc3zwcfc88vf584vh9"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/go-chi/cors"))
+    (arguments '(#:import-path "github.com/go-chi/cors"))
     (home-page "https://github.com/go-chi/cors")
     (synopsis "CORS net/http middleware")
     (description
@@ -2064,8 +2038,7 @@ services.")
         (sha256
          (base32 "1wlgs5qms988f4q1h30c08f3w7jlnz76dlkp2shf02prgv4qv00f"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/go-enry/go-oniguruma"))
+    (arguments '(#:import-path "github.com/go-enry/go-oniguruma"))
     (inputs
      (list oniguruma))
     (home-page "https://github.com/go-enry/go-oniguruma")
@@ -2216,7 +2189,7 @@ capabilities.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/acomagu/bufpipe"))
     (propagated-inputs
-      `(("go-github-com-matryer-is" ,go-github-com-matryer-is)))
+     (list go-github-com-matryer-is))
     (home-page "https://github.com/acomagu/bufpipe")
     (synopsis #f)
     (description #f)
@@ -2236,8 +2209,7 @@ capabilities.")
         (sha256
           (base32 "104w10jf0wlxyxi35hf6frndgf0ybz21h54xjmnkivpb6slycpyq"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/armon/go-socks5"))
+    (arguments '(#:import-path "github.com/armon/go-socks5"))
     (propagated-inputs
      (list go-golang-org-x-net))
     (home-page "https://github.com/armon/go-socks5")
@@ -2308,9 +2280,9 @@ and escaping.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/gliderlabs/ssh"))
     (propagated-inputs
-      `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ("go-github-com-anmitsu-go-shlex" ,go-github-com-anmitsu-go-shlex)))
+     (list go-golang-org-x-sys
+           go-golang-org-x-crypto
+           go-github-com-anmitsu-go-shlex))
     (home-page "https://github.com/gliderlabs/ssh")
     (synopsis "gliderlabs/ssh")
     (description
@@ -2335,10 +2307,10 @@ the API is very similar.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-git/go-billy/v5"))
     (propagated-inputs
-      `(("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
-        ("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ("go-github-com-niemeyer-pretty" ,go-github-com-niemeyer-pretty)
-        ("go-github-com-kr-text" ,go-github-com-kr-text)))
+     (list go-gopkg-in-check-v1
+           go-golang-org-x-sys
+           go-github-com-niemeyer-pretty
+           go-github-com-kr-text))
     (home-page "https://github.com/go-git/go-billy")
     (synopsis "go-billy")
     (description
@@ -2362,12 +2334,19 @@ free to implement mocks and testing over filesystem operations.")
         (sha256
           (base32 "0vxsyfrw4c0kqjbiycdx4xxpz8zjq69pwbsfxmcvkizpj87ywf9d"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-git/go-git-fixtures/v4"))
+    (arguments
+     '(#:import-path "github.com/go-git/go-git-fixtures/v4"
+       #:phases
+       (modify-phases %standard-phases
+         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
+           (lambda* (#:key outputs #:allow-other-keys)
+             (for-each make-file-writable
+                       (find-files (assoc-ref outputs "out") "\\.t?gz$")))))))
     (propagated-inputs
-      `(("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
-        ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-go-git-go-billy-v5"
-         ,go-github-com-go-git-go-billy-v5)))
+     (list go-gopkg-in-check-v1
+           go-github-com-go-git-go-billy-v5))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/go-git/go-git-fixtures")
     (synopsis "go-git-fixtures")
     (description
@@ -2399,6 +2378,7 @@ free to implement mocks and testing over filesystem operations.")
       "Package warnings implements error handling with non-fatal errors (warnings).")
     (license license:bsd-2)))
 
+;; Needs a newer go-golang-org-x-sys
 (define-public go-github-com-go-git-go-git-v5
   (package
     (name "go-github-com-go-git-go-git-v5")
@@ -2415,87 +2395,63 @@ free to implement mocks and testing over filesystem operations.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-git/go-git/v5"))
     (propagated-inputs
-      `(("go-gopkg-in-warnings-v0" ,go-gopkg-in-warnings-v0)
-        ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
-        ("go-golang-org-x-text" ,go-golang-org-x-text)
-        ("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ("go-golang-org-x-net" ,go-golang-org-x-net)
-        ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ("go-github-com-xanzy-ssh-agent" ,go-github-com-xanzy-ssh-agent)
-        ("go-github-com-sergi-go-diff" ,go-github-com-sergi-go-diff)
-        ("go-github-com-mitchellh-go-homedir"
-         ,go-github-com-mitchellh-go-homedir)
-        ("go-github-com-kevinburke-ssh-config"
-         ,go-github-com-kevinburke-ssh-config)
-        ("go-github-com-jessevdk-go-flags" ,go-github-com-jessevdk-go-flags)
-        ("go-github-com-jbenet-go-context" ,go-github-com-jbenet-go-context)
-        ("go-github-com-imdario-mergo" ,go-github-com-imdario-mergo)
-        ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-        ("go-github-com-go-git-go-git-fixtures-v4"
-         ,go-github-com-go-git-go-git-fixtures-v4)
-        ("go-github-com-go-git-go-billy-v5" ,go-github-com-go-git-go-billy-v5)
-        ("go-github-com-go-git-gcfg" ,go-github-com-go-git-gcfg)
-        ("go-github-com-gliderlabs-ssh" ,go-github-com-gliderlabs-ssh)
-        ("go-github-com-flynn-go-shlex" ,go-github-com-flynn-go-shlex)
-        ("go-github-com-emirpasic-gods" ,go-github-com-emirpasic-gods)
-        ("go-github-com-armon-go-socks5" ,go-github-com-armon-go-socks5)
-        ("go-github-com-anmitsu-go-shlex" ,go-github-com-anmitsu-go-shlex)
-        ("go-github-com-acomagu-bufpipe" ,go-github-com-acomagu-bufpipe)
-        ("go-github-com-protonmail-go-crypto"
-         ,go-github-com-protonmail-go-crypto)
-        ("go-github-com-microsoft-go-winio"
-         ,go-github-com-microsoft-go-winio)))
+     (list go-gopkg-in-warnings-v0
+           go-gopkg-in-check-v1
+           go-golang-org-x-text
+           go-golang-org-x-sys
+           go-golang-org-x-net
+           go-golang-org-x-crypto
+           go-github-com-xanzy-ssh-agent
+           go-github-com-sergi-go-diff
+           go-github-com-mitchellh-go-homedir
+           go-github-com-kevinburke-ssh-config
+           go-github-com-jessevdk-go-flags
+           go-github-com-jbenet-go-context
+           go-github-com-imdario-mergo
+           go-github-com-google-go-cmp
+           go-github-com-go-git-go-git-fixtures-v4
+           go-github-com-go-git-go-billy-v5
+           go-github-com-go-git-gcfg
+           go-github-com-gliderlabs-ssh
+           go-github-com-flynn-go-shlex
+           go-github-com-emirpasic-gods
+           go-github-com-armon-go-socks5
+           go-github-com-anmitsu-go-shlex
+           go-github-com-acomagu-bufpipe
+           go-github-com-protonmail-go-crypto
+           go-github-com-microsoft-go-winio))
     (home-page "https://github.com/go-git/go-git")
     (synopsis "Project Status")
     (description
       "This package provides a highly extensible git implementation in pure Go.")
     (license license:asl2.0)))
 
-(define-public go-github-com-azure-go-ntlmssp
-  (package
-    (name "go-github-com-azure-go-ntlmssp")
-    (version "0.0.0-20211209120228-48547f28849e")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/Azure/go-ntlmssp")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "0im28kp9p6ncdmh7qq5qwl85nmiwmp8jka2qgrjiqzc5n36q56np"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/Azure/go-ntlmssp"))
-    (home-page "https://github.com/Azure/go-ntlmssp")
-    (synopsis "go-ntlmssp")
-    (description
-      "Package ntlmssp provides NTLM/Negotiate authentication over HTTP")
-    (license license:expat)))
-
 (define-public go-github-com-go-ldap-ldap-v3
-  (package
-    (name "go-github-com-go-ldap-ldap-v3")
-    (version "3.4.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/go-ldap/ldap")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1xf2jrwhgr06jy4liba48hrz4b7j27r7m9dnl7fj95vazsx2n5br"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-ldap/ldap/v3"))
-    (propagated-inputs
-      `(("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ("go-github-com-go-asn1-ber-asn1-ber"
-         ,go-github-com-go-asn1-ber-asn1-ber)
-        ("go-github-com-azure-go-ntlmssp" ,go-github-com-azure-go-ntlmssp)))
-    (home-page "https://github.com/go-ldap/ldap")
-    (synopsis #f)
-    (description "Package ldap provides basic LDAP v3 functionality.")
-    (license license:expat)))
+  (deprecated-package "go-github-com-go-ldap-ldap-v3" go-github-com-go-ldap-ldap))
+  ;(package
+  ;  (name "go-github-com-go-ldap-ldap-v3")
+  ;  (version "3.4.1")
+  ;  (source
+  ;    (origin
+  ;      (method git-fetch)
+  ;      (uri (git-reference
+  ;             (url "https://github.com/go-ldap/ldap")
+  ;             (commit (string-append "v" version))))
+  ;      (file-name (git-file-name name version))
+  ;      (sha256
+  ;        (base32 "1xf2jrwhgr06jy4liba48hrz4b7j27r7m9dnl7fj95vazsx2n5br"))))
+  ;  (build-system go-build-system)
+  ;  (arguments
+  ;   '(#:tests? #f      ; Tests require network access.
+  ;     #:import-path "github.com/go-ldap/ldap/v3"))
+  ;  (propagated-inputs
+  ;   (list go-golang-org-x-crypto
+  ;         go-github-com-go-asn1-ber-asn1-ber
+  ;         go-github-com-azure-go-ntlmssp))
+  ;  (home-page "https://github.com/go-ldap/ldap")
+  ;  (synopsis #f)
+  ;  (description "Package ldap provides basic LDAP v3 functionality.")
+  ;  (license license:expat)))
 
 (define-public go-github-com-dgryski-go-rendezvous
   (package
@@ -2531,14 +2487,15 @@ free to implement mocks and testing over filesystem operations.")
         (sha256
           (base32 "1frzg6zywab6nnys1hwphx39ipimpqi8czpjkxb7gcd2pvqs4pnr"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-redis/redis/v8"))
+    (arguments
+     '(#:tests? #f      ; TODO: fix
+       #:import-path "github.com/go-redis/redis/v8"))
     (propagated-inputs
-      `(("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
-        ("go-github-com-onsi-ginkgo" ,go-github-com-onsi-ginkgo)
-        ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-        ("go-github-com-dgryski-go-rendezvous"
-         ,go-github-com-dgryski-go-rendezvous)
-        ("go-github-com-cespare-xxhash-v2" ,go-github-com-cespare-xxhash-v2)))
+     (list go-github-com-onsi-gomega
+           go-github-com-onsi-ginkgo
+           go-github-com-google-go-cmp
+           go-github-com-dgryski-go-rendezvous
+           go-github-com-cespare-xxhash-v2))
     (home-page "https://github.com/go-redis/redis")
     (synopsis "Redis client for Golang")
     (description "Package redis implements a Redis client.")
@@ -2559,6 +2516,10 @@ free to implement mocks and testing over filesystem operations.")
           (base32 "11m6slbpi33ynffml7812piq4anhjlf1qszjlsf26f5y7x3qh8n5"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/coreos/go-oidc"))
+    (propagated-inputs
+     (list go-github-com-pquerna-cachecontrol
+           go-golang-org-x-oauth2
+           go-gopkg-in-square-go-jose-v2))
     (home-page "https://github.com/coreos/go-oidc")
     (synopsis "go-oidc")
     (description
@@ -2624,16 +2585,15 @@ package.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-openapi/analysis"))
     (propagated-inputs
-      `(("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
-        ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-mitchellh-mapstructure"
-         ,go-github-com-mitchellh-mapstructure)
-        ("go-github-com-go-openapi-swag" ,go-github-com-go-openapi-swag)
-        ("go-github-com-go-openapi-strfmt" ,go-github-com-go-openapi-strfmt)
-        ("go-github-com-go-openapi-spec" ,go-github-com-go-openapi-spec)
-        ("go-github-com-go-openapi-jsonpointer"
-         ,go-github-com-go-openapi-jsonpointer)
-        ("go-github-com-go-openapi-errors" ,go-github-com-go-openapi-errors)))
+     (list go-gopkg-in-yaml-v3
+           go-github-com-mitchellh-mapstructure
+           go-github-com-go-openapi-swag
+           go-github-com-go-openapi-strfmt
+           go-github-com-go-openapi-spec
+           go-github-com-go-openapi-jsonpointer
+           go-github-com-go-openapi-errors))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/go-openapi/analysis")
     (synopsis "OpenAPI initiative analysis")
     (description
@@ -2661,10 +2621,10 @@ from package go-openapi/spec.")
       `(;("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
         ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
         ;("go-github-com-go-openapi-validate" ,go-github-com-go-openapi-validate)
-        ;("go-github-com-go-openapi-swag" ,go-github-com-go-openapi-swag)
+        ("go-github-com-go-openapi-swag" ,go-github-com-go-openapi-swag)
         ;("go-github-com-go-openapi-strfmt" ,go-github-com-go-openapi-strfmt)
-        ;("go-github-com-go-openapi-spec" ,go-github-com-go-openapi-spec)
-        ;("go-github-com-go-openapi-analysis" ,go-github-com-go-openapi-analysis)
+        ("go-github-com-go-openapi-spec" ,go-github-com-go-openapi-spec)
+        ("go-github-com-go-openapi-analysis" ,go-github-com-go-openapi-analysis)
         ))
     (home-page "https://github.com/go-openapi/loads")
     (synopsis "Loads OAI specs")
@@ -2689,17 +2649,17 @@ specifications.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-openapi/runtime"))
     (propagated-inputs
-      `(;("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-opentracing-opentracing-go" ,go-github-com-opentracing-opentracing-go)
-        ;("go-github-com-go-openapi-validate" ,go-github-com-go-openapi-validate)
-        ;("go-github-com-go-openapi-swag" ,go-github-com-go-openapi-swag)
-        ;("go-github-com-go-openapi-strfmt" ,go-github-com-go-openapi-strfmt)
-        ;("go-github-com-go-openapi-spec" ,go-github-com-go-openapi-spec)
-        ;("go-github-com-go-openapi-loads" ,go-github-com-go-openapi-loads)
-        ;("go-github-com-go-openapi-errors" ,go-github-com-go-openapi-errors)
-        ;("go-github-com-go-openapi-analysis" ,go-github-com-go-openapi-analysis)
-        ;("go-github-com-docker-go-units" ,go-github-com-docker-go-units)
+     (list ;go-gopkg-in-yaml-v2
+        ;go-github-com-stretchr-testify
+        ;go-github-com-opentracing-opentracing-go
+        ;go-github-com-go-openapi-validate
+        go-github-com-go-openapi-swag
+        go-github-com-go-openapi-strfmt
+        ;go-github-com-go-openapi-spec
+        ;go-github-com-go-openapi-loads
+        go-github-com-go-openapi-errors
+        ;go-github-com-go-openapi-analysis
+        ;go-github-com-docker-go-units
         ))
     (home-page "https://github.com/go-openapi/runtime")
     (synopsis "runtime")
@@ -2725,9 +2685,9 @@ specifications.")
     (propagated-inputs
       `(;("go-golang-org-x-net" ,go-golang-org-x-net)
         ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-go-openapi-jsonpointer" ,go-github-com-go-openapi-jsonpointer)
+        ("go-github-com-go-openapi-jsonpointer" ,go-github-com-go-openapi-jsonpointer)
         ;("go-github-com-puerkitobio-urlesc" ,go-github-com-puerkitobio-urlesc)
-        ;("go-github-com-puerkitobio-purell" ,go-github-com-puerkitobio-purell)
+        ("go-github-com-puerkitobio-purell" ,go-github-com-puerkitobio-purell)
         ))
     (home-page "https://github.com/go-openapi/jsonreference")
     (synopsis "gojsonreference")
@@ -2751,12 +2711,12 @@ specifications.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-openapi/spec"))
     (propagated-inputs
-      `(;("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-        ;("go-golang-org-x-text" ,go-golang-org-x-text)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-go-openapi-swag" ,go-github-com-go-openapi-swag)
-        ;("go-github-com-go-openapi-jsonreference" ,go-github-com-go-openapi-jsonreference)
-        ;("go-github-com-go-openapi-jsonpointer" ,go-github-com-go-openapi-jsonpointer)
+     (list ;go-gopkg-in-yaml-v2
+        ;go-golang-org-x-text
+        ;go-github-com-stretchr-testify
+        go-github-com-go-openapi-swag
+        go-github-com-go-openapi-jsonreference
+        go-github-com-go-openapi-jsonpointer
         ))
     (home-page "https://github.com/go-openapi/spec")
     (synopsis "OAI object model")
@@ -2777,7 +2737,9 @@ specifications.")
         (sha256
           (base32 "0aab1pym5c6di8vidynp6ly5j4kcqv6lp2737gw0a07zng0nn8lw"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/asaskevich/govalidator"))
+    (arguments
+     '(#:tests? #f      ; Tests fail on go-1.17+
+       #:import-path "github.com/asaskevich/govalidator"))
     (home-page "https://github.com/asaskevich/govalidator")
     (synopsis "govalidator")
     (description
@@ -2786,35 +2748,40 @@ and collections.")
     (license license:expat)))
 
 (define-public go-github-com-go-openapi-errors
-  (package
-    (name "go-github-com-go-openapi-errors")
-    (version "0.20.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/go-openapi/errors")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "16np7q3bassdn3fcjh0kfryv0206yd38y0v4k8d7y6jl3n5f8rlw"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-openapi/errors"))
-    (propagated-inputs
-      `(;("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
-        ;("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-niemeyer-pretty" ,go-github-com-niemeyer-pretty)
-        ;("go-github-com-kr-text" ,go-github-com-kr-text)
-        ;("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
-        ))
-    (home-page "https://github.com/go-openapi/errors")
-    (synopsis "OpenAPI errors")
-    (description
-      "Package errors provides an Error interface and several concrete types
+  ;; Fixes test error related to a previous api change.
+  (let ((commit "b45e39dc92fa5448ebf1564c0f4e680f2067cdf5")
+        (revision "1"))
+    (package
+      (name "go-github-com-go-openapi-errors")
+      (version (git-version "0.20.1" revision commit))
+      (source
+        (origin
+          (method git-fetch)
+          (uri (git-reference
+                 (url "https://github.com/go-openapi/errors")
+                 (commit commit)))
+          (file-name (git-file-name name version))
+          (sha256
+           (base32 "0c669p3g0bfcmnmxvc382j5amvah9m5psp59rmgyp6gryci0pxwy"))))
+      (build-system go-build-system)
+      (arguments '(#:import-path "github.com/go-openapi/errors"))
+      (propagated-inputs
+        `(;("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
+          ;("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
+          ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+          ;("go-github-com-niemeyer-pretty" ,go-github-com-niemeyer-pretty)
+          ;("go-github-com-kr-text" ,go-github-com-kr-text)
+          ;("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+          ))
+      (native-inputs
+       (list go-github-com-stretchr-testify))
+      (home-page "https://github.com/go-openapi/errors")
+      (synopsis "OpenAPI errors")
+      (description
+        "Package errors provides an Error interface and several concrete types
 implementing this interface to manage API errors and JSON-schema validation
 errors.")
-    (license license:asl2.0)))
+      (license license:asl2.0))))
 
 (define-public go-github-com-go-openapi-strfmt
   (package
@@ -2832,13 +2799,13 @@ errors.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-openapi/strfmt"))
     (propagated-inputs
-      `(;("go-go-mongodb-org-mongo-driver" ,go-go-mongodb-org-mongo-driver)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-oklog-ulid" ,go-github-com-oklog-ulid)
-        ;("go-github-com-mitchellh-mapstructure" ,go-github-com-mitchellh-mapstructure)
-        ;("go-github-com-google-uuid" ,go-github-com-google-uuid)
-        ;("go-github-com-go-openapi-errors" ,go-github-com-go-openapi-errors)
-        ;("go-github-com-asaskevich-govalidator" ,go-github-com-asaskevich-govalidator)
+     (list go-go-mongodb-org-mongo-driver
+        ;go-github-com-stretchr-testify
+        go-github-com-oklog-ulid
+        go-github-com-mitchellh-mapstructure
+        ;go-github-com-google-uuid
+        go-github-com-go-openapi-errors
+        go-github-com-asaskevich-govalidator
         ))
     (home-page "https://github.com/go-openapi/strfmt")
     (synopsis "Strfmt")
@@ -2861,17 +2828,17 @@ errors.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-openapi/validate"))
     (propagated-inputs
-      `(;("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
-        ;("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-go-openapi-swag" ,go-github-com-go-openapi-swag)
-        ;("go-github-com-go-openapi-strfmt" ,go-github-com-go-openapi-strfmt)
-        ;("go-github-com-go-openapi-spec" ,go-github-com-go-openapi-spec)
-        ;("go-github-com-go-openapi-runtime" ,go-github-com-go-openapi-runtime)
-        ;("go-github-com-go-openapi-loads" ,go-github-com-go-openapi-loads)
-        ;("go-github-com-go-openapi-jsonpointer" ,go-github-com-go-openapi-jsonpointer)
-        ;("go-github-com-go-openapi-errors" ,go-github-com-go-openapi-errors)
-        ;("go-github-com-go-openapi-analysis" ,go-github-com-go-openapi-analysis)
+     (list ;go-gopkg-in-yaml-v3
+        ;go-gopkg-in-yaml-v2
+        ;go-github-com-stretchr-testify
+        go-github-com-go-openapi-swag
+        go-github-com-go-openapi-strfmt
+        go-github-com-go-openapi-spec
+        go-github-com-go-openapi-runtime
+        go-github-com-go-openapi-loads
+        go-github-com-go-openapi-jsonpointer
+        go-github-com-go-openapi-errors
+        go-github-com-go-openapi-analysis
         ))
     (home-page "https://github.com/go-openapi/validate")
     (synopsis "Validation helpers")
@@ -2894,7 +2861,9 @@ as tools to validate data against their schema.")
         (sha256
           (base32 "0ipqv53s9piq5v5nsjmg8v7pzz4zinv2xkif7h0na84i9pnsccyn"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-swagger/scan-repo-boundary"))
+    (arguments
+     '(#:unpack-path "github.com/go-swagger/scan-repo-boundary"
+       #:import-path "github.com/go-swagger/scan-repo-boundary/makeplans"))
     (home-page "https://github.com/go-swagger/scan-repo-boundary")
     (synopsis "TestRepo")
     (description
@@ -2916,8 +2885,17 @@ only here to test finding files across repository boundaries.")
         (sha256
           (base32 "13ixw1yx4bvcj66lkc8zgwf9j7gkvj686g991gycdsafvdvca0lj"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/jessevdk/go-flags"))
-    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
+    (arguments
+     '(#:import-path "github.com/jessevdk/go-flags"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-tests
+           (lambda _
+             ;; SOURCE_DATE_EPOCH messes with the date on the man page test.
+             (substitute* "src/github.com/jessevdk/go-flags/help_test.go"
+               (("TestMan") "DisabledTestMan")))))))
+    (propagated-inputs
+     (list go-golang-org-x-sys))
     (home-page "https://github.com/jessevdk/go-flags")
     (synopsis "go-flags: a go library for parsing command line arguments")
     (description
@@ -2942,8 +2920,8 @@ specifying command line options.")
           (base32 "1ds4wgk6hm1sd6037dww5zm59syzs7vrdzh9q5x78s1lfrznsi3k"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/pquerna/cachecontrol"))
-    (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/pquerna/cachecontrol")
     (synopsis "cachecontrol: HTTP Caching Parser and Interpretation")
     (description "Package cachecontrol implements the logic for HTTP Caching")
@@ -3077,8 +3055,8 @@ and @url{https://rfc-editor.org/rfc/rfc8018.html,RFC 8018}.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/xdg-go/scram"))
     (propagated-inputs
-      `(("go-github-com-xdg-go-stringprep" ,go-github-com-xdg-go-stringprep)
-        ("go-github-com-xdg-go-pbkdf2" ,go-github-com-xdg-go-pbkdf2)))
+     (list go-github-com-xdg-go-stringprep
+           go-github-com-xdg-go-pbkdf2))
     (home-page "https://github.com/xdg-go/scram")
     (synopsis "scram â\x80\x93Â\xa0Go implementation of RFC-5802")
     (description
@@ -3101,7 +3079,8 @@ Response Authentication Mechanism (SCRAM) described in RFC-5802 and RFC-7677.")
           (base32 "1df0l5n3c520y9filzz83j42wa5c056jcygmfwhjyf1pq8f6jkv9"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/xdg-go/stringprep"))
-    (propagated-inputs `(("go-golang-org-x-text" ,go-golang-org-x-text)))
+    (propagated-inputs
+     (list go-golang-org-x-text))
     (home-page "https://github.com/xdg-go/stringprep")
     (synopsis
       "stringprep â\x80\x93Â\xa0Go implementation of RFC-3454 stringprep and RFC-4013 SASLprep")
@@ -3126,7 +3105,8 @@ RFC-4013.")
           (base32 "1bk20x279iiafxh39v75hrmxncbkmw17603g8xw5b59cqzzpnrmv"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/youmark/pkcs8"))
-    (propagated-inputs `(("go-golang-org-x-crypto" ,go-golang-org-x-crypto)))
+    (propagated-inputs
+     (list go-golang-org-x-crypto))
     (home-page "https://github.com/youmark/pkcs8")
     (synopsis "pkcs8")
     (description
@@ -3150,23 +3130,24 @@ format, as defined in RFC5208 and RFC5958")
     (build-system go-build-system)
     (arguments '(#:import-path "go.mongodb.org/mongo-driver"))
     (propagated-inputs
-      `(("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
-        ("go-golang-org-x-tools" ,go-golang-org-x-tools)
-        ("go-golang-org-x-sync" ,go-golang-org-x-sync)
-        ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ("go-github-com-youmark-pkcs8" ,go-github-com-youmark-pkcs8)
-        ("go-github-com-xdg-go-stringprep" ,go-github-com-xdg-go-stringprep)
-        ("go-github-com-xdg-go-scram" ,go-github-com-xdg-go-scram)
-        ("go-github-com-tidwall-pretty" ,go-github-com-tidwall-pretty)
-        ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-        ("go-github-com-montanaflynn-stats" ,go-github-com-montanaflynn-stats)
-        ("go-github-com-kr-pretty" ,go-github-com-kr-pretty)
-        ("go-github-com-klauspost-compress" ,go-github-com-klauspost-compress)
-        ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-        ("go-github-com-golang-snappy" ,go-github-com-golang-snappy)
-        ("go-github-com-go-stack-stack" ,go-github-com-go-stack-stack)
-        ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)))
+     (list go-gopkg-in-check-v1
+           go-golang-org-x-tools
+           go-golang-org-x-sync
+           go-golang-org-x-crypto
+           go-github-com-youmark-pkcs8
+           go-github-com-xdg-go-stringprep
+           go-github-com-xdg-go-scram
+           go-github-com-tidwall-pretty
+           go-github-com-pkg-errors
+           go-github-com-montanaflynn-stats
+           go-github-com-kr-pretty
+           go-github-com-klauspost-compress
+           go-github-com-google-go-cmp
+           go-github-com-golang-snappy
+           go-github-com-go-stack-stack
+           go-github-com-davecgh-go-spew))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://go.mongodb.org/mongo-driver")
     (synopsis "MongoDB Go Driver")
     (description "The MongoDB supported driver for Go.")
@@ -3187,10 +3168,18 @@ format, as defined in RFC5208 and RFC5958")
           (base32 "1b1nhqxfmhzwrfk7pkvp2w3z3d0pf5ir00vizmy2d4xdbnldn70r"))))
     (build-system go-build-system)
     (arguments
-      '(#:import-path
-        "gopkg.in/square/go-jose.v2"
-        #:unpack-path
-        "gopkg.in/square/go-jose.v2"))
+     '(#:import-path "gopkg.in/square/go-jose.v2"
+       #:phases
+       (modify-phases %standard-phases
+         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
+           (lambda* (#:key outputs #:allow-other-keys)
+             (for-each make-file-writable
+                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
+    (propagated-inputs
+     (list go-golang-org-x-crypto))
+    (native-inputs
+     (list go-github-com-google-go-cmp
+           go-github-com-stretchr-testify))
     (home-page "https://gopkg.in/square/go-jose.v2")
     (synopsis "Go JOSE")
     (description
@@ -3335,9 +3324,9 @@ goon specification.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/sourcegraph/go-diff"))
     (propagated-inputs
-      `(("go-github-com-shurcool-go-goon" ,go-github-com-shurcool-go-goon)
-        ("go-github-com-shurcool-go" ,go-github-com-shurcool-go)
-        ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)))
+     (list go-github-com-shurcool-go-goon
+           go-github-com-shurcool-go
+           go-github-com-google-go-cmp))
     (home-page "https://github.com/sourcegraph/go-diff")
     (synopsis "go-diff")
     (description "Diff parser and printer for Go.")
@@ -3357,19 +3346,22 @@ goon specification.")
         (sha256
           (base32 "0fyz1wclcc776qwh6qnnajgfa3l8rwp3y6dzyrfb8cfnc3j0jqim"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-openapi/swag"))
+    (arguments
+     '(#:tests? #f      ; Test suite not ready for go-1.17+
+       #:import-path "github.com/go-openapi/swag"))
     (propagated-inputs
-      `(;("go-github-com-sourcegraph-go-diff" ,go-github-com-sourcegraph-go-diff)
-        ;("go-golang-org-x-lint" ,go-golang-org-x-lint)
-        ;("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
-        ;("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-        ;("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-niemeyer-pretty" ,go-github-com-niemeyer-pretty)
-        ;("go-github-com-mailru-easyjson" ,go-github-com-mailru-easyjson)
-        ;("go-github-com-kr-text" ,go-github-com-kr-text)
-        ;("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+     (list ;go-github-com-sourcegraph-go-diff
+        ;go-golang-org-x-lint
+        ;go-gopkg-in-yaml-v3
+        go-gopkg-in-yaml-v2
+        ;go-gopkg-in-check-v1
+        ;go-github-com-niemeyer-pretty
+        go-github-com-mailru-easyjson
+        ;go-github-com-kr-text
+        ;go-github-com-davecgh-go-spew
         ))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/go-openapi/swag")
     (synopsis "Swag")
     (description
@@ -3389,14 +3381,15 @@ projects.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0azic9nfwywlz4qxvacyi4g668fbbrkcyv15bag02yfcsi8szg5c"))))
+         (base32 "0azic9nfwywlz4qxvacyi4g668fbbrkcyv15bag02yfcsi8szg5c"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-openapi/jsonpointer"))
     (propagated-inputs
-      `(;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-mailru-easyjson" ,go-github-com-mailru-easyjson)
-        ;("go-github-com-go-openapi-swag" ,go-github-com-go-openapi-swag)
-        ))
+     (list ;go-github-com-stretchr-testify
+           ;go-github-com-mailru-easyjson
+           go-github-com-go-openapi-swag))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/go-openapi/jsonpointer")
     (synopsis "gojsonpointer")
     (description
@@ -3464,88 +3457,74 @@ common patterns.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-swagger/go-swagger"))
     (propagated-inputs
-      `(("go-gotest-tools" ,go-gotest-tools)
-        ("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
-        ("go-gopkg-in-ini-v1" ,go-gopkg-in-ini-v1)
-        ("go-google-golang-org-appengine" ,go-google-golang-org-appengine)
-        ("go-golang-org-x-xerrors" ,go-golang-org-x-xerrors)
-        ("go-github-com-subosito-gotenv" ,go-github-com-subosito-gotenv)
-        ("go-github-com-spf13-jwalterweatherman"
-         ,go-github-com-spf13-jwalterweatherman)
-        ("go-github-com-spf13-afero" ,go-github-com-spf13-afero)
-        ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
-        ("go-github-com-pelletier-go-toml" ,go-github-com-pelletier-go-toml)
-        ("go-github-com-opentracing-opentracing-go"
-         ,go-github-com-opentracing-opentracing-go)
-        ("go-github-com-oklog-ulid" ,go-github-com-oklog-ulid)
-        ("go-github-com-magiconair-properties"
-         ,go-github-com-magiconair-properties)
-        ("go-github-com-kr-text" ,go-github-com-kr-text)
-        ("go-github-com-josharian-intern" ,go-github-com-josharian-intern)
-        ("go-github-com-inconshreveable-mousetrap"
-         ,go-github-com-inconshreveable-mousetrap)
-        ("go-github-com-hashicorp-hcl" ,go-github-com-hashicorp-hcl)
-        ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-        ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
-        ("go-github-com-go-openapi-jsonpointer"
-         ,go-github-com-go-openapi-jsonpointer)
-        ("go-github-com-docker-go-units" ,go-github-com-docker-go-units)
-        ("go-github-com-puerkitobio-urlesc" ,go-github-com-puerkitobio-urlesc)
-        ("go-github-com-puerkitobio-purell" ,go-github-com-puerkitobio-purell)
-        ("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-        ("go-gopkg-in-square-go-jose-v2" ,go-gopkg-in-square-go-jose-v2)
-        ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-        ("go-golang-org-x-tools" ,go-golang-org-x-tools)
-        ("go-golang-org-x-text" ,go-golang-org-x-text)
-        ("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ("go-golang-org-x-oauth2" ,go-golang-org-x-oauth2)
-        ("go-golang-org-x-net" ,go-golang-org-x-net)
-        ("go-golang-org-x-mod" ,go-golang-org-x-mod)
-        ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ("go-go-mongodb-org-mongo-driver" ,go-go-mongodb-org-mongo-driver)
-        ("go-github-com-toqueteos-webbrowser"
-         ,go-github-com-toqueteos-webbrowser)
-        ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-spf13-viper" ,go-github-com-spf13-viper)
-        ("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
-        ("go-github-com-spf13-cobra" ,go-github-com-spf13-cobra)
-        ("go-github-com-spf13-cast" ,go-github-com-spf13-cast)
-        ("go-github-com-rogpeppe-go-internal"
-         ,go-github-com-rogpeppe-go-internal)
-        ("go-github-com-pquerna-cachecontrol"
-         ,go-github-com-pquerna-cachecontrol)
-        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-        ("go-github-com-mitchellh-mapstructure"
-         ,go-github-com-mitchellh-mapstructure)
-        ("go-github-com-mitchellh-go-homedir"
-         ,go-github-com-mitchellh-go-homedir)
-        ("go-github-com-mailru-easyjson" ,go-github-com-mailru-easyjson)
-        ("go-github-com-kr-pretty" ,go-github-com-kr-pretty)
-        ("go-github-com-jessevdk-go-flags" ,go-github-com-jessevdk-go-flags)
-        ("go-github-com-gorilla-handlers" ,go-github-com-gorilla-handlers)
-        ("go-github-com-go-swagger-scan-repo-boundary"
-         ,go-github-com-go-swagger-scan-repo-boundary)
-        ("go-github-com-go-stack-stack" ,go-github-com-go-stack-stack)
-        ("go-github-com-go-openapi-validate"
-         ,go-github-com-go-openapi-validate)
-        ("go-github-com-go-openapi-swag" ,go-github-com-go-openapi-swag)
-        ("go-github-com-go-openapi-strfmt" ,go-github-com-go-openapi-strfmt)
-        ("go-github-com-go-openapi-spec" ,go-github-com-go-openapi-spec)
-        ("go-github-com-go-openapi-runtime" ,go-github-com-go-openapi-runtime)
-        ("go-github-com-go-openapi-loads" ,go-github-com-go-openapi-loads)
-        ("go-github-com-go-openapi-jsonreference"
-         ,go-github-com-go-openapi-jsonreference)
-        ("go-github-com-go-openapi-inflect" ,go-github-com-go-openapi-inflect)
-        ("go-github-com-go-openapi-errors" ,go-github-com-go-openapi-errors)
-        ("go-github-com-go-openapi-analysis"
-         ,go-github-com-go-openapi-analysis)
-        ("go-github-com-fsnotify-fsnotify" ,go-github-com-fsnotify-fsnotify)
-        ("go-github-com-felixge-httpsnoop" ,go-github-com-felixge-httpsnoop)
-        ("go-github-com-dgrijalva-jwt-go" ,go-github-com-dgrijalva-jwt-go)
-        ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
-        ("go-github-com-coreos-go-oidc" ,go-github-com-coreos-go-oidc)
-        ("go-github-com-asaskevich-govalidator"
-         ,go-github-com-asaskevich-govalidator)))
+     (list go-gotest-tools
+           go-gopkg-in-yaml-v3
+           go-gopkg-in-ini-v1
+           go-google-golang-org-appengine
+           go-golang-org-x-xerrors
+           go-github-com-subosito-gotenv
+           go-github-com-spf13-jwalterweatherman
+           go-github-com-spf13-afero
+           go-github-com-pmezard-go-difflib
+           go-github-com-pelletier-go-toml
+           go-github-com-opentracing-opentracing-go
+           go-github-com-oklog-ulid
+           go-github-com-magiconair-properties
+           go-github-com-kr-text
+           go-github-com-josharian-intern
+           go-github-com-inconshreveable-mousetrap
+           go-github-com-hashicorp-hcl
+           go-github-com-google-go-cmp
+           go-github-com-golang-protobuf
+           go-github-com-go-openapi-jsonpointer
+           go-github-com-docker-go-units
+           go-github-com-puerkitobio-urlesc
+           go-github-com-puerkitobio-purell
+           go-gopkg-in-yaml-v2
+           go-gopkg-in-square-go-jose-v2
+           go-google-golang-org-protobuf
+           go-golang-org-x-tools
+           go-golang-org-x-text
+           go-golang-org-x-sys
+           go-golang-org-x-oauth2
+           go-golang-org-x-net
+           go-golang-org-x-mod
+           go-golang-org-x-crypto
+           go-go-mongodb-org-mongo-driver
+           go-github-com-toqueteos-webbrowser
+           go-github-com-spf13-viper
+           go-github-com-spf13-pflag
+           go-github-com-spf13-cobra
+           go-github-com-spf13-cast
+           go-github-com-rogpeppe-go-internal
+           go-github-com-pquerna-cachecontrol
+           go-github-com-pkg-errors
+           go-github-com-mitchellh-mapstructure
+           go-github-com-mitchellh-go-homedir
+           go-github-com-mailru-easyjson
+           go-github-com-kr-pretty
+           go-github-com-jessevdk-go-flags
+           go-github-com-gorilla-handlers
+           go-github-com-go-swagger-scan-repo-boundary
+           go-github-com-go-stack-stack
+           go-github-com-go-openapi-validate
+           go-github-com-go-openapi-swag
+           go-github-com-go-openapi-strfmt
+           go-github-com-go-openapi-spec
+           go-github-com-go-openapi-runtime
+           go-github-com-go-openapi-loads
+           go-github-com-go-openapi-jsonreference
+           go-github-com-go-openapi-inflect
+           go-github-com-go-openapi-errors
+           go-github-com-go-openapi-analysis
+           go-github-com-fsnotify-fsnotify
+           go-github-com-felixge-httpsnoop
+           go-github-com-dgrijalva-jwt-go
+           go-github-com-davecgh-go-spew
+           go-github-com-coreos-go-oidc
+           go-github-com-asaskevich-govalidator))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/go-swagger/go-swagger")
     (synopsis "Swagger 2.0")
     (description
@@ -3590,16 +3569,17 @@ common patterns.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-testfixtures/testfixtures/v3"))
     (propagated-inputs
-      `(;("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-        ;("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ;("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
-        ;("go-github-com-mattn-go-sqlite3" ,go-github-com-mattn-go-sqlite3)
-        ;("go-github-com-lib-pq" ,go-github-com-lib-pq)
-        ;("go-github-com-joho-godotenv" ,go-github-com-joho-godotenv)
-        ;("go-github-com-jackc-pgx-v4" ,go-github-com-jackc-pgx-v4)
-        ;("go-github-com-go-sql-driver-mysql" ,go-github-com-go-sql-driver-mysql)
-        ;("go-github-com-denisenkom-go-mssqldb" ,go-github-com-denisenkom-go-mssqldb)
-        ))
+     (list go-gopkg-in-yaml-v2
+           ;go-golang-org-x-crypto
+           ;go-github-com-spf13-pflag
+           ;go-github-com-mattn-go-sqlite3
+           ;go-github-com-lib-pq
+           ;go-github-com-jackc-pgx-v4
+           ;go-github-com-go-sql-driver-mysql
+           ;go-github-com-denisenkom-go-mssqldb
+           ))
+    (native-inputs
+     (list go-github-com-joho-godotenv))
     (home-page "https://github.com/go-testfixtures/testfixtures")
     (synopsis "testfixtures")
     (description
@@ -3686,13 +3666,12 @@ easier.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/google/go-github/v32"))
     (propagated-inputs
-      `(("go-google-golang-org-appengine" ,go-google-golang-org-appengine)
-        ("go-golang-org-x-oauth2" ,go-golang-org-x-oauth2)
-        ("go-golang-org-x-net" ,go-golang-org-x-net)
-        ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ("go-github-com-google-go-querystring"
-         ,go-github-com-google-go-querystring)
-        ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)))
+     (list go-google-golang-org-appengine
+           go-golang-org-x-oauth2
+           go-golang-org-x-net
+           go-golang-org-x-crypto
+           go-github-com-google-go-querystring
+           go-github-com-golang-protobuf))
     (home-page "https://github.com/google/go-github")
     (synopsis "go-github")
     (description
@@ -3758,7 +3737,7 @@ easier.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/issue9/identicon"))
     (propagated-inputs
-      `(("go-github-com-issue9-assert-v2" ,go-github-com-issue9-assert-v2)))
+     (list go-github-com-issue9-assert-v2))
     (home-page "https://github.com/issue9/identicon")
     (synopsis "identicon")
     (description
@@ -3780,9 +3759,33 @@ easier.")
           (base32 "12ckgkp8xqgp0fh6019nwp4ssg2k1rv1a67cpk37ian4q5zrvppm"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/jaytaylor/html2text"))
+    (propagated-inputs
+     (list go-github-com-olekukonko-tablewriter
+           go-github-com-ssor-bom
+           go-golang-org-x-net))
     (home-page "https://github.com/jaytaylor/html2text")
     (synopsis "html2text")
     (description "Ensure your emails are readable by all!")
+    (license license:expat)))
+
+(define-public go-github-com-ssor-bom
+  (package
+    (name "go-github-com-ssor-bom")
+    (version "0.0.0-20170718123548-6386211fdfcf")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/ssor/bom")
+               (commit (go-version->git-ref version))))
+        (file-name (git-file-name name version))
+        (sha256
+          (base32 "09g5496ifwqxqclh2iw58plcwcz0sczlnxwqxzwmnl4shdl371ld"))))
+    (build-system go-build-system)
+    (arguments '(#:import-path "github.com/ssor/bom"))
+    (home-page "https://github.com/ssor/bom")
+    (synopsis "bom")
+    (description "small tools for cleaning bom from byte array or reader")
     (license license:expat)))
 
 (define-public go-github-com-keybase-go-crypto
@@ -3901,7 +3904,7 @@ semantics.")
     (arguments
       '(#:import-path "google.golang.org/grpc/cmd/protoc-gen-go-grpc"))
     (propagated-inputs
-      `(("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)))
+     (list go-google-golang-org-protobuf))
     (home-page "https://google.golang.org/grpc/cmd/protoc-gen-go-grpc")
     (synopsis "protoc-gen-go-grpc")
     (description
@@ -4020,7 +4023,14 @@ for a full list of sub-packages.")
         (sha256
           (base32 "1h5w5rnfaifg6frgyh7pz6604zhdacy0jmha0i0vvmb8n2vadx2n"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "cloud.google.com/go"))
+    (arguments
+     '(#:import-path "cloud.google.com/go"
+       #:phases
+       (modify-phases %standard-phases
+         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
+           (lambda* (#:key outputs #:allow-other-keys)
+             (for-each make-file-writable
+                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
     (propagated-inputs
       `(;("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
         ;("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
@@ -4081,6 +4091,9 @@ for a full list of sub-packages.")
           (base32 "1z9mk8ism43bc1zm484iaq1cipn64znmzma4sl2gq83nsh4gcw5i"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/gorilla/pat"))
+    (propagated-inputs
+     (list go-github-com-gorilla-context
+           go-github-com-gorilla-mux))
     (home-page "https://github.com/gorilla/pat")
     (synopsis "pat")
     (description
@@ -4125,9 +4138,9 @@ used as a base for different API flavors.  Package pat is documented at:")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/lestrrat-go/backoff/v2"))
     (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-lestrrat-go-option"
-         ,go-github-com-lestrrat-go-option)))
+     (list go-github-com-lestrrat-go-option))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/lestrrat-go/backoff")
     (synopsis "backoff")
     (description
@@ -4150,8 +4163,9 @@ used as a base for different API flavors.  Package pat is documented at:")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/lestrrat-go/blackmagic"))
     (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)))
+     (list go-github-com-pkg-errors))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/lestrrat-go/blackmagic")
     (synopsis "blackmagic")
     (description "Reflect-based black magic.  YMMV, and use with caution")
@@ -4173,8 +4187,9 @@ used as a base for different API flavors.  Package pat is documented at:")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/lestrrat-go/httpcc"))
     (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)))
+     (list go-github-com-pkg-errors))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/lestrrat-go/httpcc")
     (synopsis "httpcc")
     (description
@@ -4198,8 +4213,9 @@ for the end-user to do what they will with.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/lestrrat-go/iter"))
     (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)))
+     (list go-github-com-pkg-errors))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/lestrrat-go/iter")
     (synopsis "iter")
     (description "Simple tools for container iteration")
@@ -4220,8 +4236,8 @@ for the end-user to do what they will with.")
           (base32 "0wic12v84ga7fm14lc51jh5qjp242fm0f67l9xldjz0rm0d6qxwd"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/lestrrat-go/option"))
-    (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/lestrrat-go/option")
     (synopsis "option")
     (description
@@ -4244,17 +4260,18 @@ for the end-user to do what they will with.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/lestrrat-go/jwx"))
     (propagated-inputs
-      `(("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-        ("go-github-com-lestrrat-go-option" ,go-github-com-lestrrat-go-option)
-        ("go-github-com-lestrrat-go-iter" ,go-github-com-lestrrat-go-iter)
-        ("go-github-com-lestrrat-go-httpcc" ,go-github-com-lestrrat-go-httpcc)
-        ("go-github-com-lestrrat-go-blackmagic" ,go-github-com-lestrrat-go-blackmagic)
-        ("go-github-com-lestrrat-go-backoff-v2" ,go-github-com-lestrrat-go-backoff-v2)
-        ("go-github-com-goccy-go-json" ,go-github-com-goccy-go-json)
-        ;("go-github-com-decred-dcrd-dcrec-secp256k1-v4" ,go-github-com-decred-dcrd-dcrec-secp256k1-v4)     ; TODO: import
-        ))
+     (list go-golang-org-x-crypto
+           go-github-com-pkg-errors
+           go-github-com-lestrrat-go-option
+           go-github-com-lestrrat-go-iter
+           go-github-com-lestrrat-go-httpcc
+           go-github-com-lestrrat-go-blackmagic
+           go-github-com-lestrrat-go-backoff-v2
+           go-github-com-goccy-go-json
+           ;go-github-com-decred-dcrd-dcrec-secp256k1-v4)     ; TODO: import
+           ))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/lestrrat-go/jwx")
     (synopsis "github.com/lestrrat-go/jwx")
     (description
@@ -4332,8 +4349,8 @@ such as JWT, JWS, JWE, etc in Go.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/nxadm/tail"))
     (propagated-inputs
-      `(("go-gopkg-in-tomb-v1" ,go-gopkg-in-tomb-v1)
-        ("go-github-com-fsnotify-fsnotify" ,go-github-com-fsnotify-fsnotify)))
+     (list go-gopkg-in-tomb-v1
+           go-github-com-fsnotify-fsnotify))
     (home-page "https://github.com/nxadm/tail")
     (synopsis "tail functionality in Go")
     (description
@@ -4360,12 +4377,11 @@ and MS Windows.  Go 1.9 is the oldest compiler release supported.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/onsi/ginkgo"))
     (propagated-inputs
-     `(("go-golang-org-x-tools" ,go-golang-org-x-tools)
-       ("go-golang-org-x-sys" ,go-golang-org-x-sys)
-       ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
-       ("go-github-com-nxadm-tail" ,go-github-com-nxadm-tail)
-       ("go-github-com-go-task-slim-sprig" ,go-github-com-go-task-slim-sprig)
-       ))
+     (list go-golang-org-x-tools
+           go-golang-org-x-sys
+           go-github-com-onsi-gomega
+           go-github-com-nxadm-tail
+           go-github-com-go-task-slim-sprig))
     (home-page "https://github.com/onsi/ginkgo")
     (synopsis "Ginkgo 2.0 Release Candidate is available!")
     (description "Ginkgo is a BDD-style testing framework for Golang")
@@ -4387,9 +4403,9 @@ and MS Windows.  Go 1.9 is the oldest compiler release supported.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/onsi/gomega"))
     (propagated-inputs
-     `(("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-       ("go-golang-org-x-net" ,go-golang-org-x-net)
-       ("go-golang-org-x-text" ,go-golang-org-x-text)))
+     (list go-gopkg-in-yaml-v2
+           go-golang-org-x-net
+           go-golang-org-x-text))
     (home-page "https://github.com/onsi/gomega")
     (synopsis ": a BDD Testing Framework for Golang")
     (description
@@ -4435,10 +4451,11 @@ github.com/golang/lint/golint (e.g.  ID or HTTP)")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/markbates/going"))
     (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-serenize-snaker" ,go-github-com-serenize-snaker)
-        ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
-        ("go-github-com-onsi-ginkgo" ,go-github-com-onsi-ginkgo)))
+     (list go-github-com-serenize-snaker
+           go-github-com-onsi-gomega
+           go-github-com-onsi-ginkgo))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/markbates/going")
     (synopsis "github.com/markbates/going")
     (description
@@ -4462,20 +4479,21 @@ applications.  Your mileage may vary, but I find them to be pretty darn helpful.
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/markbates/goth"))
     (propagated-inputs
-      `(("go-golang-org-x-oauth2" ,go-golang-org-x-oauth2)
-        ("go-golang-org-x-net" ,go-golang-org-x-net)
-        ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-        ("go-github-com-mrjones-oauth" ,go-github-com-mrjones-oauth)
-        ("go-github-com-markbates-going" ,go-github-com-markbates-going)
-        ("go-github-com-lestrrat-go-jwx" ,go-github-com-lestrrat-go-jwx)
-        ("go-github-com-jarcoal-httpmock" ,go-github-com-jarcoal-httpmock)
-        ("go-github-com-gorilla-sessions" ,go-github-com-gorilla-sessions)
-        ("go-github-com-gorilla-pat" ,go-github-com-gorilla-pat)
-        ("go-github-com-gorilla-mux" ,go-github-com-gorilla-mux)
-        ("go-github-com-golang-jwt-jwt" ,go-github-com-golang-jwt-jwt)
-        ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
-        ("go-cloud-google-com-go" ,go-cloud-google-com-go)))
+     (list go-golang-org-x-oauth2
+           go-golang-org-x-net
+           go-github-com-pkg-errors
+           go-github-com-mrjones-oauth
+           go-github-com-markbates-going
+           go-github-com-lestrrat-go-jwx
+           go-github-com-jarcoal-httpmock
+           go-github-com-gorilla-sessions
+           go-github-com-gorilla-pat
+           go-github-com-gorilla-mux
+           go-github-com-golang-jwt-jwt
+           go-github-com-davecgh-go-spew
+           go-cloud-google-com-go))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/markbates/goth")
     (synopsis "Goth: Multi-Provider Authentication for Go")
     (description
@@ -4498,8 +4516,8 @@ packages for Go web applications.")
           (base32 "07cbl8x9cpai8k4086qmdq9r2wy97khvi0pkwl7bh8r9m3q4msiv"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/chavacava/garif"))
-    (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/chavacava/garif")
     (synopsis "garif")
     (description
@@ -4568,17 +4586,15 @@ Please vendor the library as it might change in future versions.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/mgechev/revive"))
     (propagated-inputs
-      `(("go-golang-org-x-tools" ,go-golang-org-x-tools)
-        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-        ("go-github-com-olekukonko-tablewriter"
-         ,go-github-com-olekukonko-tablewriter)
-        ("go-github-com-mitchellh-go-homedir"
-         ,go-github-com-mitchellh-go-homedir)
-        ("go-github-com-mgechev-dots" ,go-github-com-mgechev-dots)
-        ("go-github-com-fatih-structtag" ,go-github-com-fatih-structtag)
-        ("go-github-com-fatih-color" ,go-github-com-fatih-color)
-        ("go-github-com-chavacava-garif" ,go-github-com-chavacava-garif)
-        ("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)))
+     (list go-golang-org-x-tools
+           go-github-com-pkg-errors
+           go-github-com-olekukonko-tablewriter
+           go-github-com-mitchellh-go-homedir
+           go-github-com-mgechev-dots
+           go-github-com-fatih-structtag
+           go-github-com-fatih-color
+           go-github-com-chavacava-garif
+           go-github-com-burntsushi-toml))
     (home-page "https://github.com/mgechev/revive")
     (synopsis "revive")
     (description
@@ -4629,7 +4645,14 @@ specifically the sequence in Section 7.1 (page 21).")
         (sha256
           (base32 "1zvmj7gbnkq9xwv1bvcxk9acxl06y902148qwbd2kqwgs52wy2c0"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/andybalholm/brotli"))
+    (arguments
+     '(#:import-path "github.com/andybalholm/brotli"
+      #:phases
+      (modify-phases %standard-phases
+        (add-before 'reset-gzip-timestamps 'chmod-gzip-files
+          (lambda* (#:key outputs #:allow-other-keys)
+            (for-each make-file-writable
+                      (find-files (assoc-ref outputs "out") "\\.gz$")))))))
     (home-page "https://github.com/andybalholm/brotli")
     (synopsis #f)
     (description
@@ -4676,10 +4699,10 @@ the @code{c2go} tool at
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/dsnet/compress"))
     (propagated-inputs
-      `(("go-github-com-ulikunitz-xz" ,go-github-com-ulikunitz-xz)
-        ("go-github-com-klauspost-cpuid" ,go-github-com-klauspost-cpuid)
-        ("go-github-com-klauspost-compress" ,go-github-com-klauspost-compress)
-        ("go-github-com-dsnet-golib" ,go-github-com-dsnet-golib)))
+     (list go-github-com-ulikunitz-xz
+           go-github-com-klauspost-cpuid
+           go-github-com-klauspost-compress
+           go-github-com-dsnet-golib))
     (home-page "https://github.com/dsnet/compress")
     (synopsis "Collection of compression libraries for Go")
     (description "Package compress is a collection of compression libraries.")
@@ -4764,16 +4787,15 @@ specified in @url{https://rfc-editor.org/rfc/rfc1952.html,RFC 1952}.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/mholt/archiver/v3"))
     (propagated-inputs
-      `(("go-github-com-xi2-xz" ,go-github-com-xi2-xz)
-        ("go-github-com-ulikunitz-xz" ,go-github-com-ulikunitz-xz)
-        ("go-github-com-pierrec-lz4-v4" ,go-github-com-pierrec-lz4-v4)
-        ("go-github-com-nwaples-rardecode" ,go-github-com-nwaples-rardecode)
-        ("go-github-com-klauspost-pgzip" ,go-github-com-klauspost-pgzip)
-        ("go-github-com-klauspost-compress" ,go-github-com-klauspost-compress)
-        ("go-github-com-golang-snappy" ,go-github-com-golang-snappy)
-        ("go-github-com-dsnet-compress" ,go-github-com-dsnet-compress)
-        ("go-github-com-andybalholm-brotli"
-         ,go-github-com-andybalholm-brotli)))
+     (list go-github-com-xi2-xz
+           go-github-com-ulikunitz-xz
+           go-github-com-pierrec-lz4-v4
+           go-github-com-nwaples-rardecode
+           go-github-com-klauspost-pgzip
+           go-github-com-klauspost-compress
+           go-github-com-golang-snappy
+           go-github-com-dsnet-compress
+           go-github-com-andybalholm-brotli))
     (home-page "https://github.com/mholt/archiver")
     (synopsis "archiver")
     (description
@@ -4797,10 +4819,10 @@ compression operations for a variety of formats and compression algorithms.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/miekg/dns"))
     (propagated-inputs
-      `(("go-golang-org-x-tools" ,go-golang-org-x-tools)
-        ("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ("go-golang-org-x-sync" ,go-golang-org-x-sync)
-        ("go-golang-org-x-net" ,go-golang-org-x-net)))
+     (list go-golang-org-x-tools
+           go-golang-org-x-sys
+           go-golang-org-x-sync
+           go-golang-org-x-net))
     (home-page "https://github.com/miekg/dns")
     (synopsis "Alternative (more granular) approach to a DNS library")
     (description
@@ -4847,8 +4869,7 @@ less-is-more principle, by presenting a small, clean interface.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/minio/md5-simd"))
     (propagated-inputs
-      `(("go-github-com-klauspost-cpuid-v2"
-         ,go-github-com-klauspost-cpuid-v2)))
+     (list go-github-com-klauspost-cpuid-v2))
     (home-page "https://github.com/minio/md5-simd")
     (synopsis "md5-simd")
     (description
@@ -4872,30 +4893,27 @@ less-is-more principle, by presenting a small, clean interface.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/minio/minio-go/v7"))
     (propagated-inputs
-      `(("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-        ("go-golang-org-x-text" ,go-golang-org-x-text)
-        ("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-smartystreets-goconvey"
-         ,go-github-com-smartystreets-goconvey)
-        ("go-github-com-modern-go-reflect2" ,go-github-com-modern-go-reflect2)
-        ("go-github-com-modern-go-concurrent"
-         ,go-github-com-modern-go-concurrent)
-        ("go-github-com-klauspost-cpuid" ,go-github-com-klauspost-cpuid)
-        ("go-gopkg-in-ini-v1" ,go-gopkg-in-ini-v1)
-        ("go-golang-org-x-net" ,go-golang-org-x-net)
-        ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ("go-github-com-sirupsen-logrus" ,go-github-com-sirupsen-logrus)
-        ("go-github-com-rs-xid" ,go-github-com-rs-xid)
-        ("go-github-com-mitchellh-go-homedir"
-         ,go-github-com-mitchellh-go-homedir)
-        ("go-github-com-minio-sha256-simd" ,go-github-com-minio-sha256-simd)
-        ("go-github-com-minio-md5-simd" ,go-github-com-minio-md5-simd)
-        ("go-github-com-klauspost-compress" ,go-github-com-klauspost-compress)
-        ("go-github-com-json-iterator-go" ,go-github-com-json-iterator-go)
-        ("go-github-com-google-uuid" ,go-github-com-google-uuid)
-        ("go-github-com-dustin-go-humanize"
-         ,go-github-com-dustin-go-humanize)))
+     (list go-gopkg-in-yaml-v2
+           go-golang-org-x-text
+           go-golang-org-x-sys
+           go-github-com-smartystreets-goconvey
+           go-github-com-modern-go-reflect2
+           go-github-com-modern-go-concurrent
+           go-github-com-klauspost-cpuid
+           go-gopkg-in-ini-v1
+           go-golang-org-x-net
+           go-golang-org-x-crypto
+           go-github-com-sirupsen-logrus
+           go-github-com-rs-xid
+           go-github-com-mitchellh-go-homedir
+           go-github-com-minio-sha256-simd
+           go-github-com-minio-md5-simd
+           go-github-com-klauspost-compress
+           go-github-com-json-iterator-go
+           go-github-com-google-uuid
+           go-github-com-dustin-go-humanize))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/minio/minio-go")
     (synopsis "MinIO Go Client SDK for Amazon S3 Compatible Cloud Storage")
     (description
@@ -4947,6 +4965,7 @@ object storage.")
     (description "Package resize implements various image resizing methods.")
     (license license:isc)))
 
+;; This package is deprecated upstream
 (define-public go-github-com-chaseadamsio-goorgeous
   (package
     (name "go-github-com-chaseadamsio-goorgeous")
@@ -4962,6 +4981,9 @@ object storage.")
           (base32 "179pazd942609b4ndhirb2sanz88s16d9csbdj7w4dnyqgqiyylk"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/chaseadamsio/goorgeous"))
+    (propagated-inputs
+     (list go-github-com-russross-blackfriday
+           go-github-com-shurcool-sanitized-anchor-name))
     (home-page "https://github.com/chaseadamsio/goorgeous")
     (synopsis #f)
     (description #f)
@@ -4983,15 +5005,14 @@ object storage.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/niklasfasching/go-org"))
     (propagated-inputs
-      `(("go-golang-org-x-net" ,go-golang-org-x-net)
-        ("go-github-com-shurcool-sanitized-anchor-name"
-         ,go-github-com-shurcool-sanitized-anchor-name)
-        ("go-github-com-russross-blackfriday"
-         ,go-github-com-russross-blackfriday)
-        ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
-        ("go-github-com-chaseadamsio-goorgeous"
-         ,go-github-com-chaseadamsio-goorgeous)
-        ("go-github-com-alecthomas-chroma" ,go-github-com-alecthomas-chroma)))
+     (list go-golang-org-x-net
+           go-github-com-danwakefield-fnmatch
+           go-github-com-dlclark-regexp2
+           go-github-com-shurcool-sanitized-anchor-name
+           go-github-com-russross-blackfriday
+           go-github-com-pmezard-go-difflib
+           ;go-github-com-chaseadamsio-goorgeous
+           go-github-com-alecthomas-chroma))
     (home-page "https://github.com/niklasfasching/go-org")
     (synopsis #f)
     (description #f)
@@ -5033,10 +5054,9 @@ object storage.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/aws/aws-sdk-go"))
     (propagated-inputs
-      `(("go-golang-org-x-net" ,go-golang-org-x-net)
-        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-        ("go-github-com-jmespath-go-jmespath"
-         ,go-github-com-jmespath-go-jmespath)))
+     (list go-golang-org-x-net
+           go-github-com-pkg-errors
+           go-github-com-jmespath-go-jmespath))
     (home-page "https://github.com/aws/aws-sdk-go")
     (synopsis "AWS SDK for Go")
     (description
@@ -5106,7 +5126,7 @@ functions may be called concurrently with themselves and each other.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/mailru/easyjson"))
     (propagated-inputs
-      `(("go-github-com-josharian-intern" ,go-github-com-josharian-intern)))
+     (list go-github-com-josharian-intern))
     (home-page "https://github.com/mailru/easyjson")
     (synopsis "easyjson")
     (description
@@ -5223,7 +5243,7 @@ de-duplication that works across a set of peer processes.")
         #:unpack-path
         "github.com/cncf/udpa"))
     (propagated-inputs
-      `(("go-github-com-cncf-xds-go" ,go-github-com-cncf-xds-go)))
+     (list go-github-com-cncf-xds-go))
     (home-page "https://github.com/cncf/udpa")
     (synopsis "Description")
     (description
@@ -5747,8 +5767,9 @@ barcodes.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/pquerna/otp"))
     (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-boombuler-barcode" ,go-github-com-boombuler-barcode)))
+     (list go-github-com-boombuler-barcode))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/pquerna/otp")
     (synopsis "otp: One Time Password utilities Go / Golang")
     (description
@@ -5772,8 +5793,7 @@ Authenticator compatible manner.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/gorilla/sessions"))
     (propagated-inputs
-      `(("go-github-com-gorilla-securecookie"
-         ,go-github-com-gorilla-securecookie)))
+     (list go-github-com-gorilla-securecookie))
     (home-page "https://github.com/gorilla/sessions")
     (synopsis "sessions")
     (description
@@ -5797,9 +5817,9 @@ custom session backends.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/quasoft/websspi"))
     (propagated-inputs
-      `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ("go-github-com-gorilla-sessions" ,go-github-com-gorilla-sessions)
-        ("go-github-com-gorilla-securecookie" ,go-github-com-gorilla-securecookie)))
+     (list go-golang-org-x-sys
+           go-github-com-gorilla-sessions
+           go-github-com-gorilla-securecookie))
     (home-page "https://github.com/quasoft/websspi")
     (synopsis "websspi")
     (description
@@ -5866,8 +5886,8 @@ help improve the encoding/decoding performance of some binary protocols.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/tinylib/msgp"))
     (propagated-inputs
-      `(("go-golang-org-x-tools" ,go-golang-org-x-tools)
-        ("go-github-com-philhofer-fwd" ,go-github-com-philhofer-fwd)))
+     (list go-golang-org-x-tools
+           go-github-com-philhofer-fwd))
     (home-page "https://github.com/tinylib/msgp")
     (synopsis "MessagePack Code Generator")
     (description
@@ -5973,10 +5993,9 @@ programming language.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/unknwon/i18n"))
     (propagated-inputs
-      `(("go-gopkg-in-ini-v1" ,go-gopkg-in-ini-v1)
-        ("go-github-com-unknwon-com" ,go-github-com-unknwon-com)
-        ("go-github-com-smartystreets-goconvey"
-         ,go-github-com-smartystreets-goconvey)))
+     (list go-gopkg-in-ini-v1
+           go-github-com-unknwon-com
+           go-github-com-smartystreets-goconvey))
     (home-page "https://github.com/unknwon/i18n")
     (synopsis "i18n")
     (description
@@ -6165,22 +6184,22 @@ generates Go code that statically implements the provided http.FileSystem.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/gopherjs/gopherjs"))
     (propagated-inputs
-      `(("go-golang-org-x-xerrors" ,go-golang-org-x-xerrors)
-        ("go-golang-org-x-term" ,go-golang-org-x-term)
-        ("go-github-com-shurcool-vfsgen" ,go-github-com-shurcool-vfsgen)
-        ("go-github-com-inconshreveable-mousetrap" ,go-github-com-inconshreveable-mousetrap)
-        ("go-golang-org-x-tools" ,go-golang-org-x-tools)
-        ("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ("go-golang-org-x-sync" ,go-golang-org-x-sync)
-        ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
-        ("go-github-com-spf13-cobra" ,go-github-com-spf13-cobra)
-        ("go-github-com-shurcool-httpfs" ,go-github-com-shurcool-httpfs)
-        ("go-github-com-shurcool-go" ,go-github-com-shurcool-go)
-        ("go-github-com-neelance-sourcemap" ,go-github-com-neelance-sourcemap)
-        ("go-github-com-neelance-astrewrite" ,go-github-com-neelance-astrewrite)
-        ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-        ("go-github-com-fsnotify-fsnotify" ,go-github-com-fsnotify-fsnotify)))
+     (list go-golang-org-x-xerrors
+           go-golang-org-x-term
+           go-github-com-shurcool-vfsgen
+           go-github-com-inconshreveable-mousetrap
+           go-golang-org-x-tools
+           go-golang-org-x-sys
+           go-golang-org-x-sync
+           go-golang-org-x-crypto
+           go-github-com-spf13-pflag
+           go-github-com-spf13-cobra
+           go-github-com-shurcool-httpfs
+           go-github-com-shurcool-go
+           go-github-com-neelance-sourcemap
+           go-github-com-neelance-astrewrite
+           go-github-com-google-go-cmp
+           go-github-com-fsnotify-fsnotify))
     (home-page "https://github.com/gopherjs/gopherjs")
     (synopsis "GopherJS - A compiler from Go to JavaScript")
     (description
@@ -6250,11 +6269,10 @@ be used in traditional Go test functions and even in applications.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/smartystreets/goconvey"))
     (propagated-inputs
-      `(("go-golang-org-x-tools" ,go-golang-org-x-tools)
-        ("go-github-com-smartystreets-assertions"
-         ,go-github-com-smartystreets-assertions)
-        ("go-github-com-jtolds-gls" ,go-github-com-jtolds-gls)
-        ("go-github-com-gopherjs-gopherjs" ,go-github-com-gopherjs-gopherjs)))
+     (list go-golang-org-x-tools
+           go-github-com-smartystreets-assertions
+           go-github-com-jtolds-gls
+           go-github-com-gopherjs-gopherjs))
     (home-page "https://github.com/smartystreets/goconvey")
     (synopsis "GoConvey is awesome Go testing")
     (description
@@ -6280,8 +6298,7 @@ of running `go test` in each go package.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/unknwon/paginater"))
     (propagated-inputs
-      `(("go-github-com-smartystreets-goconvey"
-         ,go-github-com-smartystreets-goconvey)))
+     (list go-github-com-smartystreets-goconvey))
     (home-page "https://github.com/unknwon/paginater")
     (synopsis "Paginater")
     (description
@@ -6304,8 +6321,8 @@ of running `go test` in each go package.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/unrolled/render"))
     (propagated-inputs
-      `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ("go-github-com-fsnotify-fsnotify" ,go-github-com-fsnotify-fsnotify)))
+     (list go-golang-org-x-sys
+           go-github-com-fsnotify-fsnotify))
     (home-page "https://github.com/unrolled/render")
     (synopsis "Render")
     (description
@@ -6351,12 +6368,13 @@ http.Transport and http.Client structs.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/hashicorp/go-hclog"))
     (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
-        ("go-github-com-mattn-go-isatty" ,go-github-com-mattn-go-isatty)
-        ("go-github-com-mattn-go-colorable" ,go-github-com-mattn-go-colorable)
-        ("go-github-com-fatih-color" ,go-github-com-fatih-color)
-        ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)))
+     (list go-github-com-pmezard-go-difflib
+           go-github-com-mattn-go-isatty
+           go-github-com-mattn-go-colorable
+           go-github-com-fatih-color
+           go-github-com-davecgh-go-spew))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/hashicorp/go-hclog")
     (synopsis "go-hclog")
     (description
@@ -6378,11 +6396,12 @@ interface for use in development and production environments.")
         (sha256
           (base32 "1pq6a7qyb4yvbvbpkqw8qq2qnk3i3mfalfg61g4lnddf33wad8yl"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/hashicorp/go-retryablehttp"))
+    (arguments
+     '(#:tests? #f      ; Tests require network access
+       #:import-path "github.com/hashicorp/go-retryablehttp"))
     (propagated-inputs
-      `(("go-github-com-hashicorp-go-hclog" ,go-github-com-hashicorp-go-hclog)
-        ("go-github-com-hashicorp-go-cleanhttp"
-         ,go-github-com-hashicorp-go-cleanhttp)))
+     (list go-github-com-hashicorp-go-hclog
+           go-github-com-hashicorp-go-cleanhttp))
     (home-page "https://github.com/hashicorp/go-retryablehttp")
     (synopsis "go-retryablehttp")
     (description
@@ -6408,8 +6427,8 @@ retryablehttp very easy to drop into existing programs.")
     (build-system go-build-system)
     (arguments '(#:import-path "google.golang.org/protobuf"))
     (propagated-inputs
-      `(("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-        ;("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
+     (list go-github-com-google-go-cmp
+        ;go-github-com-golang-protobuf)
         ))
     (home-page "https://google.golang.org/protobuf")
     (synopsis "Go support for Protocol Buffers")
@@ -6427,29 +6446,30 @@ buffer developer guide} for more information about protocol buffers themselves."
     (license license:bsd-3)))
 
 (define-public go-github-com-golang-protobuf
-  (package
-    (name "go-github-com-golang-protobuf")
-    (version "1.5.2")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/golang/protobuf")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1mh5fyim42dn821nsd3afnmgscrzzhn3h8rag635d2jnr23r1zhk"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/golang/protobuf"))
-    (propagated-inputs
-      `(;("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-        ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)))
-    (home-page "https://github.com/golang/protobuf")
-    (synopsis "Go support for Protocol Buffers")
-    (description
-      "This module (@url{https://pkg.go.dev/mod/github.com/golang/protobuf,(code
-github.com/golang/protobuf)}) contains Go bindings for protocol buffers.")
-    (license license:bsd-3)))
+  (deprecated-package "go-github-com-golang-protobuf" go-github-com-golang-protobuf-proto))
+;  (package
+;    (name "go-github-com-golang-protobuf")
+;    (version "1.5.2")
+;    (source
+;      (origin
+;        (method git-fetch)
+;        (uri (git-reference
+;               (url "https://github.com/golang/protobuf")
+;               (commit (string-append "v" version))))
+;        (file-name (git-file-name name version))
+;        (sha256
+;          (base32 "1mh5fyim42dn821nsd3afnmgscrzzhn3h8rag635d2jnr23r1zhk"))))
+;    (build-system go-build-system)
+;    (arguments '(#:import-path "github.com/golang/protobuf"))
+;    (propagated-inputs
+;      `(;("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
+;        ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)))
+;    (home-page "https://github.com/golang/protobuf")
+;    (synopsis "Go support for Protocol Buffers")
+;    (description
+;      "This module (@url{https://pkg.go.dev/mod/github.com/golang/protobuf,(code
+;github.com/golang/protobuf)}) contains Go bindings for protocol buffers.")
+;    (license license:bsd-3)))
 
 (define-public go-google-golang-org-appengine
   (package
@@ -6467,9 +6487,9 @@ github.com/golang/protobuf)}) contains Go bindings for protocol buffers.")
     (build-system go-build-system)
     (arguments '(#:import-path "google.golang.org/appengine"))
     (propagated-inputs
-      `(("go-golang-org-x-text" ,go-golang-org-x-text)
-        ("go-golang-org-x-net" ,go-golang-org-x-net)
-        ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)))
+     (list go-golang-org-x-text
+           go-golang-org-x-net
+           go-github-com-golang-protobuf))
     (home-page "https://google.golang.org/appengine")
     (synopsis "Go App Engine packages")
     (description
@@ -6492,18 +6512,16 @@ github.com/golang/protobuf)}) contains Go bindings for protocol buffers.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/xanzy/go-gitlab"))
     (propagated-inputs
-      `(("go-google-golang-org-appengine" ,go-google-golang-org-appengine)
-        ("go-golang-org-x-time" ,go-golang-org-x-time)
-        ("go-golang-org-x-sync" ,go-golang-org-x-sync)
-        ("go-golang-org-x-oauth2" ,go-golang-org-x-oauth2)
-        ("go-golang-org-x-net" ,go-golang-org-x-net)
-        ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-hashicorp-go-retryablehttp"
-         ,go-github-com-hashicorp-go-retryablehttp)
-        ("go-github-com-hashicorp-go-cleanhttp"
-         ,go-github-com-hashicorp-go-cleanhttp)
-        ("go-github-com-google-go-querystring"
-         ,go-github-com-google-go-querystring)))
+     (list go-google-golang-org-appengine
+           go-golang-org-x-time
+           go-golang-org-x-sync
+           go-golang-org-x-oauth2
+           go-golang-org-x-net
+           go-github-com-hashicorp-go-retryablehttp
+           go-github-com-hashicorp-go-cleanhttp
+           go-github-com-google-go-querystring))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/xanzy/go-gitlab")
     (synopsis "go-gitlab")
     (description "Package gitlab implements a GitLab API client.")
@@ -6524,7 +6542,8 @@ github.com/golang/protobuf)}) contains Go bindings for protocol buffers.")
           (base32 "0ziwacqiyc62392nxnfyghr3fgfjxbnbgxdpbixrlviahz7mnh4f"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/yohcop/openid-go"))
-    (propagated-inputs `(("go-golang-org-x-net" ,go-golang-org-x-net)))
+    (propagated-inputs
+     (list go-golang-org-x-net))
     (home-page "https://github.com/yohcop/openid-go")
     (synopsis "openid.go")
     (description
@@ -6547,9 +6566,9 @@ github.com/golang/protobuf)}) contains Go bindings for protocol buffers.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/yuin/goldmark-highlighting"))
     (propagated-inputs
-      `(("go-github-com-yuin-goldmark" ,go-github-com-yuin-goldmark)
-        ("go-github-com-dlclark-regexp2" ,go-github-com-dlclark-regexp2)
-        ("go-github-com-alecthomas-chroma" ,go-github-com-alecthomas-chroma)))
+     (list go-github-com-yuin-goldmark
+           go-github-com-dlclark-regexp2
+           go-github-com-alecthomas-chroma))
     (home-page "https://github.com/yuin/goldmark-highlighting")
     (synopsis "goldmark-highlighting")
     (description
@@ -6573,8 +6592,8 @@ goldmark(@url{http://github.com/yuin/goldmark,http://github.com/yuin/goldmark}).
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/yuin/goldmark-meta"))
     (propagated-inputs
-      `(("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-        ("go-github-com-yuin-goldmark" ,go-github-com-yuin-goldmark)))
+     (list go-gopkg-in-yaml-v2
+           go-github-com-yuin-goldmark))
     (home-page "https://github.com/yuin/goldmark-meta")
     (synopsis "goldmark-meta")
     (description
@@ -6692,8 +6711,7 @@ efficiently.")
     (arguments
       '(#:import-path "mvdan.cc/xurls/v2" #:unpack-path "mvdan.cc/xurls/v2"))
     (propagated-inputs
-      `(("go-github-com-rogpeppe-go-internal"
-         ,go-github-com-rogpeppe-go-internal)))
+     (list go-github-com-rogpeppe-go-internal))
     (home-page "https://mvdan.cc/xurls/v2")
     (synopsis "xurls")
     (description
@@ -6712,14 +6730,15 @@ efficiently.")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1s5q8iyx0sy5fav7qbivmza755pv5yjjjqh51vhs03pcxcz8fbi1"))))
+         (base32 "1s5q8iyx0sy5fav7qbivmza755pv5yjjjqh51vhs03pcxcz8fbi1"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "strk.kbt.io/projects/go/libravatar"))
+    (arguments
+     '(#:tests? #f      ; TODO: Fix
+       #:import-path "strk.kbt.io/projects/go/libravatar"))
     (home-page "https://strk.kbt.io/projects/go/libravatar")
-    (synopsis "Use")
-    (description
-      "Simple @url{https://www.golang.org,golang} library for serving
-@url{https://www.libravatar.org,federated avatars}")
+    (synopsis "Federated avatars using Go")
+    (description "This package provides a library library for serving
+@url{https://www.libravatar.org, federated avatars}.")
     (license license:expat)))
 
 (define-public go-github-com-golang-sql-civil
@@ -6759,10 +6778,12 @@ calendar with exactly 24-hour days, 60-minute hours, and 60-second minutes.")
         (sha256
           (base32 "0gh1k0sp4ka1cnqqmhhs5d5c0gp4xsv4pfy6azky5djpmsrwnb57"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/denisenkom/go-mssqldb"))
+    (arguments
+     '(#:tests? #f      ; Tests want network access
+       #:import-path "github.com/denisenkom/go-mssqldb"))
     (propagated-inputs
-      `(("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ("go-github-com-golang-sql-civil" ,go-github-com-golang-sql-civil)))
+     (list go-golang-org-x-crypto
+           go-github-com-golang-sql-civil))
     (home-page "https://github.com/denisenkom/go-mssqldb")
     (synopsis "A pure Go MSSQL driver for Go's database/sql package")
     (description
@@ -6880,7 +6901,7 @@ used as a more human friendly alternative to JSON for structured logging.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-kit/log"))
     (propagated-inputs
-      `(("go-github-com-go-logfmt-logfmt" ,go-github-com-go-logfmt-logfmt)))
+     (list go-github-com-go-logfmt-logfmt))
     (home-page "https://github.com/go-kit/log")
     (synopsis "package log")
     (description "Package log provides a structured logger.")
@@ -6926,10 +6947,7 @@ used as a more human friendly alternative to JSON for structured logging.")
      '(#:tests? #f      ; Circular imports
        #:import-path "github.com/jackc/pgmock"))
     (propagated-inputs
-      `(;("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-jackc-pgproto3-v2" ,go-github-com-jackc-pgproto3-v2)
-        ))
+     (list go-github-com-jackc-pgproto3-v2))
     ;(native-inputs
     ; (list go-github-com-jackc-pgconn))
     (home-page "https://github.com/jackc/pgmock")
@@ -6953,8 +6971,8 @@ used as a more human friendly alternative to JSON for structured logging.")
           (base32 "1crw06lzksgimbmr1a3sr00azg2v7l4qkvjra1cpmzzq5mncaj8z"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/jackc/pgpassfile"))
-    (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/jackc/pgpassfile")
     (synopsis "pgpassfile")
     (description "Package pgpassfile is a parser PostgreSQL .pgpass files.")
@@ -6998,10 +7016,10 @@ memory allocations.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/jackc/pgproto3/v2"))
     (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-jackc-pgio" ,go-github-com-jackc-pgio)
-        ("go-github-com-jackc-chunkreader-v2"
-         ,go-github-com-jackc-chunkreader-v2)))
+     (list go-github-com-jackc-pgio
+           go-github-com-jackc-chunkreader-v2))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/jackc/pgproto3")
     (synopsis "pgproto3")
     (description
@@ -7024,8 +7042,8 @@ version 3.")
           (base32 "13gbi0ad58rm3rcgj8bssc7hgrqwva0q015fw57vx5cxb4rcrmxh"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/jackc/pgservicefile"))
-    (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/jackc/pgservicefile")
     (synopsis "pgservicefile")
     (description
@@ -7049,17 +7067,16 @@ version 3.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/jackc/pgconn"))
     (propagated-inputs
-      `(("go-golang-org-x-text" ,go-golang-org-x-text)
-        ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-jackc-pgservicefile"
-         ,go-github-com-jackc-pgservicefile)
-        ("go-github-com-jackc-pgproto3-v2" ,go-github-com-jackc-pgproto3-v2)
-        ("go-github-com-jackc-pgpassfile" ,go-github-com-jackc-pgpassfile)
-        ("go-github-com-jackc-pgmock" ,go-github-com-jackc-pgmock)
-        ("go-github-com-jackc-pgio" ,go-github-com-jackc-pgio)
-        ("go-github-com-jackc-chunkreader-v2"
-         ,go-github-com-jackc-chunkreader-v2)))
+     (list go-golang-org-x-text
+           go-golang-org-x-crypto
+           go-github-com-jackc-pgservicefile
+           go-github-com-jackc-pgproto3-v2
+           go-github-com-jackc-pgpassfile
+           go-github-com-jackc-pgmock
+           go-github-com-jackc-pgio
+           go-github-com-jackc-chunkreader-v2))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/jackc/pgconn")
     (synopsis "pgconn")
     (description "Package pgconn is a low-level PostgreSQL database driver.")
@@ -7103,13 +7120,14 @@ protocol.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/jackc/pgtype"))
     (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-shopspring-decimal" ,go-github-com-shopspring-decimal)
-        ("go-github-com-lib-pq" ,go-github-com-lib-pq)
-        ("go-github-com-jackc-pgx-v4" ,go-github-com-jackc-pgx-v4)
-        ("go-github-com-jackc-pgio" ,go-github-com-jackc-pgio)
-        ("go-github-com-jackc-pgconn" ,go-github-com-jackc-pgconn)
-        ("go-github-com-gofrs-uuid" ,go-github-com-gofrs-uuid)))
+     (list go-github-com-shopspring-decimal
+           go-github-com-lib-pq
+           go-github-com-jackc-pgx-v4
+           go-github-com-jackc-pgio
+           go-github-com-jackc-pgconn
+           go-github-com-gofrs-uuid))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/jackc/pgtype")
     (synopsis "pgtype")
     (description
@@ -7136,8 +7154,8 @@ and can be used with @url{https://github.com/lib/pq,https://github.com/lib/pq}."
           (base32 "1avwqiwn1pri262vscpy686li8cadm6avxqgypj9hylgdyibj33z"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/jackc/puddle"))
-    (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/jackc/puddle")
     (synopsis "Puddle")
     (description "Package puddle is a generic resource pool.")
@@ -7180,7 +7198,7 @@ and can be used with @url{https://github.com/lib/pq,https://github.com/lib/pq}."
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/coreos/go-systemd/v22"))
     (propagated-inputs
-      `(("go-github-com-godbus-dbus-v5" ,go-github-com-godbus-dbus-v5)))
+     (list go-github-com-godbus-dbus-v5))
     (home-page "https://github.com/coreos/go-systemd")
     (synopsis "go-systemd")
     (description "Go bindings to systemd.  The project has several packages:")
@@ -7223,12 +7241,11 @@ and can be used with @url{https://github.com/lib/pq,https://github.com/lib/pq}."
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/rs/zerolog"))
     (propagated-inputs
-      `(("go-golang-org-x-tools" ,go-golang-org-x-tools)
-        ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ("go-github-com-rs-xid" ,go-github-com-rs-xid)
-        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-        ("go-github-com-coreos-go-systemd-v22"
-         ,go-github-com-coreos-go-systemd-v22)))
+     (list go-golang-org-x-tools
+           go-golang-org-x-crypto
+           go-github-com-rs-xid
+           go-github-com-pkg-errors
+           go-github-com-coreos-go-systemd-v22))
     (home-page "https://github.com/rs/zerolog")
     (synopsis "Zero Allocation JSON Logger")
     (description
@@ -7358,11 +7375,12 @@ code portable")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/json-iterator/go"))
     (propagated-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-modern-go-reflect2" ,go-github-com-modern-go-reflect2)
-        ("go-github-com-modern-go-concurrent" ,go-github-com-modern-go-concurrent)
-        ("go-github-com-google-gofuzz" ,go-github-com-google-gofuzz)
-        ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)))
+     (list go-github-com-modern-go-reflect2
+           go-github-com-modern-go-concurrent
+           go-github-com-google-gofuzz
+           go-github-com-davecgh-go-spew))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/json-iterator/go")
     (synopsis "Benchmark")
     (description
@@ -7446,31 +7464,7 @@ documentation, please contact me.")
     (license license:bsd-3)))
 
 (define-public go-github-com-google-go-cmp
-  (package
-    (name "go-github-com-google-go-cmp")
-    (version "0.5.6")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/google/go-cmp")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0lrb0pacv5iy3m6fn1qb3nv7zwimfhpzqq8f6hwpwx88cx3g6p1s"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:unpack-path "github.com/google/go-cmp"
-       #:import-path "github.com/google/go-cmp/cmp"))
-    (propagated-inputs
-     (list go-golang-org-x-xerrors))
-    (home-page "https://github.com/google/go-cmp")
-    (synopsis "Package for equality of Go values")
-    (description
-     "This package is intended to be a more powerful and safer alternative to
-@code{reflect.DeepEqual} for comparing whether two values are semantically
-equal.")
-    (license license:bsd-3)))
+  (deprecated-package "go-github-com-google-go-cmp" go-github-com-google-go-cmp-cmp))
 
 (define-public go-lukechampine-com-uint128
   (package
@@ -7513,7 +7507,7 @@ receiver.  A @code{Uint128} value is therefore immutable, just like
     (build-system go-build-system)
     (arguments '(#:import-path "modernc.org/strutil"))
     (propagated-inputs
-     `(("go-modernc-org-mathutil" ,go-modernc-org-mathutil)))
+     (list go-modernc-org-mathutil))
     (home-page "https://modernc.org/strutil")
     (synopsis #f)
     (description
@@ -7609,7 +7603,7 @@ Token removed.")
     (build-system go-build-system)
     (arguments '(#:import-path "modernc.org/ccorpus"))
     (propagated-inputs
-     `(("go-modernc-org-httpfs" ,go-modernc-org-httpfs)))
+     (list go-modernc-org-httpfs))
     (home-page "https://modernc.org/ccorpus")
     (synopsis "ccorpus")
     (description "Package ccorpus provides a test corpus of C code.")
@@ -7643,17 +7637,15 @@ Token removed.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://gitlab.com/cznic/ccgo")
+               (url "https://gitlab.com/cznic/ccgo.git/")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
           (base32 "1ad9wvmnbrs4nix2jb0k9xhd1dvl4r2h3ifscjj7wybbbz820wsw"))))
     (build-system go-build-system)
     (arguments
-      '(#:import-path
-        "modernc.org/ccgo/v3"
-        #:unpack-path
-        "modernc.org/ccgo/v3"))
+      '(#:import-path "modernc.org/ccgo/v3"
+        #:unpack-path "modernc.org/ccgo/v3"))
     (propagated-inputs
       `(;("go-modernc-org-opt" ,go-modernc-org-opt)
         ;("go-modernc-org-mathutil" ,go-modernc-org-mathutil)
@@ -7708,8 +7700,7 @@ Token removed.")
     (build-system go-build-system)
     (arguments '(#:import-path "modernc.org/mathutil"))
     (propagated-inputs
-      `(("go-github-com-remyoudompheng-bigfft"
-         ,go-github-com-remyoudompheng-bigfft)))
+     (list go-github-com-remyoudompheng-bigfft))
     (home-page "https://modernc.org/mathutil")
     (synopsis #f)
     (description
@@ -7731,8 +7722,10 @@ Token removed.")
         (sha256
           (base32 "089b7qhz49rm5158icq7f4h0jgnpa6p803z70jsx5y2yxkgh8463"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "modernc.org/memory"))
-    (propagated-inputs `(("go-modernc-org-mathutil" ,go-modernc-org-mathutil)))
+    (arguments
+     '(#:import-path "modernc.org/memory"))
+    (propagated-inputs
+     (list go-modernc-org-mathutil))
     (home-page "https://modernc.org/memory")
     (synopsis "memory")
     (description "Package memory implements a memory allocator.")
@@ -7784,8 +7777,8 @@ implements selected parts of the C standard library.")
     (build-system go-build-system)
     (arguments '(#:import-path "modernc.org/z"))
     (propagated-inputs
-      `(("go-modernc-org-libc" ,go-modernc-org-libc)
-        ("go-modernc-org-ccgo-v3" ,go-modernc-org-ccgo-v3)))
+     (list go-modernc-org-libc
+           go-modernc-org-ccgo-v3))
     (home-page "https://modernc.org/z")
     (synopsis "z")
     (description "Package z implements the native Go API for zlib.")
@@ -7866,11 +7859,9 @@ library.")
      '(#:tests? #f      ; Tests try to connect to the Internet.
        #:import-path "xorm.io/builder"))
     (propagated-inputs
-      `(
-        ("go-gitea-com-xorm-sqlfiddle" ,go-gitea-com-xorm-sqlfiddle)))
+     (list go-gitea-com-xorm-sqlfiddle))
     (native-inputs
-      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ))
+     (list go-github-com-stretchr-testify))
     (home-page "https://xorm.io/builder")
     (synopsis "SQL builder")
     (description
@@ -7945,7 +7936,7 @@ versions, etc.")
         (method git-fetch)
         (uri (git-reference
                (url "https://github.com/zeripath/jwt")
-               (commit (go-version->git-ref version))))
+               (commit (string-append "v" (go-version->git-ref version)))))
         (file-name (git-file-name name version))
         (sha256
           (base32 "0hq8wz11g6kddx9ab0icl5h3k4lrivk1ixappnr5db2ng2wjks9c"))))
