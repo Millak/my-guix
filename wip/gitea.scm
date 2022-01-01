@@ -2583,7 +2583,14 @@ package.")
         (sha256
           (base32 "1plnyj0lmjn2x3r4isvc1rr957i7i4xkc8mmf5mrrc102g6dpfzn"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-openapi/analysis"))
+    (arguments
+     '(#:import-path "github.com/go-openapi/analysis"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'disable-network-tests
+           (lambda _
+             (substitute* "src/github.com/go-openapi/analysis/flatten_test.go"
+               (("TestFlatten_RemoteAbsolute") "DisableTestFlatten_RemoteAbsolute")))))))
     (propagated-inputs
      (list go-gopkg-in-yaml-v3
            go-github-com-mitchellh-mapstructure
@@ -2615,17 +2622,18 @@ from package go-openapi/spec.")
         (sha256
           (base32 "0n2bwrc00dn5a4vyni60h820qv9w2r1jpy8g1d4n0l5z8cfdmmp2"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-openapi/loads"))
+    (arguments
+     '(#:tests? #f      ; Test requirements introduce circular dependencies.
+       #:import-path "github.com/go-openapi/loads"))
     (propagated-inputs
-      ;; This package is cursed
-      `(;("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-go-openapi-validate" ,go-github-com-go-openapi-validate)
-        ("go-github-com-go-openapi-swag" ,go-github-com-go-openapi-swag)
-        ;("go-github-com-go-openapi-strfmt" ,go-github-com-go-openapi-strfmt)
-        ("go-github-com-go-openapi-spec" ,go-github-com-go-openapi-spec)
-        ("go-github-com-go-openapi-analysis" ,go-github-com-go-openapi-analysis)
-        ))
+     (list ;go-gopkg-in-yaml-v2
+        go-github-com-go-openapi-swag
+        go-github-com-go-openapi-strfmt
+        go-github-com-go-openapi-spec
+        go-github-com-go-openapi-analysis))
+    ;(native-inputs
+    ; (list go-github-com-go-openapi-validate
+    ;       go-github-com-stretchr-testify))
     (home-page "https://github.com/go-openapi/loads")
     (synopsis "Loads OAI specs")
     (description
@@ -2650,7 +2658,6 @@ specifications.")
     (arguments '(#:import-path "github.com/go-openapi/runtime"))
     (propagated-inputs
      (list ;go-gopkg-in-yaml-v2
-        ;go-github-com-stretchr-testify
         ;go-github-com-opentracing-opentracing-go
         ;go-github-com-go-openapi-validate
         go-github-com-go-openapi-swag
@@ -2661,6 +2668,8 @@ specifications.")
         ;go-github-com-go-openapi-analysis
         ;go-github-com-docker-go-units
         ))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/go-openapi/runtime")
     (synopsis "runtime")
     (description
@@ -2683,12 +2692,12 @@ specifications.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-openapi/jsonreference"))
     (propagated-inputs
-      `(;("go-golang-org-x-net" ,go-golang-org-x-net)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ("go-github-com-go-openapi-jsonpointer" ,go-github-com-go-openapi-jsonpointer)
-        ;("go-github-com-puerkitobio-urlesc" ,go-github-com-puerkitobio-urlesc)
-        ("go-github-com-puerkitobio-purell" ,go-github-com-puerkitobio-purell)
-        ))
+     (list ;go-golang-org-x-net
+        go-github-com-go-openapi-jsonpointer
+        ;go-github-com-puerkitobio-urlesc
+        go-github-com-puerkitobio-purell))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/go-openapi/jsonreference")
     (synopsis "gojsonreference")
     (description
@@ -2707,17 +2716,17 @@ specifications.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1gc92i6y9rcnzx1pz7q0k3s16pgpgmzgjyqvqzlyrds59jxc165s"))))
+         (base32 "1gc92i6y9rcnzx1pz7q0k3s16pgpgmzgjyqvqzlyrds59jxc165s"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-openapi/spec"))
     (propagated-inputs
      (list ;go-gopkg-in-yaml-v2
         ;go-golang-org-x-text
-        ;go-github-com-stretchr-testify
         go-github-com-go-openapi-swag
         go-github-com-go-openapi-jsonreference
-        go-github-com-go-openapi-jsonpointer
-        ))
+        go-github-com-go-openapi-jsonpointer))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/go-openapi/spec")
     (synopsis "OAI object model")
     (description "The object model for OpenAPI specification documents.")
@@ -2800,13 +2809,13 @@ errors.")
     (arguments '(#:import-path "github.com/go-openapi/strfmt"))
     (propagated-inputs
      (list go-go-mongodb-org-mongo-driver
-        ;go-github-com-stretchr-testify
         go-github-com-oklog-ulid
         go-github-com-mitchellh-mapstructure
-        ;go-github-com-google-uuid
+        go-github-com-google-uuid
         go-github-com-go-openapi-errors
-        go-github-com-asaskevich-govalidator
-        ))
+        go-github-com-asaskevich-govalidator))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/go-openapi/strfmt")
     (synopsis "Strfmt")
     (description "Package strfmt contains custom string formats")
@@ -2830,7 +2839,6 @@ errors.")
     (propagated-inputs
      (list ;go-gopkg-in-yaml-v3
         ;go-gopkg-in-yaml-v2
-        ;go-github-com-stretchr-testify
         go-github-com-go-openapi-swag
         go-github-com-go-openapi-strfmt
         go-github-com-go-openapi-spec
@@ -2838,12 +2846,13 @@ errors.")
         go-github-com-go-openapi-loads
         go-github-com-go-openapi-jsonpointer
         go-github-com-go-openapi-errors
-        go-github-com-go-openapi-analysis
-        ))
+        go-github-com-go-openapi-analysis))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/go-openapi/validate")
     (synopsis "Validation helpers")
     (description
-      "Package validate provides methods to validate a swagger specification, as well
+     "Package validate provides methods to validate a swagger specification, as well
 as tools to validate data against their schema.")
     (license license:asl2.0)))
 
@@ -3126,9 +3135,44 @@ format, as defined in RFC5208 and RFC5958")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "1g3nbnkkfgy8rr6h6c95r1kv6kib4wbmw3f5p77v0hq6qp0xwndj"))))
+         (base32 "1g3nbnkkfgy8rr6h6c95r1kv6kib4wbmw3f5p77v0hq6qp0xwndj"))
+        (modules '((guix build utils)))
+        (snippet
+         '(begin
+            (delete-file-recursively "vendor")))))
     (build-system go-build-system)
-    (arguments '(#:import-path "go.mongodb.org/mongo-driver"))
+    (arguments
+     '(#:import-path "go.mongodb.org/mongo-driver"
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'build
+           (lambda* (#:key import-path build-flags #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'build)
+                  #:build-flags build-flags
+                  #:import-path (string-append "go.mongodb.org/mongo-driver/" directory)))
+               (list "bson"
+                     "internal"
+                     "mongo"
+                     "x/bsonx"
+                     "x/mongo/driver"))))
+         (replace 'check
+           (lambda* (#:key tests? import-path #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'check)
+                  #:tests? tests?
+                  #:import-path (string-append "go.mongodb.org/mongo-driver/" directory)))
+               (list "bson"
+                     "internal"
+                     ;"mongo"       ; Wants a running mongodb server.
+                     "x/bsonx"
+                     "x/mongo/driver"))))
+         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
+           (lambda* (#:key outputs #:allow-other-keys)
+             (for-each make-file-writable
+                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
     (propagated-inputs
      (list go-gopkg-in-check-v1
            go-golang-org-x-tools
@@ -3206,6 +3250,10 @@ recipients.")
           (base32 "0c525frsxmalrn55hzzsxy17ng8avkd40ga0wxfw9haxsdjgqdqy"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/PuerkitoBio/purell"))
+    (propagated-inputs
+     (list go-github-com-puerkitobio-urlesc
+           go-golang-org-x-net
+           go-golang-org-x-text))
     (home-page "https://github.com/PuerkitoBio/purell")
     (synopsis "Purell")
     (description
@@ -3802,7 +3850,90 @@ easier.")
         (sha256
           (base32 "0prrpv0x7nbq5k6swn2jwypzxa8h4aj5lgyw372n6c8ln34fh9jq"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/keybase/go-crypto"))
+    (arguments
+     '(#:import-path "github.com/keybase/go-crypto"
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'build
+           (lambda* (#:key import-path build-flags #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'build)
+                  #:build-flags build-flags
+                  #:import-path (string-append "github.com/keybase/go-crypto/" directory)))
+               (list
+                     "poly1305"
+                     "pkcs12"
+                     "otr"
+                     "brainpool"
+                     "scrypt"
+                     "salsa20"
+                     "blowfish"
+                     "pbkdf2"
+                     "md4"
+                     "ed25519"
+                     "nacl/secretbox"
+                     "nacl/box"
+                     "xtea"
+                     "cast5"
+                     "curve25519"
+                     "hkdf"
+                     "rsa"
+                     "ssh/terminal"
+                     "ocsp"
+                     "openpgp"
+                     "bcrypt"
+                     "sha3"
+                     "xts"
+                     "twofish"
+                     "tea"
+                     "ripemd160"
+                     "bn256"
+                     ))))
+         (replace 'check
+           (lambda* (#:key tests? import-path #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'check)
+                  #:tests? tests?
+                  #:import-path (string-append "github.com/keybase/go-crypto/" directory)))
+               (list
+                     "poly1305"
+                     "pkcs12"
+                     "otr"
+                     "brainpool"
+                     "scrypt"
+                     "salsa20"
+                     "blowfish"
+                     "pbkdf2"
+                     "md4"
+                     "ed25519"
+                     "nacl/secretbox"
+                     "nacl/box"
+                     "xtea"
+                     "cast5"
+                     "curve25519"
+                     "hkdf"
+                     "rsa"
+                     "ssh/terminal"
+                     "ocsp"
+                     "openpgp"
+                     "bcrypt"
+                     "sha3"
+                     "xts"
+                     "twofish"
+                     "tea"
+                     "ripemd160"
+                     "bn256"
+                     ))))
+         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
+           (lambda* (#:key outputs #:allow-other-keys)
+             (for-each make-file-writable
+                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
+    (propagated-inputs
+     (list
+           go-golang-org-x-sys
+           ))
     (home-page "https://github.com/keybase/go-crypto")
     (synopsis #f)
     (description #f)
@@ -3824,20 +3955,23 @@ easier.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/lafriks/xormstore"))
     (propagated-inputs
-      `(;("go-xorm-io-xorm" ,go-xorm-io-xorm)
-        ;("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
-        ;("go-golang-org-x-text" ,go-golang-org-x-text)
-        ;("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-        ;("go-github-com-mattn-go-sqlite3" ,go-github-com-mattn-go-sqlite3)
-        ;("go-github-com-lib-pq" ,go-github-com-lib-pq)
-        ;("go-github-com-kr-pretty" ,go-github-com-kr-pretty)
-        ;("go-github-com-gorilla-sessions" ,go-github-com-gorilla-sessions)
-        ;("go-github-com-gorilla-securecookie" ,go-github-com-gorilla-securecookie)
-        ;("go-github-com-gorilla-context" ,go-github-com-gorilla-context)
-        ;("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
-        ;("go-github-com-go-sql-driver-mysql" ,go-github-com-go-sql-driver-mysql)
-        ;("go-github-com-denisenkom-go-mssqldb" ,go-github-com-denisenkom-go-mssqldb)
-        ))
+     (list go-xorm-io-xorm
+           ;go-gopkg-in-check-v1
+           ;go-golang-org-x-text
+           ;go-golang-org-x-crypto
+           ;go-github-com-kr-pretty
+           go-github-com-gorilla-sessions
+           go-github-com-gorilla-securecookie
+           go-github-com-gorilla-context
+           ;go-github-com-golang-protobuf
+           ))
+    (native-inputs
+     (list
+           go-github-com-denisenkom-go-mssqldb
+           go-github-com-go-sql-driver-mysql
+           go-github-com-lib-pq
+           go-github-com-mattn-go-sqlite3
+           ))
     (home-page "https://github.com/lafriks/xormstore")
     (synopsis "XORM backend for gorilla sessions")
     (description "Package xormstore is a XORM backend for gorilla sessions")
@@ -4211,7 +4345,28 @@ for the end-user to do what they will with.")
         (sha256
           (base32 "07601yzh1dgldi2pp7lvbrlhfd17wqvdqfcxl44jg2n9dmcbmaam"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/lestrrat-go/iter"))
+    (arguments
+     '(#:import-path "github.com/lestrrat-go/iter"
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'build
+           (lambda* (#:key import-path build-flags #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'build)
+                  #:build-flags build-flags
+                  #:import-path (string-append "github.com/lestrrat-go/iter/" directory)))
+               (list "arrayiter"
+                     "mapiter"))))
+         (replace 'check
+           (lambda* (#:key tests? import-path #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'check)
+                  #:tests? tests?
+                  #:import-path (string-append "github.com/lestrrat-go/iter/" directory)))
+               (list "arrayiter"
+                     "mapiter")))))))
     (propagated-inputs
      (list go-github-com-pkg-errors))
     (native-inputs
@@ -4427,6 +4582,8 @@ and MS Windows.  Go 1.9 is the oldest compiler release supported.")
           (base32 "1c1d335q1i3mz55bhs2k84rcrz4xdaps2y63vwkyv9fsjpb2wnzb"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/serenize/snaker"))
+    (native-inputs
+     (list go-github-com-onsi-ginkgo))
     (home-page "https://github.com/serenize/snaker")
     (synopsis "snaker")
     (description
@@ -4720,13 +4877,22 @@ the @code{c2go} tool at
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0m66jcsz27076qvi5qzagzlbyd1sdzh6kbf1njj0sswx86026rx3"))))
+         (base32 "0m66jcsz27076qvi5qzagzlbyd1sdzh6kbf1njj0sswx86026rx3"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/klauspost/pgzip"))
+    (arguments
+     '(#:import-path "github.com/klauspost/pgzip"
+       #:phases
+       (modify-phases %standard-phases
+         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
+           (lambda* (#:key outputs #:allow-other-keys)
+             (for-each make-file-writable
+                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
+    (propagated-inputs
+     (list go-github-com-klauspost-compress))
     (home-page "https://github.com/klauspost/pgzip")
     (synopsis "pgzip")
     (description
-      "Package pgzip implements reading and writing of gzip format compressed files, as
+     "Package pgzip implements reading and writing of gzip format compressed files, as
 specified in @url{https://rfc-editor.org/rfc/rfc1952.html,RFC 1952}.")
     (license license:expat)))
 
@@ -4769,6 +4935,7 @@ specified in @url{https://rfc-editor.org/rfc/rfc1952.html,RFC 1952}.")
     (home-page "https://github.com/xi2/xz")
     (synopsis #f)
     (description #f)
+    ;; same license as xz?
     (license #f)))
 
 (define-public go-github-com-mholt-archiver-v3
@@ -4783,9 +4950,16 @@ specified in @url{https://rfc-editor.org/rfc/rfc1952.html,RFC 1952}.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1py186hfy4p69wghqmbsyi1r3xvw1nyl55pz8f97a5qhmwxb3mwp"))))
+         (base32 "1py186hfy4p69wghqmbsyi1r3xvw1nyl55pz8f97a5qhmwxb3mwp"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/mholt/archiver/v3"))
+    (arguments
+     '(#:import-path "github.com/mholt/archiver/v3"
+       #:phases
+       (modify-phases %standard-phases
+         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
+           (lambda* (#:key outputs #:allow-other-keys)
+             (for-each make-file-writable
+                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
     (propagated-inputs
      (list go-github-com-xi2-xz
            go-github-com-ulikunitz-xz
@@ -4889,9 +5063,17 @@ less-is-more principle, by presenting a small, clean interface.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "082rsdnaqx36685h55lj4kl97x5cjaifjpdci0cg6bhbdl6isd1h"))))
+         (base32 "082rsdnaqx36685h55lj4kl97x5cjaifjpdci0cg6bhbdl6isd1h"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/minio/minio-go/v7"))
+    (arguments
+     '(#:import-path "github.com/minio/minio-go/v7"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'disable-network-tests
+           (lambda _
+             (substitute* "src/github.com/minio/minio-go/v7/core_test.go"
+               (("TestGet") "DisabledTestGet")
+               (("TestCore") "DisabledTestCore")))))))
     (propagated-inputs
      (list go-gopkg-in-yaml-v2
            go-golang-org-x-text
@@ -5317,10 +5499,10 @@ below:")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/lyft/protoc-gen-star"))
     (propagated-inputs
-      `(;("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-spf13-afero" ,go-github-com-spf13-afero)
-        ;("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
+     (list ;go-google-golang-org-protobuf
+        ;go-github-com-stretchr-testify
+        ;go-github-com-spf13-afero
+        ;go-github-com-golang-protobuf
         ))
     (home-page "https://github.com/lyft/protoc-gen-star")
     (synopsis "protoc-gen-star (PG*)")
@@ -5508,19 +5690,19 @@ google.api.http)} annotations in your service definitions.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/envoyproxy/go-control-plane"))
     (propagated-inputs
-      `(;("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-        ;("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
-        ;("go-google-golang-org-genproto" ,go-google-golang-org-genproto)
-        ;("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ;("go-golang-org-x-net" ,go-golang-org-x-net)
-        ;("go-go-opentelemetry-io-proto-otlp" ,go-go-opentelemetry-io-proto-otlp)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-prometheus-client-model" ,go-github-com-prometheus-client-model)
-        ;("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-        ;("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
-        ;("go-github-com-envoyproxy-protoc-gen-validate" ,go-github-com-envoyproxy-protoc-gen-validate)
-        ;("go-github-com-cncf-xds-go" ,go-github-com-cncf-xds-go)
-        ;("go-github-com-census-instrumentation-opencensus-proto" ,go-github-com-census-instrumentation-opencensus-proto)
+     (list ;go-google-golang-org-protobuf
+        ;go-google-golang-org-grpc
+        ;go-google-golang-org-genproto
+        ;go-golang-org-x-sys
+        ;go-golang-org-x-net
+        ;go-go-opentelemetry-io-proto-otlp
+        ;go-github-com-stretchr-testify
+        ;go-github-com-prometheus-client-model
+        ;go-github-com-google-go-cmp
+        ;go-github-com-golang-protobuf
+        ;go-github-com-envoyproxy-protoc-gen-validate
+        ;go-github-com-cncf-xds-go
+        ;go-github-com-census-instrumentation-opencensus-proto
         ))
     (home-page "https://github.com/envoyproxy/go-control-plane")
     (synopsis "control-plane")
@@ -5570,12 +5752,12 @@ by the -v and -vmodule=file=2 flags.")
     (build-system go-build-system)
     (arguments '(#:import-path "google.golang.org/genproto"))
     (propagated-inputs
-      `(;("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-        ;("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
-        ;("go-golang-org-x-text" ,go-golang-org-x-text)
-        ;("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ;("go-golang-org-x-net" ,go-golang-org-x-net)
-        ;("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
+     (list ;go-google-golang-org-protobuf
+        ;go-google-golang-org-grpc
+        ;go-golang-org-x-text
+        ;go-golang-org-x-sys
+        ;go-golang-org-x-net
+        ;go-github-com-golang-protobuf
         ))
     (home-page "https://google.golang.org/genproto")
     (synopsis "Go generated proto packages")
@@ -5601,19 +5783,19 @@ interacting with Google's gRPC APIs.")
     (build-system go-build-system)
     (arguments '(#:import-path "google.golang.org/grpc"))
     (propagated-inputs
-      `(;("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-        ;("go-google-golang-org-genproto" ,go-google-golang-org-genproto)
-        ;("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ;("go-golang-org-x-oauth2" ,go-golang-org-x-oauth2)
-        ;("go-golang-org-x-net" ,go-golang-org-x-net)
-        ;("go-github-com-google-uuid" ,go-github-com-google-uuid)
-        ;("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-        ;("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
-        ;("go-github-com-golang-glog" ,go-github-com-golang-glog)
-        ;("go-github-com-envoyproxy-go-control-plane" ,go-github-com-envoyproxy-go-control-plane)
-        ;("go-github-com-cncf-xds-go" ,go-github-com-cncf-xds-go)
-        ;("go-github-com-cncf-udpa-go" ,go-github-com-cncf-udpa-go)
-        ;("go-github-com-cespare-xxhash-v2" ,go-github-com-cespare-xxhash-v2)
+     (list ;go-google-golang-org-protobuf
+        ;go-google-golang-org-genproto
+        ;go-golang-org-x-sys
+        ;go-golang-org-x-oauth2
+        ;go-golang-org-x-net
+        ;go-github-com-google-uuid
+        ;go-github-com-google-go-cmp
+        ;go-github-com-golang-protobuf
+        ;go-github-com-golang-glog
+        ;go-github-com-envoyproxy-go-control-plane
+        ;go-github-com-cncf-xds-go
+        ;go-github-com-cncf-udpa-go
+        ;go-github-com-cespare-xxhash-v2
         ))
     (home-page "https://google.golang.org/grpc")
     (synopsis "gRPC-Go")
@@ -5636,12 +5818,12 @@ interacting with Google's gRPC APIs.")
     (build-system go-build-system)
     (arguments '(#:import-path "go.opencensus.io"))
     (propagated-inputs
-      `(;("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
-        ;("go-golang-org-x-net" ,go-golang-org-x-net)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-        ;("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
-        ;("go-github-com-golang-groupcache" ,go-github-com-golang-groupcache)
+     (list ;go-google-golang-org-grpc
+        ;go-golang-org-x-net
+        ;go-github-com-stretchr-testify
+        ;go-github-com-google-go-cmp
+        ;go-github-com-golang-protobuf
+        ;go-github-com-golang-groupcache
         ))
     (home-page "https://go.opencensus.io")
     (synopsis "OpenCensus Libraries for Go")
@@ -5662,20 +5844,25 @@ interacting with Google's gRPC APIs.")
         (sha256
           (base32 "105bcf5477sv6a31kfk8zfyfnyvi5gxhxvax3rc1wpgml5grgl4p"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/olivere/elastic/v7"))
+    (arguments
+     '(#:tests? #f      ; Tests require elasticsearch node.
+       #:import-path "github.com/olivere/elastic/v7"))
     (propagated-inputs
-      `(;("go-go-opencensus-io" ,go-go-opencensus-io)
-        ;("go-github-com-smartystreets-gunit"  ,go-github-com-smartystreets-gunit)
-        ;("go-github-com-smartystreets-go-aws-auth" ,go-github-com-smartystreets-go-aws-auth)
-        ;("go-github-com-smartystreets-assertions" ,go-github-com-smartystreets-assertions)
-        ;("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-        ;("go-github-com-opentracing-opentracing-go" ,go-github-com-opentracing-opentracing-go)
-        ;("go-github-com-mailru-easyjson" ,go-github-com-mailru-easyjson)
-        ;("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-        ;("go-github-com-golang-groupcache" ,go-github-com-golang-groupcache)
-        ;("go-github-com-fortytw2-leaktest" ,go-github-com-fortytw2-leaktest)
-        ;("go-github-com-aws-aws-sdk-go" ,go-github-com-aws-aws-sdk-go)
+     (list ;go-go-opencensus-io
+        ;go-github-com-smartystreets-gunit
+        ;go-github-com-smartystreets-go-aws-auth
+        ;go-github-com-smartystreets-assertions
+        go-github-com-pkg-errors
+        ;go-github-com-opentracing-opentracing-go
+        go-github-com-mailru-easyjson
+        ;go-github-com-golang-groupcache
+        ;go-github-com-aws-aws-sdk-go
         ))
+    (native-inputs
+     (list
+        go-github-com-google-go-cmp
+        go-github-com-fortytw2-leaktest
+       ))
     (home-page "https://github.com/olivere/elastic")
     (synopsis "Elastic")
     (description
@@ -6387,38 +6574,39 @@ retryablehttp very easy to drop into existing programs.")
     (license license:mpl2.0)))
 
 (define-public go-google-golang-org-protobuf
-  (package
-    (name "go-google-golang-org-protobuf")
-    (version "1.27.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://go.googlesource.com/protobuf")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "0aszb7cv8fq1m8akgd4kjyg5q7g5z9fdqnry6057ygq9r8r2yif2"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "google.golang.org/protobuf"))
-    (propagated-inputs
-     (list go-github-com-google-go-cmp
-        ;go-github-com-golang-protobuf)
-        ))
-    (home-page "https://google.golang.org/protobuf")
-    (synopsis "Go support for Protocol Buffers")
-    (description
-      "This project hosts the Go implementation for
-@url{https://developers.google.com/protocol-buffers,protocol buffers}, which is
-a language-neutral, platform-neutral, extensible mechanism for serializing
-structured data.  The protocol buffer language is a language for specifying the
-schema for structured data.  This schema is compiled into language specific
-bindings.  This project provides both a tool to generate Go code for the
-protocol buffer language, and also the runtime implementation to handle
-serialization of messages in Go.  See the
-@url{https://developers.google.com/protocol-buffers/docs/overview,protocol
-buffer developer guide} for more information about protocol buffers themselves.")
-    (license license:bsd-3)))
+  (deprecated-package "go-github-com-golang-org-protobuf" go-github-com-golang-protobuf-proto))
+;  (package
+;    (name "go-google-golang-org-protobuf")
+;    (version "1.27.1")
+;    (source
+;      (origin
+;        (method git-fetch)
+;        (uri (git-reference
+;               (url "https://go.googlesource.com/protobuf")
+;               (commit (string-append "v" version))))
+;        (file-name (git-file-name name version))
+;        (sha256
+;          (base32 "0aszb7cv8fq1m8akgd4kjyg5q7g5z9fdqnry6057ygq9r8r2yif2"))))
+;    (build-system go-build-system)
+;    (arguments '(#:import-path "google.golang.org/protobuf"))
+;    (propagated-inputs
+;     (list go-github-com-google-go-cmp
+;        ;go-github-com-golang-protobuf)
+;        ))
+;    (home-page "https://google.golang.org/protobuf")
+;    (synopsis "Go support for Protocol Buffers")
+;    (description
+;      "This project hosts the Go implementation for
+;@url{https://developers.google.com/protocol-buffers,protocol buffers}, which is
+;a language-neutral, platform-neutral, extensible mechanism for serializing
+;structured data.  The protocol buffer language is a language for specifying the
+;schema for structured data.  This schema is compiled into language specific
+;bindings.  This project provides both a tool to generate Go code for the
+;protocol buffer language, and also the runtime implementation to handle
+;serialization of messages in Go.  See the
+;@url{https://developers.google.com/protocol-buffers/docs/overview,protocol
+;buffer developer guide} for more information about protocol buffers themselves.")
+;    (license license:bsd-3)))
 
 (define-public go-github-com-golang-protobuf
   (deprecated-package "go-github-com-golang-protobuf" go-github-com-golang-protobuf-proto))
@@ -6539,11 +6727,14 @@ buffer developer guide} for more information about protocol buffers themselves."
         (sha256
           (base32 "1dl2pjwd8j1pf09zhsb9xkz1q59kgjgv0q0w7lgwsrfpgajdqyw4"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/yuin/goldmark-highlighting"))
+    (arguments
+     '(#:tests? #f      ; TODO: figure out undefined testutil.DiffPretty
+       #:import-path "github.com/yuin/goldmark-highlighting"))
     (propagated-inputs
-     (list go-github-com-yuin-goldmark
+     (list go-github-com-alecthomas-chroma
+           go-github-com-danwakefield-fnmatch
            go-github-com-dlclark-regexp2
-           go-github-com-alecthomas-chroma))
+           go-github-com-yuin-goldmark))
     (home-page "https://github.com/yuin/goldmark-highlighting")
     (synopsis "goldmark-highlighting")
     (description
@@ -6590,7 +6781,9 @@ goldmark(@url{http://github.com/yuin/goldmark,http://github.com/yuin/goldmark}).
         (sha256
           (base32 "1p38amhjqh9wglzzcdggsn1dymd6alcq5mva3xal7ygd95ybffkn"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "go.jolheiser.com/hcaptcha"))
+    (arguments
+     '(#:tests? #f      ; Tests require network access.
+       #:import-path "go.jolheiser.com/hcaptcha"))
     (home-page "https://go.jolheiser.com/hcaptcha")
     (synopsis "hCaptcha")
     (description
@@ -7917,6 +8110,8 @@ versions, etc.")
           (base32 "0hq8wz11g6kddx9ab0icl5h3k4lrivk1ixappnr5db2ng2wjks9c"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/zeripath/jwt"))
+    (native-inputs
+     (list go-github-com-golang-jwt-jwt))
     (home-page "https://github.com/zeripath/jwt")
     (synopsis "jwt-go")
     (description
