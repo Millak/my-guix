@@ -5038,31 +5038,6 @@ object storage.")
     (description "Package cutter provides a function to crop image.")
     (license license:expat)))
 
-(define-public go-github-com-aws-aws-sdk-go
-  (package
-    (name "go-github-com-aws-aws-sdk-go")
-    (version "1.42.25")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/aws/aws-sdk-go")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "01y5cnhwwl8xka7hb8x3gjdc90f19j7myi3n89mghvxd6y42zjc6"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/aws/aws-sdk-go"))
-    (propagated-inputs
-     (list go-golang-org-x-net
-           go-github-com-pkg-errors
-           go-github-com-jmespath-go-jmespath))
-    (home-page "https://github.com/aws/aws-sdk-go")
-    (synopsis "AWS SDK for Go")
-    (description
-      "Package sdk is the official AWS SDK for the Go programming language.")
-    (license license:asl2.0)))
-
 (define-public go-github-com-fortytw2-leaktest
   (package
     (name "go-github-com-fortytw2-leaktest")
