@@ -15,7 +15,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (dfsg main arcticfox)
+(define-module (wip arcticfox)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build utils)
   #:use-module (guix git-download)
@@ -25,6 +25,7 @@
   #:use-module (gnu packages)
   #:use-module (gnu packages assembly)
   #:use-module (gnu packages autotools)
+  #:use-module (gnu packages bash)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages gcc)
   #:use-module (gnu packages gl)
@@ -51,17 +52,16 @@
         (revision "1"))
     (package
       (name "arcticfox")
-      (version (git-version "27.11.0" revision commit))
+      (version "39.0")
       (source
         (origin
           (method git-fetch)
             (uri (git-reference
                    (url "https://github.com/wicknix/Arctic-Fox")
-                   (commit commit)))
+                   (commit (string-append "v" version))))
             (file-name (git-file-name name version))
             (sha256
-             (base32
-              "07mh8apn84ywxsxdncyqrvylgmym8r7sf2lgjwzpaylr79jk8s76"))
+             (base32 "0xqdpansfha762352q0j2pd68b30jp44l2bsmbgmm5bcdlc5r2py"))
             (modules '((guix build utils)))
             (snippet
              '(begin
@@ -84,8 +84,7 @@
                             "modules/zlib"
                             "js/src/ctypes/libffi"
                             "security/nss"
-                            "security/sandbox/chromium-shim/base/third_party"))
-                #t))))
+                            "security/sandbox/chromium-shim/base/third_party"))))))
       (build-system gnu-build-system)
       (arguments
        `(#:tests? #f          ; check target removed
@@ -135,8 +134,7 @@
                (let ((ffmpeg (assoc-ref inputs "ffmpeg")))
                  (substitute* "dom/media/platforms/ffmpeg/FFmpegRuntimeLinker.cpp"
                    (("libavcodec\\.so" all)
-                    (string-append ffmpeg "/lib/" all)))
-                 #t)))
+                    (string-append ffmpeg "/lib/" all))))))
            (replace 'configure
              ;; configure does not work followed by both "SHELL=..." and
              ;; "CONFIG_SHELL=..."; set environment variables instead
@@ -153,7 +151,7 @@
                      (format #t "export LDFLAGS=\"-Wl,-rpath=~a/lib/arcticfox-~a\"~@
                              mk_add_options MOZ_MAKE_FLAGS=\"-s -j~a\"~@
                              ~{ac_add_options ~a\n~} ~%"
-                             out ,(version-major+minor+point version)
+                             out ,(version-major+minor version)
                              (number->string (parallel-job-count)) flags)))
                  (setenv "SHELL" bash)
                  (setenv "CONFIG_SHELL" bash)
@@ -171,13 +169,11 @@
            (replace 'check
              (lambda* (#:key tests? #:allow-other-keys)
                (when tests?
-                 (invoke "./mach" "test"))
-               #t))
+                 (invoke "./mach" "test"))))
            (replace 'install
              (lambda* (#:key outputs #:allow-other-keys)
                (let ((out (assoc-ref outputs "out")))
-                 (invoke "./mach" "install")
-               #t)))
+                 (invoke "./mach" "install"))))
            (add-after 'install 'install-desktop-file
              (lambda* (#:key outputs #:allow-other-keys)
                (let* ((out (assoc-ref outputs "out"))
@@ -203,8 +199,7 @@
                              [Desktop Action new-window]~@
                              Name=Open a New Window~@
                              Exec=~@*~a/bin/arcticfox -new-window%"
-                             out))))
-                        #t))
+                             out))))))
            (add-after 'install 'wrap-program
              (lambda* (#:key inputs outputs #:allow-other-keys)
                (let* ((out (assoc-ref outputs "out"))
@@ -219,13 +214,12 @@
                       (pulseaudio-lib (string-append pulseaudio "/lib")))
                  (wrap-program (car (find-files lib "^arcticfox$"))
                    `("XDG_DATA_DIRS" prefix (,gtk-share))
-                   `("LD_LIBRARY_PATH" prefix (,pulseaudio-lib ,mesa-lib ,libpng-lib)))
-               #t))))))
+                   `("LD_LIBRARY_PATH" prefix (,pulseaudio-lib ,mesa-lib ,libpng-lib)))))))))
       (native-inputs
        `(("autoconf" ,((@@ (gnu packages autotools)
                            make-autoconf-wrapper) autoconf-2.13))
          ("automake" ,automake)
-         ("gcc" ,gcc-6)     ; not gcc-7
+         ;("gcc" ,gcc-6)     ; not gcc-7
          ("perl" ,perl)
          ("pkg-config" ,pkg-config)
          ("python" ,python-2)
@@ -235,12 +229,13 @@
          ("zip" ,zip)))
       (inputs
        `(("alsa-lib" ,alsa-lib)
+         ("bash-minimal" ,bash-minimal)
          ("cairo" ,cairo)
          ("dbus-glib" ,dbus-glib)
          ("ffmpeg" ,ffmpeg)
-         ("gdk-pixbuf" ,gdk-pixbuf+svg)
+         ("gdk-pixbuf" ,gdk-pixbuf)
          ("glib" ,glib)
-         ("gtk" ,gtk+-2)
+         ("gtk+@2" ,gtk+-2)
          ("gtk+" ,gtk+)
          ("hunspell" ,hunspell)
          ;("icu4c" ,icu4c)
@@ -248,6 +243,7 @@
          ("libjpeg-turbo" ,libjpeg-turbo)
          ;("libevent" ,libevent)
          ("libffi" ,libffi)
+         ;("librsvg" ,librsvg)
          ("libvpx" ,libvpx)
          ;("libwebp" ,libwebp)
          ("libxt" ,libxt)
