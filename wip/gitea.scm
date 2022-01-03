@@ -1,4 +1,4 @@
-;;; Copyright © 2021 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2021, 2022 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -31,17 +31,62 @@
   #:use-module (gnu packages textutils)
   #:use-module (gnu packages version-control))
 
+(define-public go-golang-org-x-sys-next
+  (package
+    (name "go-golang-org-x-sys")
+    (version "0.0.0-20211216021012-1d35b9e2eb4e")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://go.googlesource.com/sys")
+               (commit (go-version->git-ref version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32 "09xmnw6hhpqnakm99xxigg0znbx46f084lpacz67p5rbcdngjxis"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "golang.org/x/sys"
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'build
+           (lambda* (#:key import-path build-flags #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'build)
+                  #:build-flags build-flags
+                  #:import-path (string-append "golang.org/x/sys/" directory)))
+               (list "cpu"
+                     "execabs"
+                     "unix"))))
+         (replace 'check
+           (lambda* (#:key tests? import-path #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'check)
+                  #:tests? tests?
+                  #:import-path (string-append "golang.org/x/sys/" directory)))
+               (list "cpu"
+                     "execabs"
+                     "unix")))))))
+    (home-page "https://golang.org/x/sys")
+    (synopsis "sys")
+    (description
+      "This repository holds supplemental Go packages for low-level interactions with
+the operating system.")
+    (license license:bsd-3)))
+
 (define-public gitea
   (package
     (name "gitea")
-    (version "1.14.6")
+    (version "1.14.7")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://github.com/go-gitea/gitea/releases"
                                   "/download/v" version
                                   "/gitea-src-" version ".tar.gz"))
               (sha256
-               (base32 "0nkv5a49iryx806fba76l8y7pbx0vir7npf6hf53wc4zaqk0x2i0"))
+               (base32 "0rgh89qb2iqdy2whdk46z89lss0pj2ik8ay44i0pmrbmkvxg5zn2"))
               (modules '((guix build utils)))
               (snippet
                '(begin
@@ -50,6 +95,8 @@
     (build-system go-build-system)
     (arguments
      `(#:install-source? #f
+       #:import-path "code.gitea.io/gitea"
+       ;#:build-flags (list "-tags bindata sqlite sqlite_unlock_notify")
        #:phases
        (modify-phases %standard-phases
          (add-after 'patch-source-shebangs 'unpatch-example-shebangs
@@ -64,16 +111,20 @@
                (("#!/gnu/store/.*/bin/sh") "#!/bin/sh"))))
          (add-before 'build 'prepare-build
            (lambda _
-             (setenv "TAGS" "bindata sqlite sqlite_unlock_notify")))
-         (replace 'build
-           (lambda _
-             (with-directory-excursion "src"
+             (setenv "TAGS" "bindata sqlite sqlite_unlock_notify")
+         ;    ))
+         ;(replace 'build
+         ;  (lambda _
+             (with-directory-excursion "src/code.gitea.io/gitea"
                (substitute* "Makefile"
                  (("-mod=vendor") "")
+                 (("go-check generate") "go-check")
                  ;(("(GO_DIRS := .) vendor(.*)" all first last)
                  ; (string-append first last "\n"))
                  )
-               (invoke "make" "build"))))
+         ;      (invoke "make" "build")
+               )
+             ))
          (replace 'check
            (lambda* (#:key tests? #:allow-other-keys)
              (when tests?
@@ -188,6 +239,7 @@
            go-github-com-issue9-assert
            go-github-com-imdario-mergo
            go-github-com-huandu-xstrings
+           go-github-com-hashicorp-go-version-1.3.0
            go-github-com-hashicorp-go-retryablehttp
            go-github-com-hashicorp-go-cleanhttp
            go-github-com-gorilla-sessions
@@ -225,6 +277,7 @@
            go-github-com-couchbase-goutils
            go-github-com-couchbase-gomemcached
            go-github-com-couchbase-go-couchbase
+           go-github-com-chris-ramon-douceur
            go-github-com-chi-middleware-proxy
            go-github-com-caddyserver-certmagic
            go-github-com-bradfitz-gomemcache
@@ -242,7 +295,7 @@
            go-gitea-com-go-chi-captcha
            go-gitea-com-go-chi-cache
            go-gitea-com-go-chi-binding
-           ;go-code-gitea-io-sdk-gitea      ; TODO: import
+           go-code-gitea-io-sdk-gitea
            go-code-gitea-io-gitea-vet
            go-cloud-google-com-go))
     (home-page "https://gitea.io/")
@@ -252,6 +305,60 @@
     (properties
       '((release-monitoring-url . "https://github.com/go-gitea/gitea/releases")))
     (license license:expat)))
+
+(define-public go-code-gitea-io-sdk-gitea
+  (package
+    (name "go-code-gitea-io-sdk-gitea")
+    (version "0.14.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://gitea.com/gitea/go-sdk")
+               (commit (string-append "gitea/v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32 "0a5dp0wlinnjacv7a6qkkg9ninqqbf8qrdfjr7is0kxvlkr0ih7f"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f      ; TODO: Fix
+       #:unpack-path "code.gitea.io/sdk"
+       #:import-path "code.gitea.io/sdk/gitea"))
+    (propagated-inputs
+     (list go-github-com-hashicorp-go-version-1.3.0))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
+    (home-page "https://code.gitea.io/sdk")
+    (synopsis "Gitea SDK for Go")
+    (description
+      "This project acts as a client SDK implementation written in Go to interact with
+the Gitea API implementation.  For further informations take a look at the
+current @url{https://godoc.org/code.gitea.io/sdk/gitea,documentation}.")
+    (license license:expat)))
+
+(define-public go-github-com-hashicorp-go-version-1.3.0
+  (package
+    (name "go-github-com-hashicorp-go-version")
+    (version "1.3.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/hashicorp/go-version")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+          (base32 "15ygnddqh4wq1l866cicc9cmbcqvym16ai8dj71i0wqyknnfxr3v"))))
+    (build-system go-build-system)
+    (arguments '(#:import-path "github.com/hashicorp/go-version"))
+    (home-page "https://github.com/hashicorp/go-version")
+    (synopsis "Versioning Library for Go")
+    (description
+      "go-version is a library for parsing versions and version constraints, and
+verifying versions against a set of constraints.  go-version can sort a
+collection of versions properly, handles prerelease/beta versions, can increment
+versions, etc.")
+    (license license:mpl2.0)))
 
 (define-public go-code-gitea-io-gitea-vet
   (package
@@ -2378,7 +2485,6 @@ free to implement mocks and testing over filesystem operations.")
       "Package warnings implements error handling with non-fatal errors (warnings).")
     (license license:bsd-2)))
 
-;; Needs a newer go-golang-org-x-sys
 (define-public go-github-com-go-git-go-git-v5
   (package
     (name "go-github-com-go-git-go-git-v5")
@@ -2393,12 +2499,45 @@ free to implement mocks and testing over filesystem operations.")
         (sha256
           (base32 "08kdknkrh9qks8qykmd1hmc573cb6qbb4b10f57k3kik4ygq2frj"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-git/go-git/v5"))
+    (arguments
+     '(#:tests? #f      ; Unlabeled test fails.
+       #:import-path "github.com/go-git/go-git/v5"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'disable-network-tests
+           (lambda _
+             (setenv "GIT_AUTHOR_NAME" "Your Name")
+             (setenv "GIT_COMMITTER_NAME" "Your Name")
+             (setenv "GIT_AUTHOR_EMAIL" "you@example.com")
+             (setenv "GIT_COMMITTER_EMAIL" "you@example.com")
+             (substitute* "src/github.com/go-git/go-git/v5/blame_test.go"
+               (("TestBlame\\(" all) (string-append "Disable" all)))
+             (substitute* "src/github.com/go-git/go-git/v5/references_test.go"
+               (("TestEquivalent\\(" all) (string-append "Disable" all))
+               (("TestRevList\\(" all) (string-append "Disable" all)))
+             (substitute* "src/github.com/go-git/go-git/v5/remote_test.go"
+               (("TestFetchExactSHA1\\(" all) (string-append "Disable" all))
+               (("TestList\\(" all) (string-append "Disable" all)))
+             (substitute* "src/github.com/go-git/go-git/v5/repository_test.go"
+               (("TestConfigScoped\\(" all) (string-append "Disable" all))          ; Cannot find User.Email
+               (("TestCreateTagAnnotatedBadOpts\\(" all) (string-append "Disable" all))
+               (("TestPlainCloneWithRecurseSubmodules\\(" all) (string-append "Disable" all))
+               (("TestPushWithProgress\\(" all) (string-append "Disable" all)))
+             (substitute* "src/github.com/go-git/go-git/v5/submodule_test.go"
+               (("TestUpdate\\(" all) (string-append "Disable" all))
+               (("TestUpdateWithInitAndUpdate\\(" all) (string-append "Disable" all))
+               (("TestUpdateWithRecursion\\(" all) (string-append "Disable" all)))
+             (substitute* "src/github.com/go-git/go-git/v5/worktree_commit_test.go"
+               (("TestCommitEmptyOptions\\(" all) (string-append "Disable" all)))   ; Cannot find author field.
+             (substitute* "src/github.com/go-git/go-git/v5/worktree_test.go"
+               (("TestCheckoutRelativePathSubmoduleInitialized\\(" all) (string-append "Disable" all))
+               (("TestCheckoutSubmoduleInitialized\\(" all) (string-append "Disable" all))
+               (("TestPullProgressWithRecursion\\(" all) (string-append "Disable" all))))))))
     (propagated-inputs
      (list go-gopkg-in-warnings-v0
            go-gopkg-in-check-v1
            go-golang-org-x-text
-           go-golang-org-x-sys
+           go-golang-org-x-sys-next
            go-golang-org-x-net
            go-golang-org-x-crypto
            go-github-com-xanzy-ssh-agent
@@ -2420,6 +2559,8 @@ free to implement mocks and testing over filesystem operations.")
            go-github-com-acomagu-bufpipe
            go-github-com-protonmail-go-crypto
            go-github-com-microsoft-go-winio))
+    (native-inputs
+     (list git-minimal))
     (home-page "https://github.com/go-git/go-git")
     (synopsis "Project Status")
     (description
@@ -3712,7 +3853,39 @@ easier.")
         (sha256
           (base32 "0qaxcm2p655r1jd59rv1hd58driadw5hxlfy7h53c7pzcsmf2546"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/google/go-github/v32"))
+    (arguments
+     '(#:import-path "github.com/google/go-github/v32"
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'build
+           (lambda* (#:key import-path build-flags #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'build)
+                  #:build-flags build-flags
+                  #:import-path (string-append "github.com/google/go-github/v32/" directory)))
+               (list "github"
+                     ;"scrape"      ; Wants go-github-com-google-go-github-v28
+                     "test/fields"
+                     "test/integration"
+                     "update-urls"))))
+         (replace 'check
+           (lambda* (#:key tests? import-path #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'check)
+                  #:tests? tests?
+                  #:import-path (string-append "github.com/google/go-github/v32/" directory)))
+               (list "github"
+                     ;"scrape"      ; Wants go-github-com-google-go-github-v28
+                     "test/fields"
+                     "test/integration"
+                     "update-urls"))))
+         (add-after 'unpack 'disable-network-tests
+           (lambda _
+             (substitute* "src/github.com/google/go-github/v32/github/repos_releases_test.go"
+               (("TestRepositoriesService_UploadReleaseAsset" all)
+                (string-append "Disabled" all))))))))
     (propagated-inputs
      (list go-google-golang-org-appengine
            go-golang-org-x-oauth2
@@ -3720,6 +3893,8 @@ easier.")
            go-golang-org-x-crypto
            go-github-com-google-go-querystring
            go-github-com-golang-protobuf))
+    (native-inputs
+     (list go-github-com-pmezard-go-difflib))
     (home-page "https://github.com/google/go-github")
     (synopsis "go-github")
     (description
@@ -3795,7 +3970,7 @@ easier.")
 (define-public go-github-com-jaytaylor-html2text
   (package
     (name "go-github-com-jaytaylor-html2text")
-    (version "0.0.0-20211105163654-bc68cce691ba")
+    (version "0.0.0-20211013000000-90c08c5027d3")
     (source
       (origin
         (method git-fetch)
@@ -3804,7 +3979,7 @@ easier.")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "12ckgkp8xqgp0fh6019nwp4ssg2k1rv1a67cpk37ian4q5zrvppm"))))
+         (base32 "1zxb2ym0rz087hwzcgd6ja717930k2clhs7995yvbspncswidmgb"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/jaytaylor/html2text"))
     (propagated-inputs
@@ -4014,11 +4189,15 @@ semantics.")
         (sha256
           (base32 "0dw6vzv6aq1yfxyllc406q69vlrk39m5jdcj355y9h9ak84plznw"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/lunny/dingtalk_webhook"))
+    (arguments
+     '(#:tests? #f      ; All tests require network access.
+       #:import-path "github.com/lunny/dingtalk_webhook"))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/lunny/dingtalk_webhook")
-    (synopsis "é\x9d\x9eå®\x98æ\x96¹ Dingtalk webhook Golang SDK")
+    (synopsis "Dingtalk webhook Golang SDK")
     (description
-      "é¦\x96å\x85\x88å\x9c¨dingtalkä¸\xadå\x88\x9bå»ºä¸\x80ä¸ªæ\x9cºå\x99¨äººï¼\x8cå°\x86accessTokenæ\x8b·è´\x9då\x87ºæ\x9d¥ï¼\x8cç\x84¶å\x90\x8eæ\x89§è¡\x8cä¸\x8bé\x9d¢æ\x96¹æ³\x95å\x8d³å\x8f¯")
+     "Dingtalk webhook Golang SDK")
     (license license:expat)))
 
 (define-public go-google-golang-org-grpc-cmd-protoc-gen-go-grpc
@@ -4606,7 +4785,34 @@ github.com/golang/lint/golint (e.g.  ID or HTTP)")
         (sha256
           (base32 "14b8mj3x7bynpdw99a260j6gpjsqnki5fh3bbsf9cyggsgai11zz"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/markbates/going"))
+    (arguments
+     '(#:import-path "github.com/markbates/going"
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'build
+           (lambda* (#:key import-path build-flags #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'build)
+                  #:build-flags build-flags
+                  #:import-path (string-append "github.com/markbates/going/" directory)))
+               (list "clam"
+                     "defaults"
+                     "randx"
+                     "validate"
+                     "wait"))))
+         (replace 'check
+           (lambda* (#:key tests? import-path #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'check)
+                  #:tests? tests?
+                  #:import-path (string-append "github.com/markbates/going/" directory)))
+               (list "clam"
+                     "defaults"
+                     "randx"
+                     "validate"
+                     "wait")))))))
     (propagated-inputs
      (list go-github-com-serenize-snaker
            go-github-com-onsi-gomega
@@ -5977,7 +6183,14 @@ custom session backends.")
         (sha256
           (base32 "1xgq9cghrf25zqjrx7hmc2qcjgh38lpkxb8b5i71c7k1nv1hh65z"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/quasoft/websspi"))
+    (arguments
+     '(#:import-path "github.com/quasoft/websspi"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'remove-some-tests
+           (lambda _
+             ;; Some of the tests are Windows specific and can't be easily separated.
+             (delete-file "src/github.com/quasoft/websspi/utf16_test.go"))))))
     (propagated-inputs
      (list go-golang-org-x-sys
            go-github-com-gorilla-sessions
@@ -6805,7 +7018,13 @@ goldmark(@url{http://github.com/yuin/goldmark,http://github.com/yuin/goldmark}).
         (sha256
           (base32 "10yx5pdvchf8amfmvwmpba61ixyf3gr93ry411q5r65r66ljpf8v"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "go.jolheiser.com/pwn"))
+    (arguments
+     '(#:import-path "go.jolheiser.com/pwn"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'remove-network-tests
+           (lambda _
+             (delete-file "src/go.jolheiser.com/pwn/password_test.go"))))))
     (home-page "https://go.jolheiser.com/pwn")
     (synopsis "Have I Been Pwned")
     (description
@@ -6851,10 +7070,11 @@ goldmark(@url{http://github.com/yuin/goldmark,http://github.com/yuin/goldmark}).
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0zdykrv5s19lnq0g49p6njldy4cpk4g161vyjafiw7f84h8r28mc"))))
+         (base32 "0zdykrv5s19lnq0g49p6njldy4cpk4g161vyjafiw7f84h8r28mc"))))
     (build-system go-build-system)
     (arguments
-      '(#:import-path "gopkg.in/gomail.v2" #:unpack-path "gopkg.in/gomail.v2"))
+     '(#:tests? #f      ; Package is unmaintained.
+       #:import-path "gopkg.in/gomail.v2"))
     (home-page "https://gopkg.in/gomail.v2")
     (synopsis "Gomail")
     (description
