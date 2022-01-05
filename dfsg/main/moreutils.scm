@@ -1,4 +1,4 @@
-;;; Copyright © 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2020, 2022 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -18,6 +18,7 @@
 (define-module (dfsg main moreutils)
   #:use-module (guix packages)
   #:use-module (guix utils)
+  #:use-module (guix gexp)
   #:use-module (gnu packages moreutils))
 
 (define-public my-moreutils
@@ -27,10 +28,8 @@
     (arguments
       (substitute-keyword-arguments (package-arguments moreutils)
         ((#:phases phases)
-         `(modify-phases ,phases
+         #~(modify-phases #$phases
             (add-after 'unpack 'skip-parallel
               (lambda _
                 (substitute* "Makefile"
-                  (("parallel.1") "")
-                  (("parallel") ""))
-                #t))))))))
+                  (("parallel(.1)?") ""))))))))))
