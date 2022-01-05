@@ -49,7 +49,7 @@
     (arguments
      '(#:import-path "golang.org/x/crypto"
        #:modules ((guix build go-build-system)
-                  ((guix build utils) #:hide (delete))
+                  (guix build utils)
                   (srfi srfi-1))
        #:phases
        (modify-phases %standard-phases
@@ -60,16 +60,22 @@
                  ((assoc-ref %standard-phases 'build)
                   #:build-flags build-flags
                   #:import-path (string-drop directory 4)))
-               (fold delete
-                     (find-files "src/golang.org/x/crypto"
-                                 (lambda (file stat)
-                                   (and
-                                     (eq? (stat:type stat) 'directory)
-                                     (not (null? (find-files file "\\.go$")))
-                                     (not (string-contains file "internal"))))
-                                 #:directories? #t)
-                     '("src/golang.org/x/crypto"
-                       "src/golang.org/x/crypto/nacl")))))
+               (find-files "src/golang.org/x/crypto"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (string-contains file "internal"))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t))))
          (replace 'check
            (lambda* (#:key tests? import-path #:allow-other-keys)
              (for-each
@@ -77,16 +83,22 @@
                  ((assoc-ref %standard-phases 'check)
                   #:tests? tests?
                   #:import-path (string-drop directory 4)))
-               (fold delete
-                     (find-files "src/golang.org/x/crypto"
-                                 (lambda (file stat)
-                                   (and
-                                     (eq? (stat:type stat) 'directory)
-                                     (not (null? (find-files file "\\.go$")))
-                                     (not (string-contains file "internal"))))
-                                 #:directories? #t)
-                     '("src/golang.org/x/crypto"
-                       "src/golang.org/x/crypto/nacl")))))
+               (find-files "src/golang.org/x/crypto"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (string-contains file "internal"))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t))))
          (add-before 'reset-gzip-timestamps 'chmod-gzip-files
            (lambda* (#:key outputs #:allow-other-keys)
              (for-each make-file-writable
@@ -118,6 +130,9 @@
     (build-system go-build-system)
     (arguments
      '(#:import-path "golang.org/x/image"
+       #:modules ((guix build go-build-system)
+                  (guix build utils)
+                  (srfi srfi-1))
        #:phases
        (modify-phases %standard-phases
          (replace 'build
@@ -126,32 +141,50 @@
                (lambda (directory)
                  ((assoc-ref %standard-phases 'build)
                   #:build-flags build-flags
-                  #:import-path (string-append "golang.org/x/image/" directory)))
-               (list "bmp"
-                     "ccitt"
-                     "colornames"
-                     "draw"
-                     "font"
-                     "riff"
-                     "tiff"
-                     "vector"
-                     "vp8"))))
+                  #:import-path (string-drop directory 4)))
+               (find-files "src/golang.org/x/image"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (string-contains file "webp-manual-test"))
+                         (not (string-contains file "example/font"))
+                         (not (string-contains file "font/gofont"))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t))))
          (replace 'check
            (lambda* (#:key tests? import-path #:allow-other-keys)
              (for-each
                (lambda (directory)
                  ((assoc-ref %standard-phases 'check)
                   #:tests? tests?
-                  #:import-path (string-append "golang.org/x/image/" directory)))
-               (list "bmp"
-                     "ccitt"
-                     "colornames"
-                     "draw"
-                     "font"
-                     "riff"
-                     "tiff"
-                     "vector"
-                     "vp8")))))))
+                  #:import-path (string-drop directory 4)))
+               (find-files "src/golang.org/x/image"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (string-contains file "webp-manual-test"))
+                         (not (string-contains file "example/font"))
+                         (not (string-contains file "font/gofont"))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t)))))))
     (propagated-inputs
      (list go-golang-org-x-text-next))
     (home-page "https://golang.org/x/image")
@@ -258,7 +291,7 @@ themselves.")
     (arguments
      '(#:import-path "golang.org/x/net"
        #:modules ((guix build go-build-system)
-                  ((guix build utils) #:hide (delete))
+                  (guix build utils)
                   (srfi srfi-1))
        #:phases
        (modify-phases %standard-phases
@@ -269,19 +302,23 @@ themselves.")
                  ((assoc-ref %standard-phases 'build)
                   #:build-flags build-flags
                   #:import-path (string-drop directory 4)))
-               (fold delete
-                     (find-files "src/golang.org/x/net"
-                                 (lambda (file stat)
-                                   (and
-                                     (eq? (stat:type stat) 'directory)
-                                     (not (null? (find-files file "\\.go$")))
-                                     (not (string-contains file "internal"))))
-                                 #:directories? #t)
-                     '("src/golang.org/x/net"
-                       "src/golang.org/x/net/dns"
-                       "src/golang.org/x/net/http"
-                       "src/golang.org/x/net/lif"
-                       "src/golang.org/x/net/route")))))
+               (find-files "src/golang.org/x/net"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (string-contains file "net/lif"))
+                         (not (string-contains file "net/route"))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t))))
          (replace 'check
            (lambda* (#:key tests? import-path #:allow-other-keys)
              (for-each
@@ -289,19 +326,23 @@ themselves.")
                  ((assoc-ref %standard-phases 'check)
                   #:tests? tests?
                   #:import-path (string-drop directory 4)))
-               (fold delete
-                     (find-files "src/golang.org/x/net"
-                                 (lambda (file stat)
-                                   (and
-                                     (eq? (stat:type stat) 'directory)
-                                     (not (null? (find-files file "\\.go$")))
-                                     (not (string-contains file "internal"))))
-                                 #:directories? #t)
-                     '("src/golang.org/x/net"
-                       "src/golang.org/x/net/dns"
-                       "src/golang.org/x/net/http"
-                       "src/golang.org/x/net/lif"
-                       "src/golang.org/x/net/route"))))))))
+               (find-files "src/golang.org/x/net"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (string-contains file "net/lif"))
+                         (not (string-contains file "net/route"))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t)))))))
     (propagated-inputs
      (list go-golang-org-x-text-next
            go-golang-org-x-term-next
@@ -470,10 +511,14 @@ transformations, and locale-specific text handling.")
     (arguments
      '(#:import-path "golang.org/x/tools"
        #:modules ((guix build go-build-system)
-                  ((guix build utils) #:hide (delete))
+                  (guix build utils)
                   (srfi srfi-1))
        #:phases
        (modify-phases %standard-phases
+         (add-after 'unpack 'patch-filepaths
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* (find-files "src/golang.org/x/tools" "\\.go$")
+               (("/usr/bin/diff") (search-input-file inputs "/bin/diff")))))
          (replace 'build
            (lambda* (#:key import-path build-flags #:allow-other-keys)
              (for-each
@@ -481,28 +526,55 @@ transformations, and locale-specific text handling.")
                  ((assoc-ref %standard-phases 'build)
                   #:build-flags build-flags
                   #:import-path (string-drop directory 4)))
-               (fold delete
-                     (find-files "src/golang.org/x/tools"
-                                 (lambda (file stat)
-                                   (and
-                                     (eq? (stat:type stat) 'directory)
-                                     (not (null? (find-files file "\\.go$")))
-                                     (not (string-contains file "internal"))))
-                                 #:directories? #t)
-                     '("src/golang.org/x/tools"
-                       )))))
+               (find-files "src/golang.org/x/tools"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (string-contains file "copyright"))
+                         (not (string-contains file "gopls"))
+                         (not (string-contains file "testdata"))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t))))
          (replace 'check
            (lambda* (#:key tests? import-path #:allow-other-keys)
              (for-each
                (lambda (directory)
                  ((assoc-ref %standard-phases 'check)
                   #:tests? tests?
-                  #:import-path (string-append "golang.org/x/tools/" directory)))
-               (list "cmd/benchcmp"
-                     "cmd/bundle"
-                     "cmd/getgo"
-                     "go/analysis"
-                     "present")))))))
+                  #:import-path (string-drop directory 4)))
+               (find-files "src/golang.org/x/tools"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (string-contains file "copyright"))
+                         (not (string-contains file "cmd/stringer"))    ; Tries to 'go get'.
+                         (not (string-contains file "gcexportdata"))
+                         (not (string-contains file "go/packages"))
+                         (not (string-contains file "go/ssa"))
+                         (not (string-contains file "godoc"))
+                         (not (string-contains file "gopls"))
+                         (not (string-contains file "internal"))
+                         (not (string-contains file "testdata"))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t)))))))
     (propagated-inputs
      (list go-github-com-yuin-goldmark
            go-golang-org-x-mod-next
@@ -525,7 +597,7 @@ transformations, and locale-specific text handling.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0h9ip7sry1y8z94jypygas4ylb403wji3vljcc5jlb54rf51x3z7"))))
+         (base32 "0h9ip7sry1y8z94jypygas4ylb403wji3vljcc5jlb54rf51x3z7"))))
     ;; Keep this as source-only due to the dependencies
     ;(arguments '(#:import-path "golang.org/x/tools"))
     ;(propagated-inputs
@@ -612,6 +684,8 @@ transformations, and locale-specific text handling.")
                  ; (string-append first last "\n"))
                  )
          ;      (invoke "make" "build")
+         ;      (invoke "make" "gitea")
+         ;      (invoke "make" "install")
                )
              ))
          (replace 'check
@@ -4556,6 +4630,9 @@ easier.")
     (build-system go-build-system)
     (arguments
      '(#:import-path "github.com/keybase/go-crypto"
+       #:modules ((guix build go-build-system)
+                  (guix build utils)
+                  (srfi srfi-1))
        #:phases
        (modify-phases %standard-phases
          (replace 'build
@@ -4564,80 +4641,50 @@ easier.")
                (lambda (directory)
                  ((assoc-ref %standard-phases 'build)
                   #:build-flags build-flags
-                  #:import-path (string-append "github.com/keybase/go-crypto/" directory)))
-               (list
-                     "poly1305"
-                     "pkcs12"
-                     "otr"
-                     "brainpool"
-                     "scrypt"
-                     "salsa20"
-                     "blowfish"
-                     "pbkdf2"
-                     "md4"
-                     "ed25519"
-                     "nacl/secretbox"
-                     "nacl/box"
-                     "xtea"
-                     "cast5"
-                     "curve25519"
-                     "hkdf"
-                     "rsa"
-                     "ssh/terminal"
-                     "ocsp"
-                     "openpgp"
-                     "bcrypt"
-                     "sha3"
-                     "xts"
-                     "twofish"
-                     "tea"
-                     "ripemd160"
-                     "bn256"
-                     ))))
+                  #:import-path (string-drop directory 4)))
+               (find-files "src/github.com/keybase/go-crypto"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t))))
          (replace 'check
            (lambda* (#:key tests? import-path #:allow-other-keys)
              (for-each
                (lambda (directory)
                  ((assoc-ref %standard-phases 'check)
                   #:tests? tests?
-                  #:import-path (string-append "github.com/keybase/go-crypto/" directory)))
-               (list
-                     "poly1305"
-                     "pkcs12"
-                     "otr"
-                     "brainpool"
-                     "scrypt"
-                     "salsa20"
-                     "blowfish"
-                     "pbkdf2"
-                     "md4"
-                     "ed25519"
-                     "nacl/secretbox"
-                     "nacl/box"
-                     "xtea"
-                     "cast5"
-                     "curve25519"
-                     "hkdf"
-                     "rsa"
-                     "ssh/terminal"
-                     "ocsp"
-                     "openpgp"
-                     "bcrypt"
-                     "sha3"
-                     "xts"
-                     "twofish"
-                     "tea"
-                     "ripemd160"
-                     "bn256"
-                     ))))
+                  #:import-path (string-drop directory 4)))
+               (find-files "src/github.com/keybase/go-crypto"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t))))
          (add-before 'reset-gzip-timestamps 'chmod-gzip-files
            (lambda* (#:key outputs #:allow-other-keys)
              (for-each make-file-writable
                        (find-files (assoc-ref outputs "out") "\\.gz$")))))))
     (propagated-inputs
-     (list
-           go-golang-org-x-sys
-           ))
+     (list go-golang-org-x-sys))
     (home-page "https://github.com/keybase/go-crypto")
     (synopsis #f)
     (description #f)
