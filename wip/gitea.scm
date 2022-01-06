@@ -22,6 +22,7 @@
   #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (guix build-system go)
+  #:use-module (gnu packages)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages check)
   #:use-module (gnu packages databases)
@@ -640,14 +641,15 @@ transformations, and locale-specific text handling.")
 (define-public gitea
   (package
     (name "gitea")
-    (version "1.14.7")
+    (version "1.15.9")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://github.com/go-gitea/gitea/releases"
                                   "/download/v" version
                                   "/gitea-src-" version ".tar.gz"))
               (sha256
-               (base32 "0rgh89qb2iqdy2whdk46z89lss0pj2ik8ay44i0pmrbmkvxg5zn2"))
+               (base32 "0k17glrzpk5aaic3rj8frp0f9x24ac9cwv7mxj2562w3m9wj3957"))
+              (patches (search-patches "gitea-patch-makefile.patch"))
               (modules '((guix build utils)))
               (snippet
                '(begin
@@ -656,6 +658,7 @@ transformations, and locale-specific text handling.")
     (build-system go-build-system)
     (arguments
      `(#:install-source? #f
+       #:tests? #f      ; Disable tests and start with some manual testing
        #:import-path "code.gitea.io/gitea"
        ;#:build-flags (list "-tags bindata sqlite sqlite_unlock_notify")
        #:phases
@@ -676,191 +679,150 @@ transformations, and locale-specific text handling.")
          ;    ))
          ;(replace 'build
          ;  (lambda _
-             (with-directory-excursion "src/code.gitea.io/gitea"
-               (substitute* "Makefile"
-                 (("-mod=vendor") "")
-                 (("go-check generate") "go-check")
+         ;    (with-directory-excursion "src/code.gitea.io/gitea"
+         ;      (substitute* "Makefile"
+         ;        (("-mod=vendor") "")
+         ;        (("go-check generate") "go-check")
                  ;(("(GO_DIRS := .) vendor(.*)" all first last)
                  ; (string-append first last "\n"))
-                 )
+         ;        )
          ;      (invoke "make" "build")
          ;      (invoke "make" "gitea")
          ;      (invoke "make" "install")
-               )
+         ;      )
              ))
          (replace 'check
            (lambda* (#:key tests? #:allow-other-keys)
              (when tests?
-               (with-directory-excursion "src"
-                 (invoke "make" "test")
+               (with-directory-excursion "src/code.gitea.io/gitea"
+                 ;(substitute* "Makefile"
+                 ;  ;; Adjust GO_PACKAGES
+                 ;  (("GO\\) list .*") "GO) list . ))\n")
+                 ;  )
+                 ;; Skip testing the front-end, we're using the bundled javascript.
+                 ;(invoke "make" "test")
+                 (invoke "make" "test-backend")
                  ;; Gitea requires git with lfs support to run tests.
-                 ;(invoke "make" "test-sqlite")
-                 (invoke "make" "test-sqlite-migration")))))
-         (replace 'install
-           (lambda _
-             (with-directory-excursion "src"
-               (invoke "make" "install"))))
+                 (invoke "make" "test-sqlite")
+                 ;(invoke "make" "test-sqlite-migration")
+                 (invoke "make" "test-mysql")
+                 (invoke "make" "test-mysql8")
+                 (invoke "make" "test-pgsql")
+                 ))))
+         ;(replace 'install
+         ;  (lambda _
+         ;    (with-directory-excursion "src/code.gitea.io/gitea"
+         ;      (invoke "make" "install"))))
          (add-after 'install 'wrap-program
            (lambda* (#:key outputs inputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
                     (bin (string-append out "/bin/gitea"))
                     (git (assoc-ref inputs "git")))
                (wrap-program bin
-                 `("PATH" ":" prefix (,(string-append git "/bin"))))))))))
+                 `("PATH" ":" prefix (,(string-append git "/bin")))))))
+         )))
     (native-inputs
      (list go-github-com-stretchr-testify
            node))
     (inputs
      (list bash-minimal
            git
-           go-github-com-zeripath-jwt
-           go-github-com-6543-go-version
-           go-xorm-io-xorm
-           go-xorm-io-builder
-           go-strk-kbt-io-projects-go-libravatar
-           go-mvdan-cc-xurls-v2
-           go-gopkg-in-yaml-v2
-           go-gopkg-in-ini-v1
-           go-gopkg-in-gomail-v2
-           go-gopkg-in-alexcesaro-quotedprintable-v3
-           go-golang-org-x-tools
-           go-golang-org-x-time
-           go-golang-org-x-text
-           go-golang-org-x-sys
-           go-golang-org-x-oauth2
-           go-golang-org-x-net
-           go-golang-org-x-crypto
-           go-go-uber-org-zap
-           go-go-uber-org-multierr
-           go-go-jolheiser-com-pwn
-           go-go-jolheiser-com-hcaptcha
-           go-github-com-yuin-goldmark-meta
-           go-github-com-yuin-goldmark-highlighting
-           go-github-com-yuin-goldmark
-           go-github-com-yohcop-openid-go
-           go-github-com-xanzy-ssh-agent
-           go-github-com-xanzy-go-gitlab
-           go-github-com-willf-bitset
-           go-github-com-urfave-cli
-           go-github-com-unrolled-render
-           go-github-com-unknwon-paginater
-           go-github-com-unknwon-i18n
-           go-github-com-unknwon-com
-           go-github-com-ulikunitz-xz
-           go-github-com-tstranex-u2f
-           go-github-com-tinylib-msgp
-           go-github-com-syndtr-goleveldb
-           go-github-com-ssor-bom
-           go-github-com-spf13-afero
-           go-github-com-shurcool-vfsgen
-           go-github-com-shurcool-httpfs
-           go-github-com-sergi-go-diff
-           go-github-com-russross-blackfriday-v2
-           go-github-com-rivo-uniseg
-           go-github-com-quasoft-websspi
-           go-github-com-prometheus-procfs
-           go-github-com-prometheus-common
-           go-github-com-prometheus-client-golang
-           go-github-com-pquerna-otp
-           go-github-com-pkg-errors
-           go-github-com-pierrec-lz4-v4
-           go-github-com-pelletier-go-toml
-           go-github-com-olivere-elastic-v7
-           go-github-com-oliamb-cutter
-           go-github-com-olekukonko-tablewriter
-           go-github-com-niklasfasching-go-org
-           go-github-com-nfnt-resize
-           ;go-github-com-msteinert-pam     ; TODO: import
-           go-github-com-mrjones-oauth
-           go-github-com-mitchellh-go-homedir
-           go-github-com-minio-sha256-simd
-           go-github-com-minio-minio-go-v7
-           go-github-com-minio-md5-simd
-           go-github-com-miekg-dns
-           go-github-com-microcosm-cc-bluemonday
-           go-github-com-mholt-archiver-v3
-           go-github-com-mholt-acmez
-           go-github-com-mgechev-revive
-           go-github-com-mgechev-dots
-           go-github-com-mattn-go-sqlite3
-           go-github-com-mattn-go-runewidth
-           go-github-com-mattn-go-isatty
-           go-github-com-markbates-goth
-           go-github-com-mailru-easyjson
-           go-github-com-lunny-dingtalk-webhook
-           go-github-com-libdns-libdns
-           go-github-com-lib-pq
-           go-github-com-lafriks-xormstore
-           go-github-com-klauspost-pgzip
-           go-github-com-klauspost-compress
-           go-github-com-keybase-go-crypto
-           go-github-com-kevinburke-ssh-config
-           go-github-com-kballard-go-shellquote
-           go-github-com-json-iterator-go
-           go-github-com-jaytaylor-html2text
-           go-github-com-issue9-identicon
-           go-github-com-issue9-assert
-           go-github-com-imdario-mergo
-           go-github-com-huandu-xstrings
-           go-github-com-hashicorp-go-version-1.3.0
-           go-github-com-hashicorp-go-retryablehttp
-           go-github-com-hashicorp-go-cleanhttp
-           go-github-com-gorilla-sessions
-           go-github-com-gorilla-mux
-           go-github-com-gorilla-context
-           go-github-com-google-uuid
-           go-github-com-google-go-github-v32
-           go-github-com-golang-snappy
-           go-github-com-gogs-go-gogs-client
-           go-github-com-gogs-cron
-           go-github-com-gogs-chardet
-           go-github-com-gobwas-glob
-           go-github-com-go-testfixtures-testfixtures-v3
-           go-github-com-go-swagger-go-swagger
-           go-github-com-go-sql-driver-mysql
-           go-github-com-go-redis-redis-v8
-           go-github-com-go-openapi-validate
-           go-github-com-go-openapi-errors
-           go-github-com-go-ldap-ldap-v3
-           go-github-com-go-git-go-git-v5
-           go-github-com-go-git-go-billy-v5
-           go-github-com-go-enry-go-enry-v2
-           go-github-com-go-chi-cors
-           go-github-com-go-chi-chi
-           go-github-com-go-asn1-ber-asn1-ber
-           go-github-com-glycerine-go-unsnap-stream
-           go-github-com-gliderlabs-ssh
-           go-github-com-ethantkoenig-rupture
-           go-github-com-emirpasic-gods
-           go-github-com-editorconfig-editorconfig-core-go-v2
-           go-github-com-dustin-go-humanize
-           go-github-com-dlclark-regexp2
-           go-github-com-denisenkom-go-mssqldb
-           go-github-com-cpuguy83-go-md2man-v2
-           go-github-com-couchbase-goutils
-           go-github-com-couchbase-gomemcached
-           go-github-com-couchbase-go-couchbase
-           go-github-com-chris-ramon-douceur
-           go-github-com-chi-middleware-proxy
-           go-github-com-caddyserver-certmagic
-           go-github-com-bradfitz-gomemcache
-           go-github-com-boombuler-barcode
-           go-github-com-blevesearch-bleve-v2
-           go-github-com-anmitsu-go-shlex
-           go-github-com-andybalholm-brotli
-           go-github-com-alecthomas-chroma
-           go-github-com-roaringbitmap-roaring
-           go-github-com-puerkitobio-goquery
-           go-github-com-nytimes-gziphandler
-           go-github-com-microsoft-go-winio
-           go-gitea-com-lunny-levelqueue
-           go-gitea-com-go-chi-session
-           go-gitea-com-go-chi-captcha
-           go-gitea-com-go-chi-cache
-           go-gitea-com-go-chi-binding
-           go-code-gitea-io-sdk-gitea
+
+           go-cloud-google-com-go
            go-code-gitea-io-gitea-vet
-           go-cloud-google-com-go))
+           go-code-gitea-io-sdk-gitea
+           go-gitea-com-go-chi-binding
+           go-gitea-com-go-chi-cache
+           go-gitea-com-go-chi-captcha
+           go-gitea-com-go-chi-session
+           go-gitea-com-lunny-levelqueue
+           go-github-com-alecthomas-chroma
+           go-github-com-blevesearch-bleve-v2
+           go-github-com-caddyserver-certmagic
+           go-github-com-chi-middleware-proxy
+           go-github-com-denisenkom-go-mssqldb
+           go-github-com-djherbis-buffer
+           go-github-com-djherbis-nio-v3
+           go-github-com-dustin-go-humanize
+           go-github-com-editorconfig-editorconfig-core-go-v2
+           go-github-com-emirpasic-gods
+           go-github-com-ethantkoenig-rupture
+           go-github-com-gliderlabs-ssh
+           go-github-com-gobwas-glob
+           go-github-com-go-chi-chi
+           go-github-com-go-chi-cors
+           go-github-com-go-enry-go-enry-v2
+           go-github-com-go-git-go-billy-v5
+           go-github-com-go-git-go-git-v5
+           go-github-com-gogs-chardet
+           go-github-com-gogs-cron
+           go-github-com-gogs-go-gogs-client
+           go-github-com-go-ldap-ldap-v3
+           go-github-com-google-go-github-v32
+           go-github-com-go-redis-redis-v8
+           go-github-com-gorilla-context
+           go-github-com-go-sql-driver-mysql
+           go-github-com-go-swagger-go-swagger
+           go-github-com-go-testfixtures-testfixtures-v3
+           go-github-com-hashicorp-golang-lru
+           go-github-com-huandu-xstrings
+           go-github-com-issue9-identicon
+           go-github-com-jaytaylor-html2text
+           go-github-com-json-iterator-go
+           go-github-com-kballard-go-shellquote
+           go-github-com-keybase-go-crypto
+           go-github-com-klauspost-compress
+           go-github-com-lafriks-xormstore
+           go-github-com-lib-pq
+           go-github-com-lunny-dingtalk-webhook
+           go-github-com-markbates-goth
+           go-github-com-mattn-go-isatty
+           go-github-com-mattn-go-sqlite3
+           go-github-com-mholt-archiver-v3
+           go-github-com-microcosm-cc-bluemonday
+           go-github-com-minio-minio-go-v7
+           go-github-com-nfnt-resize
+           go-github-com-niklasfasching-go-org
+           go-github-com-nytimes-gziphandler
+           go-github-com-oliamb-cutter
+           go-github-com-olivere-elastic-v7
+           go-github-com-pkg-errors
+           go-github-com-pquerna-otp
+           go-github-com-prometheus-client-golang
+           go-github-com-puerkitobio-goquery
+           go-github-com-quasoft-websspi
+           go-github-com-sergi-go-diff
+           go-github-com-shurcool-vfsgen
+           go-github-com-syndtr-goleveldb
+           go-github-com-tstranex-u2f
+           go-github-com-unknwon-com
+           go-github-com-unknwon-i18n
+           go-github-com-unknwon-paginater
+           go-github-com-unrolled-render
+           go-github-com-urfave-cli
+           go-github-com-xanzy-go-gitlab
+           go-github-com-yohcop-openid-go
+           go-github-com-yuin-goldmark
+           go-github-com-yuin-goldmark-highlighting
+           go-github-com-yuin-goldmark-meta
+           go-go-jolheiser-com-hcaptcha
+           go-go-jolheiser-com-pwn
+           go-golang-org-x-crypto
+           go-golang-org-x-net
+           go-golang-org-x-oauth2
+           go-golang-org-x-sys
+           go-golang-org-x-text
+           go-golang-org-x-tools
+           go-gopkg-in-gomail-v2
+           go-gopkg-in-ini-v1
+           go-gopkg-in-yaml-v2
+           go-mvdan-cc-xurls-v2
+           go-strk-kbt-io-projects-go-libravatar
+           go-xorm-io-builder
+           go-xorm-io-xorm
+
+           go-github-com-6543-go-version
+           go-github-com-zeripath-jwt))
     (home-page "https://gitea.io/")
     (synopsis "Self-hosted git service")
     (description
@@ -916,7 +878,7 @@ transformations, and locale-specific text handling.")
          (base32 "0a5dp0wlinnjacv7a6qkkg9ninqqbf8qrdfjr7is0kxvlkr0ih7f"))))
     (build-system go-build-system)
     (arguments
-     '(#:tests? #f      ; TODO: Fix
+     '(#:tests? #f      ; Requires a running gitea instance.
        #:unpack-path "code.gitea.io/sdk"
        #:import-path "code.gitea.io/sdk/gitea"))
     (propagated-inputs
@@ -1065,7 +1027,14 @@ validation for Chi.")
         (sha256
          (base32 "08p6sxphi5w9mm43pj9ma5v4n5r2v0xr7nzmp2nya3hpn9fq2vcj"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/lunny/nodb"))
+    (arguments
+     '(#:tests? #f      ; Repository archived.
+       #:import-path "github.com/lunny/nodb"))
+    (propagated-inputs
+     (list go-github-com-burntsushi-toml
+           go-github-com-lunny-log
+           go-github-com-siddontang-go-snappy
+           go-github-com-syndtr-goleveldb))
     (home-page "https://github.com/lunny/nodb")
     (synopsis "NoDB")
     (description "package nodb is a high performance embedded NoSQL.")
@@ -1086,8 +1055,24 @@ validation for Chi.")
          (base32 "11h25k4h8mdnhm8jyllsvv597bgbq3zf5ym2ccppla1jflp5r3jg"))))
     (build-system go-build-system)
     (arguments
-     '(#:unpack-path "github.com/siddontang/go-snappy"
-       #:import-path "github.com/siddontang/go-snappy/snappy"))
+     '(
+       #:import-path "github.com/siddontang/go-snappy"
+       ;#:unpack-path "github.com/siddontang/go-snappy"
+       ;#:import-path "github.com/siddontang/go-snappy/snappy"
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'build
+           (lambda* (#:key import-path build-flags #:allow-other-keys)
+             (lambda (directory)
+               ((assoc-ref %standard-phases 'build)
+                #:build-flags build-flags
+                #:import-path "github.com/siddontang/go-snappy/snappy"))))
+         (replace 'check
+           (lambda* (#:key tests? import-path #:allow-other-keys)
+             (lambda (directory)
+               ((assoc-ref %standard-phases 'check)
+                #:tests? tests?
+                #:import-path "github.com/siddontang/go-snappy/snappy")))))))
     (home-page "https://github.com/siddontang/go-snappy")
     (synopsis #f)
     (description #f)
@@ -1109,36 +1094,14 @@ validation for Chi.")
     (build-system go-build-system)
     (arguments '(#:import-path "gitea.com/go-chi/cache"))
     (propagated-inputs
-      ;; Commented out to prevent circular dependencies, is anything needed‽
-     `(;("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-       ;("go-gopkg-in-ini-v1" ,go-gopkg-in-ini-v1)
-       ;("go-google-golang-org-appengine" ,go-google-golang-org-appengine)
-       ;("go-golang-org-x-sys" ,go-golang-org-x-sys)
-       ;("go-golang-org-x-net" ,go-golang-org-x-net)
-       ;("go-github-com-unknwon-com" ,go-github-com-unknwon-com)
-       ;("go-github-com-syndtr-goleveldb" ,go-github-com-syndtr-goleveldb)
-       ;("go-github-com-smartystreets-goconvey" ,go-github-com-smartystreets-goconvey)
-       ;("go-github-com-siddontang-rdb" ,go-github-com-siddontang-rdb)
-       ;("go-github-com-siddontang-ledisdb" ,go-github-com-siddontang-ledisdb)
-       ;("go-github-com-siddontang-go-snappy" ,go-github-com-siddontang-go-snappy)
-       ;("go-github-com-siddontang-go" ,go-github-com-siddontang-go)
-       ;("go-github-com-pelletier-go-toml" ,go-github-com-pelletier-go-toml)
-       ;("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
-       ;("go-github-com-onsi-ginkgo" ,go-github-com-onsi-ginkgo)
-       ;("go-github-com-mattn-go-sqlite3" ,go-github-com-mattn-go-sqlite3)
-       ;;("go-github-com-lunny-nodb" ,go-github-com-lunny-nodb)
-       ;("go-github-com-lunny-log" ,go-github-com-lunny-log)
-       ;("go-github-com-lib-pq" ,go-github-com-lib-pq)
-       ;("go-github-com-golang-snappy" ,go-github-com-golang-snappy)
-       ;("go-github-com-go-sql-driver-mysql" ,go-github-com-go-sql-driver-mysql)
-       ;("go-github-com-go-redis-redis" ,go-github-com-go-redis-redis)
-       ;("go-github-com-edsrzf-mmap-go" ,go-github-com-edsrzf-mmap-go)
-       ;("go-github-com-cupcake-rdb" ,go-github-com-cupcake-rdb)
-       ;("go-github-com-bradfitz-gomemcache" ,go-github-com-bradfitz-gomemcache)
-       ;("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)
-       ))
-    (native-inputs
-     (list go-github-com-smartystreets-goconvey))
+     (list go-github-com-bradfitz-gomemcache
+           go-github-com-go-redis-redis
+           go-github-com-go-sql-driver-mysql
+           go-github-com-lunny-nodb
+           go-github-com-siddontang-ledisdb
+           go-github-com-smartystreets-goconvey
+           go-github-com-unknwon-com
+           go-gopkg-in-ini-v1))
     (home-page "https://gitea.com/go-chi/cache")
     (synopsis "cache")
     (description
@@ -1590,33 +1553,71 @@ and benchmarks for comparing against other libraries.")
             (delete-file-recursively "vendor")))))
     (build-system go-build-system)
     (arguments
-      ;; This seems suboptimal
-     '(#:unpack-path "github.com/ledisdb/ledisdb"
-       #:import-path "github.com/ledisdb/ledisdb/ledis"))
+     '(#:import-path "github.com/ledisdb/ledisdb"
+       #:modules ((guix build go-build-system)
+                  (guix build utils)
+                  (srfi srfi-1))
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'build
+           (lambda* (#:key import-path build-flags #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'build)
+                  #:build-flags build-flags
+                  #:import-path (string-drop directory 4)))
+               (find-files "src/github.com/ledisdb/ledisdb"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t))))
+         (replace 'check
+           (lambda* (#:key tests? import-path #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'check)
+                  #:tests? tests?
+                  #:import-path (string-drop directory 4)))
+               (find-files "src/github.com/ledisdb/ledisdb"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (string-contains file "ledisdb/ledisdb/ledis"))
+                         (not (string-contains file "ledisdb/server"))
+                         (not (string-contains file "ledisdb/store"))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t)))))))
     (propagated-inputs
-     (list go-gopkg-in-yaml-v2
-           go-gopkg-in-mgo-v2
-           go-gopkg-in-check-v1
-           go-golang-org-x-net
-           go-github-com-yuin-gopher-lua
-           go-github-com-ugorji-go
-           go-github-com-syndtr-goleveldb
-           go-github-com-siddontang-rdb
-           go-github-com-siddontang-goredis
-           go-github-com-siddontang-go
-           go-github-com-peterh-liner
-           go-github-com-pelletier-go-toml
-           go-github-com-onsi-ginkgo
-           go-github-com-niemeyer-pretty
-           go-github-com-gomodule-redigo
-           go-github-com-golang-snappy
+     (list go-github-com-edsrzf-mmap-go
            go-github-com-glendc-gopher-json
-           go-github-com-edsrzf-mmap-go
-           go-github-com-davecgh-go-spew
-           go-github-com-cupcake-rdb
-           go-github-com-alicebob-miniredis
-           go-github-com-alicebob-gopher-json
-           go-github-com-burntsushi-toml))
+           go-github-com-pelletier-go-toml
+           go-github-com-peterh-liner
+           go-github-com-siddontang-go
+           go-github-com-siddontang-goredis
+           go-github-com-siddontang-rdb
+           go-github-com-syndtr-goleveldb
+           go-github-com-ugorji-go
+           go-github-com-yuin-gopher-lua
+           go-golang-org-x-net))
     (home-page "https://github.com/siddontang/ledisdb")
     (synopsis "LedisDB")
     (description
@@ -1662,31 +1663,17 @@ list, hash, zset, set.")
          (base32 "1m5dmjlb85z6518fpvcyl9ljz6zivq9is4mxzbfylkssmavrqmb7"))))
     (build-system go-build-system)
     (arguments '(#:import-path "gitea.com/go-chi/session"))
-    ;; This seems to be an acurate list of what is *needed* to build the package
     (propagated-inputs
-     (list ;go-gopkg-in-ini-v1
-           ;go-google-golang-org-appengine
+     (list go-github-com-bradfitz-gomemcache
+           go-github-com-couchbase-go-couchbase
+           go-github-com-go-redis-redis-v8
+           go-github-com-go-sql-driver-mysql
+           go-github-com-go-chi-chi-v5
+           go-github-com-lib-pq
+           go-github-com-siddontang-ledisdb
+           go-github-com-smartystreets-goconvey
            go-github-com-unknwon-com
-           ;go-github-com-syndtr-goleveldb
-           ;go-github-com-smartystreets-goconvey
-           ;go-github-com-siddontang-rdb
-           ;go-github-com-siddontang-ledisdb
-           ;go-github-com-siddontang-go
-           ;go-github-com-pkg-errors
-           ;go-github-com-pelletier-go-toml
-           ;go-github-com-lib-pq
-           ;go-github-com-go-sql-driver-mysql
-           ;go-github-com-go-redis-redis-v8
-           ;go-github-com-go-chi-chi-v5
-           ;go-github-com-edsrzf-mmap-go
-           ;go-github-com-cupcake-rdb
-           ;go-github-com-couchbase-goutils
-           ;go-github-com-couchbase-gomemcached
-           ;go-github-com-couchbase-go-couchbase
-           ;go-github-com-bradfitz-gomemcache
-           ))
-    (native-inputs
-     (list go-github-com-go-chi-chi-v5))
+           go-gopkg-in-ini-v1))
     (home-page "https://gitea.com/go-chi/session")
     (synopsis "Session")
     (description
@@ -1778,7 +1765,7 @@ when that's undesirable.")
 (define-public go-github-com-caddyserver-certmagic
   (package
     (name "go-github-com-caddyserver-certmagic")
-    (version "0.15.2")
+    (version "0.14.1")
     (source
       (origin
         (method git-fetch)
@@ -1787,7 +1774,7 @@ when that's undesirable.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "1pwp3jjg51682ndvvj6rmjbpp3s00ssjc7sbd8hak306hbma1rw7"))))
+         (base32 "0y65cb1hncgb4fhrkc22fh47scdix77r22nlj11c1f846vy5frbx"))))
     (build-system go-build-system)
     (arguments
      '(#:tests? #f      ; Tests require network access.
@@ -2537,7 +2524,7 @@ Postgres or MySQL.")
 (define-public go-github-com-blevesearch-bleve-v2
   (package
     (name "go-github-com-blevesearch-bleve-v2")
-    (version "2.3.0")
+    (version "2.0.6")
     (source
       (origin
         (method git-fetch)
@@ -2546,7 +2533,7 @@ Postgres or MySQL.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "13dlc6m64x1r183gz4z98xs3mz6icznkvq072wr7ghxixnx6mpvk"))
+         (base32 "1xpcckqk9c2jbz64r72w9nbpwvjhsc0rbiays523rgvgja3h4zpw"))
         (modules '((guix build utils)))
         (snippet
          '(begin
@@ -8922,3 +8909,68 @@ versions, etc.")
       "Package jwt is a Go implementation of JSON Web Tokens:
 @url{http://self-issued.info/docs/draft-jones-json-web-token.html,http://self-issued.info/docs/draft-jones-json-web-token.html}")
     (license license:expat)))
+
+(define-public go-github-com-djherbis-buffer
+  (package
+    (name "go-github-com-djherbis-buffer")
+    (version "1.2.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/djherbis/buffer")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+          (base32 "17m6la583p9yskcj3bmhnazj8j4v8bmfjjp0kkv8i0zhqmcm0wmq"))))
+    (build-system go-build-system)
+    (arguments '(#:import-path "github.com/djherbis/buffer"))
+    (home-page "https://github.com/djherbis/buffer")
+    (synopsis "Buffer")
+    (description
+      "Package buffer implements a series of Buffers which can be composed to implement
+complicated buffering strategies")
+    (license license:expat)))
+
+(define-public go-github-com-djherbis-nio-v3
+  (package
+    (name "go-github-com-djherbis-nio-v3")
+    (version "3.0.1")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/djherbis/nio")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+          (base32 "06zd92m0p4hd6mkrp3ya043p4f9f1hhqwvcl69hxmdr1an39b699"))))
+    (build-system go-build-system)
+    (arguments '(#:import-path "github.com/djherbis/nio/v3"))
+    (propagated-inputs
+     (list go-github-com-djherbis-buffer))
+    (home-page "https://github.com/djherbis/nio")
+    (synopsis "nio")
+    (description "Package nio provides a few buffered io primitives.")
+    (license license:expat)))
+
+(define-public go-github-com-hashicorp-golang-lru
+  (package
+    (name "go-github-com-hashicorp-golang-lru")
+    (version "0.5.4")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/hashicorp/golang-lru")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+          (base32 "1sdbymypp9vrnzp8ashw0idlxvaq0rb0alwxx3x8g27yjlqi9jfn"))))
+    (build-system go-build-system)
+    (arguments '(#:import-path "github.com/hashicorp/golang-lru"))
+    (home-page "https://github.com/hashicorp/golang-lru")
+    (synopsis "golang-lru")
+    (description
+      "Package lru provides three different LRU caches of varying sophistication.")
+    (license license:mpl2.0)))
