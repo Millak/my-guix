@@ -660,7 +660,7 @@ transformations, and locale-specific text handling.")
      `(#:install-source? #f
        #:tests? #f      ; Disable tests and start with some manual testing
        #:import-path "code.gitea.io/gitea"
-       ;#:build-flags (list "-tags bindata sqlite sqlite_unlock_notify")
+       ;#:build-flags (list "-tags 'bindata sqlite sqlite_unlock_notify'")
        #:phases
        (modify-phases %standard-phases
          (add-after 'patch-source-shebangs 'unpatch-example-shebangs
@@ -675,22 +675,11 @@ transformations, and locale-specific text handling.")
                (("#!/gnu/store/.*/bin/sh") "#!/bin/sh"))))
          (add-before 'build 'prepare-build
            (lambda _
-             (setenv "TAGS" "bindata sqlite sqlite_unlock_notify")
-         ;    ))
-         ;(replace 'build
-         ;  (lambda _
-         ;    (with-directory-excursion "src/code.gitea.io/gitea"
-         ;      (substitute* "Makefile"
-         ;        (("-mod=vendor") "")
-         ;        (("go-check generate") "go-check")
-                 ;(("(GO_DIRS := .) vendor(.*)" all first last)
-                 ; (string-append first last "\n"))
-         ;        )
-         ;      (invoke "make" "build")
-         ;      (invoke "make" "gitea")
-         ;      (invoke "make" "install")
-         ;      )
-             ))
+             (setenv "TAGS" "bindata sqlite sqlite_unlock_notify")))
+         (replace 'build
+           (lambda _
+             (with-directory-excursion "src/code.gitea.io/gitea"
+               (invoke "make" "build"))))
          (replace 'check
            (lambda* (#:key tests? #:allow-other-keys)
              (when tests?
@@ -709,18 +698,17 @@ transformations, and locale-specific text handling.")
                  (invoke "make" "test-mysql8")
                  (invoke "make" "test-pgsql")
                  ))))
-         ;(replace 'install
-         ;  (lambda _
-         ;    (with-directory-excursion "src/code.gitea.io/gitea"
-         ;      (invoke "make" "install"))))
+         (replace 'install
+           (lambda _
+             (with-directory-excursion "src/code.gitea.io/gitea"
+               (invoke "make" "install"))))
          (add-after 'install 'wrap-program
            (lambda* (#:key outputs inputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
                     (bin (string-append out "/bin/gitea"))
                     (git (assoc-ref inputs "git")))
                (wrap-program bin
-                 `("PATH" ":" prefix (,(string-append git "/bin")))))))
-         )))
+                 `("PATH" ":" prefix (,(string-append git "/bin"))))))))))
     (native-inputs
      (list go-github-com-stretchr-testify
            node))

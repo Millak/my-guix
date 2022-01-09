@@ -1,7 +1,16 @@
 diff --git a/Makefile b/Makefile
-index bf3d93d3c..b6f305270 100644
+index bf3d93d3c..48f056189 100644
 --- a/Makefile
 +++ b/Makefile
+@@ -17,7 +17,7 @@ else
+ DIST := dist
+ DIST_DIRS := $(DIST)/binaries $(DIST)/release
+ IMPORT := code.gitea.io/gitea
+-export GO111MODULE=on
++export GO111MODULE=off
+ 
+ GO ?= go
+ SHASUM ?= shasum -a 256
 @@ -93,7 +93,7 @@ LDFLAGS := $(LDFLAGS) -X "main.MakeVersion=$(MAKE_VERSION)" -X "main.Version=$(G
  
  LINUX_ARCHS ?= linux/amd64,linux/386,linux/arm-5,linux/arm-6,linux/arm64
