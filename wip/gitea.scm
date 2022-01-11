@@ -865,6 +865,7 @@ transformations, and locale-specific text handling.")
 ;;;
 ;;;
 
+;; (gnu packages gitea)
 (define-public go-code-gitea-io-sdk-gitea
   (package
     (name "go-code-gitea-io-sdk-gitea")
@@ -890,13 +891,15 @@ transformations, and locale-specific text handling.")
     (home-page "https://code.gitea.io/sdk")
     (synopsis "Gitea SDK for Go")
     (description
-      "This project acts as a client SDK implementation written in Go to interact with
-the Gitea API implementation.  For further informations take a look at the
+     "This project acts as a client SDK implementation written in Go to interact
+with the Gitea API implementation.  For further informations take a look at the
 current @url{https://godoc.org/code.gitea.io/sdk/gitea,documentation}.")
     (license license:expat)))
 
+;; update in (gnu packages golang)
 (define-public go-github-com-hashicorp-go-version-1.3.0
   (package
+    (inherit go-github-com-hashicorp-go-version)
     (name "go-github-com-hashicorp-go-version")
     (version "1.3.0")
     (source
@@ -907,18 +910,10 @@ current @url{https://godoc.org/code.gitea.io/sdk/gitea,documentation}.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "15ygnddqh4wq1l866cicc9cmbcqvym16ai8dj71i0wqyknnfxr3v"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/hashicorp/go-version"))
-    (home-page "https://github.com/hashicorp/go-version")
-    (synopsis "Versioning Library for Go")
-    (description
-      "go-version is a library for parsing versions and version constraints, and
-verifying versions against a set of constraints.  go-version can sort a
-collection of versions properly, handles prerelease/beta versions, can increment
-versions, etc.")
-    (license license:mpl2.0)))
+         (base32 "15ygnddqh4wq1l866cicc9cmbcqvym16ai8dj71i0wqyknnfxr3v"))))
+    (arguments '(#:import-path "github.com/hashicorp/go-version"))))
 
+;; (gnu packages gitea)
 (define-public go-code-gitea-io-gitea-vet
   (package
     (name "go-code-gitea-io-gitea-vet")
@@ -937,7 +932,7 @@ versions, etc.")
     (propagated-inputs
      (list go-golang-org-x-tools))
     (home-page "https://code.gitea.io/gitea-vet")
-    (synopsis "gitea-vet")
+    (synopsis "Golang vet tool for gitea development")
     (description "@code{go vet} tool for Gitea.")
     (license license:expat)))
 
@@ -957,16 +952,16 @@ versions, etc.")
     (build-system go-build-system)
     (arguments '(#:import-path "gitea.com/go-chi/binding"))
     (propagated-inputs
-     (list go-github-com-unknwon-com
+     (list go-github-com-go-chi-chi-v5
            go-github-com-goccy-go-json
-           go-github-com-go-chi-chi-v5))
+           go-github-com-unknwon-com))
     (native-inputs
      (list go-github-com-stretchr-testify))
     (home-page "https://gitea.com/go-chi/binding")
-    (synopsis "License")
+    (synopsis "Middleware binding providing request data binding and validation")
     (description
      "Package binding is a middleware that provides request data binding and
-validation for Chi.")
+validation for @code{net/http}.")
     (license license:asl2.0)))
 
 (define-public go-github-com-go-redis-redis
@@ -987,22 +982,23 @@ validation for Chi.")
      '(#:tests? #f      ; Tests need a running redis server.
        #:import-path "github.com/go-redis/redis"))
     (native-inputs
-     (list go-github-com-onsi-ginkgo))
+     (list go-github-com-onsi-ginkgo
+           go-github-com-onsi-gomega))
     (home-page "https://github.com/go-redis/redis")
     (synopsis "Redis client for Golang")
-    (description "Package redis implements a Redis client.")
+    (description "This package implements a Redis client in Golang.")
     (license license:bsd-2)))
 
 (define-public go-github-com-lunny-log
   (package
     (name "go-github-com-lunny-log")
-    (version "0.0.0-20160921050905-7887c61bf0de")
+    (version "0.1")
     (source
       (origin
         (method git-fetch)
         (uri (git-reference
                (url "https://github.com/lunny/log")
-               (commit (go-version->git-ref version))))
+               (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
          (base32 "1yyqk5lmz3nrd6dnpafmrpkx80f311i5dzw6n2lvn29n9jkkjg97"))))
@@ -1011,10 +1007,11 @@ validation for Chi.")
     (native-inputs
      (list go-github-com-mattn-go-sqlite3))
     (home-page "https://github.com/lunny/log")
-    (synopsis "log")
-    (description "For Single File:")
+    (synopsis "Extension of Golang log")
+    (description "This package is an extension of Golang log.")
     (license license:bsd-3)))
 
+;; Stick with the go-chi packages.
 (define-public go-github-com-lunny-nodb
   (package
     (name "go-github-com-lunny-nodb")
@@ -1039,9 +1036,10 @@ validation for Chi.")
            go-github-com-syndtr-goleveldb))
     (home-page "https://github.com/lunny/nodb")
     (synopsis "NoDB")
-    (description "package nodb is a high performance embedded NoSQL.")
+    (description "Package nodb is a high performance embedded NoSQL.")
     (license license:expat)))
 
+;; Can we not use this library?
 (define-public go-github-com-siddontang-go-snappy
   (package
     (name "go-github-com-siddontang-go-snappy")
@@ -1058,26 +1056,28 @@ validation for Chi.")
     (build-system go-build-system)
     (arguments
      '(
-       #:import-path "github.com/siddontang/go-snappy"
-       ;#:unpack-path "github.com/siddontang/go-snappy"
-       ;#:import-path "github.com/siddontang/go-snappy/snappy"
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'build
-           (lambda* (#:key import-path build-flags #:allow-other-keys)
-             (lambda (directory)
-               ((assoc-ref %standard-phases 'build)
-                #:build-flags build-flags
-                #:import-path "github.com/siddontang/go-snappy/snappy"))))
-         (replace 'check
-           (lambda* (#:key tests? import-path #:allow-other-keys)
-             (lambda (directory)
-               ((assoc-ref %standard-phases 'check)
-                #:tests? tests?
-                #:import-path "github.com/siddontang/go-snappy/snappy")))))))
+       #:unpack-path "github.com/siddontang/go-snappy"
+       #:import-path "github.com/siddontang/go-snappy/snappy"
+
+       ;#:import-path "github.com/siddontang/go-snappy"
+       ;#:phases
+       ;(modify-phases %standard-phases
+       ;  (replace 'build
+       ;    (lambda* (#:key import-path build-flags #:allow-other-keys)
+       ;      (lambda (directory)
+       ;        ((assoc-ref %standard-phases 'build)
+       ;         #:build-flags build-flags
+       ;         #:import-path "github.com/siddontang/go-snappy/snappy"))))
+       ;  (replace 'check
+       ;    (lambda* (#:key tests? import-path #:allow-other-keys)
+       ;      (lambda (directory)
+       ;        ((assoc-ref %standard-phases 'check)
+       ;         #:tests? tests?
+       ;         #:import-path "github.com/siddontang/go-snappy/snappy")))))
+       ))
     (home-page "https://github.com/siddontang/go-snappy")
-    (synopsis #f)
-    (description #f)
+    (synopsis "Snappy library for Golang")
+    (description "This is a Snappy library for the Go programming language.")
     (license license:bsd-3)))
 
 (define-public go-gitea-com-go-chi-cache
@@ -1099,13 +1099,14 @@ validation for Chi.")
      (list go-github-com-bradfitz-gomemcache
            go-github-com-go-redis-redis
            go-github-com-go-sql-driver-mysql
+           go-github-com-lib-pq
            go-github-com-lunny-nodb
            go-github-com-siddontang-ledisdb
            go-github-com-smartystreets-goconvey
            go-github-com-unknwon-com
            go-gopkg-in-ini-v1))
     (home-page "https://gitea.com/go-chi/cache")
-    (synopsis "cache")
+    (synopsis "Cache management for different databases")
     (description
      "Package cache is a middleware that provides the cache management of Macaron.")
     (license license:asl2.0)))
@@ -1126,12 +1127,12 @@ validation for Chi.")
     (build-system go-build-system)
     (arguments '(#:import-path "gitea.com/go-chi/captcha"))
     (propagated-inputs
-     (list go-github-com-unknwon-com
-           go-github-com-smartystreets-goconvey
+     (list go-gitea-com-go-chi-cache
            go-github-com-go-chi-chi-v5
-           go-gitea-com-go-chi-cache))
+           go-github-com-smartystreets-goconvey
+           go-github-com-unknwon-com))
     (home-page "https://gitea.com/go-chi/captcha")
-    (synopsis "captcha")
+    (synopsis "Captcha service for chi")
     (description
      "Package captcha a middleware that provides captcha service for chi.")
     (license license:asl2.0)))
@@ -1151,12 +1152,12 @@ validation for Chi.")
          (base32 "1fblh4anp85qc77zv7465a7a5yn2l5i2lrwsrnbhlmhpzfa6lmdl"))))
     (build-system go-build-system)
     (arguments
-     '(#:tests? #f      ; TODO: Fix
+     '(#:tests? #f      ; bad argument #1 to decode
        #:import-path "github.com/alicebob/gopher-json"))
     (propagated-inputs
      (list go-github-com-yuin-gopher-lua))
     (home-page "https://github.com/alicebob/gopher-json")
-    (synopsis "gopher-json")
+    (synopsis "JSON encoder/decoder")
     (description
      "Package json is a simple JSON encoder/decoder for gopher-lua.")
     (license license:unlicense)))
@@ -1176,7 +1177,7 @@ validation for Chi.")
          (base32 "193vjx8lrrklffjyi6x635hmmwa72gjvcq2dm09hyd3258fpdzrg"))))
     (build-system go-build-system)
     (arguments
-     '(#:tests? #f      ; TODO: Fix
+     '(#:tests? #f      ; cmd_scripting_test.go:444: no EVAL error
        #:import-path "github.com/alicebob/miniredis"))
     (propagated-inputs
      (list go-github-com-alicebob-gopher-json
@@ -1207,8 +1208,8 @@ empty.")
     (arguments '(#:import-path "github.com/cupcake/rdb"))
     (native-inputs
      (list go-gopkg-in-check-v1))
-    (home-page "https://github.com/cupcake/rdb")
-    (synopsis "rdb")
+    (home-page "https://github.com/tent/rdb")
+    (synopsis "Redis RDB parser for Go")
     (description
      "Package rdb implements parsing and encoding of the Redis RDB file format.")
     (license license:expat)))
@@ -1231,34 +1232,34 @@ empty.")
     (propagated-inputs
      (list go-golang-org-x-sys))
     (home-page "https://github.com/edsrzf/mmap-go")
-    (synopsis "mmap-go")
+    (synopsis "Prtable mmap package for Go")
     (description
      "Package mmap allows mapping files into memory.  It tries to provide a simple,
 reasonably portable interface, but doesn't go out of its way to abstract away
-every little platform detail.  This specifically means:")
+every little platform detail.")
     (license license:bsd-3)))
 
 (define-public go-github-com-glendc-gopher-json
   (package
     (name "go-github-com-glendc-gopher-json")
-    (version "0.0.0-20170414221815-dc4743023d0c")
+    (version "0.1.0")
     (source
       (origin
         (method git-fetch)
         (uri (git-reference
                (url "https://github.com/GlenDC/gopher-json")
-               (commit (go-version->git-ref version))))
+               (commit version)))
         (file-name (git-file-name name version))
         (sha256
          (base32 "1hvam978ls0768smwfywwfg2dy816bfifch4hdwwbsx2d59zpphs"))))
     (build-system go-build-system)
     (arguments
-     '(#:tests? #f      ; TODO: Fix
+     '(#:tests? #f      ; cannot encode recursively nested tables to JSON
        #:import-path "github.com/glendc/gopher-json"))
     (propagated-inputs
      (list go-github-com-yuin-gopher-lua))
     (home-page "https://github.com/glendc/gopher-json")
-    (synopsis "gopher-json")
+    (synopsis "JSON encoder/decoder for gopher-lua")
     (description
      "Package json is a simple JSON encoder/decoder for gopher-lua.")
     (license license:unlicense)))
@@ -1266,7 +1267,7 @@ every little platform detail.  This specifically means:")
 (define-public go-github-com-gomodule-redigo
   (package
     (name "go-github-com-gomodule-redigo")
-    (version "1.8.6")
+    (version "1.8.8")
     (source
       (origin
         (method git-fetch)
@@ -1275,7 +1276,7 @@ every little platform detail.  This specifically means:")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "0s8njypx4in1pmjq4k3s8xzc70x39yp03sh69mzi905fqaj8609r"))))
+         (base32 "0wplaaxg7f6c6c08gdp33l48hygn8gq1rhlnjzr1c9qcggsm07k1"))))
     (build-system go-build-system)
     (arguments
      '(#:unpack-path "github.com/gomodule/redigo"
@@ -1284,9 +1285,9 @@ every little platform detail.  This specifically means:")
      (list go-github-com-stretchr-testify
            redis))
     (home-page "https://github.com/gomodule/redigo")
-    (synopsis "Redigo")
+    (synopsis "Go client for Redis")
     (description
-      "Redigo is a @url{http://golang.org/,Go} client for the
+     "Redigo is a @url{http://golang.org/,Go} client for the
 @url{http://redis.io/,Redis} database.")
     (license license:asl2.0)))
 
@@ -1308,12 +1309,10 @@ every little platform detail.  This specifically means:")
     (propagated-inputs
      (list go-github-com-mattn-go-runewidth))
     (home-page "https://github.com/peterh/liner")
-    (synopsis "Liner")
+    (synopsis "Line editor in Golang")
     (description
-     "Package liner implements a simple command line editor, inspired by linenoise
-(@url{https://github.com/antirez/linenoise/,https://github.com/antirez/linenoise/}).
- This package supports WIN32 in addition to the xterm codes supported by
-everything else.")
+     "Package liner implements a simple command line editor, inspired by
+@url{https://github.com/antirez/linenoise/,linenoise}.")
     (license license:expat)))
 
 (define-public go-github-com-siddontang-go
@@ -1332,10 +1331,60 @@ everything else.")
     (build-system go-build-system)
     (arguments
      '(#:import-path "github.com/siddontang/go"
-       #:tests? #f
+       #:modules ((guix build go-build-system)
+                  (guix build utils)
+                  (srfi srfi-1))
        #:phases
        (modify-phases %standard-phases
-         (delete 'build))))
+         (replace 'build
+           (lambda* (#:key import-path build-flags #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'build)
+                  #:build-flags build-flags
+                  #:import-path (string-drop directory 4)))
+               (find-files "src/github.com/siddontang/go"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t))))
+         (replace 'check
+           (lambda* (#:key tests? import-path #:allow-other-keys)
+             (for-each
+               (lambda (directory)
+                 ((assoc-ref %standard-phases 'check)
+                  #:tests? tests?
+                  #:import-path (string-drop directory 4)))
+               (find-files "src/github.com/siddontang/go"
+                 (lambda (file stat)
+                   (and
+                     (eq? (stat:type stat) 'directory)
+                     (let ((files (find-files file "\\.go$")))
+                       (and
+                         (not (null? files))
+                         (not (string-contains file "go/bson"))
+                         (not (string-contains file "go/filelock"))
+                         (not (string-contains file "go/list2"))
+                         (not (string-contains file "go/websocket"))    ; wants go-github-com-gorilla-websocket
+                         (not (string-contains file "go/rpc"))          ; wants network access
+                         (not (null?
+                                (filter-map
+                                  (lambda (test-entry)
+                                    (not (string-contains test-entry file-name-separator-string)))
+                                  (map (lambda (entry)
+                                         (string-drop entry (1+ (string-length file))))
+                                       files))))))))
+                 #:directories? #t)))))))
     (home-page "https://github.com/siddontang/go")
     (synopsis "golib")
     (description "my golang lib")
@@ -4696,22 +4745,14 @@ easier.")
     (arguments '(#:import-path "github.com/lafriks/xormstore"))
     (propagated-inputs
      (list go-xorm-io-xorm
-           ;go-gopkg-in-check-v1
-           ;go-golang-org-x-text
-           ;go-golang-org-x-crypto
-           ;go-github-com-kr-pretty
            go-github-com-gorilla-sessions
            go-github-com-gorilla-securecookie
-           go-github-com-gorilla-context
-           ;go-github-com-golang-protobuf
-           ))
+           go-github-com-gorilla-context))
     (native-inputs
-     (list
-           go-github-com-denisenkom-go-mssqldb
+     (list go-github-com-denisenkom-go-mssqldb
            go-github-com-go-sql-driver-mysql
            go-github-com-lib-pq
-           go-github-com-mattn-go-sqlite3
-           ))
+           go-github-com-mattn-go-sqlite3))
     (home-page "https://github.com/lafriks/xormstore")
     (synopsis "XORM backend for gorilla sessions")
     (description "Package xormstore is a XORM backend for gorilla sessions")
