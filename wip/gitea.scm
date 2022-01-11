@@ -1386,8 +1386,8 @@ every little platform detail.")
                                        files))))))))
                  #:directories? #t)))))))
     (home-page "https://github.com/siddontang/go")
-    (synopsis "golib")
-    (description "my golang lib")
+    (synopsis "Collection of Golang libraries")
+    (description "This package contains a curated collection of Golang libraries.")
     (license license:expat)))
 
 (define-public go-github-com-siddontang-goredis
@@ -1408,8 +1408,8 @@ every little platform detail.")
     (native-inputs
      (list go-github-com-alicebob-miniredis))
     (home-page "https://github.com/siddontang/goredis")
-    (synopsis #f)
-    (description "Package goredis is a client for the redis and ledisdb.")
+    (synopsis "Redis client in Go")
+    (description "Package goredis is a client for redis and ledisdb.")
     (license license:expat)))
 
 (define-public go-github-com-ugorji-go-codec
@@ -1452,7 +1452,7 @@ codec/encoding library for binc, msgpack, cbor, json.")
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/ugorji/go"))
     (home-page "https://github.com/ugorji/go")
-    (synopsis "go-codec")
+    (synopsis "Golang go-codec library")
     (description
      "This repository contains the @code{go-codec} library, the @code{codecgen} tool
 and benchmarks for comparing against other libraries.")
@@ -1473,12 +1473,12 @@ and benchmarks for comparing against other libraries.")
          (base32 "07ksz43a8kvx0hm8qji6kb1xm7fbwmwapcvcq9zpc8v337jggs4g"))))
     (build-system go-build-system)
     (arguments
-     '(#:tests? #f      ; TODO: Figure out fix
+     '(#:tests? #f      ; https://github.com/chzyer/logex/issues/4
        #:import-path "github.com/chzyer/logex"))
     (home-page "https://github.com/chzyer/logex")
-    (synopsis "Logex")
+    (synopsis "Enhanced logging library")
     (description
-     "An golang log lib, supports tracing and level, wrap by standard log lib")
+     "A golang log lib, supports tracing and level, wrapped by the standard log lib.")
     (license license:expat)))
 
 (define-public go-github-com-chzyer-readline
@@ -1499,7 +1499,7 @@ and benchmarks for comparing against other libraries.")
     (native-inputs
      (list go-github-com-chzyer-test))
     (home-page "https://github.com/chzyer/readline")
-    (synopsis "Guide")
+    (synopsis "Golang readline implementation")
     (description
      "Readline is a pure go implementation for GNU-Readline kind library.")
     (license license:expat)))
@@ -1524,8 +1524,9 @@ and benchmarks for comparing against other libraries.")
     (propagated-inputs
      (list go-github-com-chzyer-logex))
     (home-page "https://github.com/chzyer/test")
-    (synopsis "test")
-    (description #f)
+    (synopsis "Golang test library")
+    (description "This package provides a testing library for
+go-github-com-chzyer packages.")
     (license license:expat)))
 
 (define-public go-github-com-yuin-gopher-lua
@@ -1543,16 +1544,20 @@ and benchmarks for comparing against other libraries.")
          (base32 "1knkabycjvjkjb7vdj1cm0g856fsc8yzm3yqlwhlbzbpkfq4xjcf"))))
     (build-system go-build-system)
     (arguments
-     '(#:tests? #f      ; TODO: Fix
-       #:import-path "github.com/yuin/gopher-lua"))
+     '(#:import-path "github.com/yuin/gopher-lua"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-tests
+           (lambda _
+             (with-directory-excursion "src/github.com/yuin/gopher-lua"
+               (substitute* "script_test.go"
+                 ;; Procduces stack overflow.
+                 ((".*files\\.lua.*") ""))))))))
     (propagated-inputs
-     (list go-golang-org-x-sys
-           go-github-com-chzyer-test
-           go-github-com-chzyer-readline
-           go-github-com-chzyer-logex))
+     (list go-github-com-chzyer-readline))
     (home-page "https://github.com/yuin/gopher-lua")
-    (synopsis #f)
-    (description "GopherLua: VM and compiler for Lua in Go")
+    (synopsis "Lua compiler in Go")
+    (description "GopherLua is a VM and compiler for Lua in Go.")
     (license license:expat)))
 
 (define-public go-gopkg-in-mgo-v2
@@ -1582,7 +1587,7 @@ and benchmarks for comparing against other libraries.")
      (list go-gopkg-in-check-v1))
     (home-page "https://gopkg.in/mgo.v2")
     (synopsis "The MongoDB driver for Go")
-    (description "Package mgo offers a rich MongoDB driver for Go.")
+    (description "This package provides a MongoDB driver for Go.")
     (license license:bsd-2)))
 
 (define-public go-github-com-siddontang-ledisdb
@@ -1669,12 +1674,11 @@ and benchmarks for comparing against other libraries.")
            go-github-com-ugorji-go
            go-github-com-yuin-gopher-lua
            go-golang-org-x-net))
-    (home-page "https://github.com/siddontang/ledisdb")
+    (home-page "https://github.com/ledisdb/ledisdb")
     (synopsis "LedisDB")
     (description
      "Ledisdb is a high-performance NoSQL database, similar to Redis, written in
-@url{http://golang.org/,Go}.  It supports many data structures including kv,
-list, hash, zset, set.")
+Go.  It supports many data structures including kv, list, hash, zset, set.")
     (license license:expat)))
 
 (define-public go-github-com-siddontang-rdb
@@ -1695,8 +1699,8 @@ list, hash, zset, set.")
     (propagated-inputs
      (list go-github-com-cupcake-rdb))
     (home-page "https://github.com/siddontang/rdb")
-    (synopsis "rdb")
-    (description "Handling Redis RDB format.")
+    (synopsis "Handle Redis RDB format in Golang")
+    (description "This package handles Redis RDB format in Golang.")
     (license license:expat)))
 
 (define-public go-gitea-com-go-chi-session
@@ -1717,18 +1721,18 @@ list, hash, zset, set.")
     (propagated-inputs
      (list go-github-com-bradfitz-gomemcache
            go-github-com-couchbase-go-couchbase
+           go-github-com-go-chi-chi-v5
            go-github-com-go-redis-redis-v8
            go-github-com-go-sql-driver-mysql
-           go-github-com-go-chi-chi-v5
            go-github-com-lib-pq
            go-github-com-siddontang-ledisdb
            go-github-com-smartystreets-goconvey
            go-github-com-unknwon-com
            go-gopkg-in-ini-v1))
     (home-page "https://gitea.com/go-chi/session")
-    (synopsis "Session")
-    (description
-     "Package session a middleware that provides the session management of Macaron.")
+    (synopsis "Session management for go-chi")
+    (description "This package provides middleware that provides session
+management for @code{go-chi}.")
     (license license:asl2.0)))
 
 (define-public go-gitea-com-lunny-levelqueue
@@ -1747,12 +1751,11 @@ list, hash, zset, set.")
     (build-system go-build-system)
     (arguments '(#:import-path "gitea.com/lunny/levelqueue"))
     (propagated-inputs
-     (list go-github-com-syndtr-goleveldb
-           go-github-com-golang-snappy))
+     (list go-github-com-syndtr-goleveldb))
     (native-inputs
      (list go-github-com-stretchr-testify))
     (home-page "https://gitea.com/lunny/levelqueue")
-    (synopsis "levelqueue")
+    (synopsis "Golang queue library")
     (description
      "Level queue is a simple queue golang library base on go-leveldb.")
     (license license:expat)))
@@ -5055,7 +5058,9 @@ used as a base for different API flavors.  Package pat is documented at:")
         (sha256
           (base32 "1s939szsdv0ggp69rig8dkl74s5dvwzm5cw80h0b3dvkqhikim5d"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/lestrrat-go/backoff/v2"))
+    (arguments
+     '(#:tests? #f      ; Tests only pass under low system load.
+       #:import-path "github.com/lestrrat-go/backoff/v2"))
     (propagated-inputs
      (list go-github-com-lestrrat-go-option))
     (native-inputs
