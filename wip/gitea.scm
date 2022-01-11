@@ -1757,7 +1757,7 @@ management for @code{go-chi}.")
     (home-page "https://gitea.com/lunny/levelqueue")
     (synopsis "Golang queue library")
     (description
-     "Level queue is a simple queue golang library base on go-leveldb.")
+     "Level queue is a simple queue golang library based on go-leveldb.")
     (license license:expat)))
 
 (define-public go-github-com-nytimes-gziphandler
@@ -1819,7 +1819,7 @@ when that's undesirable.")
 (define-public go-github-com-caddyserver-certmagic
   (package
     (name "go-github-com-caddyserver-certmagic")
-    (version "0.14.1")
+    (version "0.14.5")
     (source
       (origin
         (method git-fetch)
@@ -1828,21 +1828,21 @@ when that's undesirable.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "0y65cb1hncgb4fhrkc22fh47scdix77r22nlj11c1f846vy5frbx"))))
+         (base32 "0fda736d9787bw1zirs7ns5chsalgzbn6dsb8sagl1hy1kj55w4s"))))
     (build-system go-build-system)
     (arguments
      '(#:tests? #f      ; Tests require network access.
        #:import-path "github.com/caddyserver/certmagic"))
     (propagated-inputs
-     (list go-golang-org-x-net
-           go-golang-org-x-crypto
-           go-go-uber-org-zap
-           go-github-com-miekg-dns
-           go-github-com-mholt-acmez
+     (list go-github-com-klauspost-cpuid-v2
            go-github-com-libdns-libdns
-           go-github-com-klauspost-cpuid-v2))
+           go-github-com-mholt-acmez
+           go-github-com-miekg-dns
+           go-go-uber-org-zap
+           go-golang-org-x-crypto
+           go-golang-org-x-net))
     (home-page "https://github.com/caddyserver/certmagic")
-    (synopsis "Easy and Powerful TLS Automation")
+    (synopsis "Fully-managed TLS certificate issuance and renewal")
     (description
      "Package certmagic automates the obtaining and renewal of TLS certificates,
 including TLS & HTTPS best practices such as robust OCSP stapling, caching,
