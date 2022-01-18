@@ -316,6 +316,8 @@
     (synopsis "Secure messaging and file-sharing")
     (description "Keybase is a safe, secure, and private app for everything you
 do online.")
+    (properties
+      '((release-monitoring-url . "https://github.com/keybase/client/releases")))
     (license license:bsd-3)))
 
 (define-public go-golang.org-x-sync-semaphore
