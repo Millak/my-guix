@@ -1191,6 +1191,7 @@ There are no dependencies on system binaries, and every server you start will be
 empty.")
     (license license:expat)))
 
+;; (gnu packages databases)
 (define-public go-github-com-cupcake-rdb
   (package
     (name "go-github-com-cupcake-rdb")
@@ -1232,7 +1233,7 @@ empty.")
     (propagated-inputs
      (list go-golang-org-x-sys))
     (home-page "https://github.com/edsrzf/mmap-go")
-    (synopsis "Prtable mmap package for Go")
+    (synopsis "Portable mmap package for Go")
     (description
      "Package mmap allows mapping files into memory.  It tries to provide a simple,
 reasonably portable interface, but doesn't go out of its way to abstract away
@@ -1264,6 +1265,7 @@ every little platform detail.")
      "Package json is a simple JSON encoder/decoder for gopher-lua.")
     (license license:unlicense)))
 
+;; (gnu packages databases)
 (define-public go-github-com-gomodule-redigo
   (package
     (name "go-github-com-gomodule-redigo")
@@ -1287,8 +1289,7 @@ every little platform detail.")
     (home-page "https://github.com/gomodule/redigo")
     (synopsis "Go client for Redis")
     (description
-     "Redigo is a @url{http://golang.org/,Go} client for the
-@url{http://redis.io/,Redis} database.")
+     "Redigo is a Go client for the Redis database.")
     (license license:asl2.0)))
 
 (define-public go-github-com-peterh-liner
@@ -1560,6 +1561,7 @@ go-github-com-chzyer packages.")
     (description "GopherLua is a VM and compiler for Lua in Go.")
     (license license:expat)))
 
+;; (gnu packages databases)
 (define-public go-gopkg-in-mgo-v2
   (package
     (name "go-gopkg-in-mgo-v2")
@@ -1576,17 +1578,11 @@ go-github-com-chzyer packages.")
     (build-system go-build-system)
     (arguments
      '(#:tests? #f      ; Tests try to use a running mongodb server.
-       #:import-path "gopkg.in/mgo.v2"
-       #:phases
-       (modify-phases %standard-phases
-         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
-           (lambda* (#:key outputs #:allow-other-keys)
-             (for-each make-file-writable
-                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
+       #:import-path "gopkg.in/mgo.v2"))
     (native-inputs
      (list go-gopkg-in-check-v1))
     (home-page "https://gopkg.in/mgo.v2")
-    (synopsis "The MongoDB driver for Go")
+    (synopsis "MongoDB driver for Go")
     (description "This package provides a MongoDB driver for Go.")
     (license license:bsd-2)))
 
@@ -1764,17 +1760,18 @@ management for @code{go-chi}.")
   (package
     (name "go-github-com-nytimes-gziphandler")
     (version "1.1.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/nytimes/gziphandler")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0rhrjlw220hnymzfccm0yir3pc9dpj7h3gwzhzq2cbsb3hhsqvyy"))))
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/nytimes/gziphandler")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0rhrjlw220hnymzfccm0yir3pc9dpj7h3gwzhzq2cbsb3hhsqvyy"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/NYTimes/gziphandler"))
+    (arguments
+     '(#:import-path "github.com/NYTimes/gziphandler"))
     (native-inputs
      (list go-github-com-stretchr-testify))
     (home-page "https://github.com/NYTimes/gziphandler")
@@ -1786,6 +1783,7 @@ leave that to a reverse proxy (like nginx or Varnish), this package is useful
 when that's undesirable.")
     (license license:asl2.0)))
 
+;; (gnu packages databases)
 (define-public go-github-com-bradfitz-gomemcache
   (package
     (name "go-github-com-bradfitz-gomemcache")
@@ -1802,7 +1800,7 @@ when that's undesirable.")
         (modules '((guix build utils)))
         (snippet
          '(begin
-            ;; Fixes the untyped-int -> string of one rune issue.
+            ;; Fixes the 'untyped-int -> string of one rune' issue.
             ;; https://github.com/golang/go/issues/32479
             (substitute* "memcache/memcache_test.go"
               (("string\\(0x7f") "string(rune(0x7f)"))))))
@@ -1811,7 +1809,7 @@ when that's undesirable.")
      '(#:unpack-path "github.com/bradfitz/gomemcache"
        #:import-path "github.com/bradfitz/gomemcache/memcache"))
     (home-page "https://github.com/bradfitz/gomemcache")
-    (synopsis "Memcache client library for the Go programming language")
+    (synopsis "Memcache client library in Go")
     (description
      "This is a memcache client library for the Go programming language.")
     (license license:asl2.0)))
@@ -1919,6 +1917,7 @@ services.")
     (description "Package couchbase provides a smart client for go.")
     (license license:expat)))
 
+;; (gnu packages databases)
 (define-public go-github-com-couchbase-gomemcached
   (package
     (name "go-github-com-couchbase-gomemcached")
@@ -1937,9 +1936,9 @@ services.")
     (native-inputs
      (list go-github-com-stretchr-testify))
     (home-page "https://github.com/couchbase/gomemcached")
-    (synopsis "gomemcached")
+    (synopsis "Memcached binary protocol toolkit for go")
     (description
-     "Package gomemcached is binary protocol packet formats and constants.")
+     "This package provides memcache client and server functionality.")
     (license license:expat)))
 
 ;; DO NOT UPGRADE! Future versions are under the nonfree Business Source License.
@@ -2547,6 +2546,7 @@ processing.")
      "gtreap is an immutable treap implementation in the Go Language")
     (license license:expat)))
 
+;; (gnu packages databases)
 (define-public go-go-etcd-io-bbolt
   (package
     (name "go-go-etcd-io-bbolt")
@@ -3590,11 +3590,11 @@ errors.")
     (arguments '(#:import-path "github.com/go-openapi/strfmt"))
     (propagated-inputs
      (list go-go-mongodb-org-mongo-driver
-        go-github-com-oklog-ulid
-        go-github-com-mitchellh-mapstructure
-        go-github-com-google-uuid
-        go-github-com-go-openapi-errors
-        go-github-com-asaskevich-govalidator))
+           go-github-com-oklog-ulid
+           go-github-com-mitchellh-mapstructure
+           go-github-com-google-uuid
+           go-github-com-go-openapi-errors
+           go-github-com-asaskevich-govalidator))
     (native-inputs
      (list go-github-com-stretchr-testify))
     (home-page "https://github.com/go-openapi/strfmt")
@@ -8003,7 +8003,7 @@ used as a more human friendly alternative to JSON for structured logging.")
     (home-page "https://github.com/jackc/chunkreader")
     (synopsis "chunkreader")
     (description
-      "Package chunkreader provides an io.Reader wrapper that minimizes IO reads and
+      "Package chunkreader provides an @code{io.Reader} wrapper that minimizes IO reads and
 memory allocations.")
     (license license:expat)))
 
@@ -8420,6 +8420,7 @@ compatibility with code using standard lib.")
       "Package decimal implements an arbitrary precision fixed-point decimal.")
     (license license:expat)))
 
+;; unused?
 (define-public go-github-com-ziutek-mymysql
   (package
     (name "go-github-com-ziutek-mymysql")
