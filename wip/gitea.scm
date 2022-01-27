@@ -1191,30 +1191,6 @@ There are no dependencies on system binaries, and every server you start will be
 empty.")
     (license license:expat)))
 
-;; (gnu packages databases)
-(define-public go-github-com-cupcake-rdb
-  (package
-    (name "go-github-com-cupcake-rdb")
-    (version "0.0.0-20161107195141-43ba34106c76")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/tent/rdb")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "1l4bsn5yj8r875crz1rsk6dlvhv0bd8mgazsch5vl4c19v0fs2ib"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/cupcake/rdb"))
-    (native-inputs
-     (list go-gopkg-in-check-v1))
-    (home-page "https://github.com/tent/rdb")
-    (synopsis "Redis RDB parser for Go")
-    (description
-     "Package rdb implements parsing and encoding of the Redis RDB file format.")
-    (license license:expat)))
-
 (define-public go-github-com-edsrzf-mmap-go
   (package
     (name "go-github-com-edsrzf-mmap-go")
@@ -1264,33 +1240,6 @@ every little platform detail.")
     (description
      "Package json is a simple JSON encoder/decoder for gopher-lua.")
     (license license:unlicense)))
-
-;; (gnu packages databases)
-(define-public go-github-com-gomodule-redigo
-  (package
-    (name "go-github-com-gomodule-redigo")
-    (version "1.8.8")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/gomodule/redigo")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0wplaaxg7f6c6c08gdp33l48hygn8gq1rhlnjzr1c9qcggsm07k1"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:unpack-path "github.com/gomodule/redigo"
-       #:import-path "github.com/gomodule/redigo/redis"))
-    (native-inputs
-     (list go-github-com-stretchr-testify
-           redis))
-    (home-page "https://github.com/gomodule/redigo")
-    (synopsis "Go client for Redis")
-    (description
-     "Redigo is a Go client for the Redis database.")
-    (license license:asl2.0)))
 
 (define-public go-github-com-peterh-liner
   (package
@@ -1561,31 +1510,6 @@ go-github-com-chzyer packages.")
     (description "GopherLua is a VM and compiler for Lua in Go.")
     (license license:expat)))
 
-;; (gnu packages databases)
-(define-public go-gopkg-in-mgo-v2
-  (package
-    (name "go-gopkg-in-mgo-v2")
-    (version "2.0.0-20190816093944-a6b53ec6cb22")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://gopkg.in/mgo.v2")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "1lgvwxsbmdrf4938qkxl56wbwgbphk2qqnmpf73qdmlv4qsg14na"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; Tests try to use a running mongodb server.
-       #:import-path "gopkg.in/mgo.v2"))
-    (native-inputs
-     (list go-gopkg-in-check-v1))
-    (home-page "https://gopkg.in/mgo.v2")
-    (synopsis "MongoDB driver for Go")
-    (description "This package provides a MongoDB driver for Go.")
-    (license license:bsd-2)))
-
 (define-public go-github-com-siddontang-ledisdb
   (package
     (name "go-github-com-siddontang-ledisdb")
@@ -1783,37 +1707,6 @@ leave that to a reverse proxy (like nginx or Varnish), this package is useful
 when that's undesirable.")
     (license license:asl2.0)))
 
-;; (gnu packages databases)
-(define-public go-github-com-bradfitz-gomemcache
-  (package
-    (name "go-github-com-bradfitz-gomemcache")
-    (version "0.0.0-20190913173617-a41fca850d0b")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/bradfitz/gomemcache")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "18qpds6xr73jy80pj7l3pc1l1ndcy3va2dl8fzk17bgwg49sxwfz"))
-        (modules '((guix build utils)))
-        (snippet
-         '(begin
-            ;; Fixes the 'untyped-int -> string of one rune' issue.
-            ;; https://github.com/golang/go/issues/32479
-            (substitute* "memcache/memcache_test.go"
-              (("string\\(0x7f") "string(rune(0x7f)"))))))
-    (build-system go-build-system)
-    (arguments
-     '(#:unpack-path "github.com/bradfitz/gomemcache"
-       #:import-path "github.com/bradfitz/gomemcache/memcache"))
-    (home-page "https://github.com/bradfitz/gomemcache")
-    (synopsis "Memcache client library in Go")
-    (description
-     "This is a memcache client library for the Go programming language.")
-    (license license:asl2.0)))
-
 (define-public go-github-com-caddyserver-certmagic
   (package
     (name "go-github-com-caddyserver-certmagic")
@@ -1915,30 +1808,6 @@ services.")
     (home-page "https://github.com/couchbase/go-couchbase")
     (synopsis "A smart client for couchbase in go")
     (description "Package couchbase provides a smart client for go.")
-    (license license:expat)))
-
-;; (gnu packages databases)
-(define-public go-github-com-couchbase-gomemcached
-  (package
-    (name "go-github-com-couchbase-gomemcached")
-    (version "0.1.4")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/couchbase/gomemcached")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "10w74gc05x5naspls39sv2r92krrg31mk266w3lyqqwc0s3fxysl"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/couchbase/gomemcached"))
-    (native-inputs
-     (list go-github-com-stretchr-testify))
-    (home-page "https://github.com/couchbase/gomemcached")
-    (synopsis "Memcached binary protocol toolkit for go")
-    (description
-     "This package provides memcache client and server functionality.")
     (license license:expat)))
 
 ;; DO NOT UPGRADE! Future versions are under the nonfree Business Source License.
@@ -2544,35 +2413,6 @@ processing.")
     (synopsis "gtreap")
     (description
      "gtreap is an immutable treap implementation in the Go Language")
-    (license license:expat)))
-
-;; (gnu packages databases)
-(define-public go-go-etcd-io-bbolt
-  (package
-    (name "go-go-etcd-io-bbolt")
-    (version "1.3.6")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/etcd-io/bbolt")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0pj5245d417za41j6p09fmkbv05797vykr1bi9a6rnwddh1dbs8d"))))
-    (build-system go-build-system)
-    (arguments
-     `(#:import-path "go.etcd.io/bbolt"
-       ;; Extending the test timeout to 30 minutes still times out on aarch64.
-       #:tests? ,(not target-arm?)))
-    (propagated-inputs
-     (list go-golang-org-x-sys))
-    (home-page "https://go.etcd.io/bbolt")
-    (synopsis "Embedded key/value database for Go")
-    (description "Bolt is a pure Go key/value store inspired by Howard Chu's
-LMDB project.  The goal of the project is to provide a simple, fast, and
-reliable database for projects that don't require a full database server such as
-Postgres or MySQL.")
     (license license:expat)))
 
 (define-public go-github-com-blevesearch-bleve-v2
