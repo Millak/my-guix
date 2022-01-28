@@ -1740,28 +1740,6 @@ including TLS & HTTPS best practices such as robust OCSP stapling, caching,
 HTTP->HTTPS redirects, and more.")
     (license license:asl2.0)))
 
-(define-public go-github-com-go-chi-chi-v5
-  (package
-    (name "go-github-com-go-chi-chi-v5")
-    (version "5.0.7")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/go-chi/chi")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0rzrsxz4xj0973c6nxklvq2vmg2m795snhk25836i0gnd1jnx79k"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-chi/chi/v5"))
-    (home-page "https://github.com/go-chi/chi")
-    (synopsis #f)
-    (description
-     "Package chi is a small, idiomatic and composable router for building HTTP
-services.")
-    (license license:expat)))
-
 (define-public go-github-com-chi-middleware-proxy
   (package
     (name "go-github-com-chi-middleware-proxy")
@@ -5448,38 +5426,6 @@ replacement of golint. .")
 @url{https://tools.ietf.org/html/rfc8555,https://tools.ietf.org/html/rfc8555},
 specifically the sequence in Section 7.1 (page 21).")
     (license license:asl2.0)))
-
-(define-public go-github-com-andybalholm-brotli
-  (package
-    (name "go-github-com-andybalholm-brotli")
-    (version "1.0.4")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/andybalholm/brotli")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1zvmj7gbnkq9xwv1bvcxk9acxl06y902148qwbd2kqwgs52wy2c0"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/andybalholm/brotli"
-      #:phases
-      (modify-phases %standard-phases
-        (add-before 'reset-gzip-timestamps 'chmod-gzip-files
-          (lambda* (#:key outputs #:allow-other-keys)
-            (for-each make-file-writable
-                      (find-files (assoc-ref outputs "out") "\\.gz$")))))))
-    (home-page "https://github.com/andybalholm/brotli")
-    (synopsis #f)
-    (description
-      "This package is a brotli compressor and decompressor implemented in Go.  It was
-translated from the reference implementation
-(@url{https://github.com/google/brotli,https://github.com/google/brotli}) with
-the @code{c2go} tool at
-@url{https://github.com/andybalholm/c2go,https://github.com/andybalholm/c2go}.")
-    (license license:expat)))
 
 (define-public go-github-com-dsnet-golib
   (package
