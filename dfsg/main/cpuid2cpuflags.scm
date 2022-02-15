@@ -1,4 +1,4 @@
-;;; Copyright © 2018, 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2020, 2022 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -38,5 +38,7 @@
     (home-page "https://github.com/mgorny/cpuid2cpuflags")
     (synopsis "Tool to generate CPU_FLAGS_* for your CPU")
     (description "Tool to generate CPU_FLAGS_* for your CPU")
-    (supported-systems '("x86_64-linux" "i686-linux" "armhf-linux" "aarch64-linux"))
+    (supported-systems '("x86_64-linux" "i686-linux"
+                         "armhf-linux" "aarch64-linux"
+                         "powerpc64le-linux"))
     (license license:bsd-2)))
