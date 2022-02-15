@@ -1,4 +1,4 @@
-;;; Copyright © 2021 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2021, 2022 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -55,7 +55,7 @@
            (install-file (string-append source "/LICENSE")
                          (string-append out "/share/doc/" ,name "-" ,version))
            (substitute* (string-append lib "/sponsorblock_minimal.lua")
-             (("curl") (string-append curl "/bin/curl")))))))
+             (("\"curl\"") (string-append "\"" curl "/bin/curl\"")))))))
     (inputs
      `(("curl" ,curl-minimal)))
     (home-page "https://codeberg.org/jouni/mpv_sponsorblock_minimal")
