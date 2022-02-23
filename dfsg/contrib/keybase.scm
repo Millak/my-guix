@@ -188,8 +188,7 @@
             (rename-file "go-vendor/github.com/stellar/go" "go/vendor/github.com/stellar/go")
             (rename-file "go-vendor/github.com/syndtr" "go/vendor/github.com/syndtr")
             (rename-file "go-vendor/gopkg.in/src-d/go-git.v4" "go/vendor/gopkg.in/src-d/go-git.v4")
-            (delete-file-recursively "go-vendor")
-            #t))))
+            (delete-file-recursively "go-vendor")))))
     (build-system go-build-system)
     (arguments
      `(#:install-source? #f
@@ -209,8 +208,7 @@
                      "github.com/keybase/client/go/kbfs/kbfsfuse"
                      "github.com/keybase/client/go/kbfs/kbfsgit/git-remote-keybase"
                      "github.com/keybase/client/go/kbfs/redirector"
-                     "github.com/keybase/client/go/kbnm"))
-             #t))
+                     "github.com/keybase/client/go/kbnm"))))
          (replace 'check
            (lambda* (#:key tests? import-path #:allow-other-keys)
              (for-each
@@ -222,15 +220,13 @@
                      "github.com/keybase/client/go/kbfs/kbfsfuse"
                      "github.com/keybase/client/go/kbfs/kbfsgit/git-remote-keybase"
                      "github.com/keybase/client/go/kbfs/redirector"
-                     "github.com/keybase/client/go/kbnm"))
-             #t))
+                     "github.com/keybase/client/go/kbnm"))))
          (add-after 'install 'install-license
            (lambda* (#:key outputs #:allow-other-keys)
              (let ((out (assoc-ref outputs "out")))
                (install-file "src/github.com/keybase/client/LICENSE"
                              (string-append out "/share/doc/"
-                                            ,name "-" ,version "/"))
-               #t))))))
+                                            ,name "-" ,version "/"))))))))
     (inputs
      `(("go-bazil-org-fuse" ,go-bazil-org-fuse)
        ("go-camlistore-org-pkg-buildinfo" ,go-camlistore-org-pkg-buildinfo) ; camlistore/pkg/images
@@ -408,8 +404,7 @@ and does not use the C library from the project called FUSE.")
              (delete-file-recursively "vendor")
              (delete-file-recursively "website")
              (delete-file-recursively "server/camlistored")
-             (for-each make-file-writable (find-files "."))
-             #t))))
+             (for-each make-file-writable (find-files "."))))))
       (build-system go-build-system)
       (arguments
        '(#:import-path "camlistore.org/pkg/buildinfo"
@@ -486,8 +481,7 @@ of storing, syncing, sharing, modelling and backing up content.")
                   #:build-flags build-flags
                   #:import-path directory))
                (list "github.com/rwcarlsen/goexif/exif"
-                     "github.com/rwcarlsen/goexif/tiff"))
-             #t))
+                     "github.com/rwcarlsen/goexif/tiff"))))
          (replace 'check
            (lambda* (#:key tests? import-path #:allow-other-keys)
              (for-each
@@ -496,8 +490,7 @@ of storing, syncing, sharing, modelling and backing up content.")
                   #:tests? tests?
                   #:import-path directory))
                (list "github.com/rwcarlsen/goexif/exif"
-                     "github.com/rwcarlsen/goexif/tiff"))
-             #t)))))
+                     "github.com/rwcarlsen/goexif/tiff")))))))
     (home-page "https://github.com/rwcarlsen/goexif")
     (synopsis "goexif")
     (description #f)
@@ -695,33 +688,6 @@ Postgres or MySQL.")
     (synopsis "logrotate: slightly better than")
     (description #f)
     (license license:bsd-2)))
-
-(define-public go-github-com-jessevdk-go-flags
-  (package
-    (name "go-github-com-jessevdk-go-flags")
-    (version "1.5.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/jessevdk/go-flags.git")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "13ixw1yx4bvcj66lkc8zgwf9j7gkvj686g991gycdsafvdvca0lj"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/jessevdk/go-flags"
-       ;; Manpage tests fail due to SOURCE_DATE_EPOCH.
-       #:tests? #f))
-    (propagated-inputs
-     `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
-    (home-page "https://github.com/jessevdk/go-flags")
-    (synopsis
-     "go-flags: a go library for parsing command line arguments")
-    (description #f)
-    (license license:bsd-3)))
 
 (define-public go-github-com-buger-jsonparser
   (package
@@ -1976,8 +1942,7 @@ services.")
         (modules '((guix build utils)))
         (snippet
          '(begin
-            (delete-file-recursively "vendor")
-            #t))))
+            (delete-file-recursively "vendor")))))
     (build-system go-build-system)
     (arguments
      '(#:import-path "github.com/yudai/gojsondiff"))
@@ -2086,8 +2051,7 @@ services.")
         (modules '((guix build utils)))
         (snippet
          '(begin
-            (delete-file-recursively "vendor")
-            #t))))
+            (delete-file-recursively "vendor")))))
     (build-system go-build-system)
     (arguments
      '(#:import-path "moul.io/http2curl"))
@@ -2506,8 +2470,7 @@ reused in other contexts.")
         (modules '((guix build utils)))
         (snippet
          '(begin
-            (delete-file-recursively "vendor")
-            #t))))
+            (delete-file-recursively "vendor")))))
     (build-system go-build-system)
     (arguments
      '(#:import-path "github.com/couchbase/vellum"))
@@ -2621,8 +2584,7 @@ reused in other contexts.")
          (add-before 'build 'patch-source
            (lambda* (#:key import-path #:allow-other-keys)
              (substitute* (string-append "src/" import-path "/unsnap_test.go")
-               (("/usr/bin/diff") (which "diff")))
-             #t)))))
+               (("/usr/bin/diff") (which "diff"))))))))
     (propagated-inputs
      (list go-github-com-golang-snappy))
     (native-inputs

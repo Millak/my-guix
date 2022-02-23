@@ -100,11 +100,7 @@
                                   (map (lambda (entry)
                                          (string-drop entry (1+ (string-length file))))
                                        files))))))))
-                 #:directories? #t))))
-         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
-           (lambda* (#:key outputs #:allow-other-keys)
-             (for-each make-file-writable
-                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
+                 #:directories? #t)))))))
     (propagated-inputs
      (list go-golang-org-x-text-next
            go-golang-org-x-term-next
@@ -641,14 +637,14 @@ transformations, and locale-specific text handling.")
 (define-public gitea
   (package
     (name "gitea")
-    (version "1.15.9")
+    (version "1.15.11")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://github.com/go-gitea/gitea/releases"
                                   "/download/v" version
                                   "/gitea-src-" version ".tar.gz"))
               (sha256
-               (base32 "0k17glrzpk5aaic3rj8frp0f9x24ac9cwv7mxj2562w3m9wj3957"))
+               (base32 "0ihw68qy36xdwp6kiardxlbp1x0s10gjdkg51b6p93c0r9pm9501"))
               (patches (search-patches "gitea-patch-makefile.patch"))
               (modules '((guix build utils)))
               (snippet
@@ -2900,13 +2896,7 @@ free to implement mocks and testing over filesystem operations.")
           (base32 "0vxsyfrw4c0kqjbiycdx4xxpz8zjq69pwbsfxmcvkizpj87ywf9d"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/go-git/go-git-fixtures/v4"
-       #:phases
-       (modify-phases %standard-phases
-         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
-           (lambda* (#:key outputs #:allow-other-keys)
-             (for-each make-file-writable
-                       (find-files (assoc-ref outputs "out") "\\.t?gz$")))))))
+     '(#:import-path "github.com/go-git/go-git-fixtures/v4"))
     (propagated-inputs
      (list go-gopkg-in-check-v1
            go-github-com-go-git-go-billy-v5))
@@ -3002,7 +2992,7 @@ free to implement mocks and testing over filesystem operations.")
            go-github-com-sergi-go-diff
            go-github-com-mitchellh-go-homedir
            go-github-com-kevinburke-ssh-config
-           go-github-com-jessevdk-go-flags
+           go-github.com-jessevdk-go-flags
            go-github-com-jbenet-go-context
            go-github-com-imdario-mergo
            go-github-com-google-go-cmp
@@ -3467,7 +3457,7 @@ as tools to validate data against their schema.")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0ipqv53s9piq5v5nsjmg8v7pzz4zinv2xkif7h0na84i9pnsccyn"))))
+         (base32 "0ipqv53s9piq5v5nsjmg8v7pzz4zinv2xkif7h0na84i9pnsccyn"))))
     (build-system go-build-system)
     (arguments
      '(#:unpack-path "github.com/go-swagger/scan-repo-boundary"
@@ -3479,40 +3469,7 @@ as tools to validate data against their schema.")
 only here to test finding files across repository boundaries.")
     (license license:asl2.0)))
 
-(define-public go-github-com-jessevdk-go-flags
-  (package
-    (name "go-github-com-jessevdk-go-flags")
-    (version "1.5.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/jessevdk/go-flags")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "13ixw1yx4bvcj66lkc8zgwf9j7gkvj686g991gycdsafvdvca0lj"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/jessevdk/go-flags"
-       #:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'fix-tests
-           (lambda _
-             ;; SOURCE_DATE_EPOCH messes with the date on the man page test.
-             (substitute* "src/github.com/jessevdk/go-flags/help_test.go"
-               (("TestMan") "DisabledTestMan")))))))
-    (propagated-inputs
-     (list go-golang-org-x-sys))
-    (home-page "https://github.com/jessevdk/go-flags")
-    (synopsis "go-flags: a go library for parsing command line arguments")
-    (description
-      "Package flags provides an extensive command line option parser.  The flags
-package is similar in functionality to the go built-in flag package but provides
-more options and uses reflection to provide a convenient and succinct way of
-specifying command line options.")
-    (license license:bsd-3)))
-
+;; ready to upstream
 (define-public go-github-com-pquerna-cachecontrol
   (package
     (name "go-github-com-pquerna-cachecontrol")
@@ -3525,16 +3482,21 @@ specifying command line options.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1ds4wgk6hm1sd6037dww5zm59syzs7vrdzh9q5x78s1lfrznsi3k"))))
+         (base32 "1ds4wgk6hm1sd6037dww5zm59syzs7vrdzh9q5x78s1lfrznsi3k"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/pquerna/cachecontrol"))
     (native-inputs
      (list go-github-com-stretchr-testify))
     (home-page "https://github.com/pquerna/cachecontrol")
-    (synopsis "cachecontrol: HTTP Caching Parser and Interpretation")
-    (description "Package cachecontrol implements the logic for HTTP Caching")
+    (synopsis "HTTP caching parser and interpretation")
+    (description
+     "Cachecontrol implements @url{http://tools.ietf.org/html/rfc7234, RFC 7234}
+Hypertext Transfer Protocol (HTTP/1.1): Caching.  It does this by parsing the
+@code{Cache-Control} and other headers, providing information about requests and
+responses.")
     (license license:asl2.0)))
 
+;; ready to upstream
 (define-public go-github-com-toqueteos-webbrowser
   (package
     (name "go-github-com-toqueteos-webbrowser")
@@ -3547,16 +3509,16 @@ specifying command line options.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1j2hz0mq06v4vxksssg20yb34wwh24l55v2x7nplksfri1rmwbn0"))))
+         (base32 "1j2hz0mq06v4vxksssg20yb34wwh24l55v2x7nplksfri1rmwbn0"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/toqueteos/webbrowser"))
     (home-page "https://github.com/toqueteos/webbrowser")
-    (synopsis "webbrowser")
-    (description
-      "Package webbrowser provides a simple API for opening web pages on your default
-browser.")
+    (synopsis "Open web pages in the default browser")
+    (description "Webbrowser provides a simple API for opening web pages on your
+default browser.")
     (license license:expat)))
 
+;; ready to upstream
 (define-public go-github-com-go-stack-stack
   (package
     (name "go-github-com-go-stack-stack")
@@ -3569,16 +3531,17 @@ browser.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "01m6l9w84yq2yyly8bdfsgc386hla1gn9431c7vr3mfa3bchj5wb"))))
+         (base32 "01m6l9w84yq2yyly8bdfsgc386hla1gn9431c7vr3mfa3bchj5wb"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/go-stack/stack"))
     (home-page "https://github.com/go-stack/stack")
-    (synopsis "stack")
+    (synopsis "Utilities to capture, manipulate, and format call stacks")
     (description
-      "Package stack implements utilities to capture, manipulate, and format call
-stacks.  It provides a simpler API than package runtime.")
+     "Stack implements utilities to capture, manipulate, and format call stacks.
+It provides a simpler API than package @code{runtime}.")
     (license license:expat)))
 
+;; ready to upstream
 (define-public go-github-com-montanaflynn-stats
   (package
     (name "go-github-com-montanaflynn-stats")
@@ -3591,16 +3554,16 @@ stacks.  It provides a simpler API than package runtime.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0r0ad2275saw79kgh3ywafii8f6rja2z6mzm9izs11k2lvkqpz6z"))))
+         (base32 "0r0ad2275saw79kgh3ywafii8f6rja2z6mzm9izs11k2lvkqpz6z"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/montanaflynn/stats"))
     (home-page "https://github.com/montanaflynn/stats")
-    (synopsis "Stats - Golang Statistics Package")
-    (description
-      "Package stats is a well tested and comprehensive statistics library package with
-no dependencies.")
+    (synopsis "Golang statistics library")
+    (description "Stats is a comprehensive Golang statistics library package
+with no dependencies.")
     (license license:expat)))
 
+;; ready to upstream
 (define-public go-github-com-tidwall-pretty
   (package
     (name "go-github-com-tidwall-pretty")
@@ -3618,12 +3581,13 @@ no dependencies.")
     (arguments
      '(#:import-path "github.com/tidwall/pretty"))
     (home-page "https://github.com/tidwall/pretty")
-    (synopsis "Pretty")
+    (synopsis "JSON formatter in go")
     (description
-     "Pretty is a Go package that provides @url{#readme-performance,fast} methods for
-formatting JSON for human readability, or to compact JSON for smaller payloads.")
+     "Pretty is a Go package that provides methods for formatting JSON for human
+readability, or to compact JSON for smaller payloads.")
     (license license:expat)))
 
+;; ready to upstream
 (define-public go-github-com-xdg-go-pbkdf2
   (package
     (name "go-github-com-xdg-go-pbkdf2")
@@ -3636,17 +3600,18 @@ formatting JSON for human readability, or to compact JSON for smaller payloads."
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1nipijy5xkdnfyhkp5ryrjzm14si1i2v2xyfmblf84binwkbr8jh"))))
+         (base32 "1nipijy5xkdnfyhkp5ryrjzm14si1i2v2xyfmblf84binwkbr8jh"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/xdg-go/pbkdf2"))
     (home-page "https://github.com/xdg-go/pbkdf2")
-    (synopsis "pbkdf2 â\x80\x93Â\xa0Go implementation of PBKDF2")
+    (synopsis "Go implementation of PBKDF2")
     (description
-      "Package pbkdf2 implements password-based key derivation using the PBKDF2
+     "Package pbkdf2 implements password-based key derivation using the PBKDF2
 algorithm described in @url{https://rfc-editor.org/rfc/rfc2898.html,RFC 2898}
 and @url{https://rfc-editor.org/rfc/rfc8018.html,RFC 8018}.")
     (license license:asl2.0)))
 
+;; ready to upstream
 (define-public go-github-com-xdg-go-scram
   (package
     (name "go-github-com-xdg-go-scram")
@@ -3659,19 +3624,21 @@ and @url{https://rfc-editor.org/rfc/rfc8018.html,RFC 8018}.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1jyv4qgc1dgh3v96pazmgljpp9ij25k8hwn0v4fck18g16i0nccm"))))
+         (base32 "1jyv4qgc1dgh3v96pazmgljpp9ij25k8hwn0v4fck18g16i0nccm"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/xdg-go/scram"))
     (propagated-inputs
      (list go-github-com-xdg-go-stringprep
            go-github-com-xdg-go-pbkdf2))
     (home-page "https://github.com/xdg-go/scram")
-    (synopsis "scram â\x80\x93Â\xa0Go implementation of RFC-5802")
+    (synopsis "Go implementation of RFC-5802")
     (description
-      "Package scram provides client and server implementations of the Salted Challenge
-Response Authentication Mechanism (SCRAM) described in RFC-5802 and RFC-7677.")
+     "Package scram provides client and server implementations of the
+@acronym{Salted Challenge Response Authentication Mechanism, SCRAM} described in
+RFC-5802 and RFC-7677.")
     (license license:asl2.0)))
 
+;; ready to upstream
 (define-public go-github-com-xdg-go-stringprep
   (package
     (name "go-github-com-xdg-go-stringprep")
@@ -3684,20 +3651,20 @@ Response Authentication Mechanism (SCRAM) described in RFC-5802 and RFC-7677.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1df0l5n3c520y9filzz83j42wa5c056jcygmfwhjyf1pq8f6jkv9"))))
+         (base32 "1df0l5n3c520y9filzz83j42wa5c056jcygmfwhjyf1pq8f6jkv9"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/xdg-go/stringprep"))
     (propagated-inputs
      (list go-golang-org-x-text))
     (home-page "https://github.com/xdg-go/stringprep")
-    (synopsis
-      "stringprep â\x80\x93Â\xa0Go implementation of RFC-3454 stringprep and RFC-4013 SASLprep")
+    (synopsis "Go implementation of RFC-3454 stringprep and RFC-4013 SASLprep")
     (description
-      "Package stringprep provides data tables and algorithms for RFC-3454, including
-errata (as of 2018-02).  It also provides a profile for SASLprep as defined in
+     "Package stringprep provides data tables and algorithms for RFC-3454,
+including errata.  It also provides a profile for SASLprep as defined in
 RFC-4013.")
     (license license:asl2.0)))
 
+;; ready to upstream
 (define-public go-github-com-youmark-pkcs8
   (package
     (name "go-github-com-youmark-pkcs8")
@@ -3710,22 +3677,23 @@ RFC-4013.")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1bk20x279iiafxh39v75hrmxncbkmw17603g8xw5b59cqzzpnrmv"))))
+         (base32 "1bk20x279iiafxh39v75hrmxncbkmw17603g8xw5b59cqzzpnrmv"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/youmark/pkcs8"))
     (propagated-inputs
      (list go-golang-org-x-crypto))
     (home-page "https://github.com/youmark/pkcs8")
-    (synopsis "pkcs8")
+    (synopsis "Go implemention to parse and convert PKCS#8 format keys")
     (description
-      "Package pkcs8 implements functions to parse and convert private keys in PKCS#8
-format, as defined in RFC5208 and RFC5958")
+     "Package pkcs8 implements functions to parse and convert private keys in
+PKCS#8 format, as defined in RFC5208 and RFC5958.")
     (license license:expat)))
 
+;; ready to upstream
 (define-public go-go-mongodb-org-mongo-driver
   (package
     (name "go-go-mongodb-org-mongo-driver")
-    (version "1.8.1")
+    (version "1.8.3")
     (source
       (origin
         (method git-fetch)
@@ -3734,7 +3702,7 @@ format, as defined in RFC5208 and RFC5958")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "1g3nbnkkfgy8rr6h6c95r1kv6kib4wbmw3f5p77v0hq6qp0xwndj"))
+         (base32 "057h3r7bh8ymfqs5idfbrx7gvs2zcjzfcl5zi2lsx5j7xqykbm0x"))
         (modules '((guix build utils)))
         (snippet
          '(begin
@@ -3750,7 +3718,9 @@ format, as defined in RFC5208 and RFC5958")
                (lambda (directory)
                  ((assoc-ref %standard-phases 'build)
                   #:build-flags build-flags
-                  #:import-path (string-append "go.mongodb.org/mongo-driver/" directory)))
+                  #:import-path (string-append
+                                  "go.mongodb.org/mongo-driver/"
+                                  directory)))
                (list "bson"
                      "internal"
                      "mongo"
@@ -3762,16 +3732,14 @@ format, as defined in RFC5208 and RFC5958")
                (lambda (directory)
                  ((assoc-ref %standard-phases 'check)
                   #:tests? tests?
-                  #:import-path (string-append "go.mongodb.org/mongo-driver/" directory)))
+                  #:import-path (string-append
+                                  "go.mongodb.org/mongo-driver/"
+                                  directory)))
                (list "bson"
                      "internal"
                      ;"mongo"       ; Wants a running mongodb server.
                      "x/bsonx"
-                     "x/mongo/driver"))))
-         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
-           (lambda* (#:key outputs #:allow-other-keys)
-             (for-each make-file-writable
-                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
+                     "x/mongo/driver")))))))
     (propagated-inputs
      (list go-gopkg-in-check-v1
            go-golang-org-x-tools
@@ -3792,10 +3760,11 @@ format, as defined in RFC5208 and RFC5958")
     (native-inputs
      (list go-github-com-stretchr-testify))
     (home-page "https://go.mongodb.org/mongo-driver")
-    (synopsis "MongoDB Go Driver")
-    (description "The MongoDB supported driver for Go.")
+    (synopsis "MongoDB Go driver")
+    (description "This package provides the MongoDB supported driver for Go.")
     (license license:asl2.0)))
 
+;; ready to upstream
 (define-public go-gopkg-in-square-go-jose-v2
   (package
     (name "go-gopkg-in-square-go-jose-v2")
@@ -3808,32 +3777,27 @@ format, as defined in RFC5208 and RFC5958")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1b1nhqxfmhzwrfk7pkvp2w3z3d0pf5ir00vizmy2d4xdbnldn70r"))))
+         (base32 "1b1nhqxfmhzwrfk7pkvp2w3z3d0pf5ir00vizmy2d4xdbnldn70r"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "gopkg.in/square/go-jose.v2"
-       #:phases
-       (modify-phases %standard-phases
-         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
-           (lambda* (#:key outputs #:allow-other-keys)
-             (for-each make-file-writable
-                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
+     '(#:import-path "gopkg.in/square/go-jose.v2"))
     (propagated-inputs
      (list go-golang-org-x-crypto))
     (native-inputs
      (list go-github-com-google-go-cmp
            go-github-com-stretchr-testify))
     (home-page "https://gopkg.in/square/go-jose.v2")
-    (synopsis "Go JOSE")
+    (synopsis "JavaScript Object Signing and Encryption in Go")
     (description
-      "Package jose aims to provide an implementation of the Javascript Object Signing
-and Encryption set of standards.  It implements encryption and signing based on
-the JSON Web Encryption and JSON Web Signature standards, with optional JSON Web
-Token support available in a sub-package.  The library supports both the compact
-and full serialization formats, and has optional support for multiple
-recipients.")
+     "Package jose aims to provide an implementation of the Javascript Object
+Signing and Encryption set of standards.  It implements encryption and signing
+based on the JSON Web Encryption and JSON Web Signature standards, with optional
+JSON Web Token support available in a sub-package.  The library supports both
+the compact and full serialization formats, and has optional support for
+multiple recipients.")
     (license license:asl2.0)))
 
+;; ready to upstream
 (define-public go-github-com-puerkitobio-purell
   (package
     (name "go-github-com-puerkitobio-purell")
@@ -3846,7 +3810,7 @@ recipients.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0c525frsxmalrn55hzzsxy17ng8avkd40ga0wxfw9haxsdjgqdqy"))))
+         (base32 "0c525frsxmalrn55hzzsxy17ng8avkd40ga0wxfw9haxsdjgqdqy"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/PuerkitoBio/purell"))
     (propagated-inputs
@@ -3854,12 +3818,11 @@ recipients.")
            go-golang-org-x-net
            go-golang-org-x-text))
     (home-page "https://github.com/PuerkitoBio/purell")
-    (synopsis "Purell")
-    (description
-      "Package purell offers URL normalization as described on the wikipedia page:
-@url{http://en.wikipedia.org/wiki/URL_normalization,http://en.wikipedia.org/wiki/URL_normalization}")
+    (synopsis "URL normalization in Go")
+    (description "Purell is a tiny Go library to normalize URLs.")
     (license license:bsd-3)))
 
+;; ready to upstream
 (define-public go-github-com-puerkitobio-urlesc
   (package
     (name "go-github-com-puerkitobio-urlesc")
@@ -3872,19 +3835,18 @@ recipients.")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0n0srpqwbaan1wrhh2b7ysz543pjs1xw2rghvqyffg9l0g8kzgcw"))))
+         (base32 "0n0srpqwbaan1wrhh2b7ysz543pjs1xw2rghvqyffg9l0g8kzgcw"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/PuerkitoBio/urlesc"))
     (home-page "https://github.com/PuerkitoBio/urlesc")
-    (synopsis "urlesc")
-    (description
-      "Package urlesc implements query escaping as per
+    (synopsis "Proper URL escaping as per RFC3986")
+    (description "Package urlesc implements query escaping as per
 @url{https://rfc-editor.org/rfc/rfc3986.html,RFC 3986}.  It contains some parts
-of the net/url package, modified so as to allow some reserved characters
-incorrectly escaped by net/url.  See
-@url{https://github.com/golang/go/issues/5684,https://github.com/golang/go/issues/5684}")
+of the @code{net/url} package, modified so as to allow some reserved characters
+incorrectly escaped by @code{net/url}.")
     (license license:bsd-3)))
 
+;; ready to upstream
 (define-public go-github-com-docker-go-units
   (package
     (name "go-github-com-docker-go-units")
@@ -3897,18 +3859,20 @@ incorrectly escaped by net/url.  See
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0k8gja8ql4pqg5rzmqvka42vjfs6rzablak87whcnqba6qxpimvz"))))
+         (base32 "0k8gja8ql4pqg5rzmqvka42vjfs6rzablak87whcnqba6qxpimvz"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/docker/go-units"))
     (home-page "https://github.com/docker/go-units")
-    (synopsis "Introduction")
+    (synopsis "Parse and print size and time units in human-readable format")
     (description
-      "Package units provides helper function to parse and print size and time units in
-human-readable format.")
+     "@code{go-units} is a library to transform human friendly measurements into
+machine friendly values.")
     (license license:asl2.0)))
 
+;; ready to upstream?
 (define-public go-github-com-niemeyer-pretty
   (package
+    ;(inherit go-github-com-kr-pretty)
     (name "go-github-com-niemeyer-pretty")
     (version "0.0.0-20200227124842-a10e7caefd8e")
     (source
@@ -3922,17 +3886,22 @@ human-readable format.")
          (base32 "1jmazh4xzaa3v6g46hz60q2z7nmqs9l9cxdzmmscn3kbcs2znq4v"))))
     (build-system go-build-system)
     (arguments
-     '(#:tests? #f      ; TODO: Fix
-       #:import-path "github.com/niemeyer/pretty"))
+     '(#:import-path "github.com/niemeyer/pretty"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'patch-source
+           (lambda _
+             ;; https://github.com/kr/pretty/pull/66
+             (substitute* "src/github.com/niemeyer/pretty/formatter.go"
+               (("string\\(i\\)") "string(rune(i))")))))))
     (propagated-inputs
      (list go-github-com-kr-text))
     (home-page "https://github.com/niemeyer/pretty")
-    (synopsis #f)
-    (description
-     "Package pretty provides pretty-printing for Go values.  This is useful during
-debugging, to avoid wrapping long output lines in the terminal.")
+    (synopsis "Pretty printer for Go values")
+    (description "This package provides a pretty printer for Go values.")
     (license license:expat)))
 
+;; not ready to upstream
 (define-public go-github-com-shurcool-go-goon
   (package
     (name "go-github-com-shurcool-go-goon")
@@ -3945,16 +3914,17 @@ debugging, to avoid wrapping long output lines in the terminal.")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1c0gkv255kjbbcx3ab26driihnq685vp08axrp5ls8vq7g67rrwl"))))
+         (base32 "1c0gkv255kjbbcx3ab26driihnq685vp08axrp5ls8vq7g67rrwl"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/shurcooL/go-goon"))
     (home-page "https://github.com/shurcooL/go-goon")
-    (synopsis "goon")
+    (synopsis "Pretty printer with Go-like notation")
     (description
-      "Package goon is a deep pretty printer with Go-like notation.  It implements the
+     "Package goon is a deep pretty printer with Go-like notation.  It implements the
 goon specification.")
     (license license:expat)))
 
+;; not needed
 (define-public go-github-com-sourcegraph-go-diff
   (package
     (name "go-github-com-sourcegraph-go-diff")
@@ -3967,16 +3937,16 @@ goon specification.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0ic58wi4cac61kh5sasn9iylcbzbqawlzva964rk0y0nifsyjcmc"))))
+         (base32 "0ic58wi4cac61kh5sasn9iylcbzbqawlzva964rk0y0nifsyjcmc"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/sourcegraph/go-diff"))
     (propagated-inputs
      (list go-github-com-shurcool-go-goon
-           go-github-com-shurcool-go
            go-github-com-google-go-cmp))
     (home-page "https://github.com/sourcegraph/go-diff")
-    (synopsis "go-diff")
-    (description "Diff parser and printer for Go.")
+    (synopsis "Unified diff parser and printer for Go")
+    (description
+     "This package provides a unified diff parser and printer for Go.")
     (license license:expat)))
 
 (define-public go-github-com-go-openapi-swag
@@ -4064,8 +4034,7 @@ projects.")
     (arguments '(#:import-path "github.com/oklog/ulid"))
     (home-page "https://github.com/oklog/ulid")
     (synopsis "Universally Unique Lexicographically Sortable Identifier")
-    (description
-      "This package provides a Go port of
+    (description "This package provides a Go port of
 @url{https://github.com/alizain/ulid,alizain/ulid} with binary format
 implemented.")
     (license license:asl2.0)))
@@ -4154,7 +4123,7 @@ common patterns.")
            go-github-com-mitchellh-go-homedir
            go-github-com-mailru-easyjson
            go-github-com-kr-pretty
-           go-github-com-jessevdk-go-flags
+           go-github.com-jessevdk-go-flags
            go-github-com-gorilla-handlers
            go-github-com-go-swagger-scan-repo-boundary
            go-github-com-go-stack-stack
@@ -4537,16 +4506,13 @@ easier.")
                                   (map (lambda (entry)
                                          (string-drop entry (1+ (string-length file))))
                                        files))))))))
-                 #:directories? #t))))
-         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
-           (lambda* (#:key outputs #:allow-other-keys)
-             (for-each make-file-writable
-                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
+                 #:directories? #t)))))))
     (propagated-inputs
      (list go-golang-org-x-sys))
     (home-page "https://github.com/keybase/go-crypto")
-    (synopsis #f)
-    (description #f)
+    (synopsis "Go supplementary cryptography libraries")
+    (description "This repository holds supplementary Go cryptography libraries
+with changes by keybase.")
     (license license:bsd-3)))
 
 (define-public go-github-com-lafriks-xormstore
@@ -4764,13 +4730,7 @@ for a full list of sub-packages.")
           (base32 "1h5w5rnfaifg6frgyh7pz6604zhdacy0jmha0i0vvmb8n2vadx2n"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "cloud.google.com/go"
-       #:phases
-       (modify-phases %standard-phases
-         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
-           (lambda* (#:key outputs #:allow-other-keys)
-             (for-each make-file-writable
-                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
+     '(#:import-path "cloud.google.com/go"))
     (propagated-inputs
       `(;("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
         ;("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
@@ -5487,13 +5447,7 @@ specifically the sequence in Section 7.1 (page 21).")
          (base32 "0m66jcsz27076qvi5qzagzlbyd1sdzh6kbf1njj0sswx86026rx3"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/klauspost/pgzip"
-       #:phases
-       (modify-phases %standard-phases
-         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
-           (lambda* (#:key outputs #:allow-other-keys)
-             (for-each make-file-writable
-                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
+     '(#:import-path "github.com/klauspost/pgzip"))
     (propagated-inputs
      (list go-github-com-klauspost-compress))
     (home-page "https://github.com/klauspost/pgzip")
@@ -5560,13 +5514,7 @@ specified in @url{https://rfc-editor.org/rfc/rfc1952.html,RFC 1952}.")
          (base32 "1py186hfy4p69wghqmbsyi1r3xvw1nyl55pz8f97a5qhmwxb3mwp"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/mholt/archiver/v3"
-       #:phases
-       (modify-phases %standard-phases
-         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
-           (lambda* (#:key outputs #:allow-other-keys)
-             (for-each make-file-writable
-                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
+     '(#:import-path "github.com/mholt/archiver/v3"))
     (propagated-inputs
      (list go-github-com-xi2-xz
            go-github-com-ulikunitz-xz
@@ -7599,13 +7547,7 @@ calendar with exactly 24-hour days, 60-minute hours, and 60-second minutes.")
          (base32 "1g18bzlwyg3hq3jizjm6b2b8b4hghmiacid16adlxz4h8g7bp4jh"))))
     (build-system go-build-system)
     (arguments
-     `(#:import-path "github.com/goccy/go-json"
-       #:phases
-       (modify-phases %standard-phases
-         (add-before 'reset-gzip-timestamps 'chmod-gzip-files
-           (lambda* (#:key outputs #:allow-other-keys)
-             (for-each make-file-writable
-                       (find-files (assoc-ref outputs "out") "\\.gz$")))))))
+     `(#:import-path "github.com/goccy/go-json"))
     (home-page "https://github.com/goccy/go-json")
     (synopsis "go-json")
     (description
