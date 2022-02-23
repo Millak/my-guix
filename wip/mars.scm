@@ -1,4 +1,4 @@
-;;; Copyright © 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2020, 2022 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -19,6 +19,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
+  #:use-module (guix gexp)
   #:use-module (guix utils)
   #:use-module (guix build-system ant)
   #:use-module (gnu packages java))
@@ -40,46 +41,42 @@
           (sha256
            (base32
             "15kh1fahkkbbf4wvb6ijzny4fi5dh4pycxyzp5325dm2ddkhnd5c"))
-          ;(modules '((guix build utils)))
-          ;(snippet
-          ; '(begin
-          ;    (for-each delete-file (find-files "." "\\.class$"))
-          ;    #t))
-          ))
+          (modules '((guix build utils)))
+          (snippet
+           '(begin
+              (for-each delete-file (find-files "." "\\.class$"))))))
     (build-system ant-build-system)
     (arguments
-     `(#:tests? #f  ; No test target
-       #:jdk ,openjdk9  ; As recommended by upstream
+     (list
+       #:tests? #f      ; No test target
+       #:jdk openjdk9   ; As recommended by upstream
        #:jar-name "Mars.jar"
        #:source-dir "."
        #:main-class "Mars"
        #:phases
-       (modify-phases %standard-phases
-         ;; This should be in a snippet, but I can't figure out how to unpack it.
-         (add-after 'unpack 'remove-vendored-class-files
-           (lambda _
-             (for-each delete-file (find-files "." "\\.class$"))
-             #t))
-         (add-after 'unpack 'make-code-utf8-safe
-           (lambda _
-             (with-fluids ((%default-port-encoding "ISO-8859-1"))
-               (substitute* "src/mars/tools/DigitalLabSim.java"
-                 (("Didier Teifreto LIFC Universit.* de franche-Comt.* www.lifc.univ-fcomte.fr/~teifreto")
-                  "Didier Teifreto LIFC Universite de franche-Comte www.lifc.univ-fcomte.fr/~teifreto"))
-               (substitute* "src/mars/tools/MipsXray.java"
-                 (("M.*rcio Roberto") "Marcio Roberto")
-                 (("Fabr.*cio Vivas") "Fabricio Vivas")
-                 (("Fl.*vio Cardeal") "Flavio Cardeal")
-                 (("F.*bio L.*cio") "Fabio Lucio"))
-               (substitute* "src/mars/venus/MessagesPane.java"
-                 (("Ricardo Fern.*ndez Pascual") "Ricardo Fernandez Pascual")))
-             #t))
-         (replace 'install-license-files
-           (lambda* (#:key outputs #:allow-other-keys)
-             (install-file "src/MARSlicense.txt"
-                           (string-append (assoc-ref outputs "out")
-                                          "/share/doc/mars-" ,version))
-             #t)))))
+       #~(modify-phases %standard-phases
+           ;; This should be in a snippet, but I can't figure out how to unpack it.
+           (add-after 'unpack 'remove-vendored-class-files
+             (lambda _
+               (for-each delete-file (find-files "." "\\.class$"))))
+           (add-after 'unpack 'make-code-utf8-safe
+             (lambda _
+               (with-fluids ((%default-port-encoding "ISO-8859-1"))
+                 (substitute* "src/mars/tools/DigitalLabSim.java"
+                   (("Didier Teifreto LIFC Universit.* de franche-Comt.* www\\.lifc\\.univ-fcomte\\.fr/~teifreto")
+                    "Didier Teifreto LIFC Universite de franche-Comte www.lifc.univ-fcomte.fr/~teifreto"))
+                 (substitute* "src/mars/tools/MipsXray.java"
+                   (("M.*rcio Roberto") "Marcio Roberto")
+                   (("Fabr.*cio Vivas") "Fabricio Vivas")
+                   (("Fl.*vio Cardeal") "Flavio Cardeal")
+                   (("F.*bio L.*cio") "Fabio Lucio"))
+                 (substitute* "src/mars/venus/MessagesPane.java"
+                   (("Ricardo Fern.*ndez Pascual") "Ricardo Fernandez Pascual")))))
+           (replace 'install-license-files
+             (lambda* (#:key outputs #:allow-other-keys)
+               (install-file "src/MARSlicense.txt"
+                             (string-append (assoc-ref outputs "out")
+                                            "/share/doc/mars-" #$version)))))))
     (home-page "https://courses.missouristate.edu/KenVollmar/MARS/")
     (synopsis "IDE for MIPS Assembly Language Programming")
     (description
