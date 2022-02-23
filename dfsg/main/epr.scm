@@ -1,4 +1,4 @@
-;;; Copyright © 2021 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2021, 2022 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -15,25 +15,22 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (wip epr)
+(define-module (dfsg main epr)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix git-download)
+  #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system python))
 
 (define-public epr
   (package
     (name "epr")
-    (version "2.3.0b")
+    (version "2.4.13")
     (source
       (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/wustho/epr")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
+        (method url-fetch)
+        (uri (pypi-uri "epr-reader" version))
         (sha256
-         (base32 "1a6md3015284hzmx0sby5kl59p7lwv73sq7sid35vrr15zrl0aw7"))))
+         (base32 "04h2jnknk3w8z5qyj52z83mjjqvqg23cg60jmbvcn1z3af03mz79"))))
     (build-system python-build-system)
     (arguments '(#:tests? #f))  ; no tests.
     (home-page "https://github.com/wustho/epr")
