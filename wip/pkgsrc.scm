@@ -22,7 +22,12 @@
   #:use-module (guix utils)
   #:use-module (guix gexp)
   #:use-module (guix build-system gnu)
+  #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
+  #:use-module (gnu packages commencement)
+  #:use-module (gnu packages compression)
+  #:use-module (gnu packages gawk)
+  #:use-module (srfi srfi-1)
   )
 
 (define-public pkgsrc
@@ -41,9 +46,11 @@
     (build-system gnu-build-system)
     (arguments
      `(#:tests? #f  ; no tests
+       #:implicit-inputs? #f
        #:phases
        (modify-phases %standard-phases
          (delete 'configure)    ; no configure script
+         (delete 'patch-generated-file-shebangs)
          (replace 'build
            (lambda* (#:key inputs outputs parallel-build? #:allow-other-keys)
              (setenv "_PKGSRCDIR" (getcwd))
@@ -74,7 +81,42 @@
              (copy-recursively "." (assoc-ref outputs "out"))))
          )))
     (inputs
-     (list bash-minimal))
+     (list
+       ;bash-minimal
+       ))
+    (native-inputs
+      ((@@ (gnu packages commencement) %bootstrap-inputs+toolchain)
+     ;`(("libc" ,(@@ (gnu packages commencement) glibc-mesboot))
+     ;  ,@(alist-delete "libc" ((@@ (gnu packages commencement) %boot-mesboot3-inputs)))
+     ;`(("bash" ,(@@ (gnu packages commencement) bash-mesboot))
+     ;  ("binutils" ,(@@ (gnu packages commencement) binutils-mesboot1))
+     ;  ("coreutils" ,(@@ (gnu packages commencement) coreutils-mesboot0))
+     ;  ("gawk" ,(@@ (gnu packages commencement) gawk-mesboot))
+     ;  ("grep" ,(@@ (gnu packages commencement) grep-mesboot))
+     ;  ("make" ,(@@ (gnu packages commencement) gnu-make-mesboot))
+     ;  ("sed" ,(@@ (gnu packages commencement) sed-mesboot))
+     ;  ("tar" ,(@@ (gnu packages commencement) tar-mesboot))
+     ;  ,@(fold alist-delete ((@@ (gnu packages commencement) %boot-mesboot0-inputs))
+     ;          '("bash" "binutils" "bootar" "coreutils" "gash"
+     ;            "gawk" "grep" "guile" "make" "sed" "tar"))
+     ;  ("xz" ,xz)
+       )
+     ;(%boot-mesboot1-inputs) ; already a list
+     ;(list
+     ;  ;(list gcc-toolchain "static")
+     ;  ;%binutils-static
+     ;  (static-package binutils)
+     ;  (static-package coreutils)
+     ;  (static-package grep)
+     ;  (static-package sed)
+     ;  ;coreutils-mesboot0
+     ;  ;(%boot-mesboot1-inputs) ; already a list
+     ;  static-bash
+     ;  static-gawk
+     ;  tar
+     ;  xz
+     ;  )
+     )
     (home-page "https://pkgsrc.org/")
     (synopsis "")
     (description "Pkgsrc is a framework for managing third-party software on
@@ -85,3 +127,11 @@ framework, among other advanced features. Unprivileged use and installation is
 also supported.")
     ;; TODO: Figure out the license.
     (license #f)))
+
+(define static-gawk
+  (let ((base (static-package gawk)))
+    (package
+      (inherit base)
+      (arguments
+       (substitute-keyword-arguments (package-arguments base)
+         ((#:tests? _ #f) #f))))))
