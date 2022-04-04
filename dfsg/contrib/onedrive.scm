@@ -1,4 +1,4 @@
-;;; Copyright © 2021 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2021, 2022 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -35,7 +35,7 @@
 (define-public onedrive
   (package
     (name "onedrive")
-    (version "2.4.14")
+    (version "2.4.16")
     (source
       (origin
         (method git-fetch)
@@ -44,8 +44,7 @@
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32
-          "050blfh96zn51zfiggkyqjg2lhsby5nmgvvky50kyrmhzd5447yf"))))
+         (base32 "14hp4x32nbg0ix9h8z8rx3pvzmz2w8s744gd2qv2iz5fq08rz2qs"))))
     (build-system gnu-build-system)
     (arguments
      (list
@@ -65,14 +64,14 @@
            (lambda* (#:key inputs outputs #:allow-other-keys)
              (wrap-program (string-append #$output "/bin/onedrive")
                `("LD_PRELOAD" ":" prefix
-                 (,(string-append #$curl-minimal "/lib/libcurl.so.4")
-                   ,(string-append #$sqlite "/lib/libsqlite3.so.0")
+                 (,(search-input-file inputs "/lib/libcurl.so.4")
+                   ,(search-input-file inputs "/lib/libsqlite3.so.0")
                    ;; These ones for libnotify
-                   ,(string-append #$libnotify "/lib/libnotify.so.4")
-                   ,(string-append #$gdk-pixbuf "/lib/libgdk_pixbuf-2.0.so.0")
-                   ,(string-append #$glib "/lib/libgio-2.0.so.0")
-                   ,(string-append #$glib "/lib/libgobject-2.0.so.0")
-                   ,(string-append #$glib "/lib/libglib-2.0.so.0")))))))))
+                   ,(search-input-file inputs "/lib/libnotify.so.4")
+                   ,(search-input-file inputs "/lib/libgdk_pixbuf-2.0.so.0")
+                   ,(search-input-file inputs "/lib/libgio-2.0.so.0")
+                   ,(search-input-file inputs "/lib/libgobject-2.0.so.0")
+                   ,(search-input-file inputs "/lib/libglib-2.0.so.0")))))))))
     (native-inputs
      (list pkg-config))
     (inputs
