@@ -2870,8 +2870,10 @@ the API is very similar.")
     (propagated-inputs
      (list go-gopkg-in-check-v1
            go-golang-org-x-sys
-           go-github-com-niemeyer-pretty
-           go-github-com-kr-text))
+           ;; These two are indirect and don't seem to be needed?
+           ;go-github-com-niemeyer-pretty
+           ;go-github-com-kr-text
+           ))
     (home-page "https://github.com/go-git/go-billy")
     (synopsis "go-billy")
     (description
