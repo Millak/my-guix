@@ -329,7 +329,7 @@ management for @code{go-chi}.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://gitea.com/lunny/levelqueue.git")
+               (url "https://gitea.com/lunny/levelqueue")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -519,25 +519,23 @@ empty.")
 (define-public go-github-com-antchfx-htmlquery
   (package
     (name "go-github-com-antchfx-htmlquery")
-    (version "1.2.3")
+    (version "1.2.4")
     (source
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/antchfx/htmlquery.git")
+               (url "https://github.com/antchfx/htmlquery")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32
-          "1s24biqarw2ywv2wndb7192ksqc3gpi7ydsliwgs35mky3firqj1"))))
+         (base32 "1g24619hys0k014ga445xzvh51g1yp07b08jjgwkfycjrjldxp46"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/antchfx/htmlquery"))
+    (arguments '(#:import-path "github.com/antchfx/htmlquery"))
     (propagated-inputs
-     `(("go-github-com-antchfx-xpath" ,go-github-com-antchfx-xpath)
-       ("go-github-com-golang-groupcache-lru" ,go-github-com-golang-groupcache-lru)
-       ("go-golang-org-x-net" ,go-golang-org-x-net)
-       ("go-golang-org-x-text" ,go-golang-org-x-text)))
+     (list go-github-com-antchfx-xpath
+           go-github-com-golang-groupcache-lru
+           go-golang-org-x-net
+           go-golang-org-x-text))
     (home-page "https://github.com/antchfx/htmlquery")
     (synopsis "htmlquery")
     (description #f)
@@ -546,17 +544,16 @@ empty.")
 (define-public go-github-com-antchfx-xmlquery
   (package
     (name "go-github-com-antchfx-xmlquery")
-    (version "1.3.5")
+    (version "1.3.10")
     (source
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/antchfx/xmlquery.git")
+               (url "https://github.com/antchfx/xmlquery")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32
-          "0j32l2zby839xfw82yicsmavzpml3b0smvv6lrjsh6j5z150jqzy"))))
+         (base32 "1ghdvbf9nd9pq0ny6xr1az93hcq5r3qy940dz9mr8mcrrsm4m1rv"))))
     (build-system go-build-system)
     (arguments
      '(#:import-path "github.com/antchfx/xmlquery"))
@@ -573,20 +570,18 @@ empty.")
 (define-public go-github-com-antchfx-xpath
   (package
     (name "go-github-com-antchfx-xpath")
-    (version "1.1.11")
+    (version "1.2.0")
     (source
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/antchfx/xpath.git")
+               (url "https://github.com/antchfx/xpath")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32
-          "0xgnqvx6h915q2sxjs6f7wx3d0jnx6865xzgyp01ggcfm99gbkl8"))))
+         (base32 "1qidxka248aaqf8n3m04ig25skgaxzh2ahm75swwxsk3s198lg08"))))
     (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/antchfx/xpath"))
+    (arguments '(#:import-path "github.com/antchfx/xpath"))
     (home-page "https://github.com/antchfx/xpath")
     (synopsis "XPath")
     (description #f)
@@ -690,7 +685,7 @@ and collections.")
 (define-public go-github-com-bits-and-blooms-bitset
   (package
     (name "go-github-com-bits-and-blooms-bitset")
-    (version "1.2.1")
+    (version "1.2.2")
     (source
       (origin
         (method git-fetch)
@@ -699,7 +694,7 @@ and collections.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "0fiwz9v2b1xydgyajc7d1b2qnpsd664sijshz2f44gs8nvh8n6zi"))))
+         (base32 "0p1g98klqwbdilqk0fkg8n7x8rjncqc52cva95rh7jl0k3q9d9x4"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/bits-and-blooms/bitset"))
     (home-page "https://github.com/bits-and-blooms/bitset")
@@ -717,7 +712,7 @@ boolean values.  It should be more efficient than map[uint] bool.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/blevesearch/bleve.git")
+               (url "https://github.com/blevesearch/bleve")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -893,7 +888,7 @@ every little platform detail.  This specifically means:")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/blevesearch/segment.git")
+               (url "https://github.com/blevesearch/segment")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -918,7 +913,7 @@ described in Unicode Standard Annex #29
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/blevesearch/snowballstem.git")
+               (url "https://github.com/blevesearch/snowballstem")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -990,7 +985,7 @@ reused in other contexts.")
 (define-public go-github-com-blevesearch-zapx-v11
   (package
     (name "go-github-com-blevesearch-zapx-v11")
-    (version "11.3.2")
+    (version "11.3.3")
     (source
       (origin
         (method git-fetch)
@@ -999,7 +994,7 @@ reused in other contexts.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "158mpby3lidxqb3dnia3m11h5p071xwv8kh0nn1xf4sl98c7aqq2"))))
+         (base32 "0aci580kl9zi2q8jpjq03ipnl07qlldzsa6rybva4svxkfrc96nd"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/blevesearch/zapx/v11"))
     (propagated-inputs
@@ -1021,7 +1016,7 @@ instead depends only on the indepenent interface modules:")
 (define-public go-github-com-blevesearch-zapx-v12
   (package
     (name "go-github-com-blevesearch-zapx-v12")
-    (version "12.3.2")
+    (version "12.3.3")
     (source
       (origin
         (method git-fetch)
@@ -1030,7 +1025,7 @@ instead depends only on the indepenent interface modules:")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "06fklrw1b0jqbalfknn0a6zrsxqqdg3ym6ph2w14d5lagnbf9zxn"))))
+         (base32 "1qiz7xd0xl4q34xfsr13cpdm3gr1xdj2kw7mllasmkv7apzvh56r"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/blevesearch/zapx/v12"))
     (propagated-inputs
@@ -1052,7 +1047,7 @@ instead depends only on the indepenent interface modules:")
 (define-public go-github-com-blevesearch-zapx-v13
   (package
     (name "go-github-com-blevesearch-zapx-v13")
-    (version "13.3.2")
+    (version "13.3.3")
     (source
       (origin
         (method git-fetch)
@@ -1061,7 +1056,7 @@ instead depends only on the indepenent interface modules:")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "05iwdzwz7wls3cjslckjhbzxkgn3169rn5dpan79dmi373j7i6rl"))))
+         (base32 "19dgsgny5w38zdblyhbp6bcn2gwb9zd3bsc4x1pc365blpfxag05"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/blevesearch/zapx/v13"))
     (propagated-inputs
@@ -1083,7 +1078,7 @@ instead depends only on the indepenent interface modules:")
 (define-public go-github-com-blevesearch-zapx-v14
   (package
     (name "go-github-com-blevesearch-zapx-v14")
-    (version "14.3.2")
+    (version "14.3.3")
     (source
       (origin
         (method git-fetch)
@@ -1092,7 +1087,7 @@ instead depends only on the indepenent interface modules:")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "00h97j2dx49652l21rbgih8cx2acpnspi9gzirsavbwji2grfh3z"))))
+         (base32 "0ygrm5ga91kmkpr0vh2s5h08q9afrm5j5v042qrrqcvm3sn7gy0n"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/blevesearch/zapx/v14"))
     (propagated-inputs
@@ -1114,7 +1109,7 @@ instead depends only on the indepenent interface modules:")
 (define-public go-github-com-blevesearch-zapx-v15
   (package
     (name "go-github-com-blevesearch-zapx-v15")
-    (version "15.3.2")
+    (version "15.3.3")
     (source
       (origin
         (method git-fetch)
@@ -1123,12 +1118,11 @@ instead depends only on the indepenent interface modules:")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "1gyc7i3svxj517yx964h91a4pmcvqk6zsm8kc1cn4y71ikxk6jx5"))))
+         (base32 "0r6yvfa2pq7b43afc8a0sja80g1aq5by38x5mv0c0lk6w3wkj5hy"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/blevesearch/zapx/v15"))
     (propagated-inputs
-     (list go-golang-org-x-sys
-           go-github-com-spf13-cobra
+     (list go-github-com-spf13-cobra
            go-github-com-golang-snappy
            go-github-com-blevesearch-vellum
            go-github-com-blevesearch-scorch-segment-api-v2
@@ -1194,7 +1188,7 @@ barcodes.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/btcsuite/btcutil.git")
+               (url "https://github.com/btcsuite/btcutil")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -1224,7 +1218,7 @@ barcodes.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/buger/jsonparser.git")
+               (url "https://github.com/buger/jsonparser")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -1574,7 +1568,7 @@ package.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/coreos/go-systemd.git")
+               (url "https://github.com/coreos/go-systemd")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -1641,7 +1635,7 @@ package.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/coreos/pkg.git")
+               (url "https://github.com/coreos/pkg")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -1766,7 +1760,7 @@ package.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/couchbase/vellum.git")
+               (url "https://github.com/couchbase/vellum")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -1983,7 +1977,7 @@ complicated buffering strategies")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/dustin/go-humanize.git")
+               (url "https://github.com/dustin/go-humanize")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -1998,7 +1992,7 @@ complicated buffering strategies")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/eapache/channels.git")
+               (url "https://github.com/eapache/channels")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -2022,7 +2016,7 @@ complicated buffering strategies")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/eapache/queue.git")
+               (url "https://github.com/eapache/queue")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -2198,7 +2192,7 @@ validate such constraints.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/fatih/structs.git")
+               (url "https://github.com/fatih/structs")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -2288,7 +2282,7 @@ to be more re-useable")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/gammazero/deque.git")
+               (url "https://github.com/gammazero/deque")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -2310,7 +2304,7 @@ to be more re-useable")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/gammazero/workerpool.git")
+               (url "https://github.com/gammazero/workerpool")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -2334,7 +2328,7 @@ to be more re-useable")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/gavv/monotime.git")
+               (url "https://github.com/gavv/monotime")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -2430,7 +2424,7 @@ the API is very similar.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/glycerine/goconvey.git")
+               (url "https://github.com/glycerine/goconvey")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -2452,7 +2446,7 @@ the API is very similar.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/glycerine/go-unsnap-stream.git")
+               (url "https://github.com/glycerine/go-unsnap-stream")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -2510,7 +2504,7 @@ specified here:
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/go-chi/chi.git")
+               (url "https://github.com/go-chi/chi")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -2556,7 +2550,7 @@ services.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/gocolly/colly.git")
+               (url "https://github.com/gocolly/colly")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -2666,7 +2660,7 @@ that supports Ruby's regex syntax.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/go-errors/errors.git")
+               (url "https://github.com/go-errors/errors")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -3012,7 +3006,7 @@ de-duplication that works across a set of peer processes.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/golang/mock.git")
+               (url "https://github.com/golang/mock")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -3730,7 +3724,7 @@ used as a base for different API flavors.  Package pat is documented at:")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/gorilla/schema.git")
+               (url "https://github.com/gorilla/schema")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -4068,7 +4062,7 @@ interface for use in development and production environments.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/hashicorp/golang-lru.git")
+               (url "https://github.com/hashicorp/golang-lru")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -4159,7 +4153,7 @@ below:")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/imkira/go-interpol.git")
+               (url "https://github.com/imkira/go-interpol")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -4535,7 +4529,7 @@ and can be used with @url{https://github.com/lib/pq,https://github.com/lib/pq}."
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/jarcoal/httpmock.git")
+               (url "https://github.com/jarcoal/httpmock")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -4625,7 +4619,7 @@ functions may be called concurrently with themselves and each other.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/jrick/logrotate.git")
+               (url "https://github.com/jrick/logrotate")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -4700,7 +4694,7 @@ compatibility with code using standard lib.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/k0kubun/colorstring.git")
+               (url "https://github.com/k0kubun/colorstring")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -4722,7 +4716,7 @@ compatibility with code using standard lib.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/kennygrant/sanitize.git")
+               (url "https://github.com/kennygrant/sanitize")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -4819,7 +4813,7 @@ with changes by keybase.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/keybase/stellarnet.git")
+               (url "https://github.com/keybase/stellarnet")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -4914,7 +4908,7 @@ processing.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/kyokomi/emoji.git")
+               (url "https://github.com/kyokomi/emoji")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -5292,7 +5286,7 @@ semantics.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/manucorporat/sse.git")
+               (url "https://github.com/manucorporat/sse")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -5854,7 +5848,7 @@ they should occur.  Actions mutate the context and transition to another state."
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/nf/cr2.git")
+               (url "https://github.com/nf/cr2")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -5880,7 +5874,7 @@ they should occur.  Actions mutate the context and transition to another state."
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/nfnt/resize.git")
+               (url "https://github.com/nfnt/resize")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -6173,7 +6167,7 @@ implemented.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/philhofer/fwd.git")
+               (url "https://github.com/philhofer/fwd")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -6362,7 +6356,7 @@ incorrectly escaped by @code{net/url}.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/qrtz/nativemessaging.git")
+               (url "https://github.com/qrtz/nativemessaging")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -6559,7 +6553,7 @@ logging.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/rwcarlsen/goexif.git")
+               (url "https://github.com/rwcarlsen/goexif")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -6601,7 +6595,7 @@ logging.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/saintfish/chardet.git")
+               (url "https://github.com/saintfish/chardet")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -6623,7 +6617,7 @@ logging.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/scylladb/termtables.git")
+               (url "https://github.com/scylladb/termtables")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -6645,7 +6639,7 @@ logging.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/segmentio/go-loggly.git")
+               (url "https://github.com/segmentio/go-loggly")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -7217,7 +7211,7 @@ for examples.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/src-d/gcfg.git")
+               (url "https://github.com/src-d/gcfg")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -7264,7 +7258,7 @@ for examples.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/stellar/go.git")
+               (url "https://github.com/stellar/go")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name "go-github-com-stellar-go" version))
         (sha256
@@ -7501,7 +7495,7 @@ for examples.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/stellar/go-xdr.git")
+               (url "https://github.com/stellar/go-xdr")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -7524,7 +7518,7 @@ for examples.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/steveyen/gtreap.git")
+               (url "https://github.com/steveyen/gtreap")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -7547,7 +7541,7 @@ for examples.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/temoto/robotstxt.git")
+               (url "https://github.com/temoto/robotstxt")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -7664,7 +7658,7 @@ default browser.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/ttacon/chalk.git")
+               (url "https://github.com/ttacon/chalk")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -7896,7 +7890,7 @@ JSON, XML, binary data, and HTML templates.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/xeipuuv/gojsonpointer.git")
+               (url "https://github.com/xeipuuv/gojsonpointer")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -7920,7 +7914,7 @@ JSON, XML, binary data, and HTML templates.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/xeipuuv/gojsonreference.git")
+               (url "https://github.com/xeipuuv/gojsonreference")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -7944,7 +7938,7 @@ JSON, XML, binary data, and HTML templates.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/xeipuuv/gojsonschema.git")
+               (url "https://github.com/xeipuuv/gojsonschema")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -7992,7 +7986,7 @@ JSON, XML, binary data, and HTML templates.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/yalp/jsonpath.git")
+               (url "https://github.com/yalp/jsonpath")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -8062,7 +8056,7 @@ PKCS#8 format, as defined in RFC5208 and RFC5958.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/yudai/gojsondiff.git")
+               (url "https://github.com/yudai/gojsondiff")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -8095,7 +8089,7 @@ PKCS#8 format, as defined in RFC5208 and RFC5958.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/yudai/golcs.git")
+               (url "https://github.com/yudai/golcs")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -8120,7 +8114,7 @@ PKCS#8 format, as defined in RFC5208 and RFC5958.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://github.com/yudai/pp.git")
+               (url "https://github.com/yudai/pp")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
@@ -8295,34 +8289,6 @@ documentation, please contact me.")
     (description #f)
     (license license:asl2.0)))
 
-(define-public go-go-etcd-io-bbolt
-  (package
-    (name "go-go-etcd-io-bbolt")
-    (version "1.3.6")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/etcd-io/bbolt.git")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0pj5245d417za41j6p09fmkbv05797vykr1bi9a6rnwddh1dbs8d"))))
-    (build-system go-build-system)
-    (arguments
-     `(#:import-path "go.etcd.io/bbolt"
-       ;; Extending the test timeout to 30 minutes still times out on aarch64.
-       #:tests? ,(not target-arm?)))
-    (propagated-inputs
-     (list go-golang-org-x-sys))
-    (home-page "https://github.com/etcd-io/bbolt")
-    (synopsis "Embedded key/value database for Go")
-    (description "Bolt is a pure Go key/value store inspired by Howard Chu's
-LMDB project.  The goal of the project is to provide a simple, fast, and
-reliable database for projects that don't require a full database server such as
-Postgres or MySQL.")
-    (license license:expat)))
-
 (define-public go-go-jolheiser-com-hcaptcha
   (package
     (name "go-go-jolheiser-com-hcaptcha")
@@ -8331,7 +8297,7 @@ Postgres or MySQL.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://gitea.com/jolheiser/hcaptcha.git")
+               (url "https://gitea.com/jolheiser/hcaptcha")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -8355,7 +8321,7 @@ Postgres or MySQL.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://gitea.com/jolheiser/pwn.git")
+               (url "https://gitea.com/jolheiser/pwn")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -9679,7 +9645,7 @@ receiver.  A @code{Uint128} value is therefore immutable, just like
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://gitlab.com/cznic/ccgo.git/")
+               (url "https://gitlab.com/cznic/ccgo")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
@@ -10105,7 +10071,7 @@ Token removed.")
       (origin
         (method git-fetch)
         (uri (git-reference
-               (url "https://strk.kbt.io/git/go-libravatar.git")
+               (url "https://strk.kbt.io/git/go-libravatar")
                (commit (go-version->git-ref version))))
         (file-name (git-file-name name version))
         (sha256
