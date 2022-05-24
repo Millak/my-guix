@@ -24,7 +24,7 @@
 (define-public cpuid2cpuflags
   (package
     (name "cpuid2cpuflags")
-    (version "11")
+    (version "12")
     (source
       (origin
         (method url-fetch)
@@ -33,12 +33,14 @@
                             "cpuid2cpuflags-" version ".tar.bz2"))
         (sha256
          (base32
-          "0v63sdch996bfmy6l6hkmqdas2akz3f5w82my4jn5y4h3ss22jsw"))))
+          "1llkhzaf863swvkxsqx0bzy7n08jvfwnv7jbl5m02dka642gldwx"))))
     (build-system gnu-build-system)
     (home-page "https://github.com/mgorny/cpuid2cpuflags")
     (synopsis "Tool to generate CPU_FLAGS_* for your CPU")
-    (description "Tool to generate CPU_FLAGS_* for your CPU")
+    (description "This program attempts to obtain the identification and
+capabilities of the currently used CPU, and print the matching set of
+CPU_FLAGS_* flags for Gentoo.")
     (supported-systems '("x86_64-linux" "i686-linux"
                          "armhf-linux" "aarch64-linux"
-                         "powerpc64le-linux"))
+                         "powerpc-linux" "powerpc64le-linux"))
     (license license:bsd-2)))
