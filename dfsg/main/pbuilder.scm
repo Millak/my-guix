@@ -49,7 +49,7 @@
        #~(modify-phases %standard-phases
            (delete 'configure)          ; no configure script
            (add-after 'unpack 'patch-source
-             (lambda* (#:key outputs #:allow-other-keys)
+             (lambda* (#:key native-inputs inputs outputs #:allow-other-keys)
 
                ;; Documentation requires tldp-one-page.xsl
                (substitute* "Makefile"
@@ -82,6 +82,10 @@
                (substitute* "pbuildd/buildd-config.sh"
                  (("/usr/share/doc/pbuilder")
                   (string-append #$output "/share/doc/pbuilder")))
+               (substitute* "pbuilder-unshare-wrapper"
+                 (("/(s)?bin/ifconfig") "ifconfig")
+                 (("/(s)?bin/ip")
+                  (search-input-file (or native-inputs inputs) "/sbin/ip")))
                (substitute* "Documentation/Makefile"
                  (("/usr") ""))
 
@@ -140,6 +144,7 @@
            debootstrap
            grep
            guile-3.0            ; for wrap-script
+           iproute
            perl
            which))
     (native-inputs
