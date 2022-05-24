@@ -19,6 +19,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (guix packages)
+  #:use-module (guix gexp)
   #:use-module (guix utils)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system trivial)
@@ -42,22 +43,23 @@
          (base32 "1m068l1m5pik9735iw922dndavchvypjs8ks8s3dxls8a6yxr6gc"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
+       #:modules '((guix build utils))
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (lib    (string-append out "/lib"))
-                (curl   (assoc-ref %build-inputs "curl"))
-                (source (assoc-ref %build-inputs "source")))
-           (install-file (string-append source "/sponsorblock_minimal.lua")
-                         lib)
-           (install-file (string-append source "/LICENSE")
-                         (string-append out "/share/doc/" ,name "-" ,version))
-           (substitute* (string-append lib "/sponsorblock_minimal.lua")
-             (("\"curl\"") (string-append "\"" curl "/bin/curl\"")))))))
+       #~(begin
+           (use-modules (guix build utils))
+           (let ((source (assoc-ref %build-inputs "source")))
+             (install-file (string-append source "/sponsorblock_minimal.lua")
+                           (string-append #$output "/lib"))
+             (install-file (string-append source "/LICENSE")
+                           (string-append #$output "/share/doc/"
+                                          #$name "-" #$version))
+             (substitute* (string-append #$output "/lib/sponsorblock_minimal.lua")
+               (("\"curl\"")
+                (string-append "\"" (search-input-file %build-inputs "/bin/curl")
+                               "\"")))))))
     (inputs
-     `(("curl" ,curl-minimal)))
+     (list curl-minimal))
     (home-page "https://codeberg.org/jouni/mpv_sponsorblock_minimal")
     (synopsis "Skips sponsored segments of YouTube videos")
     (description "This package provides a plugin to @code{mpv} to skip
