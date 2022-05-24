@@ -65,8 +65,8 @@ sponsored segments of YouTube videos.")
     (license license:gpl3))))
 
 (define-public mpv-twitch-chat
-  (let ((commit "71dfa17b4fbbba88a81e13f8954353cdd5b7eddf")     ; Sept 4, 2021
-        (revision "1"))
+  (let ((commit "69bd232afca33ebf4f5f086bed05749b666185ae")     ; March 25, 2022
+        (revision "2"))
     (package
       (name "mpv-twitch-chat")
       (version (git-version "0" revision commit))
@@ -78,7 +78,7 @@ sponsored segments of YouTube videos.")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256
-           (base32 "0qajfvykc9jbbgf9v2684gihywfnnvpvzrdrhaabpcvnk27byb52"))))
+           (base32 "01gca19xcbvjqbyp832vydlbyg2nkpd8y3wxhf73wj883r9cf4py"))))
       (build-system trivial-build-system)
       (arguments
        `(#:modules ((guix build utils))
@@ -88,20 +88,14 @@ sponsored segments of YouTube videos.")
            (let* ((out      (assoc-ref %outputs "out"))
                   (lib      (string-append out "/lib"))
                   (curl     (assoc-ref %build-inputs "curl"))
-                  (lua-json (assoc-ref %build-inputs "lua-json"))
                   (source   (assoc-ref %build-inputs "source")))
              (install-file (string-append source "/main.lua") lib)
              (install-file (string-append source "/LICENSE")
                            (string-append out "/share/doc/" ,name "-" ,version))
              (substitute* (string-append lib "/main.lua")
-               (("\"curl\"") (string-append "\"" curl "/bin/curl\""))
-               (("^package\\.path.*") "")
-               (("local json .*")
-                (string-append "local json = loadfile(\"" lua-json
-                               "/share/lua/5.2/json.lua\")()")))))))
+               (("\"curl\"") (string-append "\"" curl "/bin/curl\"")))))))
       (inputs
-       `(("curl" ,curl-minimal)
-         ("lua-json" ,lua5.2-json)))
+       `(("curl" ,curl-minimal)))
       (home-page "https://github.com/CrendKing/mpv-twitch-chat/")
       (synopsis "Twitch chat messages as subtitles")
       (description "Show Twitch chat messages as subtitles when watching Twitch
