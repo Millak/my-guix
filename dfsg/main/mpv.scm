@@ -83,21 +83,23 @@ sponsored segments of YouTube videos.")
            (base32 "01gca19xcbvjqbyp832vydlbyg2nkpd8y3wxhf73wj883r9cf4py"))))
       (build-system trivial-build-system)
       (arguments
-       `(#:modules ((guix build utils))
+       (list
+         #:modules '((guix build utils))
          #:builder
-         (begin
-           (use-modules (guix build utils))
-           (let* ((out      (assoc-ref %outputs "out"))
-                  (lib      (string-append out "/lib"))
-                  (curl     (assoc-ref %build-inputs "curl"))
-                  (source   (assoc-ref %build-inputs "source")))
-             (install-file (string-append source "/main.lua") lib)
-             (install-file (string-append source "/LICENSE")
-                           (string-append out "/share/doc/" ,name "-" ,version))
-             (substitute* (string-append lib "/main.lua")
-               (("\"curl\"") (string-append "\"" curl "/bin/curl\"")))))))
+         #~(begin
+             (use-modules (guix build utils))
+             (let ((source (assoc-ref %build-inputs "source")))
+               (install-file (string-append source "/main.lua")
+                             (string-append #$output "/lib"))
+               (install-file (string-append source "/LICENSE")
+                             (string-append #$output "/share/doc/"
+                                            #$name "-" #$version))
+               (substitute* (string-append #$output "/lib/main.lua")
+                 (("\"curl\"")
+                  (string-append "\"" (search-input-file %build-inputs "/bin/curl")
+                                 "\"")))))))
       (inputs
-       `(("curl" ,curl-minimal)))
+       (list curl-minimal))
       (home-page "https://github.com/CrendKing/mpv-twitch-chat/")
       (synopsis "Twitch chat messages as subtitles")
       (description "Show Twitch chat messages as subtitles when watching Twitch
