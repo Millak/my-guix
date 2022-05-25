@@ -27,7 +27,8 @@
   #:use-module (gnu packages guile)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages man)
-  #:use-module (gnu packages perl))
+  #:use-module (gnu packages perl)
+  #:use-module (srfi srfi-26))
 
 (define-public pbuilder
   (package
@@ -45,11 +46,14 @@
     (build-system gnu-build-system)
     (arguments
      (list
+       #:modules `((guix build gnu-build-system)
+                   (guix build utils)
+                   (srfi srfi-26))
        #:phases
        #~(modify-phases %standard-phases
            (delete 'configure)          ; no configure script
            (add-after 'unpack 'patch-source
-             (lambda* (#:key native-inputs inputs outputs #:allow-other-keys)
+             (lambda* (#:key inputs outputs #:allow-other-keys)
 
                ;; Documentation requires tldp-one-page.xsl
                (substitute* "Makefile"
@@ -84,8 +88,7 @@
                   (string-append #$output "/share/doc/pbuilder")))
                (substitute* "pbuilder-unshare-wrapper"
                  (("/(s)?bin/ifconfig") "ifconfig")
-                 (("/(s)?bin/ip")
-                  (search-input-file (or native-inputs inputs) "/sbin/ip")))
+                 (("/(s)?bin/ip") (search-input-file inputs "/sbin/ip")))
                (substitute* "Documentation/Makefile"
                  (("/usr") ""))
 
@@ -99,6 +102,9 @@
                  (lambda ()
                    (format #t "# A couple of presets to make this work more smoothly.~@
                            MIRRORSITE=\"http://deb.debian.org/debian\"~@
+                           if [ -r /run/setuid-programs/sudo ]; then~@
+                               PBUILDERROOTCMD=\"/run/setuid-programs/sudo -E\"~@
+                           fi~@
                            PBUILDERSATISFYDEPENDSCMD=\"~a/lib/pbuilder/pbuilder-satisfydepends-apt\"~%"
                            #$output)))))
            (add-after 'install 'install-manpages
@@ -108,26 +114,27 @@
                  (install-file "pdebuild.1" (string-append man "man1"))
                  (install-file "pbuilder.8" (string-append man "man8"))
                  (install-file "pbuilderrc.5" (string-append man "man5")))))
-           (add-after 'install-more 'wrap-programs
-             (lambda* (#:key native-inputs inputs outputs #:allow-other-keys)
+           (add-after 'install 'wrap-programs
+             (lambda* (#:key inputs outputs #:allow-other-keys)
                (for-each
                  (lambda (file)
                    (wrap-script file
                     `("PATH" ":" prefix
-                      (,(dirname (search-input-file (or native-inputs inputs) "/bin/cut"))
-                       ,(dirname (search-input-file (or native-inputs inputs) "/bin/dpkg"))
-                       ,(dirname (search-input-file (or native-inputs inputs) "/bin/grep"))
-                       ,(dirname (search-input-file (or native-inputs inputs) "/bin/perl"))
-                       ,(dirname (search-input-file (or native-inputs inputs) "/bin/sed"))
-                       ,(dirname (search-input-file (or native-inputs inputs) "/bin/which"))
-                       ,(dirname (search-input-file (or native-inputs inputs) "/sbin/debootstrap"))))))
+                      ,(map (compose dirname (cut search-input-file inputs <>))
+                            (list "/bin/cut"
+                                  "/bin/dpkg"
+                                  "/bin/grep"
+                                  "/bin/perl"
+                                  "/bin/sed"
+                                  "/bin/which"
+                                  "/sbin/debootstrap")))))
                  (cons*
                    (string-append #$output "/bin/pdebuild")
                    (string-append #$output "/sbin/pbuilder")
                    (find-files (string-append #$output "/lib/pbuilder"))))))
            ;; Move the 'check phase to after 'install.
            (delete 'check)
-           (add-after 'wrap-programs 'check
+           (add-after 'validate-runpath 'check
              (assoc-ref %standard-phases 'check)))
          #:make-flags
          ;; No PREFIX, use DESTDIR instead.
@@ -166,8 +173,5 @@ testing/unstable/whatever.
 chroot image.
 @item@code{pdebuild} is a wrapper for Debian Developers, to allow running
 @code{pbuilder} just like @code{debuild}, as a normal user.
-@end itemize
-NOTE: For Guix System it is recommended to put
-@code{PBUILDERROOTCMD=\"/run/setuid-programs/sudo -E\"} inside of your
-@file{~/.pbuilderrc}.")
+@end itemize")
     (license license:gpl2+)))
