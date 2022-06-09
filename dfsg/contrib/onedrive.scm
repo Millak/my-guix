@@ -35,7 +35,7 @@
 (define-public onedrive
   (package
     (name "onedrive")
-    (version "2.4.17")
+    (version "2.4.18")
     (source
       (origin
         (method git-fetch)
@@ -44,7 +44,7 @@
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "1q219i8j9wfsv9f9hkg2s0h87952xc1srymw525kld0r20zw007q"))))
+         (base32 "17clr4pzgjd1sasw1q8s74vxfg2m35iv9yfsm801avjx349wp0na"))))
     (build-system gnu-build-system)
     (arguments
      (list
