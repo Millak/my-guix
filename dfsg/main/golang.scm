@@ -200,7 +200,7 @@ for a full list of sub-packages.")
     (synopsis "Gitea SDK for Go")
     (description
      "This project acts as a client SDK implementation written in Go to interact
-with the Gitea API implementation.  For further informations take a look at the
+with the Gitea API implementation.  For further information take a look at the
 current @url{https://godoc.org/code.gitea.io/sdk/gitea,documentation}.")
     (license license:expat)))
 
@@ -1010,7 +1010,7 @@ reused in other contexts.")
     (description
      "The zapx module is fork of @url{https://github.com/blevesearch/zap,zap} module
 which maintains file format compatibility, but removes dependency on bleve, and
-instead depends only on the indepenent interface modules:")
+instead depends only on the independent interface modules:")
     (license license:asl2.0)))
 
 (define-public go-github-com-blevesearch-zapx-v12
@@ -1041,7 +1041,7 @@ instead depends only on the indepenent interface modules:")
     (description
      "The zapx module is fork of @url{https://github.com/blevesearch/zap,zap} module
 which maintains file format compatibility, but removes dependency on bleve, and
-instead depends only on the indepenent interface modules:")
+instead depends only on the independent interface modules:")
     (license license:asl2.0)))
 
 (define-public go-github-com-blevesearch-zapx-v13
@@ -1072,7 +1072,7 @@ instead depends only on the indepenent interface modules:")
     (description
      "The zapx module is fork of @url{https://github.com/blevesearch/zap,zap} module
 which maintains file format compatibility, but removes dependency on bleve, and
-instead depends only on the indepenent interface modules:")
+instead depends only on the independent interface modules:")
     (license license:asl2.0)))
 
 (define-public go-github-com-blevesearch-zapx-v14
@@ -1103,7 +1103,7 @@ instead depends only on the indepenent interface modules:")
     (description
      "The zapx module is fork of @url{https://github.com/blevesearch/zap,zap} module
 which maintains file format compatibility, but removes dependency on bleve, and
-instead depends only on the indepenent interface modules:")
+instead depends only on the independent interface modules:")
     (license license:asl2.0)))
 
 (define-public go-github-com-blevesearch-zapx-v15
@@ -1134,7 +1134,7 @@ instead depends only on the indepenent interface modules:")
     (description
      "The zapx module is fork of @url{https://github.com/blevesearch/zap,zap} module
 which maintains file format compatibility, but removes dependency on bleve, and
-instead depends only on the indepenent interface modules:")
+instead depends only on the independent interface modules:")
     (license license:asl2.0)))
 
 (define-public go-github-com-boombuler-barcode
@@ -4976,7 +4976,7 @@ processing.")
     (home-page "https://github.com/lestrrat-go/backoff")
     (synopsis "backoff")
     (description
-      "Package backoff implments backoff algorithms for retrying operations.")
+      "Package backoff implements backoff algorithms for retrying operations.")
     (license license:expat)))
 
 (define-public go-github-com-lestrrat-go-blackmagic
@@ -8042,7 +8042,7 @@ JSON, XML, binary data, and HTML templates.")
     (propagated-inputs
      (list go-golang-org-x-crypto))
     (home-page "https://github.com/youmark/pkcs8")
-    (synopsis "Go implemention to parse and convert PKCS#8 format keys")
+    (synopsis "Go implementation to parse and convert PKCS#8 format keys")
     (description
      "Package pkcs8 implements functions to parse and convert private keys in
 PKCS#8 format, as defined in RFC5208 and RFC5958.")

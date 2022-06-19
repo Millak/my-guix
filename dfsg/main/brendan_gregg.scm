@@ -61,7 +61,7 @@ sessions, at speeds they were not designed for - sometimes called
 \"overbauding\".  Overbauding can cause command overheating, resulting in
 @dfn{Command Fault Heat State Exception} (CFHSE) errors.
 
-Many command line programs, especially those for Unix, were orginially written
+Many command line programs, especially those for Unix, were originally written
 to run at bauds such as 300, 1200, 2400 or even 9600.  This was the days of
 serial connections to teletypes or dumb terminals (aka glass teletypes, green
 screens, etc).  While links to servers have increased in speed, the code for

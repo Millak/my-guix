@@ -113,7 +113,7 @@
                "--with-system-bz2"
                ;"--with-system-icu"         ; linker error on i686-linux
                "--with-system-jpeg"         ; must be libjpeg-turbo
-               ;"--with-system-libevent"    ; seems to be incompatable
+               ;"--with-system-libevent"    ; seems to be incompatible
                "--with-system-libvpx"
                "--with-system-nspr"
                "--with-system-nss"

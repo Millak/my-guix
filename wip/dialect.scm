@@ -183,7 +183,7 @@
        ("python-six" ,python-six)
        ("python-testfixtures" ,python-testfixtures)))
     (home-page "https://github.com/pndurette/gTTS")
-    (synopsis "Python library and CLI tool fpr Google Translate text-to-speech API")
+    (synopsis "Python library and CLI tool for Google Translate text-to-speech API")
     (description
      "This package provides @acronym{gTTS, Google Text-to-Speech}, a Python
 library and CLI tool to interface with Google Translate text-to-speech API.")
