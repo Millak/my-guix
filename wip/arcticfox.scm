@@ -17,7 +17,6 @@
 
 (define-module (wip arcticfox)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix build utils)
   #:use-module (guix git-download)
   #:use-module (guix utils)
   #:use-module (guix packages)
