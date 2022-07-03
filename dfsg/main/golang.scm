@@ -6888,7 +6888,6 @@ generates Go code that statically implements the provided http.FileSystem.")
                          (not (string-contains file "go/bson"))
                          (not (string-contains file "go/filelock"))
                          (not (string-contains file "go/list2"))
-                         (not (string-contains file "go/websocket"))    ; wants go-github-com-gorilla-websocket
                          (not (string-contains file "go/rpc"))          ; wants network access
                          (not (null?
                                 (filter-map
@@ -6898,6 +6897,8 @@ generates Go code that statically implements the provided http.FileSystem.")
                                          (string-drop entry (1+ (string-length file))))
                                        files))))))))
                  #:directories? #t)))))))
+    (native-inputs
+     (list go-github-com-gorilla-websocket))
     (home-page "https://github.com/siddontang/go")
     (synopsis "Collection of Golang libraries")
     (description "This package contains a curated collection of Golang libraries.")
