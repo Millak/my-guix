@@ -34,5 +34,5 @@
             "-DWANT_MONO=OFF"))))
     (inputs
      (modify-inputs (package-inputs quassel)
-       (append qtdeclarative qtwebchannel qtwebengine)))
+       (append qtdeclarative-5 qtwebchannel-5 qtwebengine-5)))
     (properties '((upstream-name . "quassel")))))

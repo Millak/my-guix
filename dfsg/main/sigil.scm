@@ -103,7 +103,7 @@
                          (string-append out "/share/sigil/python3lib/"))))))))
     (native-inputs
      (list pkg-config
-           qttools))
+           qttools-5))
     (propagated-inputs
      ;; Needed so when sigil is installed the mathjax addon will be in the correct folder.
      (list js-mathjax))
@@ -128,9 +128,9 @@
        ("python-regex" ,python-regex)
        ("python-six" ,python-six)
        ("qtbase" ,qtbase-5)
-       ("qtdeclarative" ,qtdeclarative)
-       ("qtwebchannel" ,qtwebchannel)
-       ("qtwebengine" ,qtwebengine)
+       ("qtdeclarative" ,qtdeclarative-5)
+       ("qtwebchannel" ,qtwebchannel-5)
+       ("qtwebengine" ,qtwebengine-5)
        ("zlib" ,zlib)))
     (home-page "https://sigil-ebook.com/")
     (synopsis "EPUB ebook editor")

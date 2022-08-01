@@ -48,11 +48,11 @@
                      "QMAKE_LRELEASE=lrelease"
                      "QMAKE_LUPDATE=lupdate"))))))
     (native-inputs
-     (list qttools))
+     (list qttools-5))
     (inputs
      (list mpv
            qtbase-5
-           qtdeclarative
+           qtdeclarative-5
            qtx11extras))
     (home-page "https://flavio.tordini.org/minitube")
     (synopsis "Native YouTube client")
