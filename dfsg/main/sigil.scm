@@ -38,7 +38,7 @@
 (define-public sigil
   (package
     (name "sigil")
-    (version "1.8.0")
+    (version "1.9.10")
     (source
       (origin
         (method git-fetch)
@@ -47,13 +47,13 @@
                (commit version)))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "0wqfryzgbnablwllp4gr82s4qcf51kmm4c1n4dpj351v474q6qxj"))
-        (modules '((guix build utils)))
+         (base32 "1yxazxwyrlaiq0arwac0m4x09iv1dlsmmd1yvnzsbvm9zlaggqsy"))
         (snippet
-         '(begin
+         #~(begin
+            (use-modules (guix build utils))
             (with-directory-excursion "3rdparty"
               (for-each delete-file-recursively
-                        '("extra" "hunspell" "minizip" "pcre" "zlib")))
+                        '("extra" "hunspell" "minizip" "pcre2" "zlib")))
             (delete-file-recursively "src/Resource_Files/dictionaries")
             ;(delete-file-recursively "src/Resource_Files/polyfills/")   ; mathjax
             (delete-file "src/Resource_Files/polyfills/ML.zip")
@@ -67,6 +67,7 @@
        #:tests? #f  ; no tests
        #:configure-flags
        #~(list "-DUSE_SYSTEM_LIBS=1"
+               "-DUSE_QT6=0"        ; For now.
                "-DUSE_NEWER_FINDPYTHON3=1"
                "-DSYSTEM_LIBS_REQUIRED=1"
                "-DINSTALL_BUNDLED_DICTS=0"
@@ -108,30 +109,30 @@
      ;; Needed so when sigil is installed the mathjax addon will be in the correct folder.
      (list js-mathjax))
     (inputs
-     `(("bash-minimal" ,bash-minimal)   ; for wrap-program
-       ("hunspell" ,hunspell)
-       ("js-jquery" ,js-jquery)
-       ("js-jquery-scrollto" ,js-jquery-scrollto)
-       ("minizip" ,minizip)
-       ("pcre" ,pcre)
-       ("python" ,python)
-       ("python:tk" ,python "tk")
-       ("python-chardet" ,python-chardet)
-       ("python-css-parser" ,python-css-parser)
-       ("python-cssselect" ,python-cssselect)
-       ("python-dulwich" ,python-dulwich)
-       ("python-html5lib" ,python-html5lib)
-       ("python-lxml" ,python-lxml)
-       ("python-pillow" ,python-pillow)
-       ("python-pyqt" ,python-pyqt)
-       ("python-pyqtwebengine" ,python-pyqtwebengine)
-       ("python-regex" ,python-regex)
-       ("python-six" ,python-six)
-       ("qtbase" ,qtbase-5)
-       ("qtdeclarative" ,qtdeclarative-5)
-       ("qtwebchannel" ,qtwebchannel-5)
-       ("qtwebengine" ,qtwebengine-5)
-       ("zlib" ,zlib)))
+     (list bash-minimal     ; for wrap-program
+           hunspell
+           js-jquery
+           js-jquery-scrollto
+           minizip
+           pcre2
+           python
+           (list python "tk")
+           python-chardet
+           python-css-parser
+           python-cssselect
+           python-dulwich
+           python-html5lib
+           python-lxml
+           python-pillow
+           python-pyqt-without-qtwebkit
+           python-pyqtwebengine
+           python-regex
+           python-six
+           qtbase-5
+           qtdeclarative-5
+           qtwebchannel-5
+           qtwebengine-5
+           zlib))
     (home-page "https://sigil-ebook.com/")
     (synopsis "EPUB ebook editor")
     (description "Sigil is an ebook editor that uses Qt.  It is designed to edit
@@ -156,9 +157,9 @@ books in ePub format (both ePub 2 and ePub 3).")
         (sha256
          (base32
           "12x6k47kjbp3r8dipbjq70v32izxdakyr150pkxv5b29pp0p4sgx"))
-        ;(modules '((guix build utils)))
         ;(snippet
-        ; '(begin
+        ; #~(begin
+        ;    (use-modules (guix build utils))
         ;    (delete-file-recursively "dist")))
         ))
     (build-system minify-build-system)
@@ -185,10 +186,8 @@ multitude of browsers.")
         (sha256
          (base32
           "0viaazjcxpk15bhnrrp08r8nd0gicpbc128mmcc0c31rkwc61a4l"))
-        (modules '((guix build utils)))
         (snippet
-         '(begin
-            (delete-file "jquery.scrollTo.min.js")))))
+         #~(begin (delete-file "jquery.scrollTo.min.js")))))
     (build-system minify-build-system)
     (arguments `(#:javascript-files '("jquery.scrollTo.js")))
     (home-page "http://demos.flesler.com/jquery/scrollTo/")
