@@ -58,7 +58,7 @@
       (propagated-inputs
        `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
       (native-inputs
-       `(("fuse" ,(@ (gnu packages linux) fuse))
+       `(("fuse" ,(@ (gnu packages linux) fuse-3))
          ("go-golang-org-x-net" ,go-golang-org-x-net)))
       (home-page "https://bazil.org/fuse/")
       (synopsis "Go library for writing filesystems")

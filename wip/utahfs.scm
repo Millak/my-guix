@@ -115,7 +115,7 @@ what's being stored.")
        `(#:tests? #f    ; tests try to use fusermount
          #:import-path "github.com/jacobsa/fuse"))
       (inputs
-       `(("fuse" ,fuse)))
+       `(("fuse" ,fuse-3)))
       (propagated-inputs
        `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
       (home-page "https://github.com/jacobsa/fuse")

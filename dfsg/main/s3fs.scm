@@ -58,7 +58,7 @@
        ("wget" ,wget)))
     (inputs
      `(("curl" ,curl)
-       ("fuse" ,fuse)
+       ("fuse" ,fuse-3)
        ("gnutls" ,gnutls)
        ("libgcrypt" ,libgcrypt)
        ("libxml2" ,libxml2)
