@@ -22,6 +22,7 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix utils)
+  #:use-module (guix gexp)
   #:use-module (guix build-system go)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages check)
@@ -610,7 +611,7 @@ empty.")
 (define-public go-github-com-araddon-dateparse
   (package
     (name "go-github-com-araddon-dateparse")
-    (version "0.0.0-20210207001429-0eec95c9db7e")
+    (version "0.0.0-20210429162001-6b43995a97de")
     (source
       (origin
         (method git-fetch)
@@ -620,15 +621,29 @@ empty.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "10lgc2clpzbz3g260pq213m4id3pqww4da0azz9ldxjhy14an3s8"))))
+          "0p60rdbfk7d97hb1kk225lvnqvhw04d822782hn66i4yfvigrraj"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/araddon/dateparse"))
+     (list
+       #:import-path "github.com/araddon/dateparse"
+       #:phases
+       #~(modify-phases %standard-phases
+           (replace 'check
+             (lambda* (#:key inputs #:allow-other-keys #:rest args)
+               (unless
+                 ;; The tests fail when run with gccgo.
+                 ;; Unable to load timezones.
+                 (false-if-exception (search-input-file inputs "/bin/gccgo"))
+                 (apply (assoc-ref %standard-phases 'check) args)))))))
     (native-inputs
-     `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
+     (list go-github-com-scylladb-termtables
+           go-github-com-stretchr-testify))
     (home-page "https://github.com/araddon/dateparse")
     (synopsis "Go Date Parser")
-    (description #f)
+    (description
+     "Package dateparse parses date-strings without knowing the format in advance,
+using a fast lex based approach to eliminate shotgun attempts.  It leans towards
+US style dates when there is a conflict.")
     (license license:expat)))
 
 (define-public go-github-com-armon-go-socks5
@@ -2655,7 +2670,7 @@ that supports Ruby's regex syntax.")
 (define-public go-github-com-go-errors-errors
   (package
     (name "go-github-com-go-errors-errors")
-    (version "1.1.1")
+    (version "1.4.2")
     (source
       (origin
         (method git-fetch)
@@ -2665,13 +2680,22 @@ that supports Ruby's regex syntax.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "1g9wwirsdddkxlqj6ymmy3dkh7xavkh3ybsvsnvyy4jyf0fw9fw8"))))
+          "1ww0yxp6pyd1sdb1y6zqlas7vpq8pr6d4p1z8iqm6mhsb0k4ni2f"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/go-errors/errors"))
+     (list
+       #:import-path "github.com/go-errors/errors"
+       #:phases
+       #~(modify-phases %standard-phases
+           (replace 'check
+             (lambda* (#:key inputs #:allow-other-keys #:rest args)
+               (unless
+                 ;; The tests fail when run with gccgo.
+                 (false-if-exception (search-input-file inputs "/bin/gccgo"))
+                 (apply (assoc-ref %standard-phases 'check) args)))))))
     (home-page "https://github.com/go-errors/errors")
-    (synopsis "go-errors/errors")
-    (description #f)
+    (synopsis "Errors with stacktraces for Go")
+    (description "This package adds stacktrace support to errors in Go.")
     (license license:expat)))
 
 (define-public go-github-com-gofrs-uuid
@@ -4536,10 +4560,20 @@ and can be used with @url{https://github.com/lib/pq,https://github.com/lib/pq}."
          (base32 "1nvlmr2skpxinvwd5gvc68k9saix8iajq136mwcfqmk6dl25hf4l"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/jarcoal/httpmock"))
+     (list
+       #:import-path "github.com/jarcoal/httpmock"
+       #:phases
+       #~(modify-phases %standard-phases
+           (replace 'check
+             (lambda* (#:key inputs #:allow-other-keys #:rest args)
+               (unless
+                 ;; The tests fail when run with gccgo.
+                 (false-if-exception (search-input-file inputs "/bin/gccgo"))
+                 (apply (assoc-ref %standard-phases 'check) args)))))))
     (home-page "https://github.com/jarcoal/httpmock")
-    (synopsis "httpmock")
-    (description #f)
+    (synopsis "HTTP mocking for Golang")
+    (description "This package provides easy mocking of http responses from
+external sources.")
     (license license:expat)))
 
 (define-public go-github-com-jaytaylor-html2text
@@ -5588,7 +5622,7 @@ file handles, and for using named pipes as a net transport.")
 (define-public go-github-com-miekg-dns
   (package
     (name "go-github-com-miekg-dns")
-    (version "1.1.45")
+    (version "1.1.50")
     (source
       (origin
         (method git-fetch)
@@ -5597,9 +5631,21 @@ file handles, and for using named pipes as a net transport.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0qb19y97g5wrj5m5qzzswznrpwg64q5w979w618j423wn5d7iwqp"))))
+         (base32 "1svvx9qamy3hy0ms8iwbisqjmfkbza0zljmds6091siq150ggmws"))))
+          ;(base32 "0qb19y97g5wrj5m5qzzswznrpwg64q5w979w618j423wn5d7iwqp"))))   ; 1.1.45
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/miekg/dns"))
+    (arguments
+     (list
+       #:import-path "github.com/miekg/dns"
+       #:phases
+       #~(modify-phases %standard-phases
+           (replace 'check
+             (lambda* (#:key inputs #:allow-other-keys #:rest args)
+               (unless
+                 ;; The tests fail when run with gccgo.
+                 ;; Tests try to access the network.
+                 (false-if-exception (search-input-file inputs "/bin/gccgo"))
+                 (apply (assoc-ref %standard-phases 'check) args)))))))
     (propagated-inputs
      (list go-golang-org-x-tools
            go-golang-org-x-sys
@@ -6065,7 +6111,7 @@ implemented.")
      (list ;go-go-opencensus-io
         ;go-github-com-smartystreets-gunit
         ;go-github-com-smartystreets-go-aws-auth
-        ;go-github-com-smartystreets-assertions
+        ;go-github.com-smartystreets-assertions
         go-github-com-pkg-errors
         ;go-github-com-opentracing-opentracing-go
         go-github-com-mailru-easyjson
@@ -7080,31 +7126,6 @@ Go.  It supports many data structures including kv, list, hash, zset, set.")
     (description "This package handles Redis RDB format in Golang.")
     (license license:expat)))
 
-(define-public go-github-com-smartystreets-assertions
-  (package
-    (name "go-github-com-smartystreets-assertions")
-    (version "1.2.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/smartystreets/assertions")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1iyminxmipvddm0hz8v69is4mga6ghif5ilmfz9s0d9kwmirbcn0"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/smartystreets/assertions"))
-    (home-page "https://github.com/smartystreets/assertions")
-    (synopsis #f)
-    (description
-      "Package assertions contains the implementations for all assertions which are
-referenced in goconvey's `convey` package
-(github.com/smartystreets/goconvey/convey) and gunit
-(github.com/smartystreets/gunit) for use with the So(...) method.  They can also
-be used in traditional Go test functions and even in applications.")
-    (license license:expat)))
-
 (define-public go-github-com-smartystreets-go-aws-auth
   (package
     (name "go-github-com-smartystreets-go-aws-auth")
@@ -7145,7 +7166,7 @@ STS.")
     (arguments '(#:import-path "github.com/smartystreets/goconvey"))
     (propagated-inputs
      (list go-golang-org-x-tools
-           go-github-com-smartystreets-assertions
+           go-github.com-smartystreets-assertions
            go-github-com-jtolds-gls
            go-github-com-gopherjs-gopherjs))
     (home-page "https://github.com/smartystreets/goconvey")
@@ -7769,7 +7790,7 @@ version 1.0.4 of the specification without the non-LZMA2 filters.  See
                (delete-file (string-append "src/" import-path "/http_test.go")))))))
       (propagated-inputs
        (list go-github-com-smartystreets-goconvey
-             go-github-com-smartystreets-assertions
+             go-github.com-smartystreets-assertions
              go-github-com-jtolds-gls
              go-github-com-gopherjs-gopherjs))
       (home-page "https://github.com/unknwon/com")
@@ -9086,7 +9107,7 @@ It provides APIs for interacting with App Engine services.")
 (define-public go-google-golang-org-appengine-internal
   (package
     (name "go-google-golang-org-appengine-internal")
-    (version "1.6.7")
+    (version "2.0.2")
     (source
       (origin
         (method git-fetch)
@@ -9096,14 +9117,23 @@ It provides APIs for interacting with App Engine services.")
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "1wkipg7xxc0ha5p6c3bj0vpgq38l18441n5l6zxdhx0gzvz5z1hs"))))
+          "00g6nqiiy19djymkixv37f9k3yq87h7z7h840dvvbdrs26n5rxiq"))))
     (build-system go-build-system)
     (arguments
-     '(#:unpack-path "google.golang.org/appengine"
-       #:import-path "google.golang.org/appengine/internal"))
+     (list
+       #:unpack-path "google.golang.org/appengine"
+       #:import-path "google.golang.org/appengine/internal"
+       #:phases
+       #~(modify-phases %standard-phases
+           (replace 'check
+             (lambda* (#:key inputs #:allow-other-keys #:rest args)
+               (unless
+                 ;; The tests try to connect to the network when run with gccgo.
+                 (false-if-exception (search-input-file inputs "/bin/gccgo"))
+                 (apply (assoc-ref %standard-phases 'check) args)))))))
     (propagated-inputs
-     `(("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto)
-       ("go-golang-org-x-net" ,go-golang-org-x-net)))
+     (list go-github-com-golang-protobuf-proto
+           go-golang-org-x-net))
     (home-page "https://google.golang.org/appengine")
     (synopsis "Go App Engine packages")
     (description #f)
