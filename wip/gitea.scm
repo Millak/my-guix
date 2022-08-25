@@ -74,7 +74,8 @@
            (lambda _
              (with-directory-excursion "src/code.gitea.io/gitea"
                ;; Upstream suggests to run 'make frontend' before 'make build'.
-               (invoke "make" "build"))))
+               (invoke "make" "build")
+               (invoke "make" "generate-manpage"))))
          (add-before 'check 'pre-check
            (lambda* (#:key import-path #:allow-other-keys)
              (setenv "GIT_COMMITTER_NAME" "Your Name")
@@ -106,9 +107,12 @@
                  ;(invoke "make" "test-sqlite")
                  (invoke "make" "test-sqlite-migration")))))
          (replace 'install
-           (lambda _
+           (lambda* (#:key outputs #:allow-other-keys)
              (with-directory-excursion "src/code.gitea.io/gitea"
-               (invoke "make" "install"))))
+               (invoke "make" "install")
+               (install-file "man/man1/gitea.1.gz"
+                             (string-append (assoc-ref outputs "out")
+                                            "/share/man/man1")))))
          (add-after 'install 'wrap-program
            (lambda* (#:key outputs inputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
@@ -120,7 +124,7 @@
                                        ,(string-append ssh "/bin"))))))))))
     (native-inputs
      (list go-github-com-stretchr-testify
-           node))
+           node-lts))
     (inputs
      (list bash-minimal
            git-minimal
@@ -233,3 +237,6 @@
   (package
     (inherit (newer-go-libraries gitea))
     (name "gitea-with-newer-go-libraries")))
+
+
+
