@@ -1304,28 +1304,6 @@ HTTP->HTTPS redirects, and more.")
 break those stats down across user-defined dimensions.")
     (license license:asl2.0)))
 
-(define-public go-github-com-cespare-xxhash-v2
-  (package
-    (name "go-github-com-cespare-xxhash-v2")
-    (version "2.1.2")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/cespare/xxhash")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1f3wyr9msnnz94szrkmnfps9wm40s5sp9i4ak0kl92zcrkmpy29a"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/cespare/xxhash/v2"))
-    (home-page "https://github.com/cespare/xxhash")
-    (synopsis "xxhash")
-    (description
-      "Package xxhash implements the 64-bit variant of xxHash (XXH64) as described at
-@url{http://cyan4973.github.io/xxHash/,http://cyan4973.github.io/xxHash/}.")
-    (license license:expat)))
-
 ;; This package is deprecated upstream
 (define-public go-github-com-chaseadamsio-goorgeous
   (package
@@ -2492,7 +2470,7 @@ specified here:
 (define-public go-github-com-goccy-go-json
   (package
     (name "go-github-com-goccy-go-json")
-    (version "0.8.1")
+    (version "0.9.11")
     (source
       (origin
         (method git-fetch)
@@ -2501,7 +2479,7 @@ specified here:
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "1g18bzlwyg3hq3jizjm6b2b8b4hghmiacid16adlxz4h8g7bp4jh"))))
+         (base32 "0kl0f9chb97rlvwm94adwagzfq3gm48z6w49d8nbs0zk2dcjs24m"))))
     (build-system go-build-system)
     (arguments
      `(#:import-path "github.com/goccy/go-json"))
@@ -3708,7 +3686,7 @@ front-end code in Go which will still run in all browsers.")
            go-github-com-onsi-ginkgo
            go-github-com-google-go-cmp
            go-github-com-dgryski-go-rendezvous
-           go-github-com-cespare-xxhash-v2))
+           go-github-com-cespare-xxhash))
     (home-page "https://github.com/go-redis/redis")
     (synopsis "Redis client for Golang")
     (description "Package redis implements a Redis client.")
@@ -3801,7 +3779,17 @@ custom session backends.")
         (sha256
          (base32 "01m6l9w84yq2yyly8bdfsgc386hla1gn9431c7vr3mfa3bchj5wb"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-stack/stack"))
+    (arguments
+     (list
+       #:import-path "github.com/go-stack/stack"
+       #:phases
+       #~(modify-phases %standard-phases
+           (replace 'check
+             (lambda* (#:key inputs #:allow-other-keys #:rest args)
+               (unless
+                 ;; The tests fail when run with gccgo.
+                 (false-if-exception (search-input-file inputs "/bin/gccgo"))
+                 (apply (assoc-ref %standard-phases 'check) args)))))))
     (home-page "https://github.com/go-stack/stack")
     (synopsis "Utilities to capture, manipulate, and format call stacks")
     (description
@@ -8661,6 +8649,13 @@ themselves.")
                          (not (null? files))
                          (not (string-contains file "net/lif"))
                          (not (string-contains file "net/route"))
+                         ;; These tests fail with gccgo.
+                         (not (string-contains file "net/bpf"))
+                         (not (string-contains file "net/icmp"))
+                         (not (string-contains file "net/internal/socket"))
+                         (not (string-contains file "net/ipv4"))
+                         (not (string-contains file "net/ipv6"))
+
                          (not (null?
                                 (filter-map
                                   (lambda (test-entry)
@@ -8930,6 +8925,17 @@ transformations, and locale-specific text handling.")
                          (not (string-contains file "gopls"))
                          (not (string-contains file "internal"))
                          (not (string-contains file "testdata"))
+                         ;; These tests fail with gccgo.
+                         (not (string-contains file "tools/cmd/bundle"))
+                         (not (string-contains file "tools/cmd/callgraph"))
+                         (not (string-contains file "tools/cmd/gorename"))
+                         (not (string-contains file "tools/cmd/guru"))
+                         (not (string-contains file "tools/go/analysis/multichecker"))
+                         (not (string-contains file "tools/go/analysis/passes"))
+                         (not (string-contains file "tools/go/loader"))
+                         (not (string-contains file "tools/go/pointer"))
+                         (not (string-contains file "tools/refactor"))
+
                          (not (null?
                                 (filter-map
                                   (lambda (test-entry)
@@ -9211,7 +9217,7 @@ interacting with Google's gRPC APIs.")
         ;go-github-com-envoyproxy-go-control-plane
         ;go-github-com-cncf-xds-go
         ;go-github-com-cncf-udpa-go
-        ;go-github-com-cespare-xxhash-v2
+        ;go-github-com-cespare-xxhash
         ))
     (home-page "https://google.golang.org/grpc")
     (synopsis "gRPC-Go")
