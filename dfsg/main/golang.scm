@@ -2467,28 +2467,6 @@ specified here:
 @url{https://github.com/google/snappy/blob/master/framing_format.txt,https://github.com/google/snappy/blob/master/framing_format.txt}")
     (license license:expat)))
 
-(define-public go-github-com-goccy-go-json
-  (package
-    (name "go-github-com-goccy-go-json")
-    (version "0.9.11")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/goccy/go-json")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0kl0f9chb97rlvwm94adwagzfq3gm48z6w49d8nbs0zk2dcjs24m"))))
-    (build-system go-build-system)
-    (arguments
-     `(#:import-path "github.com/goccy/go-json"))
-    (home-page "https://github.com/goccy/go-json")
-    (synopsis "go-json")
-    (description
-     "Fast JSON encoder/decoder compatible with encoding/json for Go.")
-    (license license:expat)))
-
 (define-public go-github-com-go-chi-chi
   (package
     (name "go-github-com-go-chi-chi")
