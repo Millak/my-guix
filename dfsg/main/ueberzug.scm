@@ -17,37 +17,13 @@
 
 (define-module (dfsg main ueberzug)
   #:use-module (guix packages)
-  #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix download)
-  #:use-module (guix build-system python)
-  #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (gnu packages python-xyz)
-  #:use-module (gnu packages xorg))
-
+  #:use-module (gnu packages python-xyz))
 
 (define-public ueberzug
   (package
+    (inherit python-ueberzug)
     (name "ueberzug")
-    (version "18.1.9")
-    (source (origin
-              (method url-fetch)
-              (uri (pypi-uri "ueberzug" version))
-              (sha256
-               (base32
-                "1hxd45dnwa9yv908acarr98n2drmar66wzq9z2qd3irj24srzr3w"))))
-    (build-system python-build-system)
-    (arguments
-     (list #:tests? #f))            ; No tests.
+    (propagated-inputs '())
     (inputs
-     (list libx11
-           libxext
-           python-attrs
-           python-docopt
-           python-pillow
-           python-xlib))
-    (home-page "https://github.com/seebye/ueberzug")
-    (synopsis "Command line utility to display images")
-    (description
-     "@code{ueberzug} is a command line util which allows one to display images
-in combination with X11.")
-    (license license:gpl3)))
+     (append (package-inputs python-ueberzug)
+             (package-propagated-inputs python-ueberzug)))))
