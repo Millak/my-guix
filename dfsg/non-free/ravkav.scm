@@ -18,6 +18,7 @@
 (define-module (dfsg non-free ravkav)
   #:use-module (guix download)
   #:use-module (guix packages)
+  #:use-module (guix licenses)
   #:use-module (guix utils)
   #:use-module (guix gexp)
   #:use-module (guix build-system gnu)
@@ -77,4 +78,7 @@
     (synopsis "Charge your ravkav at home")
     (description "Save time and charge your ravkav at home.")
     (supported-systems '("x86_64-linux"))
-    (license #f)))
+    (license ((@@ (guix licenses) license)
+              "Nonfree"
+              "https://ravkavonline.co.il/he/terms"
+              "This package is non-free"))))
