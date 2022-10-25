@@ -30,7 +30,8 @@
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages sqlite))
+  #:use-module (gnu packages sqlite)
+  #:use-module (srfi srfi-26))
 
 (define-public onedrive
   (package
@@ -50,6 +51,9 @@
      (list
        #:tests? #f              ; Tests require a OneDrive account.
        #:validate-runpath? #f   ; We know it fails, hence the LD_PRELOAD.
+       #:modules '((guix build gnu-build-system)
+                   (guix build utils)
+                   (srfi srfi-26))
        #:configure-flags
        #~(list "--enable-completions"
                "--enable-notifications"
@@ -64,14 +68,15 @@
            (lambda* (#:key inputs outputs #:allow-other-keys)
              (wrap-program (string-append #$output "/bin/onedrive")
                `("LD_PRELOAD" ":" prefix
-                 (,(search-input-file inputs "/lib/libcurl.so.4")
-                   ,(search-input-file inputs "/lib/libsqlite3.so.0")
-                   ;; These ones for libnotify
-                   ,(search-input-file inputs "/lib/libnotify.so.4")
-                   ,(search-input-file inputs "/lib/libgdk_pixbuf-2.0.so.0")
-                   ,(search-input-file inputs "/lib/libgio-2.0.so.0")
-                   ,(search-input-file inputs "/lib/libgobject-2.0.so.0")
-                   ,(search-input-file inputs "/lib/libglib-2.0.so.0")))))))))
+                 ,(map (cut search-input-file inputs <>)
+                       (list "/lib/libcurl.so.4"
+                             "/lib/libsqlite3.so.0"
+                             ;; These ones for libnotify.
+                             "/lib/libnotify.so.4"
+                             "/lib/libgdk_pixbuf-2.0.so.0"
+                             "/lib/libgio-2.0.so.0"
+                             "/lib/libgobject-2.0.so.0"
+                             "/lib/libglib-2.0.so.0")))))))))
     (native-inputs
      (list pkg-config))
     (inputs
