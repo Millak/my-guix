@@ -49,7 +49,6 @@
     (build-system gnu-build-system)
     (arguments
      (list
-       #:tests? #f              ; Tests require a OneDrive account.
        #:modules '((guix build gnu-build-system)
                    (guix build utils)
                    (srfi srfi-26))
@@ -76,7 +75,11 @@
                                   "/lib/libgio-2.0.so.0"
                                   "/lib/libgobject-2.0.so.0"
                                   "/lib/libglib-2.0.so.0"))
-                       " -L-Wl,--rpath=" 'prefix)))))))
+                       " -L-Wl,--rpath=" 'prefix))))
+         (replace 'check
+           (lambda* (#:key tests? #:allow-other-keys)
+             (when tests?
+               (invoke "./onedrive" "--version")))))))
     (native-inputs
      (list pkg-config))
     (inputs
