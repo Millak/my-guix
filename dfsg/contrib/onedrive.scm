@@ -50,7 +50,6 @@
     (arguments
      (list
        #:tests? #f              ; Tests require a OneDrive account.
-       #:validate-runpath? #f   ; We know it fails, hence the LD_PRELOAD.
        #:modules '((guix build gnu-build-system)
                    (guix build utils)
                    (srfi srfi-26))
@@ -64,19 +63,20 @@
        #:make-flags #~(list (string-append "CC=" #$(cc-for-target)))
        #:phases
        #~(modify-phases %standard-phases
-         (add-after 'install 'wrap-program
-           (lambda* (#:key inputs outputs #:allow-other-keys)
-             (wrap-program (string-append #$output "/bin/onedrive")
-               `("LD_PRELOAD" ":" prefix
-                 ,(map (cut search-input-file inputs <>)
-                       (list "/lib/libcurl.so.4"
-                             "/lib/libsqlite3.so.0"
-                             ;; These ones for libnotify.
-                             "/lib/libnotify.so.4"
-                             "/lib/libgdk_pixbuf-2.0.so.0"
-                             "/lib/libgio-2.0.so.0"
-                             "/lib/libgobject-2.0.so.0"
-                             "/lib/libglib-2.0.so.0")))))))))
+         (add-after 'unpack 'link-to-external-libraries
+           (lambda* (#:key inputs #:allow-other-keys)
+             (setenv "DCFLAGS"
+                     (string-join
+                       (map (compose dirname (cut search-input-file inputs <>))
+                            (list "/lib/libcurl.so.4"
+                                  "/lib/libsqlite3.so.0"
+                                  ;; These ones for libnotify.
+                                  "/lib/libnotify.so.4"
+                                  "/lib/libgdk_pixbuf-2.0.so.0"
+                                  "/lib/libgio-2.0.so.0"
+                                  "/lib/libgobject-2.0.so.0"
+                                  "/lib/libglib-2.0.so.0"))
+                       " -L-Wl,--rpath=" 'prefix)))))))
     (native-inputs
      (list pkg-config))
     (inputs
