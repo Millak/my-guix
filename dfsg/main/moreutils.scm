@@ -32,4 +32,7 @@
             (add-after 'unpack 'skip-parallel
               (lambda _
                 (substitute* "Makefile"
-                  (("parallel(.1)?") ""))))))))))
+                  (("parallel(.1)?") ""))))))))
+    (properties
+     `((upstream-name . "moreutils")
+       ,@(package-properties moreutils)))))
