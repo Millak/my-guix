@@ -2816,26 +2816,6 @@ free to implement mocks and testing over filesystem operations.")
       "This package provides a highly extensible git implementation in pure Go.")
     (license license:asl2.0)))
 
-(define-public go-github-com-gogs-chardet
-  (package
-    (name "go-github-com-gogs-chardet")
-    (version "0.0.0-20211120154057-b7413eaefb8f")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/gogs/chardet")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "12j8q5wc9m4n51v2j2m40nahqdl9bh3hzpdp26clzq91kc2amiz0"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/gogs/chardet"))
-    (home-page "https://github.com/gogs/chardet")
-    (synopsis "chardet")
-    (description "Package chardet ports character set detection from ICU.")
-    (license license:expat)))
-
 (define-public go-github-com-gogs-cron
   (package
     (name "go-github-com-gogs-cron")
@@ -4540,30 +4520,6 @@ and can be used with @url{https://github.com/lib/pq,https://github.com/lib/pq}."
     (synopsis "HTTP mocking for Golang")
     (description "This package provides easy mocking of http responses from
 external sources.")
-    (license license:expat)))
-
-(define-public go-github-com-jaytaylor-html2text
-  (package
-    (name "go-github-com-jaytaylor-html2text")
-    (version "0.0.0-20211013000000-90c08c5027d3")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/jaytaylor/html2text")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "1zxb2ym0rz087hwzcgd6ja717930k2clhs7995yvbspncswidmgb"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/jaytaylor/html2text"))
-    (propagated-inputs
-     (list go-github-com-olekukonko-tablewriter
-           go-github-com-ssor-bom
-           go-golang-org-x-net))
-    (home-page "https://github.com/jaytaylor/html2text")
-    (synopsis "html2text")
-    (description "Ensure your emails are readable by all!")
     (license license:expat)))
 
 (define-public go-github-com-joho-godotenv
@@ -7216,26 +7172,6 @@ for examples.")
     (synopsis #f)
     (description #f)
     (license license:bsd-3)))
-
-(define-public go-github-com-ssor-bom
-  (package
-    (name "go-github-com-ssor-bom")
-    (version "0.0.0-20170718123548-6386211fdfcf")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/ssor/bom")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "09g5496ifwqxqclh2iw58plcwcz0sczlnxwqxzwmnl4shdl371ld"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/ssor/bom"))
-    (home-page "https://github.com/ssor/bom")
-    (synopsis "bom")
-    (description "small tools for cleaning bom from byte array or reader")
-    (license license:expat)))
 
 (define (go-github-com-stellar-go-package suffix)
   (package
