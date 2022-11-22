@@ -205,6 +205,34 @@ with the Gitea API implementation.  For further information take a look at the
 current @url{https://godoc.org/code.gitea.io/sdk/gitea,documentation}.")
     (license license:expat)))
 
+(define-public go-filippo-io-mkcert
+  (package
+    (name "go-filippo-io-mkcert")
+    (version "1.4.4")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/FiloSottile/mkcert")
+                     (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0ms9mjspiwlsgsnir0ccj3w8vhvrphf5i6k9q3hrz47y2a6igh0l"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "filippo.io/mkcert"))
+    (propagated-inputs
+     `(("go-golang-org-x-text" ,go-golang-org-x-text)
+       ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+       ("go-software-sslmate-com-src-go-pkcs12" ,go-software-sslmate-com-src-go-pkcs12)
+       ("go-howett-net-plist" ,go-howett-net-plist)
+       ("go-golang-org-x-net" ,go-golang-org-x-net)))
+    (home-page "https://filippo.io/mkcert")
+    (synopsis "mkcert")
+    (description
+     "Command mkcert is a simple zero-config tool to make development certificates.")
+    (license license:bsd-3)))
+
 (define-public go-gitea-com-go-chi-binding
   (package
     (name "go-gitea-com-go-chi-binding")
@@ -9506,6 +9534,31 @@ multiple recipients.")
       "Package warnings implements error handling with non-fatal errors (warnings).")
     (license license:bsd-2)))
 
+(define-public go-gopkg-in-yaml-v1
+  (package
+    (name "go-gopkg-in-yaml-v1")
+    (version "1.0.0-20140924161607-9f9df34309c0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://gopkg.in/yaml.v1")
+                     (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1r8d346szqa9x8q03wiycik5qy3d6w8qq4hs99z1p64q5lm0g7gm"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f      ; TODO?
+       #:import-path "gopkg.in/yaml.v1"
+       #:unpack-path "gopkg.in/yaml.v1"))
+    (native-inputs
+     (list go-gopkg-in-check-v1))
+    (home-page "https://gopkg.in/yaml.v1")
+    (synopsis "YAML support for the Go language")
+    (description "Package yaml implements YAML support for the Go language.")
+    (license license:lgpl3)))
+
 (define-public go-gotest-tools
   (package
     (name "go-gotest-tools")
@@ -9527,6 +9580,36 @@ multiple recipients.")
       "Package gotesttools is a collection of packages to augment `testing` and support
 common patterns.")
     (license license:asl2.0)))
+
+(define-public go-howett-net-plist
+  (package
+    (name "go-howett-net-plist")
+    (version "1.0.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/DHowett/go-plist")
+                     (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0rh8z67y527czv25ljmzqpmr0qsmn8cbaal7pw97c49y75kaj95k"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "howett.net/plist"))
+    (propagated-inputs
+     `(("go-gopkg-in-yaml-v1" ,go-gopkg-in-yaml-v1)
+       ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
+       ("go-github-com-jessevdk-go-flags" ,go-github.com-jessevdk-go-flags)))
+    (home-page "https://howett.net/plist")
+    (synopsis "plist - A pure Go property list transcoder")
+    (description
+     "Package plist implements encoding and decoding of Apple's \"property
+list\" format.  Property lists come in three sorts: plain text (GNUStep and
+OpenStep), XML and binary.  plist supports all of them.  The mapping between
+property list and Go objects is described in the documentation for the Marshal
+and Unmarshal functions.")
+      (license (list license:bsd-2 license:bsd-3))))
 
 (define-public go-lukechampine-com-uint128
   (package
@@ -9956,6 +10039,34 @@ Token removed.")
     (synopsis #f)
     (description #f)
     (license license:bsd-3)))
+
+(define-public go-software-sslmate-com-src-go-pkcs12
+  (package
+    (name "go-software-sslmate-com-src-go-pkcs12")
+    (version "0.2.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/SSLMate/go-pkcs12")
+                     (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1r8hx5ply4c3jqkgaqlf4zsgg0rw54wbs2qlxf2m1skffb4gppj7"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "software.sslmate.com/src/go-pkcs12"))
+    (propagated-inputs
+     (list go-golang-org-x-crypto))
+    (home-page "https://github.com/SSLMate/go-pkcs12")
+    (synopsis "package pkcs12")
+    (description
+     "Package pkcs12 implements some of PKCS#12 (also known as P12 or PFX).  It
+is intended for decoding DER-encoded P12/PFX files for use with the crypto/tls
+package, and for encoding P12/PFX files for use by legacy applications which do
+not support newer formats.  Since PKCS#12 uses weak encryption primitives, it
+SHOULD NOT be used for new applications.")
+      (license license:bsd-3)))
 
 (define-public go-stathat-com-c-ramcache
   (package
