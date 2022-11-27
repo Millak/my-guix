@@ -3897,35 +3897,6 @@ It provides a simpler API than package @code{runtime}.")
 only here to test finding files across repository boundaries.")
     (license license:asl2.0)))
 
-(define-public go-github-com-go-task-slim-sprig
-  (package
-    (name "go-github-com-go-task-slim-sprig")
-    (version "2.20.0+incompatible")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/go-task/slim-sprig")
-               (commit (string-append "v" (go-version->git-ref version)))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "0p14axjkiznjrhl7gbmlc1fliq125xkckn1y9vy2jalslzrgprvv"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-task/slim-sprig"))
-    (propagated-inputs
-     (list go-github-com-masterminds-goutils
-           go-github-com-masterminds-semver
-           go-github-com-google-uuid
-           go-github-com-huandu-xstrings
-           go-github-com-imdario-mergo
-           go-golang-org-x-crypto))
-    (native-inputs
-     (list go-github-com-stretchr-testify))
-    (home-page "https://github.com/go-task/slim-sprig")
-    (synopsis "Sprig: Template functions for Go templates")
-    (description "Sprig: Template functions for Go.")
-    (license license:expat)))
-
 (define-public go-github-com-go-testfixtures-testfixtures-v3
   (package
     (name "go-github-com-go-testfixtures-testfixtures-v3")
@@ -5935,38 +5906,6 @@ they should occur.  Actions mutate the context and transition to another state."
       "This package provides a go package for reading RAR archives.")
     (license license:bsd-2)))
 
-(define-public go-github-com-nxadm-tail
-  (package
-    (name "go-github-com-nxadm-tail")
-    (version "1.4.8")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/nxadm/tail")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "1j2gi485fhwdpmyzn42wk62103fclwbfywg42p275z1qv2bsz1rc"))
-        (modules '((guix build utils)))
-        (snippet
-         '(begin
-            (delete-file-recursively "vendor")))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/nxadm/tail"))
-    (propagated-inputs
-     (list go-gopkg-in-tomb-v1
-           go-github-com-fsnotify-fsnotify))
-    (home-page "https://github.com/nxadm/tail")
-    (synopsis "tail functionality in Go")
-    (description
-      "nxadm/tail provides a Go library that emulates the features of the BSD `tail`
-program.  The library comes with full support for truncation/move detection as
-it is designed to work with log rotation tools.  The library works on all
-operating systems supported by Go, including POSIX systems like Linux and *BSD,
-and MS Windows.  Go 1.9 is the oldest compiler release supported.")
-    (license license:expat)))
-
 (define-public go-github-com-nytimes-gziphandler
   (package
     (name "go-github-com-nytimes-gziphandler")
@@ -6078,57 +6017,6 @@ implemented.")
     (description
       "Package elastic provides an interface to the Elasticsearch server
 (@url{https://www.elastic.co/products/elasticsearch,https://www.elastic.co/products/elasticsearch}).")
-    (license license:expat)))
-
-(define-public go-github-com-onsi-ginkgo
-  (package
-    (name "go-github-com-onsi-ginkgo")
-    (version "1.16.5")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/onsi/ginkgo")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "1hh6n7q92y0ai8k6rj2yzw6wwxikhyiyk4j92zgvf1zad0gmqqmz"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/onsi/ginkgo"))
-    (propagated-inputs
-     (list go-golang-org-x-tools
-           go-golang-org-x-sys
-           go-github-com-onsi-gomega
-           go-github-com-nxadm-tail
-           go-github-com-go-task-slim-sprig))
-    (home-page "https://github.com/onsi/ginkgo")
-    (synopsis "Ginkgo 2.0 Release Candidate is available!")
-    (description "Ginkgo is a BDD-style testing framework for Golang")
-    (license license:expat)))
-
-(define-public go-github-com-onsi-gomega
-  (package
-    (name "go-github-com-onsi-gomega")
-    (version "1.17.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/onsi/gomega")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "01lxf1ai4grd7akdgrc50rb2g2c5drrc067acndccxzxidi43grh"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/onsi/gomega"))
-    (propagated-inputs
-     (list go-gopkg-in-yaml-v2
-           go-golang-org-x-net
-           go-golang-org-x-text))
-    (home-page "https://github.com/onsi/gomega")
-    (synopsis ": a BDD Testing Framework for Golang")
-    (description
-      "Gomega is the Ginkgo BDD-style testing framework's preferred matcher library.")
     (license license:expat)))
 
 (define-public go-github-com-peterh-liner
@@ -6252,48 +6140,6 @@ responses.")
       "Package otp implements both HOTP and TOTP based one time passcodes in a Google
 Authenticator compatible manner.")
     (license license:asl2.0)))
-
-(define-public go-github-com-protonmail-go-crypto
-  (package
-    (name "go-github-com-protonmail-go-crypto")
-    (version "0.0.0-20211221144345-a4f6767435ab")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/ProtonMail/go-crypto")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "15bzf3abjy1s4mdqja574vxa70ap9inbfwfq4yz5jd5rb6dhin7j"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/ProtonMail/go-crypto"
-       #:tests? #f      ; Not ready for go-1.17
-       #:phases
-       (modify-phases %standard-phases
-         (delete 'build)
-         (replace 'check
-           (lambda* (#:key tests? #:allow-other-keys)
-             (when tests?
-               ;; from .travis.yml
-               (invoke "go" "test" "-short" "./...")
-               (invoke "go" "test" "./..." "-run" "RandomizeFast" "-count=512")
-               (invoke "go" "test" "./..." "-run" "RandomizeSlow" "-count=32")))))))
-    (propagated-inputs
-     (list go-golang-org-x-crypto))
-    (native-inputs
-     (list go-golang-org-x-net
-           go-golang-org-x-sync
-           go-golang-org-x-text
-           go-golang-org-x-tools))
-    (home-page "https://github.com/ProtonMail/go-crypto")
-    (synopsis #f)
-    (description
-     "This module is backwards compatible with x/crypto/openpgp, so you can simply
-replace all imports of @code{golang.org/x/crypto/openpgp} with
-@code{github.com/ProtonMail/go-crypto/openpgp}.")
-    (license license:bsd-3)))
 
 ;; ready to upstream
 (define-public go-github-com-puerkitobio-purell
@@ -9483,31 +9329,6 @@ multiple recipients.")
     (synopsis #f)
     (description #f)
     (license license:asl2.0)))
-
-(define-public go-gopkg-in-tomb-v1
-  (package
-    (name "go-gopkg-in-tomb-v1")
-    (version "1.0.0-20141024135613-dd632973f1e7")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://gopkg.in/tomb.v1")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "1lqmq1ag7s4b3gc3ddvr792c5xb5k6sfn0cchr3i2s7f1c231zjv"))))
-    (build-system go-build-system)
-    (arguments
-      ;; https://github.com/go-tomb/tomb/issues/25
-     '(#:tests? #f      ; Fatalf format %q reads arg #2, but call has 1 arg
-       #:import-path "gopkg.in/tomb.v1"
-       #:unpack-path "gopkg.in/tomb.v1"))
-    (home-page "https://gopkg.in/tomb.v1")
-    (synopsis "Installation and usage")
-    (description
-     "The tomb package offers a conventional API for clean goroutine termination.")
-    (license license:bsd-3)))
 
 (define-public go-gopkg-in-warnings-v0
   (package
