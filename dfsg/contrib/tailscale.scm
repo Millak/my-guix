@@ -25,6 +25,7 @@
   #:use-module (guix build-system go)
   #:use-module (gnu packages golang)
   #:use-module (gnu packages syncthing)
+  #:use-module (gnu packages web)
   #:use-module (dfsg main golang))
 
 (define-public tailscale
@@ -297,29 +298,29 @@
            ;go-github-com-jsimonetti-rtnetlink
            ;go-github-com-insomniacslk-dhcp
            go-github-com-iancoleman-strcase
-           ;go-github-com-hdevalence-ed25519consensus
-           ;go-github-com-goreleaser-nfpm
+           go-github-com-hdevalence-ed25519consensus
+           ;go-github-com-goreleaser-nfpm           ; Try to do without this one
            go-github-com-google-uuid
            go-github-com-google-go-cmp
            go-github-com-golang-groupcache
            go-github-com-godbus-dbus-v5
-           ;go-github-com-go-ole-go-ole
-           ;go-github-com-fxamacker-cbor-v2
+           go-github-com-go-ole-go-ole
+           go-github-com-fxamacker-cbor-v2
            go-github-com-frankban-quicktest
-           ;go-github-com-evanw-esbuild
-           ;go-github-com-dave-jennifer
+           esbuild ;go-github-com-evanw-esbuild
+           go-github-com-dave-jennifer
            go-github-com-creack-pty
-           ;go-github-com-coreos-go-systemd
-           ;go-github-com-coreos-go-iptables
-           ;go-github-com-aws-aws-sdk-go-v2-service-ssm
-           ;go-github-com-aws-aws-sdk-go-v2-service-s3
-           ;go-github-com-aws-aws-sdk-go-v2-feature-s3-manager
-           ;go-github-com-aws-aws-sdk-go-v2-config
-           ;go-github-com-aws-aws-sdk-go-v2
+           go-github-com-coreos-go-systemd
+           go-github-com-coreos-go-iptables
+           go-github-com-aws-aws-sdk-go-v2-service-ssm
+           go-github-com-aws-aws-sdk-go-v2-service-s3
+           go-github-com-aws-aws-sdk-go-v2-feature-s3-manager
+           go-github-com-aws-aws-sdk-go-v2-config
+           go-github-com-aws-aws-sdk-go-v2
            go-github-com-anmitsu-go-shlex
            go-github-com-andybalholm-brotli
-           ;go-github-com-alexbrainman-sspi
-           ;go-github-com-akutz-memconn
+           go-github-com-alexbrainman-sspi          ; Windows
+           go-github-com-akutz-memconn
            go-filippo-io-mkcert))
     (home-page "https://github.com/tailscale/tailscale")
     (synopsis "Tailscale VPN client")
