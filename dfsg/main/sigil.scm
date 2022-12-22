@@ -1,4 +1,4 @@
-;;; Copyright © 2020, 2021 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2020-2022 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -38,7 +38,7 @@
 (define-public sigil
   (package
     (name "sigil")
-    (version "1.9.10")
+    (version "1.9.20")
     (source
       (origin
         (method git-fetch)
@@ -47,7 +47,7 @@
                (commit version)))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "1yxazxwyrlaiq0arwac0m4x09iv1dlsmmd1yvnzsbvm9zlaggqsy"))
+         (base32 "0d09ffg1d4ql6fx4x34vd1gj3mna39lrs2arz3dn80v25mg4hd1p"))
         (snippet
          #~(begin
             (use-modules (guix build utils))
@@ -55,9 +55,8 @@
               (for-each delete-file-recursively
                         '("extra" "hunspell" "minizip" "pcre2" "zlib")))
             (delete-file-recursively "src/Resource_Files/dictionaries")
-            ;(delete-file-recursively "src/Resource_Files/polyfills/")   ; mathjax
-            (delete-file "src/Resource_Files/polyfills/ML.zip")
             (with-directory-excursion "src/Resource_Files/javascript"
+              ;(delete-file "custom-mathjax.min.js")
               (delete-file "jquery-2.2.4.min.js")
               (delete-file "jquery.scrollTo-1.4.2-min.js")
               (delete-file "jquery.scrollTo-2.1.2-min.js"))))))
@@ -73,11 +72,10 @@
                "-DINSTALL_BUNDLED_DICTS=0"
                "-DINSTALL_HICOLOR_ICONS=1"
                "-DDISABLE_UPDATE_CHECK=1"
-               ;; Tries to install file to [mathjax]/config/local.
-               ;; Set [mathjax] to the correct folder structure, not
-               ;; to the mathjax package location.
-               (string-append "-DMATHJAX_DIR=" #$output
-                              "/share/javascript/mathjax"))
+               ;(string-append "-DMATHJAX3_DIR=" #$output
+               ;               #$(this-package-input "js-mathjax-3")
+               ;               "/share/javascript/mathjax")
+               )
        #:phases
        #~(modify-phases %standard-phases
            (add-after 'unpack 'replace-javascript-libraries
@@ -90,11 +88,17 @@
                  (search-input-file inputs
                                     "/share/javascript/jquery.scrollTo.min.js")
                  "src/Resource_Files/javascript/jquery.scrollTo-2.1.2-min.js")))
+           (add-after 'unpack 'find-python3
+             (lambda _
+               (substitute* '("src/Dialogs/PluginRunner.cpp"
+                              "src/Dialogs/PreferenceWidgets/PluginWidget.cpp")
+                (("python3\\.4") "python3"))))
            (add-after 'install 'wrap-binary
              (lambda* (#:key inputs outputs #:allow-other-keys)
                (let ((out (assoc-ref outputs "out")))
                  (wrap-program (string-append out "/bin/sigil")
-                   `("GUIX_PYTHONPATH" ":" prefix (,(getenv "GUIX_PYTHONPATH")))))))
+                   `("GUIX_PYTHONPATH" ":" prefix (,(getenv "GUIX_PYTHONPATH")))
+                   `("PATH" ":" prefix (,(which "python3")))))))
            (add-after 'install 'compile-python-bytecode
              (lambda* (#:key outputs #:allow-other-keys)
                (let ((out (assoc-ref outputs "out")))
@@ -105,9 +109,10 @@
     (native-inputs
      (list pkg-config
            qttools-5))
-    (propagated-inputs
-     ;; Needed so when sigil is installed the mathjax addon will be in the correct folder.
-     (list js-mathjax))
+    ;(propagated-inputs
+    ; ;; Needed so when sigil is installed the mathjax addon will be in the correct folder.
+    ; ;; Needs to be mathjax 3.2.2+
+    ; (list js-mathjax-3))
     (inputs
      (list bash-minimal     ; for wrap-program
            hunspell
