@@ -26,7 +26,7 @@
   #:use-module (gnu packages bash)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages javascript)
-  #:use-module (gnu packages libreoffice)
+  #:use-module (gnu packages hunspell)
   #:use-module (gnu packages pcre)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)

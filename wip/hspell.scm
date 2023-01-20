@@ -23,7 +23,7 @@
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages aspell)
   #:use-module (gnu packages compression)
-  #:use-module (gnu packages libreoffice)
+  #:use-module (gnu packages hunspell)
   #:use-module (gnu packages perl))
 
 (define-public hspell
