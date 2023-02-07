@@ -158,14 +158,14 @@
        ;github.com/uptrace/bun/dialect/sqlitedialect v1.1.9
        ;github.com/wagslane/go-password-validator v0.3.0
        go-golang-org-x-crypto
-       ;go-golang-org-x-exp
+       go-golang-org-x-exp
        go-golang-org-x-net
        ;go-golang-org-x-oauth
        go-golang-org-x-text
        ;gopkg.in/mcuadros/go-syslog.v2 v2.3.0
        go-gopkg-in-yaml-v3
        ;go-modernc-org-sqlite           ; FTBFS
-       go-mvdan-cc-xurls-v2
+       go-mvdan-cc-xurls
        ))
     (native-inputs
      `(("gotosocial-web-assets.tar.gz"

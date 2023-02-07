@@ -268,7 +268,7 @@
            go-golang-org-x-sys
            go-golang-org-x-sync
            go-golang-org-x-net
-           ;go-golang-org-x-exp
+           go-golang-org-x-exp
            go-golang-org-x-crypto
            ;go-go4-org-netipx
            ;go-go4-org-mem

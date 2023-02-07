@@ -4240,7 +4240,7 @@ front-end code in Go which will still run in all browsers.")
     (arguments
      '(#:import-path "github.com/goreleaser/nfpm"))
     (propagated-inputs
-     (list ;go-mvdan-cc-gofumpt
+     (list go-mvdan-cc-gofumpt
            go-gopkg-in-yaml-v3
            go-gopkg-in-yaml-v2
            go-golang-org-x-tools
@@ -10839,28 +10839,7 @@ Token removed.")
     (license license:expat)))
 
 (define-public go-mvdan-cc-xurls-v2
-  (package
-    (name "go-mvdan-cc-xurls-v2")
-    (version "2.3.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/mvdan/xurls")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "0l5y320389rwfi049pvv4xijrckaf1jkc0shx59470k2nrdri1gs"))))
-    (build-system go-build-system)
-    (arguments
-      '(#:import-path "mvdan.cc/xurls/v2" #:unpack-path "mvdan.cc/xurls/v2"))
-    (propagated-inputs
-     (list go-github-com-rogpeppe-go-internal))
-    (home-page "https://mvdan.cc/xurls/v2")
-    (synopsis "xurls")
-    (description
-      "Package xurls extracts urls from plain text using regular expressions.")
-    (license license:bsd-3)))
+  (deprecated-package "go-mvdan-cc-xurls-v2" go-mvdan-cc-xurls))
 
 (define-public go-rsc-io-qr
   (package
