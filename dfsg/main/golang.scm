@@ -598,7 +598,7 @@ empty.")
 (define-public go-github-com-antchfx-htmlquery
   (package
     (name "go-github-com-antchfx-htmlquery")
-    (version "1.2.4")
+    (version "1.2.6")
     (source
       (origin
         (method git-fetch)
@@ -607,7 +607,7 @@ empty.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "1g24619hys0k014ga445xzvh51g1yp07b08jjgwkfycjrjldxp46"))))
+         (base32 "19avv51fsda357vzrn5bz1lbfw9bpl5vcs4q3f1zw6kb37wa728z"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/antchfx/htmlquery"))
     (propagated-inputs
