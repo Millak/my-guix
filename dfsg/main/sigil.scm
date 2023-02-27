@@ -129,7 +129,7 @@
            python-html5lib
            python-lxml
            python-pillow
-           python-pyqt-without-qtwebkit
+           python-pyqt
            python-pyqtwebengine
            python-regex
            python-six
