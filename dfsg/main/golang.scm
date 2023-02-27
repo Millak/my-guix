@@ -9444,14 +9444,6 @@ themselves.")
 provided by the language and \"sync\" and \"sync/atomic\" packages.")
     (license license:bsd-3)))
 
-(define-public go-golang-org-x-sync-semaphore
-  (package
-    (inherit go-golang.org-x-sync-errgroup)
-    (name "go-golang-org-x-sync-semaphore")
-    (arguments
-     '(#:import-path "golang.org/x/sync/semaphore"
-       #:unpack-path "golang.org/x/sync"))))
-
 (define-public go-golang-org-x-sys-next
   (package
     (name "go-golang-org-x-sys")

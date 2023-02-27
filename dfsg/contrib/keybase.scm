@@ -298,7 +298,7 @@
        ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
        ("go-golang-org-x-net" ,go-golang-org-x-net)
        ("go-golang-org-x-sync-errgroup" ,go-golang.org-x-sync-errgroup)
-       ("go-golang-org-x-sync-semaphore" ,go-golang-org-x-sync-semaphore)
+       ("go-golang.org-x-sync-semaphore" ,go-golang.org-x-sync-semaphore)
        ("go-golang-org-x-text" ,go-golang-org-x-text)
        ("go-golang-org-x-time" ,go-golang-org-x-time)
        ("go-google-golang-org-appengine-internal" ,go-google-golang-org-appengine-internal)
