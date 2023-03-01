@@ -1,4 +1,4 @@
-;;; Copyright © 2021, 2022 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2021-2023 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -27,8 +27,8 @@
   #:use-module (gnu packages lua))
 
 (define-public mpv-sponsorblock-minimal
-  (let ((commit "b71beb60eb71eb7df1266abfccd14c8cc451c643")     ; Feb 7, 2022
-        (revision "5"))
+  (let ((commit "b8c1a2a878c5b24c49711fb135902fc0ebafffe0")     ; 20220916
+        (revision "6"))
   (package
     (name "mpv-sponsorblock-minimal")
     (version (git-version "0" revision commit))
@@ -40,7 +40,7 @@
                (commit commit)))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "1m068l1m5pik9735iw922dndavchvypjs8ks8s3dxls8a6yxr6gc"))))
+         (base32 "0y4lkc9vdg50a7d16297mjmzykr86zjk8kybs7sg0a6gzzfvzgg1"))))
     (build-system trivial-build-system)
     (arguments
      (list
@@ -67,8 +67,8 @@ sponsored segments of YouTube videos.")
     (license license:gpl3))))
 
 (define-public mpv-twitch-chat
-  (let ((commit "69bd232afca33ebf4f5f086bed05749b666185ae")     ; March 25, 2022
-        (revision "2"))
+  (let ((commit "d50c20cdc12c8759e9efd0c6ec7552845c8cab28")     ; 20221215
+        (revision "3"))
     (package
       (name "mpv-twitch-chat")
       (version (git-version "0" revision commit))
@@ -80,7 +80,7 @@ sponsored segments of YouTube videos.")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256
-           (base32 "01gca19xcbvjqbyp832vydlbyg2nkpd8y3wxhf73wj883r9cf4py"))))
+           (base32 "15w4fwjh51ffrz89hrf603znpmm5mb2a8gz9aifsx37wz5msilj7"))))
       (build-system trivial-build-system)
       (arguments
        (list
@@ -95,9 +95,9 @@ sponsored segments of YouTube videos.")
                              (string-append #$output "/share/doc/"
                                             #$name "-" #$version))
                (substitute* (string-append #$output "/lib/main.lua")
-                 (("\"curl\"")
-                  (string-append "\"" (search-input-file %build-inputs "/bin/curl")
-                                 "\"")))))))
+                 (("'curl'")
+                  (string-append "'" (search-input-file %build-inputs "/bin/curl")
+                                 "'")))))))
       (inputs
        (list curl-minimal))
       (home-page "https://github.com/CrendKing/mpv-twitch-chat/")
