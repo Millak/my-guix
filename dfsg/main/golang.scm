@@ -1713,9 +1713,11 @@ users are recommended to switch their imports.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "14jnnqpdsa3vxh2zpznd2dpnychcrlkljppfplrigrs245slyh72"))))
+         (base32 "14jnnqpdsa3vxh2zpznd2dpnychcrlkljppfplrigrs245slyh72"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/cockroachdb/apd"))
+    (native-inputs
+     (list go-github-com-pkg-errors))
     (home-page "https://github.com/cockroachdb/apd")
     (synopsis "apd")
     (description "Package apd implements arbitrary-precision decimals.")
@@ -3131,9 +3133,11 @@ services.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0d7740bjprd6mhs1wmhd53fb3kf61dz0hp1a0dda3dc28w2z84pp"))))
+         (base32 "0d7740bjprd6mhs1wmhd53fb3kf61dz0hp1a0dda3dc28w2z84pp"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/godbus/dbus/v5"))
+    (arguments
+     '(#:tests? #f                  ; Tests expect running dbus session.
+       #:import-path "github.com/godbus/dbus/v5"))
     (home-page "https://github.com/godbus/dbus")
     (synopsis "dbus")
     (description
@@ -3248,6 +3252,37 @@ that supports Ruby's regex syntax.")
       "Package uuid provides implementations of the Universally Unique Identifier
 (UUID), as specified in RFC-4122 and the Peabody RFC Draft (revision 02).")
     (license license:expat)))
+
+(define-public go-github-com-go-fed-httpsig
+  (package
+    (name "go-github-com-go-fed-httpsig")
+    (version "1.1.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/go-fed/httpsig")
+                     (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1h2yk2ih8vrma8zrs1z8bd4r48hbqdwhgbqykrs4siyj9c80ykd2"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f              ; TODO: Fix
+       #:import-path "github.com/go-fed/httpsig"))
+    (propagated-inputs
+     (list go-golang-org-x-crypto))
+    (home-page "https://github.com/go-fed/httpsig")
+    (synopsis "httpsig")
+    (description
+     "This package implements HTTP request and response signing and verification.
+Supports the major MAC and asymmetric key signature algorithms.  It has several
+safety restrictions: One, none of the widely known non-cryptographically safe
+algorithms are permitted; Two, the RSA SHA256 algorithms must be available in
+the binary (and it should, barring export restrictions); Finally, the library
+assumes either the Authorizationn or Signature headers are to be set (but not
+both).")
+      (license license:bsd-3)))
 
 (define-public go-github-com-go-git-go-billy-v5
   (package
@@ -3779,6 +3814,33 @@ clients and servers based on gRPC and Google API conventions.")
 and response modifiers.")
     (license license:asl2.0)))
 
+(define-public go-github-com-google-pprof
+  (package
+    (name "go-github-com-google-pprof")
+    (version "0.0.0-20230228050547-1710fef4ab10")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/google/pprof")
+                     (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "12n29ag8x71f91xvh88279x5wbpxzhy4x8yc17b9bmjl6pgbyz12"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/google/pprof"))
+    (propagated-inputs
+     (list go-golang-org-x-sys
+           go-github-com-ianlancetaylor-demangle
+           go-github-com-chzyer-readline))
+    (home-page "https://github.com/google/pprof")
+    (synopsis "Introduction")
+    (description
+     "pprof is a tool for collection, manipulation and visualization of performance
+profiles.")
+    (license license:asl2.0)))
+
 (define-public go-github-com-go-openapi-analysis
   (package
     (name "go-github-com-go-openapi-analysis")
@@ -4126,6 +4188,65 @@ projects.")
 as tools to validate data against their schema.")
     (license license:asl2.0)))
 
+(define-public go-github-com-go-playground-assert-v2
+  (package
+    (name "go-github-com-go-playground-assert-v2")
+    (version "2.2.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/go-playground/assert")
+                     (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "13mb07dxhcy9ydqbracnrpfj682g6sazjpm56yrlbn2jc1yfy44c"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/go-playground/assert/v2"))
+    (home-page "https://github.com/go-playground/assert")
+    (synopsis "Package assert")
+    (description
+     "Package assert provides some basic assertion functions for testing and also
+     provides the building blocks for creating your own more complex validations.")
+    (license license:expat)))
+
+(define-public go-github-com-go-playground-validator-v10
+  (package
+    (name "go-github-com-go-playground-validator-v10")
+    (version "10.11.2")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/go-playground/validator")
+                     (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0yq6xj27n73x7z09qkrah813snnwq72rh6w5l1bgcay54viryqnj"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/go-playground/validator/v10"))
+    (propagated-inputs
+     `(("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
+       ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
+       ("go-golang-org-x-text" ,go-golang-org-x-text)
+       ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+       ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+       ("go-github-com-rogpeppe-go-internal" ,go-github-com-rogpeppe-go-internal)
+       ("go-github-com-leodido-go-urn" ,go-github-com-leodido-go-urn)
+       ("go-github-com-kr-pretty" ,go-github-com-kr-pretty)
+       ("go-github-com-go-playground-universal-translator" ,go-github-com-go-playground-universal-translator)
+       ("go-github-com-go-playground-locales" ,go-github-com-go-playground-locales)
+       ("go-github-com-go-playground-assert-v2" ,go-github-com-go-playground-assert-v2)
+       ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)))
+    (home-page "https://github.com/go-playground/validator")
+    (synopsis "Package validator")
+    (description
+      "Package validator implements value validations for structs and individual fields
+      based on tags.")
+    (license license:expat)))
+
 (define-public go-github-com-gopherjs-gopherjs
   (package
     (name "go-github-com-gopherjs-gopherjs")
@@ -4287,6 +4408,29 @@ front-end code in Go which will still run in all browsers.")
     (description
      "Package nfpm provides ways to package programs in some linux packaging formats.")
     (license license:expat)))
+
+(define-public go-github-com-gorilla-feeds
+  (package
+    (name "go-github-com-gorilla-feeds")
+    (version "1.1.1")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/gorilla/feeds")
+                     (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1lwqibra4hyzx0jhaz12rfhfnw73bmdf8cn9r51nqidk8k7zf7sg"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/gorilla/feeds"))
+    (native-inputs
+     (list go-github-com-kr-pretty))
+    (home-page "https://github.com/gorilla/feeds")
+    (synopsis "gorilla/feeds")
+    (description "Syndication (feed) generator library for golang.")
+    (license license:bsd-2)))
 
 (define-public go-github-com-gorilla-pat
   (package
@@ -4770,6 +4914,33 @@ retryablehttp very easy to drop into existing programs.")
 below:")
     (license license:expat)))
 
+(define-public go-github-com-ianlancetaylor-demangle
+  (package
+    (name "go-github-com-ianlancetaylor-demangle")
+    (version "0.0.0-20220517205856-0058ec4f073c")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/ianlancetaylor/demangle")
+                     (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "00xfkjr48v96qwsi68fak0chskks0iq5yvpigx8n373z857xbgdf"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/ianlancetaylor/demangle"))
+    (home-page "https://github.com/ianlancetaylor/demangle")
+    (synopsis "github.com/ianlancetaylor/demangle")
+    (description
+     "Package demangle defines functions that demangle GCC/LLVM C++ and Rust symbol
+names.  This package recognizes names that were mangled according to the C++
+ABI defined at
+@@url{http://codesourcery.com/cxx-abi/,http://codesourcery.com/cxx-abi/} and
+the Rust ABI defined at
+@@url{https://rust-lang.github.io/rfcs/2603-rust-symbol-name-mangling-v0.html,https://rust-lang.github.io/rfcs/2603-rust-symbol-name-mangling-v0.html}")
+      (license license:bsd-3)))
+
 (define-public go-github-com-imkira-go-interpol
   (package
     (name "go-github-com-imkira-go-interpol")
@@ -4937,7 +5108,7 @@ memory allocations.")
 (define-public go-github-com-jackc-pgconn
   (package
     (name "go-github-com-jackc-pgconn")
-    (version "1.10.1")
+    (version "1.13.0")
     (source
       (origin
         (method git-fetch)
@@ -4946,9 +5117,11 @@ memory allocations.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "06ibz1yjjw4vfzlw32rf1i8pv898vaa0awwnxmk7pvf38ss7gwib"))))
+         (base32 "14pgrbnc6p2fqjfcan8l73iy3nr12fmva9p9vss0r1fh9skwlw1x"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/jackc/pgconn"))
+    (arguments
+     '(#:tests? #f              ; Tests require a running postgresql server.
+       #:import-path "github.com/jackc/pgconn"))
     (propagated-inputs
      (list go-golang-org-x-text
            go-golang-org-x-crypto
@@ -5039,7 +5212,7 @@ protocol.")
 (define-public go-github-com-jackc-pgproto3-v2
   (package
     (name "go-github-com-jackc-pgproto3-v2")
-    (version "2.2.0")
+    (version "2.3.2")
     (source
       (origin
         (method git-fetch)
@@ -5048,7 +5221,7 @@ protocol.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1qm4k96pbvx52axlnyc7xic18r7n5hi3l50bf2qsy5cgz850mcvz"))))
+         (base32 "11cqxzzxn8zlmlj49rdc8np0i1ijw80f4nf3q60zcizbrnwid5gz"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/jackc/pgproto3/v2"))
     (propagated-inputs
@@ -5101,11 +5274,16 @@ version 3.")
         (sha256
           (base32 "1ajxmrh2ipf6gm6id0hnc2ijqdwv00m66jnrs5cr3jshj12m60r0"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/jackc/pgtype"))
+    (arguments
+     '(#:import-path "github.com/jackc/pgtype"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
     (propagated-inputs
      (list go-github-com-shopspring-decimal
            go-github-com-lib-pq
-           go-github-com-jackc-pgx-v4
+           ;go-github-com-jackc-pgx-v4
            go-github-com-jackc-pgio
            go-github-com-jackc-pgconn
            go-github-com-gofrs-uuid))
@@ -5125,7 +5303,7 @@ and can be used with @url{https://github.com/lib/pq,https://github.com/lib/pq}."
 (define-public go-github-com-jackc-pgx-v4
   (package
     (name "go-github-com-jackc-pgx-v4")
-    (version "4.14.1")
+    (version "4.17.2")
     (source
       (origin
         (method git-fetch)
@@ -5134,26 +5312,27 @@ and can be used with @url{https://github.com/lib/pq,https://github.com/lib/pq}."
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1waxm7mvj5n2141y8cxgrq4bia7nydwc0a7xq8r48va6vqpcja3c"))))
+         (base32 "1n7p1bail3m3hx13rym308skjp8aiqic8l6p6y0s7i4kymx0zwmk"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/jackc/pgx/v4"))
+    (arguments
+     '(#:tests? #f              ; Tests require a running postgresql server.
+       #:import-path "github.com/jackc/pgx/v4"))
     (propagated-inputs
-      `(;("go-gopkg-in-inconshreveable-log15-v2" ,go-gopkg-in-inconshreveable-log15-v2)
-        ;("go-go-uber-org-zap" ,go-go-uber-org-zap)
-        ;("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-        ;("go-github-com-sirupsen-logrus" ,go-github-com-sirupsen-logrus)
-        ;("go-github-com-shopspring-decimal" ,go-github-com-shopspring-decimal)
-        ;("go-github-com-rs-zerolog" ,go-github-com-rs-zerolog)
-        ;("go-github-com-jackc-puddle" ,go-github-com-jackc-puddle)
-        ;("go-github-com-jackc-pgtype" ,go-github-com-jackc-pgtype)
-        ;("go-github-com-jackc-pgproto3-v2" ,go-github-com-jackc-pgproto3-v2)
-        ;("go-github-com-jackc-pgio" ,go-github-com-jackc-pgio)
-        ;("go-github-com-jackc-pgconn" ,go-github-com-jackc-pgconn)
-        ;("go-github-com-gofrs-uuid" ,go-github-com-gofrs-uuid)
-        ;("go-github-com-go-kit-log" ,go-github-com-go-kit-log)
-        ;("go-github-com-cockroachdb-apd" ,go-github-com-cockroachdb-apd)
-        ;("go-github-com-masterminds-semver-v3" ,go-github-com-masterminds-semver-v3)
-        ))
+     (list go-gopkg-in-inconshreveable-log15-v2
+           go-go-uber-org-zap
+           go-github-com-stretchr-testify
+           go-github-com-sirupsen-logrus
+           go-github-com-shopspring-decimal
+           go-github-com-rs-zerolog
+           go-github-com-jackc-puddle
+           go-github-com-jackc-pgtype
+           go-github-com-jackc-pgproto3-v2
+           go-github-com-jackc-pgio
+           go-github-com-jackc-pgconn
+           go-github-com-gofrs-uuid
+           go-github-com-go-kit-log
+           go-github-com-cockroachdb-apd
+           go-github-com-masterminds-semver-v3))
     (home-page "https://github.com/jackc/pgx")
     (synopsis "pgx - PostgreSQL Driver and Toolkit")
     (description "Package pgx is a PostgreSQL database driver.")
@@ -7245,7 +7424,8 @@ identifiers.")
            go-golang-org-x-crypto
            go-github-com-rs-xid
            go-github-com-pkg-errors
-           go-github-com-coreos-go-systemd-v22))
+           ;go-github-com-coreos-go-systemd-v22
+           ))
     (home-page "https://github.com/rs/zerolog")
     (synopsis "Zero Allocation JSON Logger")
     (description
@@ -10120,10 +10300,12 @@ efficiently.")
           (base32 "03frzx2ar9fsvdrlq7d1k8askaxkyvml2im39ipcmnz760rv52hx"))))
     (build-system go-build-system)
     (arguments
-      '(#:import-path
-        "gopkg.in/inconshreveable/log15.v2"
-        #:unpack-path
-        "gopkg.in/inconshreveable/log15.v2"))
+      '(#:import-path "gopkg.in/inconshreveable/log15.v2"
+        #:unpack-path "gopkg.in/inconshreveable/log15.v2"))
+    (propagated-inputs
+     (list go-github-com-go-stack-stack
+           go-github-com-mattn-go-colorable
+           go-github-com-mattn-go-isatty))
     (home-page "https://gopkg.in/inconshreveable/log15.v2")
     (synopsis "log15")
     (description
@@ -10449,7 +10631,7 @@ and Unmarshal functions.")
 (define-public go-lukechampine-com-uint128
   (package
     (name "go-lukechampine-com-uint128")
-    (version "1.1.1")
+    (version "1.2.0")
     (source
       (origin
         (method git-fetch)
@@ -10458,13 +10640,13 @@ and Unmarshal functions.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "047rcvavn42v638ywlc8zw7gl83y836mgg171qcbjsch7nvp5sh1"))))
+         (base32 "1vn9iws7a79cfgkx2niq7wc5mapslrxhlvqnrxirrmkyfl5m62l3"))))
     (build-system go-build-system)
     (arguments '(#:import-path "lukechampine.com/uint128"))
     (home-page "https://lukechampine.com/uint128")
     (synopsis "uint128")
     (description
-      "@code{uint128} provides a high-performance @code{Uint128} type that supports
+     "@code{uint128} provides a high-performance @code{Uint128} type that supports
 standard arithmetic operations.  Unlike @code{math/big}, operations on
 @code{Uint128} values always produce new values instead of modifying a pointer
 receiver.  A @code{Uint128} value is therefore immutable, just like
@@ -10474,7 +10656,7 @@ receiver.  A @code{Uint128} value is therefore immutable, just like
 (define-public go-modernc-org-ccgo-v3
   (package
     (name "go-modernc-org-ccgo-v3")
-    (version "3.13.1")
+    (version "3.16.13")
     (source
       (origin
         (method git-fetch)
@@ -10483,23 +10665,32 @@ receiver.  A @code{Uint128} value is therefore immutable, just like
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1ad9wvmnbrs4nix2jb0k9xhd1dvl4r2h3ifscjj7wybbbz820wsw"))))
+         (base32 "1kxnrs4abxc3fm1637kz01xjxz7rij5gyy0lc3178j54hwwwr20n"))))
     (build-system go-build-system)
     (arguments
-      '(#:import-path "modernc.org/ccgo/v3"
-        #:unpack-path "modernc.org/ccgo/v3"))
+     '(#:import-path "modernc.org/ccgo/v3"
+       #:unpack-path "modernc.org/ccgo"))
     (propagated-inputs
-      `(;("go-modernc-org-opt" ,go-modernc-org-opt)
-        ;("go-modernc-org-mathutil" ,go-modernc-org-mathutil)
-        ;("go-modernc-org-libc" ,go-modernc-org-libc)
-        ;("go-modernc-org-ccorpus" ,go-modernc-org-ccorpus)
-        ;("go-modernc-org-cc-v3" ,go-modernc-org-cc-v3)
-        ;("go-golang-org-x-tools" ,go-golang-org-x-tools)
-        ;("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ;("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
-        ;("go-github-com-kballard-go-shellquote" ,go-github-com-kballard-go-shellquote)
-        ;("go-github-com-dustin-go-humanize" ,go-github-com-dustin-go-humanize)
-        ))
+     (list go-modernc-org-token
+           go-modernc-org-strutil
+           go-modernc-org-memory
+           go-modernc-org-httpfs
+           go-lukechampine-com-uint128
+           go-golang-org-x-xerrors
+           go-golang-org-x-mod
+           go-github-com-remyoudompheng-bigfft
+           go-github-com-mattn-go-isatty
+           go-github-com-google-uuid
+           go-modernc-org-opt
+           go-modernc-org-mathutil
+           go-modernc-org-libc
+           go-modernc-org-ccorpus
+           go-modernc-org-cc-v3
+           go-golang-org-x-tools
+           go-golang-org-x-sys
+           go-github-com-pmezard-go-difflib
+           go-github-com-kballard-go-shellquote
+           go-github-com-dustin-go-humanize))
     (home-page "https://modernc.org/ccgo/v3")
     (synopsis "ccgo/v3")
     (description "Command ccgo is a C compiler producing Go code.")
@@ -10530,7 +10721,7 @@ receiver.  A @code{Uint128} value is therefore immutable, just like
 (define-public go-modernc-org-cc-v3
   (package
     (name "go-modernc-org-cc-v3")
-    (version "3.35.20")
+    (version "3.40.0")
     (source
       (origin
         (method git-fetch)
@@ -10539,18 +10730,19 @@ receiver.  A @code{Uint128} value is therefore immutable, just like
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0w3w0dxdq30ls5ihg94wgbyk8ndq22n2sz035p5ayc62gwdznsfr"))))
+         (base32 "1dvil3zi71bsizl67wicg612glygpdwpjk6ab4hiiqlxxxjd8yi4"))))
     (build-system go-build-system)
     (arguments
-      '(#:import-path "modernc.org/cc/v3" #:unpack-path "modernc.org/cc/v3"))
+     '(#:import-path "modernc.org/cc/v3"
+       #:unpack-path "modernc.org/cc"))
     (propagated-inputs
-      `(;("go-modernc-org-token" ,go-modernc-org-token)
-        ;("go-modernc-org-strutil" ,go-modernc-org-strutil)
-        ;("go-modernc-org-mathutil" ,go-modernc-org-mathutil)
-        ;("go-lukechampine-com-uint128" ,go-lukechampine-com-uint128)
-        ;("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-        ;("go-github-com-dustin-go-humanize" ,go-github-com-dustin-go-humanize)
-        ))
+     (list go-github-com-remyoudompheng-bigfft
+           go-modernc-org-token
+           go-modernc-org-strutil
+           go-modernc-org-mathutil
+           go-lukechampine-com-uint128
+           go-github-com-google-go-cmp
+           go-github-com-dustin-go-humanize))
     (home-page "https://modernc.org/cc/v3")
     (synopsis "cc/v3")
     (description "Package cc is a C99 compiler front end (Work in progress).")
@@ -10568,20 +10760,20 @@ receiver.  A @code{Uint128} value is therefore immutable, just like
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "01q5rvhxmrd45h0ljh4185wlly7rxv6vvh28d2shsyan4nj67zf1"))))
+         (base32 "01q5rvhxmrd45h0ljh4185wlly7rxv6vvh28d2shsyan4nj67zf1"))))
     (build-system go-build-system)
     (arguments
      '(#:import-path "modernc.org/httpfs"))
     (home-page "https://modernc.org/httpfs")
     (synopsis "httpfs")
     (description
-      "Package httpfs implements http.FileSystem on top of a map[string]string.")
+     "Package httpfs implements http.FileSystem on top of a map[string]string.")
     (license license:bsd-3)))
 
 (define-public go-modernc-org-libc
   (package
     (name "go-modernc-org-libc")
-    (version "1.12.0")
+    (version "1.22.2")
     (source
       (origin
         (method git-fetch)
@@ -10590,28 +10782,38 @@ receiver.  A @code{Uint128} value is therefore immutable, just like
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1kj6ixc6mwp05349jhqbqv0n2jzdqcjmbj81jw6q71xrf92xs378"))))
+         (base32 "0n511d316yncxpwp9w59618wlxvvyk0qj4ssp6b06vjs38mx2fk7"))))
     (build-system go-build-system)
     (arguments '(#:import-path "modernc.org/libc"))
     (propagated-inputs
-      `(;("go-modernc-org-memory" ,go-modernc-org-memory)
-        ;("go-modernc-org-mathutil" ,go-modernc-org-mathutil)
-        ;("go-modernc-org-ccgo-v3" ,go-modernc-org-ccgo-v3)
-        ;("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ;("go-github-com-mattn-go-isatty" ,go-github-com-mattn-go-isatty)
-        ;("go-github-com-google-uuid" ,go-github-com-google-uuid)
-        ))
+     (list go-modernc-org-token
+           go-modernc-org-strutil
+           go-modernc-org-opt
+           ;go-modernc-org-ccgo-v3
+           go-modernc-org-cc-v3
+           go-lukechampine-com-uint128
+           go-golang-org-x-xerrors
+           go-golang-org-x-tools
+           go-golang-org-x-mod
+           go-github-com-remyoudompheng-bigfft
+           go-github-com-kballard-go-shellquote
+           go-modernc-org-memory
+           go-modernc-org-mathutil
+           go-golang-org-x-sys
+           go-github-com-mattn-go-isatty
+           go-github-com-google-uuid
+           go-github-com-dustin-go-humanize))
     (home-page "https://modernc.org/libc")
     (synopsis "libc")
     (description
-      "Package libc provides run time support for ccgo generated programs and
+     "Package libc provides run time support for ccgo generated programs and
 implements selected parts of the C standard library.")
     (license license:bsd-3)))
 
 (define-public go-modernc-org-mathutil
   (package
     (name "go-modernc-org-mathutil")
-    (version "1.4.1")
+    (version "1.5.0")
     (source
       (origin
         (method git-fetch)
@@ -10620,7 +10822,7 @@ implements selected parts of the C standard library.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0xzs3a29djlqfqmdjfblgv1adb4v11z6557mprx6d92a1byamdwv"))))
+         (base32 "02idz17kfq7rsy4f5my5lg956sklryfkgpzjs80xnzy770g3s4z7"))))
     (build-system go-build-system)
     (arguments '(#:import-path "modernc.org/mathutil"))
     (propagated-inputs
@@ -10628,14 +10830,14 @@ implements selected parts of the C standard library.")
     (home-page "https://modernc.org/mathutil")
     (synopsis #f)
     (description
-      "Package mathutil provides utilities supplementing the standard 'math' and
+     "Package mathutil provides utilities supplementing the standard 'math' and
 'math/rand' packages.")
     (license license:bsd-3)))
 
 (define-public go-modernc-org-memory
   (package
     (name "go-modernc-org-memory")
-    (version "1.0.5")
+    (version "1.4.0")
     (source
       (origin
         (method git-fetch)
@@ -10644,12 +10846,14 @@ implements selected parts of the C standard library.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "089b7qhz49rm5158icq7f4h0jgnpa6p803z70jsx5y2yxkgh8463"))))
+         (base32 "06khkfc2m45w98jj4dsig1y7ia9zkrp8ijdyjjl6gws71mci1gy7"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "modernc.org/memory"))
+     '(#:tests? #f                      ; Tests hang.
+       #:import-path "modernc.org/memory"))
     (propagated-inputs
-     (list go-modernc-org-mathutil))
+     (list go-github-com-remyoudompheng-bigfft
+           go-modernc-org-mathutil))
     (home-page "https://modernc.org/memory")
     (synopsis "memory")
     (description "Package memory implements a memory allocator.")
@@ -10658,7 +10862,7 @@ implements selected parts of the C standard library.")
 (define-public go-modernc-org-opt
   (package
     (name "go-modernc-org-opt")
-    (version "0.1.1")
+    (version "0.1.3")
     (source
       (origin
         (method git-fetch)
@@ -10667,7 +10871,7 @@ implements selected parts of the C standard library.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0s51dhrb2ldxki9mkhc3yb60dvb1ka7j1dyzj2p137y2z8cyw498"))))
+         (base32 "02jih8lgcyrm2v0vagdmq298rvhqkwi4pswg4nwlksdiayw356p5"))))
     (build-system go-build-system)
     (arguments '(#:import-path "modernc.org/opt"))
     (home-page "https://modernc.org/opt")
@@ -10678,7 +10882,7 @@ implements selected parts of the C standard library.")
 (define-public go-modernc-org-sqlite
   (package
     (name "go-modernc-org-sqlite")
-    (version "1.14.3")
+    (version "1.20.4")
     (source
       (origin
         (method git-fetch)
@@ -10687,18 +10891,35 @@ implements selected parts of the C standard library.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1ch8ifyp8p87kvikj5h6mhvfzzy9mmdmf8ihzay1dvqd4gqkmq71"))))
+         (base32 "0ciraizxdw852p7g4fwq2dsbdnfpbbrid6lrhvgfrsgx3b08hlhq"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "modernc.org/sqlite"))
+    (arguments
+     '(#:tests? #f                          ; Tests hang
+       #:import-path "modernc.org/sqlite"))
     (propagated-inputs
-      `(;("go-modernc-org-z" ,go-modernc-org-z)
-        ;("go-modernc-org-tcl" ,go-modernc-org-tcl)
-        ;("go-modernc-org-mathutil" ,go-modernc-org-mathutil)
-        ;("go-modernc-org-libc" ,go-modernc-org-libc)
-        ;("go-modernc-org-ccgo-v3" ,go-modernc-org-ccgo-v3)
-        ;("go-golang-org-x-sys" ,go-golang-org-x-sys)
-        ;("go-github-com-mattn-go-sqlite3" ,go-github-com-mattn-go-sqlite3)
-        ))
+     (list go-modernc-org-z
+           go-modernc-org-token
+           go-modernc-org-strutil
+           go-modernc-org-opt
+           go-modernc-org-memory
+           go-modernc-org-httpfs
+           go-modernc-org-cc-v3
+           go-lukechampine-com-uint128
+           go-golang-org-x-xerrors
+           go-golang-org-x-tools
+           go-golang-org-x-mod
+           go-github-com-remyoudompheng-bigfft
+           go-github-com-mattn-go-isatty
+           go-github-com-kballard-go-shellquote
+           go-github-com-google-uuid
+           go-github-com-dustin-go-humanize
+           go-modernc-org-tcl
+           go-modernc-org-mathutil
+           go-modernc-org-libc
+           go-modernc-org-ccgo-v3
+           go-golang-org-x-sys
+           go-github-com-mattn-go-sqlite3
+           go-github-com-google-pprof))
     (home-page "https://modernc.org/sqlite")
     (synopsis "sqlite")
     (description
@@ -10709,7 +10930,7 @@ library.")
 (define-public go-modernc-org-strutil
   (package
     (name "go-modernc-org-strutil")
-    (version "1.1.1")
+    (version "1.1.3")
     (source
       (origin
         (method git-fetch)
@@ -10718,21 +10939,22 @@ library.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1fql70xqpa0v865j6ikj8nz6vmbdwfkpbsnxzz9hk721xzaz8fl0"))))
+         (base32 "12bpa1i41z407ijwfcbqkpbc3la5x2hx7bxdrgfdwy4y0rrqjhdq"))))
     (build-system go-build-system)
     (arguments '(#:import-path "modernc.org/strutil"))
     (propagated-inputs
-     (list go-modernc-org-mathutil))
+     (list go-github-com-remyoudompheng-bigfft
+           go-modernc-org-mathutil))
     (home-page "https://modernc.org/strutil")
     (synopsis #f)
     (description
-      "Package strutil collects utils supplemental to the standard strings package.")
+     "Package strutil collects utils supplemental to the standard strings package.")
     (license license:bsd-3)))
 
 (define-public go-modernc-org-tcl
   (package
     (name "go-modernc-org-tcl")
-    (version "1.9.2")
+    (version "1.15.0")
     (source
       (origin
         (method git-fetch)
@@ -10741,26 +10963,41 @@ library.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "1j5wcfbzwdq00jfacp75g8rmr430hf56n0a5cwybbx0xplzpcg52"))))
+         (base32 "0ql3njgjr6svc93vigaqh968wc24sq5xvi4lp9q102j9xwi6dmcz"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "modernc.org/tcl"))
+    (arguments
+     '(#:tests? #f                      ; Tests hang
+       #:import-path "modernc.org/tcl"))
     (propagated-inputs
-      `(;("go-modernc-org-z" ,go-modernc-org-z)
-        ;("go-modernc-org-mathutil" ,go-modernc-org-mathutil)
-        ;("go-modernc-org-libc" ,go-modernc-org-libc)
-        ;("go-modernc-org-httpfs" ,go-modernc-org-httpfs)
-        ;("go-modernc-org-ccgo-v3" ,go-modernc-org-ccgo-v3)
-        ))
+     (list go-modernc-org-token
+           go-modernc-org-strutil
+           go-modernc-org-opt
+           go-modernc-org-memory
+           go-modernc-org-cc-v3
+           go-lukechampine-com-uint128
+           go-golang-org-x-xerrors
+           go-golang-org-x-tools
+           go-golang-org-x-sys
+           go-golang-org-x-mod
+           go-github-com-remyoudompheng-bigfft
+           go-github-com-mattn-go-isatty
+           go-github-com-kballard-go-shellquote
+           go-github-com-google-uuid
+           go-modernc-org-z
+           go-modernc-org-mathutil
+           go-modernc-org-libc
+           go-modernc-org-httpfs
+           go-modernc-org-ccgo-v3))
     (home-page "https://modernc.org/tcl")
     (synopsis "tcl")
     (description
-      "Package tcl is a CGo-free port of the Tool Command Language (Tcl).")
+     "Package tcl is a CGo-free port of the Tool Command Language (Tcl).")
     (license license:bsd-3)))
 
 (define-public go-modernc-org-token
   (package
     (name "go-modernc-org-token")
-    (version "1.0.0")
+    (version "1.0.1")
     (source
       (origin
         (method git-fetch)
@@ -10769,20 +11006,20 @@ library.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0gs2231h6i7xmsadyxqcqivkki74bsxwq2n7h0nkbm96fsmgxrd7"))))
+         (base32 "0al7x25xncvggcb0rarpr9lli193cvhld9x3cr1rhvzbr5grjd4m"))))
     (build-system go-build-system)
     (arguments '(#:import-path "modernc.org/token"))
     (home-page "https://modernc.org/token")
     (synopsis "token")
     (description
-      "Package token is variant of the stdlib package token with types FileSet and
+     "Package token is variant of the stdlib package token with types FileSet and
 Token removed.")
     (license license:bsd-3)))
 
 (define-public go-modernc-org-z
   (package
     (name "go-modernc-org-z")
-    (version "1.2.20")
+    (version "1.7.0")
     (source
       (origin
         (method git-fetch)
@@ -10791,11 +11028,26 @@ Token removed.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0kjnxji065kr0w9jp5rw0awzqpm5hyjcx1kasmh6gmmy0hc2d64k"))))
+         (base32 "1apnzzcxrjyi14pxgdgifbb2b1gachxzl3jlsbld9hpn9cikgwmj"))))
     (build-system go-build-system)
     (arguments '(#:import-path "modernc.org/z"))
     (propagated-inputs
-     (list go-modernc-org-libc
+     (list go-modernc-org-token
+           go-modernc-org-strutil
+           go-modernc-org-opt
+           go-modernc-org-memory
+           go-modernc-org-mathutil
+           go-modernc-org-cc-v3
+           go-lukechampine-com-uint128
+           go-golang-org-x-xerrors
+           go-golang-org-x-tools
+           go-golang-org-x-sys
+           go-golang-org-x-mod
+           go-github-com-remyoudompheng-bigfft
+           go-github-com-mattn-go-isatty
+           go-github-com-kballard-go-shellquote
+           go-github-com-google-uuid
+           go-modernc-org-libc
            go-modernc-org-ccgo-v3))
     (home-page "https://modernc.org/z")
     (synopsis "z")

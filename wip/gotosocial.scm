@@ -35,14 +35,14 @@
 (define-public gotosocial
   (package
     (name "gotosocial")
-    (version "0.6.0")
+    (version "0.7.1")
     (source (origin
               (method url-fetch/tarbomb)
               (uri (string-append "https://github.com/superseriousbusiness"
                                   "/gotosocial/releases/download/v" version
                                   "/gotosocial-" version "-source-code.tar.gz"))
               (sha256
-               (base32 "1ywfq6dvqc6nhyv51sjcbk6kj99m0d6h3ii543fk815a9n6236g0"))
+               (base32 "0x2impm9vjqvpv3p9kvpp1rdyhsi95hq0pwcnf71nilymbq0qjyf"))
               ;(snippet
               ; #~(begin
               ;     (use-modules (guix build utils))
@@ -61,11 +61,12 @@
            (lambda* (#:key tests? unpack-path #:allow-other-keys)
              (when tests?
                (with-directory-excursion (string-append "src/" unpack-path)
-                  (setenv "GTS_DB_TYPE" "sqlite")
-                  (setenv "GTS_DB_ADDRESS" ":memory:")
-                  (invoke "go" "test" "-tags"
-                          "'netgo osusergo static_build kvformat'"
-                          "-count" "1" "./...")))))
+                 (setenv "GTS_DB_TYPE" "sqlite")
+                 (setenv "GTS_DB_ADDRESS" ":memory:")
+                 (invoke "go" "test" "-tags"
+                         "'netgo osusergo static_build kvformat'"
+                         "-count" "1" "./...")
+                 (invoke "sh" "./test/envparsing.sh")))))
          (add-after 'install 'install-completions
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
@@ -96,76 +97,65 @@
                    (web (assoc-ref inputs "gotosocial-web-assets.tar.gz")))
                (mkdir-p (string-append out "/share/gotosocial"))
                (with-directory-excursion (string-append out "/share/gotosocial")
-                 (invoke "tar" "xvf" web)))))
-       ;  (add-after 'install 'wrap-program
-       ;    (lambda* (#:key outputs inputs #:allow-other-keys)
-       ;      (let* ((out (assoc-ref outputs "out"))
-       ;             (bin (string-append out "/bin/gotosocial"))
-       ;             (git (assoc-ref inputs "git-minimal"))
-       ;             (ssh (assoc-ref inputs "openssh-sans-x")))
-       ;        (wrap-program bin
-       ;          `("PATH" ":" prefix (,(string-append git "/bin")
-       ;                                ,(string-append ssh "/bin")))))))
-       )
-       ))
+                 (invoke "tar" "xvf" web))))))))
     (inputs
      (list
        sqlite
-       ;codeberg.org/gruf/go-bytesize v1.0.0
-       ;codeberg.org/gruf/go-byteutil v1.0.2
-       ;codeberg.org/gruf/go-cache/v3 v3.1.8
-       ;codeberg.org/gruf/go-debug v1.2.0
-       ;codeberg.org/gruf/go-errors/v2 v2.0.2
-       ;codeberg.org/gruf/go-kv v1.5.2
+       ;codeberg.org/gruf/go-bytesize v1.0.2
+       ;codeberg.org/gruf/go-byteutil v1.1.2
+       ;codeberg.org/gruf/go-cache/v3 v3.2.3
+       ;codeberg.org/gruf/go-debug v1.3.0
+       ;codeberg.org/gruf/go-errors/v2 v2.1.1
+       ;codeberg.org/gruf/go-kv v1.6.0
        ;codeberg.org/gruf/go-logger/v2 v2.2.1
-       ;codeberg.org/gruf/go-mutexes v1.1.4
-       ;codeberg.org/gruf/go-runners v1.3.1
-       ;codeberg.org/gruf/go-store/v2 v2.0.10
+       ;codeberg.org/gruf/go-mutexes v1.1.5
+       ;codeberg.org/gruf/go-runners v1.6.0
+       ;codeberg.org/gruf/go-store/v2 v2.2.1
        ;github.com/buckket/go-blurhash v1.1.0
-       go-github-com-coreos-go-oidc
+       go-github-com-coreos-go-oidc             ; v3.5.0
        ;github.com/cornelk/hashmap v1.0.8
-       go-github-com-disintegration-imaging
+       go-github-com-disintegration-imaging     ; v1.6.2
        ;github.com/gin-contrib/cors v1.4.0
        ;github.com/gin-contrib/gzip v0.0.6
        ;github.com/gin-contrib/sessions v0.0.5
-       ;github.com/gin-gonic/gin v1.8.1
-       ;github.com/go-fed/httpsig v1.1.0
-       go-gopkg-in-go-playground-validator-v9
-       ;github.com/go-playground/validator/v10 v10.11.1
-       go-github-com-google-uuid
-       ;github.com/gorilla/feeds v1.1.1
-       go-github-com-gorilla-websocket
+       ;github.com/gin-gonic/gin v1.8.2
+       go-github-com-go-fed-httpsig             ; v1.1.0
+       go-github-com-go-playground-validator-v10    ; v10.11.2
+       go-github-com-google-uuid                ; v1.3.0
+       go-github-com-gorilla-feeds              ; v1.1.1
+       go-github-com-gorilla-websocket          ; v1.5.0
        ;github.com/h2non/filetype v1.1.3
-       ;go-github-com-jackc-pgconn          ; FTBFS
-       ;go-github-com-jackc-pgx-v4          ; FTBFS
-       go-github-com-microcosm-cc-bluemonday
-       go-github-com-miekg-dns
-       go-github-com-minio-minio-go-v7
-       go-github-com-mitchellh-mapstructure
-       go-github-com-oklog-ulid
-       go-github-com-robfig-cron
-       go-github-com-russross-blackfriday
-       go-github-com-spf13-cobra
-       go-github-com-spf13-viper
-       go-github-com-stretchr-testify
+       go-github-com-jackc-pgconn               ; v1.13.0
+       go-github-com-jackc-pgx-v4               ; v4.17.2
+       go-github-com-microcosm-cc-bluemonday    ; v1.0.22
+       go-github-com-miekg-dns                  ; v1.1.50
+       go-github-com-minio-minio-go-v7          ; v7.0.48
+       go-github-com-mitchellh-mapstructure     ; v1.5.0
+       go-github-com-oklog-ulid                 ; v1.3.1
+       go-github-com-spf13-cobra                ; v1.6.1
+       go-github-com-spf13-viper                ; v1.15.0
+       go-github-com-stretchr-testify           ; v1.8.1
        ;github.com/superseriousbusiness/activity v1.2.1-gts
-       ;github.com/superseriousbusiness/exif-terminator v0.4.0
+       ;github.com/superseriousbusiness/exif-terminator v0.5.0
        ;github.com/superseriousbusiness/oauth2/v4 v4.3.2-SSB
        ;github.com/tdewolff/minify/v2 v2.12.4
-       ;github.com/ulule/limiter/v3 v3.10.0
-       ;github.com/uptrace/bun v1.1.9
-       ;github.com/uptrace/bun/dialect/pgdialect v1.1.9
-       ;github.com/uptrace/bun/dialect/sqlitedialect v1.1.9
+       ;github.com/ulule/limiter/v3 v3.11.0
+       ;github.com/uptrace/bun v1.1.10
+       ;github.com/uptrace/bun/dialect/pgdialect v1.1.10
+       ;github.com/uptrace/bun/dialect/sqlitedialect v1.1.10
        ;github.com/wagslane/go-password-validator v0.3.0
-       go-golang-org-x-crypto
-       go-golang-org-x-exp
-       go-golang-org-x-net
-       ;go-golang-org-x-oauth
-       go-golang-org-x-text
+       ;github.com/yuin/goldmark v1.5.4
+       ;go.uber.org/automaxprocs v1.5.1
+       go-golang-org-x-crypto                   ; v0.6.0
+       go-golang-org-x-exp                      ; v0.0.0-20220613132600-b0d781184e0d
+       go-golang-org-x-image                    ; v0.5.0
+       go-golang-org-x-net                      ; v0.7.0
+       ;go-golang-org-x-oauth v0.4.0
+       go-golang-org-x-text                     ; v0.7.0
        ;gopkg.in/mcuadros/go-syslog.v2 v2.3.0
-       go-gopkg-in-yaml-v3
-       ;go-modernc-org-sqlite           ; FTBFS
-       go-mvdan-cc-xurls
+       go-gopkg-in-yaml-v3                      ; v0.3.1
+       go-modernc-org-sqlite                    ; v1.20.4
+       go-mvdan-cc-xurls                        ; v2.4.0
        ))
     (native-inputs
      `(("gotosocial-web-assets.tar.gz"
@@ -177,7 +167,7 @@
                                "/gotosocial/releases/download/v" version
                                "/gotosocial_" version "_web-assets.tar.gz"))
            (sha256
-            (base32 "17sfny68wx3a16sl1fkfxvr7225nyaf0d4r4gw1phis65l7cj1s4"))))))
+            (base32 "0k0i3qw89fq6w2akdbrbg4s3amp5hznr2b5z5dzz2jragvb8a6yx"))))))
     (home-page "https://docs.gotosocial.org/")
     (synopsis "ActivityPub server powered by Go")
     (description
