@@ -41,4 +41,6 @@
     (synopsis "PDF reader in Javascript")
     (description
      "PDF.js is a Portable Document Format (PDF) viewer that is built with HTML5.")
+    (properties
+     '((release-monitoring-url . "https://github.com/mozilla/pdf.js/releases")))
     (license license:asl2.0)))

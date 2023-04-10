@@ -177,10 +177,7 @@ network server, written in Golang.")
                license:silofl1.1    ; web/assets/{Fork_Awesome,NotoSans*.ttf}
                license:agpl3))))
 
-(define-public gotosocial-with-newer-go-libraries
-  (package
-    (inherit (newer-go-libraries gotosocial))
-    (name "gotosocial-with-newer-go-libraries")))
-
-
-
+;(define-public gotosocial-with-newer-go-libraries
+;  (package
+;    (inherit (newer-go-libraries gotosocial))
+;    (name "gotosocial-with-newer-go-libraries")))

@@ -59,7 +59,7 @@
                 (string-append "\"" (search-input-file %build-inputs "/bin/curl")
                                "\"")))))))
     (inputs
-     (list curl-minimal))
+     (list curl))
     (home-page "https://codeberg.org/jouni/mpv_sponsorblock_minimal")
     (synopsis "Skips sponsored segments of YouTube videos")
     (description "This package provides a plugin to @code{mpv} to skip
@@ -99,7 +99,7 @@ sponsored segments of YouTube videos.")
                   (string-append "'" (search-input-file %build-inputs "/bin/curl")
                                  "'")))))))
       (inputs
-       (list curl-minimal))
+       (list curl))
       (home-page "https://github.com/CrendKing/mpv-twitch-chat/")
       (synopsis "Twitch chat messages as subtitles")
       (description "Show Twitch chat messages as subtitles when watching Twitch

@@ -1,4 +1,4 @@
-;;; Copyright © 2022 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2022, 2023 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -34,5 +34,5 @@
             "-DWANT_MONO=OFF"))))
     (inputs
      (modify-inputs (package-inputs quassel)
-       (append qtdeclarative-5 qtwebchannel-5 qtwebengine-5)))
+       (append qtdeclarative-5 qtwayland-5 qtwebchannel-5 qtwebengine-5)))
     (properties '((upstream-name . "quassel")))))

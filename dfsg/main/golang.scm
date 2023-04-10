@@ -1,4 +1,4 @@
-;;; Copyright © 2020, 2021, 2022 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2020-2023 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -10244,18 +10244,18 @@ within your PATH with the name:")
      '(#:import-path "gopkg.in/gavv/httpexpect.v1"
        #:tests? #f))
     (propagated-inputs
-     `(("go-github-com-ajg-form" ,go-github-com-ajg-form)
-       ("go-github-com-fatih-structs" ,go-github-com-fatih-structs)
-       ("go-github-com-gavv-monotime" ,go-github-com-gavv-monotime)
-       ("go-github-com-google-go-querystring" ,go-github-com-google-go-querystring)
-       ("go-github-com-imkira-go-interpol" ,go-github-com-imkira-go-interpol)
-       ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-       ("go-github-com-valyala-fasthttp" ,go-github-com-valyala-fasthttp)
-       ("go-golang-org-x-net" ,go-golang-org-x-net)
-       ("go-github-com-xeipuuv-gojsonschema" ,go-github-com-xeipuuv-gojsonschema)
-       ("go-github-com-yalp-jsonpath" ,go-github-com-yalp-jsonpath)
-       ("go-github-com-yudai-gojsondiff" ,go-github-com-yudai-gojsondiff)
-       ("go-moul-io-http2curl" ,go-moul-io-http2curl)))
+     (list go-github-com-ajg-form
+           go-github-com-fatih-structs
+           go-github-com-gavv-monotime
+           go-github-com-google-go-querystring
+           go-github-com-imkira-go-interpol
+           go-github-com-stretchr-testify
+           go-github-com-valyala-fasthttp
+           ;go-golang-org-x-net-next
+           go-github-com-xeipuuv-gojsonschema
+           go-github-com-yalp-jsonpath
+           go-github-com-yudai-gojsondiff
+           go-moul-io-http2curl))
     (home-page "https://gopkg.in/gavv/httpexpect.v1")
     (synopsis "httpexpect")
     (description #f)
