@@ -40,36 +40,39 @@
 ;; These packages are sorted alphabetically for lack of a better option.
 
 (define-public go-bazil-org-fuse
-  (let ((commit "5a45981690d8c47319ea10f5f1c1ba6e2cc0147b")
-        (revision "1"))
-    (package
-      (name "go-bazil-org-fuse")
-      (version (git-version "0.0.0" revision commit))
-      (source
-       (origin
-         (method git-fetch)
-         (uri (git-reference
-               (url "https://github.com/bazil/fuse")
-               (commit commit)))
-         (file-name (git-file-name name version))
-         (sha256
-          (base32
-           "0didws29ca6xqvyqg3pfy4g1hd4ij9xhhxxc5ngvaxyxk5gd0rcy"))))
-      (build-system go-build-system)
-      (arguments
-       '(#:import-path "bazil.org/fuse"
-         #:tests? #f))  ; Tests require fusermount and a fuse device.
-      (propagated-inputs
-       `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
-      (native-inputs
-       `(("fuse" ,(@ (gnu packages linux) fuse-3))
-         ("go-golang-org-x-net" ,go-golang-org-x-net)))
-      (home-page "https://bazil.org/fuse/")
-      (synopsis "Go library for writing filesystems")
-      (description "This package is a Go library for writing filesystems.  It is
+  (package
+    (name "go-bazil-org-fuse")
+    (version "0.0.0-20200424023519-3c101025617f")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/bazil/fuse")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0bz43m3ajg1v3d4n5g90lik5p88qpm0flywn8l2v3clnp5njbzr2"))
+       (snippet
+        #~(begin
+            (use-modules (guix build utils))
+            (substitute* '("mount_linux.go"
+                           "unmount_linux.go")
+              (("\"fusermount\"") "\"fusermount3\""))))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "bazil.org/fuse"
+       #:tests? #f))  ; Tests require fuse kernel module and a fuse device.
+    (propagated-inputs
+     (list go-golang-org-x-sys
+           go-github-com-tv42-httpunix))
+    (native-inputs
+     `(("fuse" ,(@ (gnu packages linux) fuse-3))))
+    (home-page "https://bazil.org/fuse/")
+    (synopsis "Go library for writing filesystems")
+    (description "This package is a Go library for writing filesystems.  It is
 a from-scratch implementation of the kernel-userspace communication protocol,
 and does not use the C library from the project called FUSE.")
-      (license license:bsd-3))))
+    (license license:bsd-3)))
 
 (define-public go-camlistore-org-pkg-buildinfo
   (let ((commit "c55c8602d3cea4511081630e17bca7ed601abc44")
@@ -774,56 +777,6 @@ proxy layer.  This can be used to bypass firewalls or NATs.")
      "Package govalidator is package of validators and sanitizers for strings, structs
 and collections.")
     (license license:expat)))
-
-(define-public go-github-com-aws-aws-sdk-go-v2
-  (package
-    (name "go-github-com-aws-aws-sdk-go-v2")
-    (version "1.17.1")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/aws/aws-sdk-go-v2")
-                     (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "0csr7xjr8awcd0l7w69lrhlihbl5bz0m7dgg00yiqxm6hw522c6w"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/aws/aws-sdk-go-v2"))
-    (propagated-inputs
-     (list go-github-com-jmespath-go-jmespath
-           go-github-com-google-go-cmp
-           go-github-com-aws-smithy-go))
-    (home-page "https://github.com/aws/aws-sdk-go-v2")
-    (synopsis "AWS SDK for Go v2")
-    (description
-     "Package sdk is the official AWS SDK v2 for the Go programming language.")
-    (license license:asl2.0)))
-
-(define-public go-github-com-aws-aws-sdk-go-v2-config
-  (package
-    (inherit go-github-com-aws-aws-sdk-go-v2)
-    (name "go-github-com-aws-aws-sdk-go-v2-config")
-    (arguments
-     '(#:import-path "github.com/aws/aws-sdk-go-v2/config"
-       #:unpack-path "github.com/aws/aws-sdk-go-v2"))))
-
-(define-public go-github-com-aws-aws-sdk-go-v2-feature-s3-manager
-  (package
-    (inherit go-github-com-aws-aws-sdk-go-v2)
-    (name "go-github-com-aws-aws-sdk-go-v2-feature-s3-manager")
-    (arguments
-     '(#:import-path "github.com/aws/aws-sdk-go-v2/feature/s3/manager"
-       #:unpack-path "github.com/aws/aws-sdk-go-v2"))))
-
-(define-public go-github-com-aws-aws-sdk-go-v2-service-s3
-  (package
-    (inherit go-github-com-aws-aws-sdk-go-v2)
-    (name "go-github-com-aws-aws-sdk-go-v2-service-s3")
-    (arguments
-     '(#:import-path "github.com/aws/aws-sdk-go-v2/service/s3"
-       #:unpack-path "github.com/aws/aws-sdk-go-v2"))))
 
 (define-public go-github-com-aws-aws-sdk-go-v2-service-ssm
   (package
@@ -1721,6 +1674,38 @@ users are recommended to switch their imports.")
     (home-page "https://github.com/cockroachdb/apd")
     (synopsis "apd")
     (description "Package apd implements arbitrary-precision decimals.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-gocolly-colly
+  (package
+    (name "go-github-com-gocolly-colly")
+    (version "1.2.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/gocolly/colly")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1a6brjy0a4pwq2ml3fvz6p7wjmg37rh006i00zxgv9v4vmv7b84d"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/gocolly/colly"))
+    (propagated-inputs
+     (list go-github-com-puerkitobio-goquery
+           go-github-com-antchfx-htmlquery
+           go-github-com-antchfx-xmlquery
+           go-github-com-gobwas-glob
+           go-github-com-kennygrant-sanitize
+           go-github-com-saintfish-chardet
+           go-github-com-temoto-robotstxt
+           go-golang-org-x-net
+           go-google-golang-org-appengine-internal
+           go-google-golang-org-appengine-urlfetch))
+    (home-page "https://github.com/gocolly/colly")
+    (synopsis "Colly")
+    (description "Package colly implements a HTTP scraping framework")
     (license license:asl2.0)))
 
 (define-public go-github-com-coreos-go-iptables
@@ -3527,6 +3512,8 @@ by the -v and -vmodule=file=2 flags.")
           (base32 "07amgr8ji4mnq91qbsw2jlcmw6hqiwdf4kzfdrj8c4b05w4knszc"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/golang/groupcache"))
+    (propagated-inputs
+     (list go-google-golang-org-protobuf))
     (home-page "https://github.com/golang/groupcache")
     (synopsis "groupcache")
     (description
@@ -5608,6 +5595,211 @@ compatibility with code using standard lib.")
     (description #f)
     (license license:bsd-3)))
 
+(define-public go-github-com-keybase-backoff
+  (package
+    (name "go-github-com-keybase-backoff")
+    (version "1.0.1-0.20160517061000-726b63b835ec")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/keybase/backoff")
+                     (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1wgcm3607zxm2v62dn0rg3b0zy8mlb98s7sbccfhg00di1611ijz"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/backoff"))
+    (propagated-inputs
+     (list go-golang-org-x-net))
+    (home-page "https://github.com/keybase/backoff")
+    (synopsis "Exponential Backoff")
+    (description
+     "Package backoff implements backoff algorithms for retrying operations.")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-cli
+  (package
+    (name "go-github-com-keybase-cli")
+    (version "1.2.1-0.20191217150554-9323fd7ddfab")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/cli")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0nbz8lwr1v2adcpivlfgm9350lkvf9dh5jc8zvg0ap1gjy2if2gh"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/cli"))
+    (home-page "https://github.com/keybase/cli")
+    (synopsis "cli.go")
+    (description
+     "Package cli provides a minimal framework for creating and organizing command
+line Go applications.  cli is designed to be easy to understand and write, the
+most simple cli application can be written as follows:")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-clockwork
+  (package
+    (name "go-github-com-keybase-clockwork")
+    (version "0.1.1-0.20161209210251-976f45f4a979")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/clockwork")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0110rc21h06695hlxg4zp3kp21mbw28bpa4rnl944sdqhjzfnsir"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/clockwork"))
+    (home-page "https://github.com/keybase/clockwork")
+    (synopsis "clockwork")
+    (description "a simple fake clock for golang")
+    (license license:asl2.0)))
+
+(define-public go-github-com-keybase-colly
+  (package
+    (name "go-github-com-keybase-colly")
+    (version "1.1.1-0.20190207010505-9a56fbe6c0e6")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/colly")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "08ynibh4blfp5nlch6ia8z1chj9zfrcscmldggsyyffg2w5pas85"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/colly"))
+    (propagated-inputs
+     (list go-github-com-gocolly-colly))
+    (home-page "https://github.com/keybase/colly")
+    (synopsis "Colly")
+    (description "Package colly implements a HTTP scraping framework")
+    (license license:asl2.0)))
+
+(define-public go-github-com-keybase-dbus
+  (package
+    (name "go-github-com-keybase-dbus")
+    (version "0.0.0-20220506165403-5aa21ea2c23a")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/dbus")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0ihicxqq685jy47dw522b5c7b8vcikay0xph6y55jcas3m3zj1lj"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f      ; Tests expect a running dbus service
+       #:import-path "github.com/keybase/dbus"))
+    (home-page "https://github.com/keybase/dbus")
+    (synopsis "go.dbus")
+    (description
+     "Package dbus implements bindings to the D-Bus message bus system.")
+    (license license:bsd-2)))
+
+(define-public go-github-com-keybase-fuse
+  (package
+    (name "go-github-com-keybase-fuse")
+    (version "0.0.0-20210104232444-d36009698767")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/fuse")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1p0s5xc2bkfbgrlsiyz9cf9b9hppzi978gmjppy9gzjh2jii840k"))
+       (snippet
+        #~(begin
+            (use-modules (guix build utils))
+            (substitute* '("mount_linux.go"
+                           "unmount_linux.go")
+              (("\"fusermount\"") "\"fusermount3\""))))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/fuse"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
+    (propagated-inputs
+     (list go-golang-org-x-sys
+           go-github-com-tv42-httpunix))
+    (native-inputs
+     `(("fuse" ,(@ (gnu packages linux) fuse-3))))
+    (home-page "https://github.com/keybase/fuse")
+    (synopsis "bazil.org/fuse -- Filesystems in Go")
+    (description
+     "Package fuse enables writing FUSE file systems on Linux, OS X, and FreeBSD.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-keybase-go-billy
+  (package
+    (name "go-github-com-keybase-go-billy")
+    (version "3.1.1-0.20180828145748-b5a7b7bc2074+incompatible")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-billy")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0z0xb9ss9gn05az3hwiwg4i9x8s0w7nbia3a5zx0mbkiy4kbls1p"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f  ; Tests expect original project
+       #:import-path "github.com/keybase/go-billy"))
+    (native-inputs
+     (list go-gopkg-in-check-v1))
+    (home-page "https://github.com/keybase/go-billy")
+    (synopsis "go-billy")
+    (description
+     "The missing interface filesystem abstraction for Go.  Billy implements an
+interface based on the @@code{os} standard library, allowing to develop
+applications without dependency on the underlying storage.  Make virtually free
+implement an mocks and testing over filesystem operations.")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-go-codec
+  (package
+    (name "go-github-com-keybase-go-codec")
+    (version "0.0.0-20180928230036-164397562123")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-codec")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "15jjbc2772jgc1g2sy1a35bl6d3lq0xdfp3zj1kpx30y1fd1553c"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f  ;src/github.com/keybase/go-codec/codec/cbor_test.go:152:4: logT format %v reads arg #4, but call has 3 args
+       #:unpack-path "github.com/keybase/go-codec"
+       #:import-path "github.com/keybase/go-codec/codec"))
+    (home-page "https://github.com/keybase/go-codec")
+    (synopsis "go/codec")
+    (description
+     "This repository contains the @@code{go-codec} library, a High Performance and
+Feature-Rich Idiomatic encode/decode and rpc library for")
+    (license license:expat)))
+
 (define-public go-github-com-keybase-go-crypto
   (package
     (name "go-github-com-keybase-go-crypto")
@@ -5681,6 +5873,694 @@ compatibility with code using standard lib.")
 with changes by keybase.")
     (license license:bsd-3)))
 
+(define-public go-github-com-keybase-go-framed-msgpack-rpc
+  (package
+    (name "go-github-com-keybase-go-framed-msgpack-rpc")
+    (version "0.0.0-20211118173254-f892386581e8")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-framed-msgpack-rpc")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0w8v7xc3v72xpahrmsm4prankvxs9bhgyf68jf4qa0ypq9dicjm2"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:unpack-path "github.com/keybase/go-framed-msgpack-rpc"
+       #:import-path "github.com/keybase/go-framed-msgpack-rpc/rpc"))
+    (propagated-inputs `(("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
+                         ;("go-github-com-reiver-go-oi" ,go-github-com-reiver-go-oi)
+                         ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ("go-github-com-keybase-msgpackzip" ,go-github-com-keybase-msgpackzip)
+                         ("go-github-com-keybase-go-codec" ,go-github-com-keybase-go-codec)
+                         ("go-github-com-keybase-backoff" ,go-github-com-keybase-backoff)))
+    (native-inputs
+     (list go-github-com-reiver-go-telnet))
+    (home-page "https://github.com/keybase/go-framed-msgpack-rpc")
+    (synopsis "go-framed-msgpack-rpc")
+    (description "Framed RPC for go.")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-go-git
+  (package
+    (name "go-github-com-keybase-go-git")
+    (version "4.0.0-rc9.0.20190209005256-3a78daa8ce8e+incompatible")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-git")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0jc3wpvj27cqdpl0s5g9dcmk8c6l2r4j39h4i696ylxyjkqbs0fd"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/go-git"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
+    (home-page "https://github.com/keybase/go-git")
+    (synopsis "go-git")
+    (description
+     "Package git is a low level and highly extensible git client library for reading
+repositories from git servers.  It is written in Go from scratch, without any C
+dependencies.")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-go-jsonw
+  (package
+    (name "go-github-com-keybase-go-jsonw")
+    (version "0.0.0-20200325173637-df90f282c233")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-jsonw")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0k67cwhxwmqi7rbk24lpzqgnvj1zc5kvmhpm9xrsi92vay05cvch"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/go-jsonw"))
+    (home-page "https://github.com/keybase/go-jsonw")
+    (synopsis "Json Wrapper for Go")
+    (description #f)
+    (license license:bsd-3)))
+
+(define-public go-github-com-keybase-go-kext
+  (package
+    (name "go-github-com-keybase-go-kext")
+    (version "0.0.0-20211119181951-8d5d2e919472")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-kext")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1yxym50n7jhcmgllp01h8p5d04f63m3d0f45hvpacsamss0jgx61"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/go-kext"))
+    (home-page "https://github.com/keybase/go-kext")
+    (synopsis "Go Kext")
+    (description
+     "This package provides a library for loading, unloading and viewing info for
+kernel extensions on OS X (golang).")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-go-keychain
+  (package
+    (name "go-github-com-keybase-go-keychain")
+    (version "0.0.0-20220610143837-c2ce06069005")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-keychain")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1jk7aanfrwgshs3h0a15zhjl17fp3jccs3j19z6mrk7xfh65i0wj"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/go-keychain"))
+    (propagated-inputs `(("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
+                         ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
+                         ("go-github-com-keybase-dbus" ,go-github-com-keybase-dbus)))
+    (home-page "https://github.com/keybase/go-keychain")
+    (synopsis "Go Keychain")
+    (description
+     "This package provides a library for accessing the Keychain for macOS, iOS, and
+Linux in Go (golang).")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-go-logging
+  (package
+    (name "go-github-com-keybase-go-logging")
+    (version "0.0.0-20211118164508-35a15a9fa71a")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-logging")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0gqjwv24gh41bm6im1nlc5qf23w7yjy8cbplrv58l86mdcg0h2y9"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/go-logging"))
+    (home-page "https://github.com/keybase/go-logging")
+    (synopsis "Golang logging library")
+    (description
+     "Package logging implements a logging infrastructure for Go.  It supports
+different logging backends like syslog, file and memory.  Multiple backends can
+be utilized with different log levels per backend and logger.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-keybase-go-merkle-tree
+  (package
+    (name "go-github-com-keybase-go-merkle-tree")
+    (version "0.0.0-20211118173306-f89b06604d00")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-merkle-tree")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1bs7yagq6fzc7k4h4lhhkpjjcqssac85gdfq3rhqfb9asr10wdw1"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/go-merkle-tree"))
+    (propagated-inputs `(("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-github-com-keybase-go-codec" ,go-github-com-keybase-go-codec)))
+    (home-page "https://github.com/keybase/go-merkle-tree")
+    (synopsis "go-merkle-tree")
+    (description
+     "Package merkleTree is a generic Merkle Tree implementation, for provably
+publishing lots of data under one succinct tree root.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-keybase-go-porterstemmer
+  (package
+    (name "go-github-com-keybase-go-porterstemmer")
+    (version "1.0.2-0.20181016185745-521f1ed5c3f7")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-porterstemmer")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "16aqly34lvlvm99q0zv0jqqgyxlksk0czbc485r0zrcw5ynnmq8q"))))
+    (build-system go-build-system)
+    (arguments
+     ;; porterstemmer_has_suffix_test.go:424:4: Errorf format %d has arg datum.Expected of wrong type bool
+     '(#:tests? #f
+       #:import-path "github.com/keybase/go-porterstemmer"))
+    (home-page "https://github.com/keybase/go-porterstemmer")
+    (synopsis "Go Porter Stemmer")
+    (description
+     "This package provides a native Go clean room implementation of the Porter
+Stemming Algorithm.")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-go-triplesec
+  (package
+    (name "go-github-com-keybase-go-triplesec")
+    (version "0.0.0-20211109205539-1f96eeacbd86")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-triplesec")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "12l0adi8rm7y6lyygjbczpix46npggwj410w597ig9axmli2716x"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/go-triplesec"))
+    (propagated-inputs `(("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
+                         ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ("go-github-com-keybase-go-crypto" ,go-github-com-keybase-go-crypto)))
+    (home-page "https://github.com/keybase/go-triplesec")
+    (synopsis "TripleSec")
+    (description
+     "Package triplesec implements the TripleSec v3 and v4 encryption and
+authentication scheme.")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-go-triplesec-insecure
+  (package
+    (name "go-github-com-keybase-go-triplesec-insecure")
+    (version "0.0.0-20211118164850-99654891ba7c")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-triplesec-insecure")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "064m3a146bc1nhk291a52v7q3l0rfl20s6gzd244wx28z6rzrwrg"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/go-triplesec-insecure"))
+    (propagated-inputs `(("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+                         ("go-github-com-keybase-go-crypto" ,go-github-com-keybase-go-crypto)))
+    (home-page "https://github.com/keybase/go-triplesec-insecure")
+    (synopsis "TripleSec")
+    (description
+     "Package triplesec implements the TripleSec v3 and v4 encryption and
+authentication scheme.")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-go-updater
+  (package
+    (name "go-github-com-keybase-go-updater")
+    (version "0.0.0-20221221215057-da7f21f4d90b")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-updater")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1xkgp7gh61sddbna089hl92l7sdym6js88n5hskaz5clx69sdr5c"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/go-updater"
+       #:tests? #f
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build))))
+    (propagated-inputs `(;("go-github-com-keybase-xurls-v2" ,go-github-com-keybase-xurls-v2)
+                         ("go-github-com-keybase-go-git" ,go-github-com-keybase-go-git)
+                         ("go-github-com-keybase-go-billy" ,go-github-com-keybase-go-billy)
+                         ;("go-github-com-keybase-goleveldb" ,go-github-com-keybase-goleveldb)
+                         ("go-github-com-keybase-stellar-org" ,go-github-com-keybase-stellar-org)
+                         ;("go-github-com-adjust-goautoneg" ,go-github-com-adjust-goautoneg)
+                         ("go-github-com-keybase-fuse" ,go-github-com-keybase-fuse)
+                         ("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
+                         ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+                         ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+                         ("go-github-com-niemeyer-pretty" ,go-github-com-niemeyer-pretty)
+                         ("go-github-com-keybase-msgpackzip" ,go-github-com-keybase-msgpackzip)
+                         ("go-github-com-keybase-go-jsonw" ,go-github-com-keybase-go-jsonw)
+                         ("go-github-com-keybase-go-framed-msgpack-rpc" ,go-github-com-keybase-go-framed-msgpack-rpc)
+                         ("go-github-com-keybase-go-crypto" ,go-github-com-keybase-go-crypto)
+                         ("go-github-com-keybase-go-codec" ,go-github-com-keybase-go-codec)
+                         ("go-github-com-keybase-clockwork" ,go-github-com-keybase-clockwork)
+                         ("go-github-com-keybase-backoff" ,go-github-com-keybase-backoff)
+                         ("go-github-com-dustin-go-humanize" ,go-github-com-dustin-go-humanize)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ("go-github-com-keybase-saltpack" ,go-github-com-keybase-saltpack)
+                         ("go-github-com-keybase-go-ps" ,go-github-com-keybase-go-ps)
+                         ("go-github-com-keybase-go-logging" ,go-github-com-keybase-go-logging)
+                         ;("go-github-com-keybase-client-go" ,go-github-com-keybase-client-go)
+                         ("go-github-com-kardianos-osext" ,go-github-com-kardianos-osext)
+                         ("go-github-com-blang-semver" ,go-github-com-blang-semver)))
+    (home-page "https://github.com/keybase/go-updater")
+    (synopsis "Updater")
+    (description
+     "@@strong{Warning}: This isn't ready for non-Keybase libraries to use yet!")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-go-winio
+  (package
+    (name "go-github-com-keybase-go-winio")
+    (version "0.4.12-0.20180913221037-b1d96ab97b58")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/go-winio")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1vw79bmf214inxqpbh36i69jkgb0k1av5ff9j4fqy5ahy5pn6wjn"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/go-winio"))
+    (home-page "https://github.com/keybase/go-winio")
+    (synopsis "go-winio")
+    (description
+     "This repository contains utilities for efficiently performing Win32 IO
+operations in Go.  Currently, this is focused on accessing named pipes and other
+file handles, and for using named pipes as a net transport.")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-go-dbus
+  (package
+    (name "go-github-com-keybase-go-dbus")
+    (version "0.0.0-20200324223359-a94be52c0b03")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/dbus")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1wsmzx41ri8isvippzjfbh2jkzr0zfg0vz94lq3rhigfjxb6rw8s"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f                  ; Tests expect running dbus session.
+       #:import-path "github.com/keybase/go.dbus"))
+    (home-page "https://github.com/keybase/go.dbus")
+    (synopsis "go.dbus")
+    (description
+     "Package dbus implements bindings to the D-Bus message bus system.")
+    (license license:bsd-2)))
+
+(define-public go-github-com-keybase-golang-ico
+  (package
+    (name "go-github-com-keybase-golang-ico")
+    (version "0.0.0-20181117022008-819cbeb217c9")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/golang-ico")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1grsgl0z0qrn23s2m9cx2xjilm3yj6x3x10mbagbdp5dq6y9rz5i"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f      ; Tests fail to write to directory
+       #:import-path "github.com/keybase/golang-ico"))
+    (propagated-inputs
+     (list go-golang-org-x-image))
+    (home-page "https://github.com/keybase/golang-ico")
+    (synopsis #f)
+    (description #f)
+    (license #f)))
+
+(define-public go-github-com-keybase-gomounts
+  (package
+    (name "go-github-com-keybase-gomounts")
+    (version "0.0.0-20180302000443-349507f4d353")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/gomounts")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0bvdvb5wvnmy5h6hahi209bzv3in84jnv4dyc4n1nvw7grmmh7al"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/gomounts"))
+    (native-inputs
+     (list go-github-com-strib-gomounts))
+    (home-page "https://github.com/keybase/gomounts")
+    (synopsis "gomounts")
+    (description
+     "Package gomounts implements a cross-platform library for retrieving mounted
+filesystem volumes.")
+    (license license:expat)))
+
+(define-public go-github-com-keybase-msgpackzip
+  (package
+    (name "go-github-com-keybase-msgpackzip")
+    (version "0.0.0-20211109205514-10e4bc329851")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/msgpackzip")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0zlb90bnv09ybdhbhdbf5j66dhyav9lcbpgmnm2zxv3lrbd0y4gm"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/msgpackzip"))
+    (propagated-inputs `(("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
+    (home-page "https://github.com/keybase/msgpackzip")
+    (synopsis "msgpackzip")
+    (description
+     "You can test compressing a message pack encoded input file by running:")
+    (license license:bsd-3)))
+
+(define-public go-github-com-keybase-keybase-test-vectors
+  (package
+    (name "go-github-com-keybase-keybase-test-vectors")
+    (version "1.0.12-0.20200309162119-ea1e58fecd5d")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/keybase-test-vectors")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0nmawklwj2hmw1xfshn9jyzmjk13pcb3pj7icfp740pc9sp5fa4k"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/keybase-test-vectors"))
+    (home-page "https://github.com/keybase/keybase-test-vectors")
+    (synopsis #f)
+    (description #f)
+    (license #f)))
+
+(define-public go-github-com-keybase-pipeliner
+  (package
+    (name "go-github-com-keybase-pipeliner")
+    (version "0.0.0-20190828022149-31ef4ee63659")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/pipeliner")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "11j8678cqxjnjldqxhpca5si2r10nrv2z4cd62hfpg59sb8npk7x"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/pipeliner"))
+    (propagated-inputs
+     (list go-golang-org-x-net))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
+    (home-page "https://github.com/keybase/pipeliner")
+    (synopsis "pipeliner")
+    (description
+     "This package provides a simplified pipline library, for parallel requests with
+bounded parallelism.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-keybase-release
+  (package
+    (name "go-github-com-keybase-release")
+    (version "0.0.0-20221220220653-50771d921175")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/release")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "18h8iabbc7vd161pfkadki5f6hhrwb45vsg22ixmd5b9h3vhxymz"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/release"))
+    (propagated-inputs `(("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
+                         ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
+                         ("go-github-com-smartystreets-goconvey" ,go-github-com-smartystreets-goconvey)
+                         ("go-github-com-sergi-go-diff" ,go-github-com-sergi-go-diff)
+                         ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+                         ("go-github-com-mattn-go-isatty" ,go-github-com-mattn-go-isatty)
+                         ("go-github-com-kr-pretty" ,go-github-com-kr-pretty)
+                         ("go-github-com-jmespath-go-jmespath" ,go-github-com-jmespath-go-jmespath)
+                         ("go-github-com-go-ini-ini" ,go-github-com-go-ini-ini)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ("go-github-com-alecthomas-units" ,go-github-com-alecthomas-units)
+                         ("go-github-com-alecthomas-repr" ,go-github-com-alecthomas-repr)
+                         ("go-github-com-alecthomas-colour" ,go-github-com-alecthomas-colour)
+                         ("go-github-com-alecthomas-assert" ,go-github-com-alecthomas-assert)
+                         ;("go-gopkg-in-alecthomas-kingpin-v2" ,go-gopkg-in-alecthomas-kingpin-v2)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ("go-github-com-blang-semver" ,go-github-com-blang-semver)
+                         ("go-github-com-aws-aws-sdk-go" ,go-github-com-aws-aws-sdk-go)
+                         ("go-github-com-alecthomas-template" ,go-github-com-alecthomas-template)))
+    (home-page "https://github.com/keybase/release")
+    (synopsis "Release")
+    (description
+     "This is a command line tool for build and release scripts for generating
+updates, interacting with Github and S3.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-keybase-saltpack
+  (package
+    (name "go-github-com-keybase-saltpack")
+    (version "0.0.0-20211118165207-4039c5df46c0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/saltpack")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "181763midr61bc4nmhq4ds6pxsjyw8qnm2mwbhsla10lkfdl9vpm"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/saltpack"))
+    (propagated-inputs `(("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
+                         ("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ("go-golang-org-x-sync" ,go-golang-org-x-sync)
+                         ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ("go-github-com-keybase-go-codec" ,go-github-com-keybase-go-codec)))
+    (home-page "https://github.com/keybase/saltpack")
+    (synopsis "saltpack")
+    (description
+     "Package saltpack is an implementation of the saltpack message format.  Saltpack
+is a light wrapper around Dan Berstein's famous NaCl library.  It adds support
+for longer messages, streaming input and output of data, multiple recipients for
+encrypted messages, and a reasonable armoring format.  We intend Saltpack as a
+replacement for the PGP messaging format, as it can be used in many of the same
+circumstances.  However, it is designed to be: (1) simpler; (2) easier to
+implement; (3) judicious (perhaps judgmental) in its crypto usage; (4) fully
+modern (no CFB mode here); (5) high performance; (6) less bug- prone; (7)
+generally unwilling to output unauthenticated data; and (8) easier to compose
+with other software in any manner of languages or platforms.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-keybase-stellar-org
+  (package
+    (name "go-github-com-keybase-stellar-org")
+    (version "0.0.0-20191010205648-0fc3bfe3dfa7")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/stellar-org")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "032n758lfycldrrb0ciscrm182jnx4nnqxdkl876scsacxxqm906"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/stellar-org"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
+    (propagated-inputs `(;("go-gopkg-in-tylerb-graceful-v1" ,go-gopkg-in-tylerb-graceful-v1)
+                         ;("go-gopkg-in-gorp-v1" ,go-gopkg-in-gorp-v1)
+                         ;("go-gopkg-in-gemnasium-logrus-airbrake-hook-v2" ,go-gopkg-in-gemnasium-logrus-airbrake-hook-v2)
+                         ("go-gopkg-in-gavv-httpexpect-v1" ,go-gopkg-in-gavv-httpexpect-v1)
+                         ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
+                         ;("go-gopkg-in-airbrake-gobrake-v2" ,go-gopkg-in-airbrake-gobrake-v2)
+                         ("go-google-golang-org-appengine" ,go-google-golang-org-appengine)
+                         ("go-golang-org-x-tools" ,go-golang-org-x-tools)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+                         ("go-github-com-ziutek-mymysql" ,go-github-com-ziutek-mymysql)
+                         ("go-github-com-yudai-pp" ,go-github-com-yudai-pp)
+                         ("go-github-com-yudai-golcs" ,go-github-com-yudai-golcs)
+                         ("go-github-com-yudai-gojsondiff" ,go-github-com-yudai-gojsondiff)
+                         ("go-github-com-yalp-jsonpath" ,go-github-com-yalp-jsonpath)
+                         ("go-github-com-xeipuuv-gojsonschema" ,go-github-com-xeipuuv-gojsonschema)
+                         ("go-github-com-xeipuuv-gojsonreference" ,go-github-com-xeipuuv-gojsonreference)
+                         ("go-github-com-xeipuuv-gojsonpointer" ,go-github-com-xeipuuv-gojsonpointer)
+                         ("go-github-com-valyala-fasthttp" ,go-github-com-valyala-fasthttp)
+                         ("go-github-com-valyala-bytebufferpool" ,go-github-com-valyala-bytebufferpool)
+                         ;("go-github-com-tyler-smith-go-bip39" ,go-github-com-tyler-smith-go-bip39)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ;("go-github-com-stellar-throttled" ,go-github-com-stellar-throttled)
+                         ("go-github-com-stellar-go-xdr" ,go-github-com-stellar-go-xdr)
+                         ("go-github-com-spf13-viper" ,go-github-com-spf13-viper)
+                         ("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
+                         ("go-github-com-spf13-jwalterweatherman" ,go-github-com-spf13-jwalterweatherman)
+                         ("go-github-com-spf13-cobra" ,go-github-com-spf13-cobra)
+                         ("go-github-com-spf13-cast" ,go-github-com-spf13-cast)
+                         ("go-github-com-smartystreets-goconvey" ,go-github-com-smartystreets-goconvey)
+                         ("go-github-com-sirupsen-logrus" ,go-github-com-sirupsen-logrus)
+                         ("go-github-com-shurcool-httpfs" ,go-github-com-shurcool-httpfs)
+                         ("go-github-com-sergi-go-diff" ,go-github-com-sergi-go-diff)
+                         ("go-github-com-segmentio-go-loggly" ,go-github-com-segmentio-go-loggly)
+                         ;("go-github-com-sebest-xff" ,go-github-com-sebest-xff)
+                         ;("go-github-com-rubenv-sql-migrate" ,go-github-com-rubenv-sql-migrate)
+                         ;("go-github-com-rs-xhandler" ,go-github-com-rs-xhandler)
+                         ;("go-github-com-rs-cors" ,go-github-com-rs-cors)
+                         ("go-github-com-rcrowley-go-metrics" ,go-github-com-rcrowley-go-metrics)
+                         ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
+                         ("go-github-com-opentracing-opentracing-go" ,go-github-com-opentracing-opentracing-go)
+                         ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
+                         ("go-github-com-onsi-ginkgo" ,go-github-com-onsi-ginkgo)
+                         ;("go-github-com-nullstyle-go-xdr" ,go-github-com-nullstyle-go-xdr)
+                         ;("go-github-com-moul-http2curl" ,go-github-com-moul-http2curl)
+                         ;("go-github-com-mndrix-ps" ,go-github-com-mndrix-ps)
+                         ("go-github-com-mitchellh-mapstructure" ,go-github-com-mitchellh-mapstructure)
+                         ("go-github-com-mitchellh-go-homedir" ,go-github-com-mitchellh-go-homedir)
+                         ("go-github-com-mattn-go-colorable" ,go-github-com-mattn-go-colorable)
+                         ("go-github-com-manucorporat-sse" ,go-github-com-manucorporat-sse)
+                         ("go-github-com-magiconair-properties" ,go-github-com-magiconair-properties)
+                         ("go-github-com-lib-pq" ,go-github-com-lib-pq)
+                         ;("go-github-com-lann-builder" ,go-github-com-lann-builder)
+                         ("go-github-com-kr-text" ,go-github-com-kr-text)
+                         ("go-github-com-kr-pretty" ,go-github-com-kr-pretty)
+                         ;("go-github-com-klauspost-crc32" ,go-github-com-klauspost-crc32)
+                         ("go-github-com-klauspost-cpuid" ,go-github-com-klauspost-cpuid)
+                         ("go-github-com-klauspost-compress" ,go-github-com-klauspost-compress)
+                         ("go-github-com-k0kubun-colorstring" ,go-github-com-k0kubun-colorstring)
+                         ;("go-github-com-jmoiron-sqlx" ,go-github-com-jmoiron-sqlx)
+                         ("go-github-com-jmespath-go-jmespath" ,go-github-com-jmespath-go-jmespath)
+                         ("go-github-com-jarcoal-httpmock" ,go-github-com-jarcoal-httpmock)
+                         ("go-github-com-inconshreveable-mousetrap" ,go-github-com-inconshreveable-mousetrap)
+                         ("go-github-com-imkira-go-interpol" ,go-github-com-imkira-go-interpol)
+                         ;("go-github-com-howeyc-gopass" ,go-github-com-howeyc-gopass)
+                         ("go-github-com-hashicorp-golang-lru" ,go-github-com-hashicorp-golang-lru)
+                         ;("go-github-com-guregu-null" ,go-github-com-guregu-null)
+                         ;("go-github-com-graph-gophers-graphql-go" ,go-github-com-graph-gophers-graphql-go)
+                         ("go-github-com-google-go-querystring" ,go-github-com-google-go-querystring)
+                         ("go-github-com-gomodule-redigo" ,go-github-com-gomodule-redigo)
+                         ;("go-github-com-goji-httpauth" ,go-github-com-goji-httpauth)
+                         ;("go-github-com-gobuffalo-packr" ,go-github-com-gobuffalo-packr)
+                         ("go-github-com-go-ini-ini" ,go-github-com-go-ini-ini)
+                         ("go-github-com-go-errors-errors" ,go-github-com-go-errors-errors)
+                         ("go-github-com-go-chi-chi" ,go-github-com-go-chi-chi)
+                         ("go-github-com-getsentry-raven-go" ,go-github-com-getsentry-raven-go)
+                         ("go-github-com-gavv-monotime" ,go-github-com-gavv-monotime)
+                         ("go-github-com-fatih-structs" ,go-github-com-fatih-structs)
+                         ;("go-github-com-facebookgo-subset" ,go-github-com-facebookgo-subset)
+                         ;("go-github-com-facebookgo-structtag" ,go-github-com-facebookgo-structtag)
+                         ;("go-github-com-facebookgo-stack" ,go-github-com-facebookgo-stack)
+                         ;("go-github-com-facebookgo-inject" ,go-github-com-facebookgo-inject)
+                         ;("go-github-com-facebookgo-ensure" ,go-github-com-facebookgo-ensure)
+                         ;("go-github-com-elazarl-go-bindata-assetfs" ,go-github-com-elazarl-go-bindata-assetfs)
+                         ("go-github-com-aws-aws-sdk-go" ,go-github-com-aws-aws-sdk-go)
+                         ("go-github-com-asaskevich-govalidator" ,go-github-com-asaskevich-govalidator)
+                         ("go-github-com-ajg-form" ,go-github-com-ajg-form)
+                         ;("go-github-com-masterminds-squirrel" ,go-github-com-masterminds-squirrel)
+                         ("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)
+                         ;("go-bitbucket-org-ww-goautoneg" ,go-bitbucket-org-ww-goautoneg)
+                         ))
+    (home-page "https://github.com/keybase/stellar-org")
+    (synopsis "Stellar Go")
+    (description
+     "This repo is the home for all of the public go code produced by SDF. In addition
+to various tools and services, this repository is the SDK from which you may
+develop your own applications that integrate with the stellar network.")
+    (license license:asl2.0)))
+
 (define-public go-github-com-keybase-stellarnet
   (package
     (name "go-github-com-keybase-stellarnet")
@@ -5705,6 +6585,28 @@ with changes by keybase.")
     (home-page "https://github.com/keybase/stellarnet")
     (synopsis "stellarnet")
     (description #f)
+    (license license:bsd-3)))
+
+(define-public go-github-com-keybase-xurls
+  (package
+    (name "go-github-com-keybase-xurls")
+    (version "1.1.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/keybase/xurls")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "05q4nqbpgfb0a35sn22rn9mlag2ks4cgwb54dx925hipp6zgj1hx"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/keybase/xurls"))
+    (home-page "https://github.com/keybase/xurls")
+    (synopsis "xurls")
+    (description
+     "Package xurls extracts urls from plain text using regular expressions.")
     (license license:bsd-3)))
 
 (define-public go-github-com-klauspost-cpuid-v2
@@ -7311,6 +8213,55 @@ single sign-on (SSO) authentication of browser based clients in a Windows
 environment.")
     (license license:expat)))
 
+(define-public go-github-com-reiver-go-oi
+  (package
+    (name "go-github-com-reiver-go-oi")
+    (version "1.0.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/reiver/go-oi")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0icqnz0lvpj9ghy5s69x0v2mfb67mjnfyggs1ff14shqjai2p6i2"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/reiver/go-oi"))
+    (home-page "https://github.com/reiver/go-oi")
+    (synopsis "go-oi")
+    (description
+     "Package oi provides useful tools to be used with Go's standard \"io\" package.")
+    (license license:expat)))
+
+(define-public go-github-com-reiver-go-telnet
+  (package
+    (name "go-github-com-reiver-go-telnet")
+    (version "0.0.0-20180421082511-9ff0b2ab096e")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/reiver/go-telnet")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "05kgn00l5l1g48ry16l90lghg3x937apb9j7rg12hh2ghkxczha9"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/reiver/go-telnet"))
+    (propagated-inputs
+     (list go-github-com-reiver-go-oi))
+    (home-page "https://github.com/reiver/go-telnet")
+    (synopsis "go-telnet")
+    (description
+     "Package telnet provides TELNET and TELNETS client and server implementations in
+a style similar to the \"net/http\" library that is part of the Go standard
+library, including support for \"middleware\"; TELNETS is secure TELNET, with the
+TELNET protocol over a secured TLS (or SSL) connection.")
+    (license license:expat)))
+
 (define-public go-github-com-remyoudompheng-bigfft
   (package
     (name "go-github-com-remyoudompheng-bigfft")
@@ -8113,11 +9064,126 @@ for examples.")
     (description #f)
     (license license:bsd-3)))
 
+(define-public go-github-com-stellar-go
+  (package
+    (name "go-github-com-stellar-go")
+    (version "0.0.0-20191010205648-0fc3bfe3dfa7")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/stellar/go")
+                     (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "032n758lfycldrrb0ciscrm182jnx4nnqxdkl876scsacxxqm906"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/stellar/go"))
+    (propagated-inputs
+     `(;("go-gopkg-in-tylerb-graceful-v1" ,go-gopkg-in-tylerb-graceful-v1)
+       ;("go-gopkg-in-gorp-v1" ,go-gopkg-in-gorp-v1)
+       ;("go-gopkg-in-gemnasium-logrus-airbrake-hook-v2" ,go-gopkg-in-gemnasium-logrus-airbrake-hook-v2)
+       ;("go-gopkg-in-gavv-httpexpect-v1" ,go-gopkg-in-gavv-httpexpect-v1)  ; FTBFS
+       ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
+       ;("go-gopkg-in-airbrake-gobrake-v2" ,go-gopkg-in-airbrake-gobrake-v2)
+       ("go-google-golang-org-appengine" ,go-google-golang-org-appengine)
+       ("go-golang-org-x-tools" ,go-golang-org-x-tools)
+       ("go-golang-org-x-net" ,go-golang-org-x-net)
+       ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+       ("go-github-com-ziutek-mymysql" ,go-github-com-ziutek-mymysql)  ; FTBFS
+       ("go-github-com-yudai-pp" ,go-github-com-yudai-pp)
+       ("go-github-com-yudai-golcs" ,go-github-com-yudai-golcs)
+       ("go-github-com-yudai-gojsondiff" ,go-github-com-yudai-gojsondiff)
+       ("go-github-com-yalp-jsonpath" ,go-github-com-yalp-jsonpath)
+       ("go-github-com-xeipuuv-gojsonschema" ,go-github-com-xeipuuv-gojsonschema)
+       ("go-github-com-xeipuuv-gojsonreference" ,go-github-com-xeipuuv-gojsonreference)
+       ("go-github-com-xeipuuv-gojsonpointer" ,go-github-com-xeipuuv-gojsonpointer)
+       ("go-github-com-valyala-fasthttp" ,go-github-com-valyala-fasthttp)
+       ("go-github-com-valyala-bytebufferpool" ,go-github-com-valyala-bytebufferpool)
+       ;("go-github-com-tyler-smith-go-bip39" ,go-github-com-tyler-smith-go-bip39)
+       ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+       ;("go-github-com-stellar-throttled" ,go-github-com-stellar-throttled)
+       ("go-github-com-stellar-go-xdr" ,go-github-com-stellar-go-xdr)
+       ("go-github-com-spf13-viper" ,go-github-com-spf13-viper)
+       ("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
+       ("go-github-com-spf13-jwalterweatherman" ,go-github-com-spf13-jwalterweatherman)
+       ("go-github-com-spf13-cobra" ,go-github-com-spf13-cobra)
+       ("go-github-com-spf13-cast" ,go-github-com-spf13-cast)
+       ("go-github-com-smartystreets-goconvey" ,go-github-com-smartystreets-goconvey)
+       ("go-github-com-sirupsen-logrus" ,go-github-com-sirupsen-logrus)
+       ("go-github-com-shurcool-httpfs" ,go-github-com-shurcool-httpfs)
+       ("go-github-com-sergi-go-diff" ,go-github-com-sergi-go-diff)
+       ("go-github-com-segmentio-go-loggly" ,go-github-com-segmentio-go-loggly)
+       ;("go-github-com-sebest-xff" ,go-github-com-sebest-xff)
+       ;("go-github-com-rubenv-sql-migrate" ,go-github-com-rubenv-sql-migrate)
+       ;("go-github-com-rs-xhandler" ,go-github-com-rs-xhandler)
+       ;("go-github-com-rs-cors" ,go-github-com-rs-cors)
+       ("go-github-com-rcrowley-go-metrics" ,go-github-com-rcrowley-go-metrics)
+       ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
+       ("go-github-com-opentracing-opentracing-go" ,go-github-com-opentracing-opentracing-go)
+       ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
+       ("go-github-com-onsi-ginkgo" ,go-github-com-onsi-ginkgo)
+       ;("go-github-com-nullstyle-go-xdr" ,go-github-com-nullstyle-go-xdr)
+       ;("go-github-com-moul-http2curl" ,go-github-com-moul-http2curl)
+       ;("go-github-com-mndrix-ps" ,go-github-com-mndrix-ps)
+       ("go-github-com-mitchellh-mapstructure" ,go-github-com-mitchellh-mapstructure)
+       ("go-github-com-mitchellh-go-homedir" ,go-github-com-mitchellh-go-homedir)
+       ("go-github-com-mattn-go-colorable" ,go-github-com-mattn-go-colorable)
+       ("go-github-com-manucorporat-sse" ,go-github-com-manucorporat-sse)
+       ("go-github-com-magiconair-properties" ,go-github-com-magiconair-properties)
+       ("go-github-com-lib-pq" ,go-github-com-lib-pq)
+       ;("go-github-com-lann-builder" ,go-github-com-lann-builder)
+       ("go-github-com-kr-text" ,go-github-com-kr-text)
+       ("go-github-com-kr-pretty" ,go-github-com-kr-pretty)
+       ;("go-github-com-klauspost-crc32" ,go-github-com-klauspost-crc32)
+       ("go-github-com-klauspost-cpuid" ,go-github-com-klauspost-cpuid)
+       ("go-github-com-klauspost-compress" ,go-github-com-klauspost-compress)
+       ("go-github-com-k0kubun-colorstring" ,go-github-com-k0kubun-colorstring)
+       ;("go-github-com-jmoiron-sqlx" ,go-github-com-jmoiron-sqlx)
+       ("go-github-com-jmespath-go-jmespath" ,go-github-com-jmespath-go-jmespath)
+       ("go-github-com-jarcoal-httpmock" ,go-github-com-jarcoal-httpmock)
+       ("go-github-com-inconshreveable-mousetrap" ,go-github-com-inconshreveable-mousetrap)
+       ("go-github-com-imkira-go-interpol" ,go-github-com-imkira-go-interpol)
+       ;("go-github-com-howeyc-gopass" ,go-github-com-howeyc-gopass)
+       ("go-github-com-hashicorp-golang-lru" ,go-github-com-hashicorp-golang-lru)
+       ;("go-github-com-guregu-null" ,go-github-com-guregu-null)
+       ;("go-github-com-graph-gophers-graphql-go" ,go-github-com-graph-gophers-graphql-go)
+       ("go-github-com-google-go-querystring" ,go-github-com-google-go-querystring)
+       ("go-github-com-gomodule-redigo" ,go-github-com-gomodule-redigo)
+       ;("go-github-com-goji-httpauth" ,go-github-com-goji-httpauth)
+       ;("go-github-com-gobuffalo-packr" ,go-github-com-gobuffalo-packr)
+       ("go-github-com-go-ini-ini" ,go-github-com-go-ini-ini)
+       ("go-github-com-go-errors-errors" ,go-github-com-go-errors-errors)
+       ("go-github-com-go-chi-chi" ,go-github-com-go-chi-chi)
+       ("go-github-com-getsentry-raven-go" ,go-github-com-getsentry-raven-go)
+       ("go-github-com-gavv-monotime" ,go-github-com-gavv-monotime)
+       ("go-github-com-fatih-structs" ,go-github-com-fatih-structs)
+       ;("go-github-com-facebookgo-subset" ,go-github-com-facebookgo-subset)
+       ;("go-github-com-facebookgo-structtag" ,go-github-com-facebookgo-structtag)
+       ;("go-github-com-facebookgo-stack" ,go-github-com-facebookgo-stack)
+       ;("go-github-com-facebookgo-inject" ,go-github-com-facebookgo-inject)
+       ;("go-github-com-facebookgo-ensure" ,go-github-com-facebookgo-ensure)
+       ;("go-github-com-elazarl-go-bindata-assetfs" ,go-github-com-elazarl-go-bindata-assetfs)
+       ("go-github-com-aws-aws-sdk-go" ,go-github-com-aws-aws-sdk-go)
+       ("go-github-com-asaskevich-govalidator" ,go-github-com-asaskevich-govalidator)
+       ("go-github-com-ajg-form" ,go-github-com-ajg-form)
+       ;("go-github-com-masterminds-squirrel" ,go-github-com-masterminds-squirrel)
+       ("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)
+       ;("go-bitbucket-org-ww-goautoneg" ,go-bitbucket-org-ww-goautoneg)
+       ))
+    (home-page "https://github.com/stellar/go")
+    (synopsis "Package Index")
+    (description
+     "This repo is the home for all of the public Go code produced by the
+@@url{https://stellar.org,Stellar Development Foundation}.")
+    (license (list license:asl2.0 license:asl2.0))))
+
 (define (go-github-com-stellar-go-package suffix)
   (package
     (name (string-append "go-github-com-stellar-go-"
                          (string-replace-substring suffix "/" "-")))
-    (version "0.0.0-20210402164147-6145dda1700f")
+    (version "0.0.0-20191010205648-0fc3bfe3dfa7")
     (source
       (origin
         (method git-fetch)
@@ -8127,7 +9193,7 @@ for examples.")
         (file-name (git-file-name "go-github-com-stellar-go" version))
         (sha256
          (base32
-          "1fp2y9lbxi05k214q8zcp6fwmngld4qa7abrvg7www209xpxq4p1"))))
+          "032n758lfycldrrb0ciscrm182jnx4nnqxdkl876scsacxxqm906"))))
     (build-system go-build-system)
     (arguments
      `(#:unpack-path "github.com/stellar/go"
@@ -8142,35 +9208,48 @@ for examples.")
   (package (inherit (go-github-com-stellar-go-package "address"))
     (propagated-inputs
      `(("go-github-com-asaskevich-govalidator" ,go-github-com-asaskevich-govalidator)
-       ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)))
+       ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
+       ;("go-github-com-stellar-go-support" ,go-github-com-stellar-go-support)
+       ))
     (native-inputs
      `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))))
 
 (define-public go-github-com-stellar-go-amount
   (package (inherit (go-github-com-stellar-go-package "amount"))
     (propagated-inputs
+     `(;("go-github-com-stellar-go-support" ,go-github-com-stellar-go-support)
+       ("go-github-com-stellar-go-xdr" ,go-github-com-stellar-go-xdr)))))
+
+(define-public go-github-com-stellar-go-build
+  (package (inherit (go-github-com-stellar-go-package "build"))
+    (propagated-inputs
      `(("go-github-com-lib-pq" ,go-github-com-lib-pq)
        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-       ("go-github-com-stellar-go-xdr-xdr3" ,go-github-com-stellar-go-xdr-xdr3)))))
+       ("go-github-com-stellar-go-xdr" ,go-github-com-stellar-go-xdr)
+       ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)))))
 
 (define-public go-github-com-stellar-go-clients-federation
   (package (inherit (go-github-com-stellar-go-package "clients/federation"))
     (propagated-inputs
-     `(("go-github-com-asaskevich-govalidator" ,go-github-com-asaskevich-govalidator)
-       ("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)
-       ("go-github-com-go-chi-chi" ,go-github-com-go-chi-chi)
-       ("go-github-com-go-errors-errors" ,go-github-com-go-errors-errors)
-       ("go-github-com-gorilla-schema" ,go-github-com-gorilla-schema)
-       ("go-github-com-lib-pq" ,go-github-com-lib-pq)
-       ("go-github-com-manucorporat-sse" ,go-github-com-manucorporat-sse)
-       ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-       ("go-github-com-segmentio-go-loggly" ,go-github-com-segmentio-go-loggly)
-       ("go-github-com-sirupsen-logrus" ,go-github-com-sirupsen-logrus)
-       ("go-github-com-stellar-go-xdr-xdr3" ,go-github-com-stellar-go-xdr-xdr3)
-       ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
+     `(
+       ("go-github-com-stellar-go-address" ,go-github-com-stellar-go-address)
+       ("go-github-com-stellar-go-clients-horizonclient" ,go-github-com-stellar-go-clients-horizonclient)
+       ("go-github-com-stellar-go-clients-stellartoml" ,go-github-com-stellar-go-clients-stellartoml)
+       ;("go-github-com-stellar-go-support" ,go-github-com-stellar-go-support)
+       ("go-github-com-stellar-go-protocols-federation" ,go-github-com-stellar-go-protocols-federation)
+       ))
     (native-inputs
-     `(("go-github-com-jarcoal-httpmock" ,go-github-com-jarcoal-httpmock)
-       ("go-gopkg-in-gavv-httpexpect-v1" ,go-gopkg-in-gavv-httpexpect-v1)))))
+     `(
+       ;("go-github-com-stellar-go-support" ,go-github-com-stellar-go-support)
+       ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+       ))))
+
+(define-public go-github-com-stellar-go-clients-horizon
+  (package (inherit (go-github-com-stellar-go-package "clients/horizon"))
+    (propagated-inputs
+     `())
+    (native-inputs
+     `())))
 
 (define-public go-github-com-stellar-go-clients-horizonclient
   (package (inherit (go-github-com-stellar-go-package "clients/horizonclient"))
@@ -8214,7 +9293,8 @@ for examples.")
     (propagated-inputs
      `(("go-github-com-lib-pq" ,go-github-com-lib-pq)
        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-       ("go-github-com-stellar-go-xdr-xdr3" ,go-github-com-stellar-go-xdr-xdr3)))
+       ("go-github-com-stellar-go-xdr-xdr3" ,go-github-com-stellar-go-xdr-xdr3)
+       ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)))
     (native-inputs
      `(("go-github-com-onsi-ginkgo" ,go-github-com-onsi-ginkgo)
        ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)))))
@@ -8326,6 +9406,7 @@ for examples.")
     (propagated-inputs
      `(("go-github-com-lib-pq" ,go-github-com-lib-pq)
        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
+       ;("go-github-com-stellar-go-amount" ,go-github-com-stellar-go-amount)
        ("go-github-com-stellar-go-xdr-xdr3" ,go-github-com-stellar-go-xdr-xdr3)))
     (native-inputs
      `(("go-github-com-go-chi-chi" ,go-github-com-go-chi-chi)
@@ -8395,6 +9476,29 @@ for examples.")
     (synopsis "gtreap")
     (description
      "gtreap is an immutable treap implementation in the Go Language")
+    (license license:expat)))
+
+(define-public go-github-com-strib-gomounts
+  (package
+    (name "go-github-com-strib-gomounts")
+    (version "0.0.0-20180215003523-d9ea4eaa52ca")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/strib/gomounts")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0rnmgcsjjv8kwxlk76n7fbigxxnb2y9nk6zqi0yrx0ikcq409qvw"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/strib/gomounts"))
+    (home-page "https://github.com/strib/gomounts")
+    (synopsis "gomounts")
+    (description
+     "Package gomounts implements a cross-platform library for retrieving mounted
+filesystem volumes.")
     (license license:expat)))
 
 (define-public go-github-com-temoto-robotstxt
@@ -9171,7 +10275,12 @@ goldmark(@url{http://github.com/yuin/goldmark,http://github.com/yuin/goldmark}).
         (sha256
           (base32 "172s7sv5bgc40x81k18hypf9c4n8hn9v5w5zwyr4mi5prbavqcci"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/ziutek/mymysql"))
+    (arguments
+     '(#:import-path "github.com/ziutek/mymysql"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
     (home-page "https://github.com/ziutek/mymysql")
     (synopsis "MyMySQL v1.5.4 (2015-01-08)")
     (description
@@ -9841,7 +10950,8 @@ transformations, and locale-specific text handling.")
                  #:directories? #t)))))))
     (propagated-inputs
      (list go-github-com-yuin-goldmark
-           go-golang-org-x-mod-next
+           ;go-golang-org-x-mod-next
+           go-golang-org-x-mod
            go-golang-org-x-net-next
            go-golang-org-x-sync-next
            go-golang-org-x-sys-next
@@ -11256,7 +12366,7 @@ SHOULD NOT be used for new applications.")
       ("go-golang-org-x-crypto" . ,(const go-golang-org-x-crypto-next))
       ("go-golang-org-x-image" . ,(const go-golang-org-x-image-next))
       ("go-golang-org-x-lint" . ,(const go-golang-org-x-lint-next))
-      ("go-golang-org-x-mod" . ,(const go-golang-org-x-mod-next))
+      ;("go-golang-org-x-mod" . ,(const go-golang-org-x-mod-next))
       ("go-golang-org-x-net" . ,(const go-golang-org-x-net-next))
       ;("go-golang-org-x-oauth2" . ,(const go-golang-org-x-oauth2-next))
       ("go-golang-org-x-sync" . ,(const go-golang-org-x-sync-next))
