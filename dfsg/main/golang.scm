@@ -17,7 +17,6 @@
 
 (define-module (dfsg main golang)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix build utils)
   #:use-module (guix git-download)
   #:use-module (guix hg-download)
   #:use-module (guix download)
@@ -30,6 +29,7 @@
   #:use-module (gnu packages check)
   #:use-module (gnu packages databases)
   #:use-module (gnu packages golang)
+  #:use-module (gnu packages linux)
   #:use-module (gnu packages node)
   #:use-module (gnu packages ssh)
   #:use-module (gnu packages sqlite)
@@ -2559,6 +2559,29 @@ reasonably portable interface, but doesn't go out of its way to abstract away
 every little platform detail.")
     (license license:bsd-3)))
 
+(define-public go-github-com-emicklei-go-restful-v3
+  (package
+    (name "go-github-com-emicklei-go-restful-v3")
+    (version "3.8.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/emicklei/go-restful")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1d10zb3cbwid4qn169xh9kdx7p48s2jw61sqnf5l037cvr1prc43"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/emicklei/go-restful/v3"))
+    (home-page "https://github.com/emicklei/go-restful")
+    (synopsis "go-restful")
+    (description
+     "Package restful , a lean package for creating REST-style WebServices without
+magic.")
+    (license license:expat)))
+
 (define-public go-github-com-envoyproxy-go-control-plane
   (package
     (name "go-github-com-envoyproxy-go-control-plane")
@@ -2659,6 +2682,56 @@ validate such constraints.")
      "An explosive companion to the
 @url{https://www.github.com/blevesearch/bleve,bleve indexing library}")
     (license license:expat)))
+
+(define-public go-github-com-evanphx-json-patch
+  (package
+    (name "go-github-com-evanphx-json-patch")
+    (version "4.12.0+incompatible")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/evanphx/json-patch")
+                    (commit (string-append "v" (go-version->git-ref version)))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1z0bmsvzm4nchfbi7h9pdvkfgrnf0fvhn39pgb0q2az8cql58q56"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/evanphx/json-patch"))
+    (propagated-inputs
+     (list go-github-com-pkg-errors))
+    (home-page "https://github.com/evanphx/json-patch")
+    (synopsis "JSON-Patch")
+    (description
+     "@@code{jsonpatch} is a library which provides functionality for both applying
+@@url{http://tools.ietf.org/html/rfc6902,RFC6902 JSON patches} against
+documents, as well as for calculating & applying
+@@url{https://tools.ietf.org/html/rfc7396,RFC7396 JSON merge patches}.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-evanphx-json-patch-v5
+  (package
+    (name "go-github-com-evanphx-json-patch-v5")
+    (version "5.6.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/evanphx/json-patch")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0xrqha67ps24wmzx4yv87pkl25hk4v7lvcga0f18928jzzk4wbvk"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/evanphx/json-patch/v5"))
+    (propagated-inputs `(("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
+                         ("go-github-com-jessevdk-go-flags" ,go-github-com-jessevdk-go-flags)))
+    (home-page "https://github.com/evanphx/json-patch")
+    (synopsis #f)
+    (description #f)
+    (license license:bsd-3)))
 
 (define-public go-github-com-fanliao-go-promise
   (package
@@ -2886,6 +2959,8 @@ Canonical CBOR, float64->32->16, and duplicate map key detection.")
           (base32 "0skwmimpy7hlh7pva2slpcplnm912rp3igs98xnqmn859kwa5v8g"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/ghodss/yaml"))
+    (propagated-inputs
+     (list go-gopkg-in-yaml-v2))
     (home-page "https://github.com/ghodss/yaml")
     (synopsis "YAML marshaling and unmarshaling support for Go")
     (description
@@ -3676,6 +3751,52 @@ readability for humans and simplicity of computer parsing.  It is most commonly
 used as a more human friendly alternative to JSON for structured logging.")
     (license license:expat)))
 
+(define-public go-github-com-go-logr-logr
+  (package
+    (name "go-github-com-go-logr-logr")
+    (version "1.2.3")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/go-logr/logr")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1148cph7c9qxjvng94a90szpbm2m5dj4pvllbsjqvgqj5j8prwip"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/go-logr/logr"))
+    (home-page "https://github.com/go-logr/logr")
+    (synopsis "A minimal logging API for Go")
+    (description
+     "Package logr defines a general-purpose logging API and abstract interfaces to
+back that API. Packages in the Go ecosystem can depend on this package, while
+callers can implement logging with whatever backend is appropriate.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-google-btree
+  (package
+    (name "go-github-com-google-btree")
+    (version "1.0.1")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/google/btree")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0fv5577bmpf2gkzw8z271q8mn3x6fqyzqjrbzm580bqld0a1xwnl"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/google/btree"))
+    (home-page "https://github.com/google/btree")
+    (synopsis "BTree implementation for Go")
+    (description
+     "Package btree implements in-memory B-Trees of arbitrary degree.")
+    (license license:asl2.0)))
+
 (define-public go-github-com-googleapis-gax-go-v2
   (package
     (name "go-github-com-googleapis-gax-go-v2")
@@ -3704,6 +3825,43 @@ used as a more human friendly alternative to JSON for structured logging.")
       "Package gax contains a set of modules which aid the development of APIs for
 clients and servers based on gRPC and Google API conventions.")
     (license license:bsd-3)))
+
+(define-public go-github-com-google-gnostic
+  (package
+    (name "go-github-com-google-gnostic")
+    (version "0.5.7-v3refs")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/google/gnostic")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1ma3mdlhbdalxlc0l82j4lsynqz19d7hp09rim3npbkj9y4wgq4i"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/google/gnostic"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
+    (propagated-inputs `(("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
+                         ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
+                         ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
+                         ("go-google-golang-org-genproto" ,go-google-golang-org-genproto)
+                         ("go-golang-org-x-xerrors" ,go-golang-org-x-xerrors)
+                         ("go-golang-org-x-tools" ,go-golang-org-x-tools)
+                         ;("go-github-com-stoewer-go-strcase" ,go-github-com-stoewer-go-strcase)
+                         ("go-github-com-kr-pretty" ,go-github-com-kr-pretty)
+                         ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
+                         ;("go-github-com-docopt-docopt-go" ,go-github-com-docopt-docopt-go)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)))
+    (home-page "https://github.com/google/gnostic")
+    (synopsis "⨁ gnostic")
+    (description
+     "Gnostic is a tool for building better REST APIs through knowledge.")
+    (license license:asl2.0)))
 
 (define-public go-github-com-google-go-cmp
   (deprecated-package "go-github-com-google-go-cmp" go-github-com-google-go-cmp-cmp))
@@ -4973,7 +5131,7 @@ the Rust ABI defined at
 (define-public go-github-com-insomniacslk-dhcp
   (package
     (name "go-github-com-insomniacslk-dhcp")
-    (version "0.0.0-20211209223715-7d93572ebe8e")
+    (version "0.0.0-20221215072855-de60144f33f8")
     (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -4982,10 +5140,32 @@ the Rust ABI defined at
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "1f4bxpmy4i0a3r5r233brh4j2zdpjw9ya51wl52yzy57401nc2nd"))))
+                "1203aiphxvwa1jx6p1d1d6x9ba8x9ad36751hm5p00s2pv71l215"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/insomniacslk/dhcp"))
+     (list
+       #:import-path "github.com/insomniacslk/dhcp"
+       #:phases
+       #~(modify-phases %standard-phases
+           (replace 'build
+             (lambda* (#:key import-path build-flags #:allow-other-keys)
+               (for-each
+                 (lambda (directory)
+                   ((assoc-ref %standard-phases 'build)
+                    #:build-flags build-flags
+                    #:import-path (string-append import-path directory)))
+                 (list "/dhcpv4"
+                       "/dhcpv6"))))
+           (replace 'check
+             (lambda* (#:key tests? import-path #:allow-other-keys)
+               (for-each
+                 (lambda (directory)
+                   ((assoc-ref %standard-phases 'check)
+                    #:tests? tests?
+                    #:import-path (string-append import-path directory)))
+                 (list "/dhcpv4"
+                       "/dhcpv6"))))
+           )))
     (propagated-inputs
      (list go-golang-org-x-sys
            go-golang-org-x-net
@@ -4997,7 +5177,8 @@ the Rust ABI defined at
            go-github-com-mdlayher-ethernet
            go-github-com-jsimonetti-rtnetlink
            go-github-com-hugelgupf-socketpair
-           go-github-com-fanliao-go-promise))
+           ;go-github-com-fanliao-go-promise
+           ))
     (home-page "https://github.com/insomniacslk/dhcp")
     (synopsis "dhcp")
     (description
@@ -5469,24 +5650,24 @@ functions may be called concurrently with themselves and each other.")
 (define-public go-github-com-jsimonetti-rtnetlink
   (package
     (name "go-github-com-jsimonetti-rtnetlink")
-    (version "1.2.3")
+    (version "1.1.2-0.20220408201609-d380b505068b")
     (source (origin
               (method git-fetch)
               (uri (git-reference
-                     (url "https://github.com/jsimonetti/rtnetlink")
-                     (commit (string-append "v" version))))
+                    (url "https://github.com/jsimonetti/rtnetlink")
+                    (commit (go-version->git-ref version))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "17zx9ja3n89fyjvlm6jz53kimqbdb9jx3m73ikccnsqclr2ff240"))))
+                "1kjq8ddr6rm1bfr4aa21gr7zdiijs8vwsgajr16i6wzj0qpyqxy4"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/jsimonetti/rtnetlink"))
-    (propagated-inputs
-     (list go-golang-org-x-sys
-           go-github-com-mdlayher-netlink
-           go-github-com-google-go-cmp
-           go-github-com-cilium-ebpf))
+     `(#:go ,go-1.20
+       #:import-path "github.com/jsimonetti/rtnetlink"))
+    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-github-com-mdlayher-netlink" ,go-github-com-mdlayher-netlink)
+                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
+                         ("go-github-com-cilium-ebpf" ,go-github-com-cilium-ebpf)))
     (home-page "https://github.com/jsimonetti/rtnetlink")
     (synopsis "rtnetlink")
     (description
@@ -6678,6 +6859,27 @@ the @url{http://snowball.tartarus.org/,Snowball stemmer} for natural language
 processing.")
     (license license:expat)))
 
+(define-public go-github-com-kortschak-wol
+  (package
+    (name "go-github-com-kortschak-wol")
+    (version "0.0.0-20200729010619-da482cc4850a")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/kortschak/wol")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "16qyy1c1q5cxcnwdzl69v49pjmyxha4i88fsg0g83gwdyapzsyln"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/kortschak/wol"))
+    (home-page "https://github.com/kortschak/wol")
+    (synopsis "Installation")
+    (description "Package wol provides a Wake On LAN function.")
+    (license license:bsd-3)))
+
 (define-public go-github-com-kyokomi-emoji
   (package
     (name "go-github-com-kyokomi-emoji")
@@ -7245,29 +7447,58 @@ capabilities.")
 II frames and IEEE 802.1Q VLAN tags.")
     (license license:expat)))
 
-(define-public go-github-com-mdlayher-netlink
+(define-public go-github-com-mdlayher-genetlink
   (package
-    (name "go-github-com-mdlayher-netlink")
-    (version "1.7.0")
+    (name "go-github-com-mdlayher-genetlink")
+    (version "1.2.0")
     (source (origin
               (method git-fetch)
               (uri (git-reference
-                     (url "https://github.com/mdlayher/netlink")
-                     (commit (string-append "v" version))))
+                    (url "https://github.com/mdlayher/genetlink")
+                    (commit (string-append "v" version))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "016cgpzcf91jggkh3ym10pikx69lj5kmk8pngy7bnbi2qn07v0jb"))))
+                "019my1wcvvl2fx6kmazik6skwr5ang1mcasichcdp42ma0mb1wgc"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/mdlayher/netlink"))
-    (propagated-inputs
-     (list go-golang-org-x-sync
-           go-golang-org-x-sys
-           go-golang-org-x-net
-           go-github-com-mdlayher-socket
-           go-github-com-josharian-native
-           go-github-com-google-go-cmp))
+     `(#:go ,go-1.20
+       #:tests? #f      ; Tests need network access
+       #:import-path "github.com/mdlayher/genetlink"))
+    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-github-com-mdlayher-netlink" ,go-github-com-mdlayher-netlink)
+                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)))
+    (home-page "https://github.com/mdlayher/genetlink")
+    (synopsis "genetlink")
+    (description
+     "Package genetlink implements generic netlink interactions and data types.")
+    (license license:expat)))
+
+(define-public go-github-com-mdlayher-netlink
+  (package
+    (name "go-github-com-mdlayher-netlink")
+    (version "1.7.1")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/mdlayher/netlink")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0lfpnssvqmkd41bc3yqkblf7h3is4aaxqf7hky17018ph7ijay2b"))))
+    (build-system go-build-system)
+    (arguments
+     `(#:go ,go-1.20
+       #:import-path "github.com/mdlayher/netlink"))
+    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-github-com-mdlayher-socket" ,go-github-com-mdlayher-socket)
+                         ("go-github-com-josharian-native" ,go-github-com-josharian-native)
+                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)))
+    (native-inputs
+     (list iproute))
     (home-page "https://github.com/mdlayher/netlink")
     (synopsis "netlink")
     (description
@@ -7289,7 +7520,12 @@ II frames and IEEE 802.1Q VLAN tags.")
                 "0bryji73rn3flqa2d803js7lpbyl3b95mlm9y3h49k8gqxv3gv4j"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/mdlayher/packet"))
+     `(;#:go ,go-1.18
+       #:import-path "github.com/mdlayher/packet"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
     (propagated-inputs
      (list go-golang-org-x-sync
            go-golang-org-x-sys
@@ -7318,7 +7554,11 @@ II frames and IEEE 802.1Q VLAN tags.")
                 "04qq2z9gb9rhky62cp0zfd4y16cvjgwyjhk0vpnrxzr90ajyjq46"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/mdlayher/raw"))
+     '(#:import-path "github.com/mdlayher/raw"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
     (propagated-inputs
      (list go-golang-org-x-sync
            go-github-com-mdlayher-socket
@@ -7333,28 +7573,51 @@ II frames and IEEE 802.1Q VLAN tags.")
 network interface.")
     (license license:expat)))
 
-(define-public go-github-com-mdlayher-socket
+(define-public go-github-com-mdlayher-sdnotify
   (package
-    (name "go-github-com-mdlayher-socket")
-    (version "0.4.0")
+    (name "go-github-com-mdlayher-sdnotify")
+    (version "1.0.0")
     (source (origin
               (method git-fetch)
               (uri (git-reference
-                     (url "https://github.com/mdlayher/socket")
-                     (commit (string-append "v" version))))
+                    (url "https://github.com/mdlayher/sdnotify")
+                    (commit (string-append "v" version))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "1br4wjpjgncz1gcjvc7188ri48ipf148yi3zrd0jfdhqia2d320k"))))
+                "0nxpbjba4n4vfkwfy9q2x5djv8agfnvd6pp7l7a6d6ssl2vhkcrv"))))
     (build-system go-build-system)
     (arguments
-     `(#:go ,go-1.19
+     '(#:import-path "github.com/mdlayher/sdnotify"))
+    (propagated-inputs `(("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)))
+    (home-page "https://github.com/mdlayher/sdnotify")
+    (synopsis "sdnotify")
+    (description
+     "Package sdnotify implements systemd readiness notifications as described in
+@@url{https://www.freedesktop.org/software/systemd/man/sd_notify.html,https://www.freedesktop.org/software/systemd/man/sd_notify.html}.")
+    (license license:expat)))
+
+(define-public go-github-com-mdlayher-socket
+  (package
+    (name "go-github-com-mdlayher-socket")
+    (version "0.4.1")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/mdlayher/socket")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1lb20cnlml61j4n666bbjpzaxb5r8c9w3xw534ax0g6zm9hnk17m"))))
+    (build-system go-build-system)
+    (arguments
+     `(#:go ,go-1.20
        #:import-path "github.com/mdlayher/socket"))
-    (propagated-inputs
-     (list go-golang-org-x-sys
-           go-golang-org-x-sync
-           go-golang-org-x-net
-           go-github-com-google-go-cmp))
+    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-golang-org-x-sync" ,go-golang-org-x-sync)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)))
     (home-page "https://github.com/mdlayher/socket")
     (synopsis "socket")
     (description
@@ -7624,6 +7887,28 @@ less-is-more principle, by presenting a small, clean interface.")
 object storage.")
     (license license:asl2.0)))
 
+(define-public go-github-com-mitchellh-go-ps
+  (package
+    (name "go-github-com-mitchellh-go-ps")
+    (version "1.0.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/mitchellh/go-ps")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0ipcbz66x7q8xczi7cyfq06y7n7v0syvkp730vn9jrn7s8f5ag0z"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/mitchellh/go-ps"))
+    (home-page "https://github.com/mitchellh/go-ps")
+    (synopsis "Process List Library for Go")
+    (description
+     "ps provides an API for finding and listing processes in a platform-agnostic way.")
+    (license license:expat)))
+
 (define-public go-github-com-modern-go-concurrent
   (package
     (name "go-github-com-modern-go-concurrent")
@@ -7733,6 +8018,27 @@ with no dependencies.")
 actions.  States describe which actions are possible, and with what probability
 they should occur.  Actions mutate the context and transition to another state.")
     (license license:asl2.0)))
+
+(define-public go-github-com-munnerz-goautoneg
+  (package
+    (name "go-github-com-munnerz-goautoneg")
+    (version "0.0.0-20191010083416-a7dc8b61c822")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/munnerz/goautoneg")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1m4v6bw6yf1g0kvpc46isjp0qfhx2y8gnvlnyjf637jy64613mgg"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/munnerz/goautoneg"))
+    (home-page "https://github.com/munnerz/goautoneg")
+    (synopsis #f)
+    (description #f)
+    (license license:bsd-3)))
 
 (define-public go-github-com-neelance-astrewrite
   (package
@@ -7986,6 +8292,30 @@ implemented.")
 (@url{https://www.elastic.co/products/elasticsearch,https://www.elastic.co/products/elasticsearch}).")
     (license license:expat)))
 
+(define-public go-github-com-peterbourgon-ff-v3
+  (package
+    (name "go-github-com-peterbourgon-ff-v3")
+    (version "3.1.2")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/peterbourgon/ff")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1i3kczf0afv3ba0a6g02wg5l7rk4agid3d85lgamyy13v2lzif7k"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/peterbourgon/ff/v3"))
+    (propagated-inputs `(("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
+                         ("go-github-com-pelletier-go-toml" ,go-github-com-pelletier-go-toml)))
+    (home-page "https://github.com/peterbourgon/ff")
+    (synopsis "ff")
+    (description
+     "Package ff is a flags-first helper package for configuring programs.")
+    (license license:asl2.0)))
+
 (define-public go-github-com-peterh-liner
   (package
     (name "go-github-com-peterh-liner")
@@ -8054,6 +8384,33 @@ help improve the encoding/decoding performance of some binary protocols.")
     (description
       "Package lz4 implements reading and writing lz4 compressed data.")
     (license license:bsd-3)))
+
+(define-public go-github-com-pkg-sftp
+  (package
+    (name "go-github-com-pkg-sftp")
+    (version "1.13.4")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/pkg/sftp")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "18vp6anhczlkw247wy427gkri47y1h4nqbrbvqsdb170h878d6c6"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/pkg/sftp"))
+    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ("go-github-com-kr-fs" ,go-github-com-kr-fs)))
+    (home-page "https://github.com/pkg/sftp")
+    (synopsis "sftp")
+    (description
+     "Package sftp implements the SSH File Transfer Protocol as described in
+@@url{https://tools.ietf.org/html/draft-ietf-secsh-filexfer-02,https://tools.ietf.org/html/draft-ietf-secsh-filexfer-02}")
+    (license license:bsd-2)))
 
 ;; ready to upstream
 (define-public go-github-com-pquerna-cachecontrol
@@ -8939,6 +9296,29 @@ Go.  It supports many data structures including kv, list, hash, zset, set.")
     (description "This package handles Redis RDB format in Golang.")
     (license license:expat)))
 
+(define-public go-github-com-skip2-go-qrcode
+  (package
+    (name "go-github-com-skip2-go-qrcode")
+    (version "0.0.0-20200617195104-da1b6568686e")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/skip2/go-qrcode")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0pghd6y2x8a5fqy4rjn4d8j5jcslb236naycdza5an7vyvinsgs9"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f
+       ;; conversion from int to string yields a string of one rune, not a string of digits (did you mean fmt.Sprint(x)?)
+       #:import-path "github.com/skip2/go-qrcode"))
+    (home-page "https://github.com/skip2/go-qrcode")
+    (synopsis "go-qrcode")
+    (description "Package qrcode implements a QR Code encoder.")
+    (license license:expat)))
+
 (define-public go-github-com-smartystreets-go-aws-auth
   (package
     (name "go-github-com-smartystreets-go-aws-auth")
@@ -9501,6 +9881,119 @@ for examples.")
 filesystem volumes.")
     (license license:expat)))
 
+(define-public go-github-com-tailscale-golang-x-crypto
+  (package
+    (name "go-github-com-tailscale-golang-x-crypto")
+    (version "v0.0.0-20221102133106-bc99ab8c2d17")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/tailscale/golang-x-crypto")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0000000000000000000000000000000004aq2mmhbaj3x1ckrcbb"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/tailscale/golang-x-crypto"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
+    (propagated-inputs `(("go-golang-org-x-text" ,go-golang-org-x-text)
+                         ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+                         ("go-golang-org-x-term" ,go-golang-org-x-term)
+                         ("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)))
+    (home-page "https://github.com/tailscale/golang-x-crypto")
+    (synopsis "golang-x-crypto")
+    (description
+     "This is a temporary dev fork of Go's @@code{golang.org/x/crypto} module, but
+only for @@code{ssh} development.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-tailscale-goupnp
+  (package
+    (name "go-github-com-tailscale-goupnp")
+    (version "1.0.1-0.20210804011211-c64d0f06ea05")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/tailscale/goupnp")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "10nkgf29jwg8qp2lkxgnh3cf2jiwjc2pbga03rdkmhiyhrqhj4rx"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/tailscale/goupnp"))
+    (propagated-inputs `(("go-golang-org-x-sync" ,go-golang-org-x-sync)))
+    (home-page "https://github.com/tailscale/goupnp")
+    (synopsis "tailscale/goupnp")
+    (description
+     "goupnp is an implementation of a client for various UPnP services.")
+    (license license:bsd-2)))
+
+(define-public go-github-com-tailscale-netlink
+  (package
+    (name "go-github-com-tailscale-netlink")
+    (version "1.1.1-0.20211101221916-cabfb018fe85")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/tailscale/netlink")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0brf9k2ynla12gn0237gll6wdi1zk49mxfgwdi4cqccvlfmbkhkc"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f      ; Tests need network access
+       #:import-path "github.com/vishvananda/netlink"))
+     ;'(#:import-path "github.com/tailscale/netlink"))
+    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-github-com-vishvananda-netns" ,go-github-com-vishvananda-netns)))
+    (home-page "https://github.com/tailscale/netlink")
+    (synopsis "netlink - netlink library for go")
+    (description
+     "Package netlink provides a simple library for netlink.  Netlink is the interface
+a user-space program in linux uses to communicate with the kernel.  It can be
+used to add and remove interfaces, set up ip addresses and routes, and confiugre
+ipsec.  Netlink communication requires elevated privileges, so in most cases
+this code needs to be run as root.  The low level primitives for netlink are
+contained in the nl subpackage.  This package attempts to provide a high-level
+interface that is loosly modeled on the iproute2 cli.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-tcnksm-go-httpstat
+  (package
+    (name "go-github-com-tcnksm-go-httpstat")
+    (version "0.2.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/tcnksm/go-httpstat")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "18jn40ra97waxx1mf23pkh6rq46y0nqd7vi3zcx9cwc39zqaf9bc"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f      ; Tests require network access
+       #:import-path "github.com/tcnksm/go-httpstat"))
+    (home-page "https://github.com/tcnksm/go-httpstat")
+    (synopsis "go-httpstat")
+    (description
+     "Package httpstat traces HTTP latency infomation (DNSLookup, TCP Connection and
+so on) on any golang HTTP request.  It uses `httptrace` package.  Just create
+`go-httpstat` powered `context.Context` and give it your `http.Request` (no big
+code modification is required).")
+    (license license:expat)))
+
 (define-public go-github-com-temoto-robotstxt
   (package
     (name "go-github-com-temoto-robotstxt")
@@ -9845,28 +10338,175 @@ rounding for conversions.  IEEE 754-2008 refers to this 16-bit floating-point
 format as binary16.")
     (license license:expat)))
 
-(define-public go-github-com-u-root-uio
+(define-public go-github-com-u-root-u-root
   (package
-    (name "go-github-com-u-root-uio")
-    (version "0.0.0-20220204230159-dac05f7d2cb4")
+    (name "go-github-com-u-root-u-root")
+    (version "0.9.1-0.20230109201855-948a78c969ad")
     (source (origin
               (method git-fetch)
               (uri (git-reference
-                     (url "https://github.com/u-root/uio")
-                     (commit (go-version->git-ref version))))
+                    (url "https://github.com/u-root/u-root")
+                    (commit (go-version->git-ref version))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "1i2s3m0jcg420zx1vnf1qg6fmcmkx55h51bmppak6sdwm73k20sy"))))
+                "157539vjqkw5r7p8lx0xdykrga1ivwdpv47dywn71swamy02v7jw"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "github.com/u-root/uio"))
-    (propagated-inputs
-     (list go-golang-org-x-sys))
+     '(#:tests? #f      ; Tests seem to hang forever
+       #:import-path "github.com/u-root/u-root"))
+    (propagated-inputs `(("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
+                         ("go-golang-org-x-xerrors" ,go-golang-org-x-xerrors)
+                         ("go-golang-org-x-sync" ,go-golang-org-x-sync)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-golang-org-x-mod" ,go-golang-org-x-mod)
+                         ("go-github-com-vishvananda-netns" ,go-github-com-vishvananda-netns)
+                         ("go-github-com-u-root-uio" ,go-github-com-u-root-uio)
+                         ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+                         ;("go-github-com-pkg-term" ,go-github-com-pkg-term)
+                         ("go-github-com-mdlayher-raw" ,go-github-com-mdlayher-raw)
+                         ("go-github-com-mdlayher-netlink" ,go-github-com-mdlayher-netlink)
+                         ("go-github-com-mdlayher-ethernet" ,go-github-com-mdlayher-ethernet)
+                         ;("go-github-com-mattn-go-tty" ,go-github-com-mattn-go-tty)
+                         ("go-github-com-mattn-go-runewidth" ,go-github-com-mattn-go-runewidth)
+                         ("go-github-com-mattn-go-isatty" ,go-github-com-mattn-go-isatty)
+                         ("go-github-com-mattn-go-colorable" ,go-github-com-mattn-go-colorable)
+                         ;("go-github-com-kaey-framebuffer" ,go-github-com-kaey-framebuffer)
+                         ("go-github-com-jsimonetti-rtnetlink" ,go-github-com-jsimonetti-rtnetlink)
+                         ("go-github-com-google-goterm" ,go-github-com-google-goterm)
+                         ("go-github-com-anmitsu-go-shlex" ,go-github-com-anmitsu-go-shlex)
+                         ;("go-src-elv-sh" ,go-src-elv-sh)
+                         ;("go-pack-ag-tftp" ,go-pack-ag-tftp)
+                         ;("go-mvdan-cc-sh-v3" ,go-mvdan-cc-sh-v3)
+                         ("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
+                         ("go-golang-org-x-tools" ,go-golang-org-x-tools)
+                         ("go-golang-org-x-text" ,go-golang-org-x-text)
+                         ("go-golang-org-x-term" ,go-golang-org-x-term)
+                         ("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+                         ;("go-github-com-vtolstov-go-ioctl" ,go-github-com-vtolstov-go-ioctl)
+                         ("go-github-com-vishvananda-netlink" ,go-github-com-vishvananda-netlink)
+                         ("go-github-com-ulikunitz-xz" ,go-github-com-ulikunitz-xz)
+                         ;("go-github-com-u-root-iscsinl" ,go-github-com-u-root-iscsinl)
+                         ;("go-github-com-u-root-gobusybox-src" ,go-github-com-u-root-gobusybox-src)
+                         ("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
+                         ;("go-github-com-safchain-ethtool" ,go-github-com-safchain-ethtool)
+                         ;("go-github-com-rekby-gpt" ,go-github-com-rekby-gpt)
+                         ;("go-github-com-rck-unit" ,go-github-com-rck-unit)
+                         ("go-github-com-pierrec-lz4-v4" ,go-github-com-pierrec-lz4-v4)
+                         ;("go-github-com-pborman-getopt-v2" ,go-github-com-pborman-getopt-v2)
+                         ;("go-github-com-orangecms-go-framebuffer" ,go-github-com-orangecms-go-framebuffer)
+                         ;("go-github-com-nanmu42-limitio" ,go-github-com-nanmu42-limitio)
+                         ;("go-github-com-kr-pty" ,go-github-com-kr-pty)
+                         ("go-github-com-klauspost-pgzip" ,go-github-com-klauspost-pgzip)
+                         ("go-github-com-klauspost-compress" ,go-github-com-klauspost-compress)
+                         ("go-github-com-kevinburke-ssh-config" ,go-github-com-kevinburke-ssh-config)
+                         ;("go-github-com-intel-go-cpuid" ,go-github-com-intel-go-cpuid)
+                         ("go-github-com-insomniacslk-dhcp" ,go-github-com-insomniacslk-dhcp)
+                         ("go-github-com-google-uuid" ,go-github-com-google-uuid)
+                         ;("go-github-com-google-goexpect" ,go-github-com-google-goexpect)
+                         ;("go-github-com-google-go-tpm" ,go-github-com-google-go-tpm)
+                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
+                         ;("go-github-com-gojuno-minimock-v3" ,go-github-com-gojuno-minimock-v3)
+                         ("go-github-com-gliderlabs-ssh" ,go-github-com-gliderlabs-ssh)
+                         ("go-github-com-dustin-go-humanize" ,go-github-com-dustin-go-humanize)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ("go-github-com-creack-pty" ,go-github-com-creack-pty)
+                         ;("go-github-com-cenkalti-backoff-v4" ,go-github-com-cenkalti-backoff-v4)
+                         ;("go-github-com-c-bata-go-prompt" ,go-github-com-c-bata-go-prompt)
+                         ;("go-github-com-beevik-ntp" ,go-github-com-beevik-ntp)
+                         ))
+    (home-page "https://github.com/u-root/u-root")
+    (synopsis "u-root")
+    (description "u-root embodies four different projects.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-u-root-uio
+  (package
+    (name "go-github-com-u-root-uio")
+    (version "0.0.0-20221210192040-301ac5150d9e")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/u-root/uio")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1h11mhxgxwyvmlm8a2j9n0lg8d6scblz9fhqpk5ljkc6407ywsqy"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "github.com/u-root/uio"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
+    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
     (home-page "https://github.com/u-root/uio")
-    (synopsis #f)
+    (synopsis "uio")
     (description #f)
     (license license:bsd-3)))
+
+(define-public go-github-com-vishvananda-netlink
+  (package
+    (name "go-github-com-vishvananda-netlink")
+    (version "1.1.1-0.20211118161826-650dca95af54")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/vishvananda/netlink")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "18j88lzynik932i4h4qrpdwz9w5667sb845kh33zsl10ywyipx74"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f      ; Tests need network access
+       #:import-path "github.com/vishvananda/netlink"))
+    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-github-com-vishvananda-netns" ,go-github-com-vishvananda-netns)))
+    (home-page "https://github.com/vishvananda/netlink")
+    (synopsis "netlink - netlink library for go")
+    (description
+     "Package netlink provides a simple library for netlink.  Netlink is the interface
+a user-space program in linux uses to communicate with the kernel.  It can be
+used to add and remove interfaces, set up ip addresses and routes, and confiugre
+ipsec.  Netlink communication requires elevated privileges, so in most cases
+this code needs to be run as root.  The low level primitives for netlink are
+contained in the nl subpackage.  This package attempts to provide a high-level
+interface that is loosly modeled on the iproute2 cli.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-vishvananda-netns
+  (package
+    (name "go-github-com-vishvananda-netns")
+    (version "0.0.0-20211101163701-50045581ed74")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/vishvananda/netns")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0kam780m036mk77fmc0w0z6qz4b5awkllcd1dps71zd1n82mr407"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f      ; Tests need network access
+       #:import-path "github.com/vishvananda/netns"))
+    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
+    (home-page "https://github.com/vishvananda/netns")
+    (synopsis "netns - network namespaces in go")
+    (description
+     "Package netns allows ultra-simple network namespace handling.  NsHandles can be
+retrieved and set.  Note that the current namespace is thread local so actions
+that set and reset namespaces should use LockOSThread to make sure the namespace
+doesn't change due to a goroutine switch.  It is best to close NsHandles when
+you are done with them.  This can be accomplished via a `defer ns.Close()` on
+the handle.  Changing namespaces requires elevated privileges, so in most cases
+this code needs to be run as root.")
+    (license license:asl2.0)))
 
 (define-public go-github-com-xanzy-go-gitlab
   (package
@@ -10286,6 +10926,65 @@ goldmark(@url{http://github.com/yuin/goldmark,http://github.com/yuin/goldmark}).
     (description
       "Sorry for my poor English.  If you can help with improving the English in this
 documentation, please contact me.")
+    (license license:bsd-3)))
+
+(define-public go-go4-org-mem
+  (package
+    (name "go-go4-org-mem")
+    (version "0.0.0-20210711025021-927187094b94")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/go4org/mem")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0rcijgwf1xr1rwi7sqw17mx5kwy6ykfvca1ybw4rdyr5ldprjg4y"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "go4.org/mem"))
+    (home-page "https://go4.org/mem")
+    (synopsis "go4.org/mem")
+    (description
+     "Package mem provides the mem.RO type that allows you to cheaply pass & access
+either a read-only []byte or a string.")
+    (license license:asl2.0)))
+
+(define-public go-go4-org-netipx
+  (package
+    (name "go-go4-org-netipx")
+    (version "0.0.0-20220725152314-7e7bdc8411bf")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/go4org/netipx")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0s9hnl1n6bfvwyxcgzrx4vdfm64ajiix9nnwx60xmh248h8f4z9a"))))
+    (build-system go-build-system)
+    (arguments
+     `(#:tests? #f      ; TODO
+       #:go ,go-1.20
+       #:import-path "go4.org/netipx"))
+    (propagated-inputs `(("go-golang-org-x-tools" ,go-golang-org-x-tools)
+                         ("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-golang-org-x-mod" ,go-golang-org-x-mod)
+                         ("go-golang-org-x-exp" ,go-golang-org-x-exp)
+                         ;("go-go4-org-unsafe-assume-no-moving-gc" ,go-go4-org-unsafe-assume-no-moving-gc)
+                         ("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)
+                         ("go-honnef-co-go-tools" ,go-honnef-co-go-tools)
+                         ;("go-github-com-dvyukov-go-fuzz" ,go-github-com-dvyukov-go-fuzz)
+                         ))
+    ;(native-inputs
+    ; (list go-go4-org-intern))
+    (home-page "https://go4.org/netipx")
+    (synopsis "netipx")
+    (description
+     "Package netipx contains code and types that were left behind when the old
+inet.af/netaddr package moved to the standard library in Go 1.18 as net/netip.")
     (license license:bsd-3)))
 
 (define-public go-go4-org-readerutil
@@ -11177,7 +11876,12 @@ It provides APIs for interacting with App Engine services.")
         (sha256
           (base32 "0fk3n2f6x3pyrfx2nn5ws88sp16yr42awc1n5dsfkzx47w9grczi"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "google.golang.org/genproto"))
+    (arguments
+     '(#:import-path "google.golang.org/genproto"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
     (propagated-inputs
      (list ;go-google-golang-org-protobuf
         ;go-google-golang-org-grpc
@@ -11208,22 +11912,28 @@ interacting with Google's gRPC APIs.")
         (sha256
           (base32 "10f9363yir4l7rnj5z897qk79si7913vsyzy4nw5xhxjhxsppji8"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "google.golang.org/grpc"))
+    (arguments
+     '(#:import-path "google.golang.org/grpc"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
     (propagated-inputs
-     (list ;go-google-golang-org-protobuf
-        ;go-google-golang-org-genproto
-        ;go-golang-org-x-sys
-        ;go-golang-org-x-oauth2
-        ;go-golang-org-x-net
-        ;go-github-com-google-uuid
-        ;go-github-com-google-go-cmp
-        ;go-github-com-golang-protobuf
-        ;go-github-com-golang-glog
-        ;go-github-com-envoyproxy-go-control-plane
-        ;go-github-com-cncf-xds-go
-        ;go-github-com-cncf-udpa-go
-        ;go-github-com-cespare-xxhash
-        ))
+     (list go-google-golang-org-protobuf
+           go-google-golang-org-genproto
+           go-golang-org-x-text
+           go-golang-org-x-sys
+           ;go-golang-org-x-oauth2
+           go-golang-org-x-net
+           ;go-github-com-google-uuid
+           ;go-github-com-google-go-cmp
+           go-github-com-golang-protobuf
+           ;go-github-com-golang-glog
+           ;go-github-com-envoyproxy-go-control-plane
+           ;go-github-com-cncf-xds-go
+           ;go-github-com-cncf-udpa-go
+           ;go-github-com-cespare-xxhash
+           ))
     (home-page "https://google.golang.org/grpc")
     (synopsis "gRPC-Go")
     (description "Package grpc implements an RPC system called gRPC.")
@@ -11424,6 +12134,33 @@ that is both human and machine readable.  It is modeled after the standard
 library's io and net/http packages.")
     (license license:asl2.0)))
 
+(define-public go-gopkg-in-inf-v0
+  (package
+    (name "go-gopkg-in-inf-v0")
+    (version "0.9.1")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://gopkg.in/inf.v0")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "00k5iqjcp371fllqxncv7jkf80hn1zww92zm78cclbcn4ybigkng"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "gopkg.in/inf.v0"
+       #:unpack-path "gopkg.in/inf.v0"))
+    (home-page "https://gopkg.in/inf.v0")
+    (synopsis #f)
+    (description
+     "Package inf (type inf.Dec) implements \"infinite-precision\" decimal arithmetic.
+\"Infinite precision\" describes two characteristics: practically unlimited
+precision for decimal number representation and no support for calculating with
+any specific fixed precision. (Although there is no practical limit on
+precision, inf.Dec can only represent finite decimals.)")
+    (license license:bsd-3)))
+
 ;; ready to upstream
 (define-public go-gopkg-in-square-go-jose-v2
   (package
@@ -11621,6 +12358,105 @@ multiple recipients.")
 common patterns.")
     (license license:asl2.0)))
 
+(define-public go-gvisor-dev-gvisor
+  (package
+    (name "go-gvisor-dev-gvisor")
+    (version "0.0.0-20221203005347-703fd9b7fbc0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/google/gvisor")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "18ma8si5670icx31i8068hcz0bgw00i51h8xz663j9y8mpaj07aw"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "gvisor.dev/gvisor"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
+    (propagated-inputs `(("go-sigs-k8s-io-yaml" ,go-sigs-k8s-io-yaml)
+                         ("go-k8s-io-utils" ,go-k8s-io-utils)
+                         ;("go-k8s-io-klog" ,go-k8s-io-klog)
+                         ("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
+                         ("go-gopkg-in-inf-v0" ,go-gopkg-in-inf-v0)
+                         ("go-google-golang-org-genproto" ,go-google-golang-org-genproto)
+                         ("go-google-golang-org-appengine" ,go-google-golang-org-appengine)
+                         ("go-golang-org-x-xerrors" ,go-golang-org-x-xerrors)
+                         ("go-golang-org-x-tools" ,go-golang-org-x-tools)
+                         ("go-golang-org-x-text" ,go-golang-org-x-text)
+                         ("go-golang-org-x-oauth2" ,go-golang-org-x-oauth2)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-golang-org-x-mod" ,go-golang-org-x-mod)
+                         ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+                         ("go-go-opencensus-io" ,go-go-opencensus-io)
+                         ("go-github-com-yuin-goldmark" ,go-github-com-yuin-goldmark)
+                         ("go-github-com-vishvananda-netns" ,go-github-com-vishvananda-netns)
+                         ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
+                         ;("go-github-com-opencontainers-runc" ,go-github-com-opencontainers-runc)
+                         ;("go-github-com-opencontainers-go-digest" ,go-github-com-opencontainers-go-digest)
+                         ("go-github-com-modern-go-reflect2" ,go-github-com-modern-go-reflect2)
+                         ("go-github-com-modern-go-concurrent" ,go-github-com-modern-go-concurrent)
+                         ("go-github-com-json-iterator-go" ,go-github-com-json-iterator-go)
+                         ;("go-github-com-hashicorp-go-multierror" ,go-github-com-hashicorp-go-multierror)
+                         ;("go-github-com-hashicorp-errwrap" ,go-github-com-hashicorp-errwrap)
+                         ;("go-github-com-googleapis-gnostic" ,go-github-com-googleapis-gnostic)
+                         ("go-github-com-google-gofuzz" ,go-github-com-google-gofuzz)
+                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
+                         ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
+                         ("go-github-com-golang-groupcache" ,go-github-com-golang-groupcache)
+                         ("go-github-com-godbus-dbus-v5" ,go-github-com-godbus-dbus-v5)
+                         ("go-github-com-docker-go-units" ,go-github-com-docker-go-units)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ;("go-github-com-containerd-ttrpc" ,go-github-com-containerd-ttrpc)
+                         ;("go-github-com-containerd-continuity" ,go-github-com-containerd-continuity)
+                         ("go-github-com-cilium-ebpf" ,go-github-com-cilium-ebpf)
+                         ;("go-github-com-microsoft-hcsshim" ,go-github-com-microsoft-hcsshim)
+                         ("go-github-com-microsoft-go-winio" ,go-github-com-microsoft-go-winio)
+                         ("go-k8s-io-client-go" ,go-k8s-io-client-go)
+                         ("go-k8s-io-apimachinery" ,go-k8s-io-apimachinery)
+                         ("go-k8s-io-api" ,go-k8s-io-api)
+                         ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
+                         ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
+                         ("go-golang-org-x-time" ,go-golang-org-x-time)
+                         ("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-golang-org-x-sync" ,go-golang-org-x-sync)
+                         ("go-github-com-vishvananda-netlink" ,go-github-com-vishvananda-netlink)
+                         ;("go-github-com-syndtr-gocapability" ,go-github-com-syndtr-gocapability)
+                         ("go-github-com-sirupsen-logrus" ,go-github-com-sirupsen-logrus)
+                         ;("go-github-com-opencontainers-runtime-spec" ,go-github-com-opencontainers-runtime-spec)
+                         ;("go-github-com-mohae-deepcopy" ,go-github-com-mohae-deepcopy)
+                         ;("go-github-com-mattbaird-jsonpatch" ,go-github-com-mattbaird-jsonpatch)
+                         ;("go-github-com-kr-pty" ,go-github-com-kr-pty)
+                         ;("go-github-com-google-subcommands" ,go-github-com-google-subcommands)
+                         ("go-github-com-google-btree" ,go-github-com-google-btree)
+                         ("go-github-com-gogo-protobuf" ,go-github-com-gogo-protobuf)
+                         ;("go-github-com-gofrs-flock" ,go-github-com-gofrs-flock)
+                         ;("go-github-com-coreos-go-systemd-v22" ,go-github-com-coreos-go-systemd-v22)
+                         ;("go-github-com-containerd-typeurl" ,go-github-com-containerd-typeurl)
+                         ;("go-github-com-containerd-go-runc" ,go-github-com-containerd-go-runc)
+                         ;("go-github-com-containerd-fifo" ,go-github-com-containerd-fifo)
+                         ;("go-github-com-containerd-containerd" ,go-github-com-containerd-containerd)
+                         ("go-github-com-containerd-console" ,go-github-com-containerd-console)
+                         ;("go-github-com-containerd-cgroups" ,go-github-com-containerd-cgroups)
+                         ;("go-github-com-cenkalti-backoff" ,go-github-com-cenkalti-backoff)
+                         ("go-github-com-bits-and-blooms-bitset" ,go-github-com-bits-and-blooms-bitset)
+                         ;("go-github-com-bazelbuild-rules-go" ,go-github-com-bazelbuild-rules-go)
+                         ("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)))
+    (home-page "https://gvisor.dev/gvisor")
+    (synopsis "What is gVisor?")
+    (description
+     "@@strong{gVisor} is an application kernel, written in Go, that implements a
+substantial portion of the Linux system surface.  It includes an
+@@url{https://www.opencontainers.org,Open Container Initiative (OCI)} runtime
+called @@code{runsc} that provides an isolation boundary between the application
+and the host kernel.  The @@code{runsc} runtime integrates with Docker and
+Kubernetes, making it simple to run sandboxed containers.")
+    (license license:asl2.0)))
+
 (define-public go-howett-net-plist
   (package
     (name "go-howett-net-plist")
@@ -11737,6 +12573,385 @@ and Unmarshal functions.")
     (synopsis #f)
     (description #f)
     (license #f)))
+
+(define-public go-inet-af-peercred
+  (package
+    (name "go-inet-af-peercred")
+    (version "0.0.0-20210906144145-0893ea02156a")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/inetaf/peercred")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "12jf9xkqp0h3crhw7brxhdcqik9vfj4lxb46xdbim9akyzs2qk3z"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f      ; Tests require network access
+       #:import-path "inet.af/peercred"))
+    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
+    (home-page "https://inet.af/peercred")
+    (synopsis "peercred")
+    (description
+     "Package peercred maps from a net.Conn to information about the other side of the
+connection, using various OS-specific facilities.")
+    (license license:bsd-3)))
+
+(define-public go-inet-af-wf
+  (package
+    (name "go-inet-af-wf")
+    (version "0.0.0-20220728202103-50d96caab2f6")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/inetaf/wf")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1c68h2a37hzp2smx0b2sbg389fpsgnm1xkcf3x1agl1lh28c90cn"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "inet.af/wf"))
+    (propagated-inputs `(("go-golang-org-x-xerrors" ,go-golang-org-x-xerrors)
+                         ("go-golang-org-x-tools" ,go-golang-org-x-tools)
+                         ("go-golang-org-x-mod" ,go-golang-org-x-mod)
+                         ("go-golang-org-x-exp" ,go-golang-org-x-exp)
+                         ("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)
+                         ("go-honnef-co-go-tools" ,go-honnef-co-go-tools)
+                         ("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-go4-org-netipx" ,go-go4-org-netipx)
+                         ("go-github-com-peterbourgon-ff-v3" ,go-github-com-peterbourgon-ff-v3)
+                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)))
+    (home-page "https://inet.af/wf")
+    (synopsis "wf")
+    (description
+     "This is a package for controlling the Windows Filtering Platform (WFP), also
+known as the Windows firewall.")
+    (license license:bsd-3)))
+
+(define-public go-k8s-io-api
+  (package
+    (name "go-k8s-io-api")
+    (version "0.25.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/kubernetes/api")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1221ljc5xb6id920iyszsqag6pvvpdhjdq5k97lwd4i12qywv3i3"))))
+    (build-system go-build-system)
+    (arguments
+     `(#:go ,go-1.20
+       #:import-path "k8s.io/api"))
+    (propagated-inputs `(("go-k8s-io-apimachinery" ,go-k8s-io-apimachinery)
+                         ("go-sigs-k8s-io-yaml" ,go-sigs-k8s-io-yaml)
+                         ("go-sigs-k8s-io-structured-merge-diff-v4" ,go-sigs-k8s-io-structured-merge-diff-v4)
+                         ("go-sigs-k8s-io-json" ,go-sigs-k8s-io-json)
+                         ("go-k8s-io-utils" ,go-k8s-io-utils)
+                         ("go-k8s-io-klog-v2" ,go-k8s-io-klog-v2)
+                         ("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
+                         ("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
+                         ("go-gopkg-in-inf-v0" ,go-gopkg-in-inf-v0)
+                         ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
+                         ("go-golang-org-x-text" ,go-golang-org-x-text)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
+                         ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+                         ("go-github-com-modern-go-reflect2" ,go-github-com-modern-go-reflect2)
+                         ("go-github-com-modern-go-concurrent" ,go-github-com-modern-go-concurrent)
+                         ("go-github-com-json-iterator-go" ,go-github-com-json-iterator-go)
+                         ("go-github-com-google-gofuzz" ,go-github-com-google-gofuzz)
+                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
+                         ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
+                         ("go-github-com-go-logr-logr" ,go-github-com-go-logr-logr)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ("go-github-com-gogo-protobuf" ,go-github-com-gogo-protobuf)))
+    (home-page "https://k8s.io/api")
+    (synopsis "api")
+    (description
+     "Schema of the external API types that are served by the Kubernetes API server.")
+    (license license:asl2.0)))
+
+(define-public go-k8s-io-apimachinery
+  (package
+    (name "go-k8s-io-apimachinery")
+    (version "0.25.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/kubernetes/apimachinery")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1ym66c7cnh3zc8nvd54kj70lna6wpx58z3qcfwx5j792mb31848h"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "k8s.io/apimachinery"))
+    (propagated-inputs `(("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
+                         ("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
+                         ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
+                         ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
+                         ("go-golang-org-x-xerrors" ,go-golang-org-x-xerrors)
+                         ("go-golang-org-x-text" ,go-golang-org-x-text)
+                         ("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+                         ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
+                         ("go-github-com-niemeyer-pretty" ,go-github-com-niemeyer-pretty)
+                         ("go-github-com-modern-go-reflect2" ,go-github-com-modern-go-reflect2)
+                         ("go-github-com-modern-go-concurrent" ,go-github-com-modern-go-concurrent)
+                         ("go-github-com-kr-text" ,go-github-com-kr-text)
+                         ("go-github-com-json-iterator-go" ,go-github-com-json-iterator-go)
+                         ("go-github-com-go-logr-logr" ,go-github-com-go-logr-logr)
+                         ("go-sigs-k8s-io-yaml" ,go-sigs-k8s-io-yaml)
+                         ("go-sigs-k8s-io-structured-merge-diff-v4" ,go-sigs-k8s-io-structured-merge-diff-v4)
+                         ("go-sigs-k8s-io-json" ,go-sigs-k8s-io-json)
+                         ("go-k8s-io-utils" ,go-k8s-io-utils)
+                         ("go-k8s-io-kube-openapi" ,go-k8s-io-kube-openapi)
+                         ("go-k8s-io-klog-v2" ,go-k8s-io-klog-v2)
+                         ("go-gopkg-in-inf-v0" ,go-gopkg-in-inf-v0)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
+                         ;("go-github-com-mxk-go-flowrate" ,go-github-com-mxk-go-flowrate)
+                         ;("go-github-com-moby-spdystream" ,go-github-com-moby-spdystream)
+                         ("go-github-com-google-uuid" ,go-github-com-google-uuid)
+                         ("go-github-com-google-gofuzz" ,go-github-com-google-gofuzz)
+                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
+                         ("go-github-com-google-gnostic" ,go-github-com-google-gnostic)
+                         ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
+                         ("go-github-com-gogo-protobuf" ,go-github-com-gogo-protobuf)
+                         ("go-github-com-evanphx-json-patch" ,go-github-com-evanphx-json-patch)
+                         ;("go-github-com-elazarl-goproxy" ,go-github-com-elazarl-goproxy)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ("go-github-com-armon-go-socks5" ,go-github-com-armon-go-socks5)))
+    (home-page "https://k8s.io/apimachinery")
+    (synopsis "apimachinery")
+    (description
+     "Scheme, typing, encoding, decoding, and conversion packages for Kubernetes and
+Kubernetes-like API objects.")
+    (license license:asl2.0)))
+
+(define-public go-k8s-io-client-go
+  (package
+    (name "go-k8s-io-client-go")
+    (version "0.25.0")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/kubernetes/client-go")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "01q9wxskp2lym4hpjnxslc6fyk3v5nsfkw05yyrrrb1bzpzbmzz8"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "k8s.io/client-go"))
+    (propagated-inputs `(("go-k8s-io-apimachinery" ,go-k8s-io-apimachinery)
+                         ("go-k8s-io-api" ,go-k8s-io-api)
+                         ("go-sigs-k8s-io-json" ,go-sigs-k8s-io-json)
+                         ("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
+                         ("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
+                         ("go-gopkg-in-inf-v0" ,go-gopkg-in-inf-v0)
+                         ("go-google-golang-org-appengine" ,go-google-golang-org-appengine)
+                         ("go-golang-org-x-text" ,go-golang-org-x-text)
+                         ("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
+                         ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+                         ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
+                         ("go-github-com-munnerz-goautoneg" ,go-github-com-munnerz-goautoneg)
+                         ("go-github-com-modern-go-reflect2" ,go-github-com-modern-go-reflect2)
+                         ("go-github-com-modern-go-concurrent" ,go-github-com-modern-go-concurrent)
+                         ;("go-github-com-moby-spdystream" ,go-github-com-moby-spdystream)
+                         ("go-github-com-mailru-easyjson" ,go-github-com-mailru-easyjson)
+                         ("go-github-com-json-iterator-go" ,go-github-com-json-iterator-go)
+                         ("go-github-com-josharian-intern" ,go-github-com-josharian-intern)
+                         ("go-github-com-google-btree" ,go-github-com-google-btree)
+                         ;("go-github-com-golang-jwt-jwt-v4" ,go-github-com-golang-jwt-jwt-v4)
+                         ("go-github-com-go-openapi-swag" ,go-github-com-go-openapi-swag)
+                         ("go-github-com-go-openapi-jsonreference" ,go-github-com-go-openapi-jsonreference)
+                         ("go-github-com-go-openapi-jsonpointer" ,go-github-com-go-openapi-jsonpointer)
+                         ("go-github-com-go-logr-logr" ,go-github-com-go-logr-logr)
+                         ("go-github-com-emicklei-go-restful-v3" ,go-github-com-emicklei-go-restful-v3)
+                         ("go-github-com-puerkitobio-urlesc" ,go-github-com-puerkitobio-urlesc)
+                         ("go-github-com-puerkitobio-purell" ,go-github-com-puerkitobio-purell)
+                         ;("go-github-com-azure-go-autorest-tracing" ,go-github-com-azure-go-autorest-tracing)
+                         ;("go-github-com-azure-go-autorest-logger" ,go-github-com-azure-go-autorest-logger)
+                         ;("go-github-com-azure-go-autorest-autorest-date" ,go-github-com-azure-go-autorest-autorest-date)
+                         ;("go-github-com-azure-go-autorest" ,go-github-com-azure-go-autorest)
+                         ("go-cloud-google-com-go" ,go-cloud-google-com-go)
+                         ("go-sigs-k8s-io-yaml" ,go-sigs-k8s-io-yaml)
+                         ("go-sigs-k8s-io-structured-merge-diff-v4" ,go-sigs-k8s-io-structured-merge-diff-v4)
+                         ("go-k8s-io-utils" ,go-k8s-io-utils)
+                         ("go-k8s-io-kube-openapi" ,go-k8s-io-kube-openapi)
+                         ("go-k8s-io-klog-v2" ,go-k8s-io-klog-v2)
+                         ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
+                         ("go-golang-org-x-time" ,go-golang-org-x-time)
+                         ("go-golang-org-x-term" ,go-golang-org-x-term)
+                         ("go-golang-org-x-oauth2" ,go-golang-org-x-oauth2)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
+                         ;("go-github-com-peterbourgon-diskv" ,go-github-com-peterbourgon-diskv)
+                         ("go-github-com-imdario-mergo" ,go-github-com-imdario-mergo)
+                         ;("go-github-com-gregjones-httpcache" ,go-github-com-gregjones-httpcache)
+                         ("go-github-com-google-uuid" ,go-github-com-google-uuid)
+                         ("go-github-com-google-gofuzz" ,go-github-com-google-gofuzz)
+                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
+                         ("go-github-com-google-gnostic" ,go-github-com-google-gnostic)
+                         ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
+                         ("go-github-com-golang-groupcache" ,go-github-com-golang-groupcache)
+                         ("go-github-com-gogo-protobuf" ,go-github-com-gogo-protobuf)
+                         ("go-github-com-evanphx-json-patch" ,go-github-com-evanphx-json-patch)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ;("go-github-com-azure-go-autorest-autorest-adal" ,go-github-com-azure-go-autorest-autorest-adal)
+                         ;("go-github-com-azure-go-autorest-autorest" ,go-github-com-azure-go-autorest-autorest)
+                         ))
+    (home-page "https://k8s.io/client-go")
+    (synopsis "client-go")
+    (description
+     "Go clients for talking to a @@url{http://kubernetes.io/,kubernetes} cluster.")
+    (license license:asl2.0)))
+
+(define-public go-k8s-io-klog-v2
+  (package
+    (name "go-k8s-io-klog-v2")
+    (version "2.70.1")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/kubernetes/klog")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "0g9wggng4cqswv12vhmq202c69bqvpm0611ir1x27gp698nicwa2"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "k8s.io/klog/v2"
+       #:unpack-path "k8s.io/klog/v2"))
+    (propagated-inputs `(("go-github-com-go-logr-logr" ,go-github-com-go-logr-logr)))
+    (home-page "https://k8s.io/klog/v2")
+    (synopsis "klog")
+    (description
+     "Package klog implements logging analogous to the Google-internal C++
+INFO/ERROR/V setup.  It provides functions Info, Warning, Error, Fatal, plus
+formatting variants such as Infof.  It also provides V-style logging controlled
+by the -v and -vmodule=file=2 flags.")
+    (license license:asl2.0)))
+
+(define-public go-k8s-io-kube-openapi
+  (package
+    (name "go-k8s-io-kube-openapi")
+    (version "0.0.0-20220803162953-67bda5d908f1")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/kubernetes/kube-openapi")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "12fr91qsk0jb2sxb4505h90720w9w2p93kmk81a1jav6fxpj7wj7"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:import-path "k8s.io/kube-openapi"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
+    (propagated-inputs `(("go-golang-org-x-xerrors" ,go-golang-org-x-xerrors)
+                         ("go-golang-org-x-tools" ,go-golang-org-x-tools)
+                         ("go-golang-org-x-text" ,go-golang-org-x-text)
+                         ("go-golang-org-x-sys" ,go-golang-org-x-sys)
+                         ("go-golang-org-x-net" ,go-golang-org-x-net)
+                         ("go-golang-org-x-mod" ,go-golang-org-x-mod)
+                         ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
+                         ("go-github-com-modern-go-reflect2" ,go-github-com-modern-go-reflect2)
+                         ("go-github-com-modern-go-concurrent" ,go-github-com-modern-go-concurrent)
+                         ("go-github-com-mailru-easyjson" ,go-github-com-mailru-easyjson)
+                         ("go-github-com-json-iterator-go" ,go-github-com-json-iterator-go)
+                         ("go-github-com-go-openapi-jsonpointer" ,go-github-com-go-openapi-jsonpointer)
+                         ("go-github-com-go-logr-logr" ,go-github-com-go-logr-logr)
+                         ("go-github-com-ghodss-yaml" ,go-github-com-ghodss-yaml)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
+                         ("go-github-com-puerkitobio-urlesc" ,go-github-com-puerkitobio-urlesc)
+                         ("go-github-com-puerkitobio-purell" ,go-github-com-puerkitobio-purell)
+                         ("go-sigs-k8s-io-yaml" ,go-sigs-k8s-io-yaml)
+                         ("go-sigs-k8s-io-structured-merge-diff-v4" ,go-sigs-k8s-io-structured-merge-diff-v4)
+                         ("go-k8s-io-utils" ,go-k8s-io-utils)
+                         ("go-k8s-io-klog-v2" ,go-k8s-io-klog-v2)
+                         ;("go-k8s-io-gengo" ,go-k8s-io-gengo)
+                         ("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
+                         ("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
+                         ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
+                         ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
+                         ;("go-github-com-onsi-ginkgo-v2" ,go-github-com-onsi-ginkgo-v2)
+                         ("go-github-com-munnerz-goautoneg" ,go-github-com-munnerz-goautoneg)
+                         ("go-github-com-mitchellh-mapstructure" ,go-github-com-mitchellh-mapstructure)
+                         ("go-github-com-google-uuid" ,go-github-com-google-uuid)
+                         ("go-github-com-google-gofuzz" ,go-github-com-google-gofuzz)
+                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
+                         ("go-github-com-google-gnostic" ,go-github-com-google-gnostic)
+                         ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
+                         ("go-github-com-go-openapi-swag" ,go-github-com-go-openapi-swag)
+                         ("go-github-com-go-openapi-jsonreference" ,go-github-com-go-openapi-jsonreference)
+                         ;("go-github-com-getkin-kin-openapi" ,go-github-com-getkin-kin-openapi)
+                         ("go-github-com-emicklei-go-restful-v3" ,go-github-com-emicklei-go-restful-v3)
+                         ("go-github-com-asaskevich-govalidator" ,go-github-com-asaskevich-govalidator)
+                         ("go-github-com-nytimes-gziphandler" ,go-github-com-nytimes-gziphandler)))
+    (home-page "https://k8s.io/kube-openapi")
+    (synopsis "Kube OpenAPI")
+    (description
+     "This repo is the home for Kubernetes OpenAPI discovery spec generation.  The
+goal is to support a subset of OpenAPI features to satisfy kubernetes use-cases
+but implement that subset with little to no assumption about the structure of
+the code or routes.  Thus, there should be no kubernetes specific code in this
+repo.")
+    (license license:asl2.0)))
+
+(define-public go-k8s-io-utils
+  (package
+    (name "go-k8s-io-utils")
+    (version "0.0.0-20220728103510-ee6ede2d64ed")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/kubernetes/utils")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "08jr05q82rkvgma1cn1p0ijlmhdfmi6d9l6vzr7ih1gikhfiym3r"))))
+    (build-system go-build-system)
+    (arguments
+     `(#:go ,go-1.20
+       #:import-path "k8s.io/utils"
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'build)
+         (delete 'check))))
+    (propagated-inputs `(("go-k8s-io-klog-v2" ,go-k8s-io-klog-v2)
+                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
+                         ("go-github-com-spf13-afero" ,go-github-com-spf13-afero)
+                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)))
+    (home-page "https://k8s.io/utils")
+    (synopsis "Utils")
+    (description
+     "This package provides a set of Go libraries that provide low-level,
+kubernetes-independent packages supplementing the
+@@url{https://pkg.go.dev/std#stdlib,Go standard libs}.")
+    (license license:asl2.0)))
 
 (define-public go-lukechampine-com-uint128
   (package
@@ -12195,6 +13410,41 @@ Token removed.")
 (define-public go-mvdan-cc-xurls-v2
   (deprecated-package "go-mvdan-cc-xurls-v2" go-mvdan-cc-xurls))
 
+(define-public go-nhooyr-io-websocket
+  (package
+    (name "go-nhooyr-io-websocket")
+    (version "1.8.7")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/nhooyr/websocket")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "11bz96vh0nkw6f8kczzcs07ixdhjy8s7bl398j0cf1hh40zxvass"))))
+    (build-system go-build-system)
+    (arguments
+     '(#:tests? #f      ; TODO
+       #:import-path "nhooyr.io/websocket"))
+    (propagated-inputs `(("go-golang-org-x-time" ,go-golang-org-x-time)
+                         ("go-github-com-klauspost-compress" ,go-github-com-klauspost-compress)
+                         ("go-github-com-gorilla-websocket" ,go-github-com-gorilla-websocket)
+                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
+                         ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
+                         ;("go-github-com-gobwas-pool" ,go-github-com-gobwas-pool)
+                         ;("go-github-com-gobwas-httphead" ,go-github-com-gobwas-httphead)
+                         ;("go-github-com-gin-gonic-gin" ,go-github-com-gin-gonic-gin)
+                         ))
+    ;(native-inputs
+    ; (list go-github-com-gobwas-ws))
+    (home-page "https://nhooyr.io/websocket")
+    (synopsis "websocket")
+    (description
+     "Package websocket implements the
+@@url{https://rfc-editor.org/rfc/rfc6455.html,RFC 6455} WebSocket protocol.")
+    (license license:expat)))
+
 (define-public go-rsc-io-qr
   (package
     (name "go-rsc-io-qr")
@@ -12215,6 +13465,61 @@ Token removed.")
     (synopsis #f)
     (description #f)
     (license license:bsd-3)))
+
+(define-public go-sigs-k8s-io-json
+  (package
+    (name "go-sigs-k8s-io-json")
+    (version "0.0.0-20220713155537-f223a00ba0e2")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/kubernetes-sigs/json")
+                    (commit (go-version->git-ref version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1ykph9nqks2xif0fffpp5nbzp4r3c5pvgi1wrnwn7lxp1718g4jm"))))
+    (build-system go-build-system)
+    (arguments
+     `(#:go ,go-1.20
+       #:import-path "sigs.k8s.io/json"))
+    (home-page "https://sigs.k8s.io/json")
+    (synopsis "sigs.k8s.io/json")
+    (description
+     "This library is a subproject of
+@@url{https://github.com/kubernetes/community/tree/master/sig-api-machinery#json,sig-api-machinery}.
+ It provides case-sensitive, integer-preserving JSON unmarshaling functions
+based on @@code{encoding/json} @@code{Unmarshal()}.")
+    (license (list license:bsd-3 license:asl2.0))))
+
+(define-public go-sigs-k8s-io-structured-merge-diff-v4
+  (package
+    (name "go-sigs-k8s-io-structured-merge-diff-v4")
+    (version "4.2.3")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url
+                     "https://github.com/kubernetes-sigs/structured-merge-diff")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "02db3a0ln64fv8s7lis7jnsprphxbr33cspxb0kdw9l9zy8dg45k"))))
+    (build-system go-build-system)
+    (arguments
+     `(#:go ,go-1.20
+       #:import-path "sigs.k8s.io/structured-merge-diff/v4/value"
+       #:unpack-path "sigs.k8s.io/structured-merge-diff/v4"))
+    (propagated-inputs `(("go-github-com-modern-go-concurrent" ,go-github-com-modern-go-concurrent)
+                         ("go-github-com-json-iterator-go" ,go-github-com-json-iterator-go)
+                         ("go-github-com-google-gofuzz" ,go-github-com-google-gofuzz)
+                         ("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)))
+    (home-page "https://sigs.k8s.io/structured-merge-diff/v4")
+    (synopsis "Structured Merge and Diff")
+    (description
+     "This repo contains code which implements the Kubernetes \"apply\" operation.")
+    (license license:asl2.0)))
 
 (define-public go-software-sslmate-com-src-go-pkcs12
   (package
