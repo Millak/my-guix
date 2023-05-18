@@ -1,4 +1,4 @@
-;;; Copyright © 2022 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2022, 2023 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -19,11 +19,14 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build utils)
   #:use-module (guix git-download)
+  #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix gexp)
+  #:use-module (guix build-system copy)
   #:use-module (guix build-system go)
   #:use-module (gnu packages golang)
+  #:use-module (gnu packages linux)
   #:use-module (gnu packages syncthing)
   #:use-module (gnu packages web)
   #:use-module (dfsg main golang))
@@ -176,6 +179,94 @@
 quickly SSH into devices on your network, and work securely from anywhere in
 the world.")
     (license license:bsd-3)))
+
+;; TODO: Figure out how to do this like (librsvg-for-system).
+(define-public tailscale-bin-amd64
+  (package
+    (name "tailscale-bin-amd64")
+    (version "1.40.1")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
+                                  version "_amd64.tgz"))
+              (sha256
+               (base32 "03g6ikka2v0vd1ffnlmlkwn2dbb61nkyyfdy1llyq3ik9ik4vhbf"))))
+    (build-system copy-build-system)
+    (arguments
+     (list
+       #:install-plan
+       #~'(("tailscaled" "sbin/")
+           ("tailscale" "bin/"))
+       #:phases
+       #~(modify-phases %standard-phases
+           (add-after 'install 'wrap-binary
+             (lambda* (#:key inputs outputs #:allow-other-keys)
+               (wrap-program
+                 (string-append (assoc-ref outputs "out") "/sbin/tailscaled")
+                 `("PATH" ":" prefix (,(dirname (search-input-file
+                                                  inputs
+                                                  "/sbin/iptables"))))))))))
+    (inputs (list iptables))
+    (home-page "https://github.com/tailscale/tailscale")
+    (synopsis "Tailscale VPN client")
+    (description "Tailscale lets you easily manage access to private resources,
+quickly SSH into devices on your network, and work securely from anywhere in
+the world.")
+    ;(properties `((hidden? . #t)))
+    (supported-systems '("x86_64-linux"))
+    (license license:bsd-3)))
+
+(define-public tailscale-bin-386
+  (package
+    (inherit tailscale-bin-amd64)
+    (name "tailscale-bin-386")
+    (version "1.40.1")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
+                                  version "_386.tgz"))
+              (sha256
+               (base32 "0dx46rlmfhc0w0xqbnmvaz7r00dvs5mjpz0m3n68snr956pyn1i7"))))
+    (supported-systems '("i686-linux"))))
+
+(define-public tailscale-bin-arm
+  (package
+    (inherit tailscale-bin-amd64)
+    (name "tailscale-bin-arm")
+    (version "1.40.1")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
+                                  version "_arm.tgz"))
+              (sha256
+               (base32 "1z7hy7difhzd17k3s4di3ylidf9jms4n6i29zmzgwa8imixnd3li"))))
+    (supported-systems '("armhf-linux"))))
+
+(define-public tailscale-bin-arm64
+  (package
+    (inherit tailscale-bin-amd64)
+    (name "tailscale-bin-arm64")
+    (version "1.40.1")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
+                                  version "_arm64.tgz"))
+              (sha256
+               (base32 "1g8i9bks3lk9anks1ygjrvwsnaja7cv13m9yzlhd4fhrjw0g3997"))))
+    (supported-systems '("aarch64-linux"))))
+
+(define-public tailscale-bin-riscv64
+  (package
+    (inherit tailscale-bin-amd64)
+    (name "tailscale-bin-riscv64")
+    (version "1.40.1")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
+                                  version "_riscv64.tgz"))
+              (sha256
+               (base32 "1vfcfs623jnqvg986dv5ls14xfd7vbs79yklixyd2ra31j74x29w"))))
+    (supported-systems '("riscv64-linux"))))
 
 (define-public tailscale-with-newer-go-libraries
   (package
