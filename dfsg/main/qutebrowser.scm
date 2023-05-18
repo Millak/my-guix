@@ -20,6 +20,7 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix utils)
+  #:use-module (guix gexp)
   #:use-module (gnu packages qt)
   #:use-module (gnu packages web-browsers))
 
@@ -28,7 +29,7 @@
     (arguments
      (substitute-keyword-arguments (package-arguments qtwebengine-5)
        ((#:phases phases)
-        `(modify-phases ,phases
+        #~(modify-phases #$phases
             (add-before 'configure 'enable-widevine-support
               (lambda _
                 (substitute* "src/buildtools/config/common.pri"
