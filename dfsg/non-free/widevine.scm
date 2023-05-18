@@ -28,9 +28,11 @@
   #:use-module (gnu packages nss)
   #:use-module (gnu packages python))
 
-;; symlink into ${HOME}/.mozilla/firefox/${profile}/gmp-widevinecdm/
+;; for firefox and icecat?
+;; symlink $output/lib/firefox to ${HOME}/.mozilla/firefox/${profile}/gmp-widevinecdm
+
+;; Where did this come from?
 ;; symlink 'chromium' folder to ${HOME}/.mozilla/firefox/${profile}/gmp-widevinecdm/$version
-;; echo '{"Path":"/opt/WidevineCdm/chromium"}' > ${HOME}/.config/chromium/WidevineCdm/latest-component-updated-widevine-cdm
 
 ;; test with `qutebrowser --temp-basedir https://bitmovin.com/demos/drm`
 
@@ -38,15 +40,15 @@
 (define-public widevine-x86_64
   (package
     (name "widevine")
-    (version "4.10.2557.0")
+    (version "4.10.2652.0")
     (source
       (origin
         (method url-fetch)
         (uri (string-append "https://dl.google.com/linux/deb/"
                             "pool/main/g/google-chrome-stable/"
-                            "google-chrome-stable_111.0.5563.64-1_amd64.deb"))
+                            "google-chrome-stable_113.0.5672.126-1_amd64.deb"))
         (sha256
-         (base32 "0rnqrjnybghb4h413cw3f54ga2x76mfmf1fp2nnf59c1yml4r4vf"))))
+         (base32 "1w8b41ij6xl8byh1977skxwwq0nivpfn8wb3gv12xvm7sw24jqka"))))
     (build-system gnu-build-system)
     (arguments
      (list
@@ -68,7 +70,7 @@
                               inputs #$(glibc-dynamic-linker "x86_64-linux")))
                      (rpath (dirname
                               (search-input-file inputs "/lib/libgcc_s.so.1"))))
-                 ;; cannot find section '.interp
+                 ;; cannot find section '.interp'. The input file is most likely statically linked
                  ;(invoke "patchelf" "--set-interpreter" ld-so widevine)
                  (invoke "patchelf" "--set-rpath" rpath widevine))))
            (add-after 'build 'create-metadata-files
@@ -102,6 +104,7 @@
                              pref(\"media.eme.enabled\", true);~@
                              pref(\"media.eme.encrypted-media-encryption-scheme.enabled\", true);~%"
                              #$version)))
+                 ;; This gets symlinked to ~/.config/chromium/WidevineCdm/latest-component-updated-widevine-cdm
                  (with-output-to-file "latest-component-updated-widevine-cdm"
                    (lambda _
                      (format #t "{PATH\":\"~a/lib/chromium\"}~%" %output))))))
@@ -118,6 +121,8 @@
                                (string-append out "/lib/chromium"))
                  (install-file widevine
                                (string-append out "/lib/chromium"))
+                 (install-file widevine
+                               (string-append out "/lib/chromium/_platform_specific/linux_x64"))
                  (install-file widevine
                                (string-append out "/lib/qt5/plugins/ppapi"))
                  (install-file widevine
