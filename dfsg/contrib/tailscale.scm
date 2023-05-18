@@ -205,8 +205,11 @@ the world.")
                  (string-append (assoc-ref outputs "out") "/sbin/tailscaled")
                  `("PATH" ":" prefix (,(dirname (search-input-file
                                                   inputs
-                                                  "/sbin/iptables"))))))))))
-    (inputs (list iptables))
+                                                  "/sbin/iptables"))
+                                       ,(dirname (search-input-file
+                                                   inputs
+                                                   "/sbin/ip"))))))))))
+    (inputs (list iproute iptables))
     (home-page "https://github.com/tailscale/tailscale")
     (synopsis "Tailscale VPN client")
     (description "Tailscale lets you easily manage access to private resources,
