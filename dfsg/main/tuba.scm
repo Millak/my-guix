@@ -21,7 +21,6 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system meson)
-  #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
@@ -33,7 +32,7 @@
 (define-public tuba
   (package
     (name "tuba")
-    (version "0.2.0")
+    (version "0.3.2")
     (source
      (origin
        (method git-fetch)
@@ -42,17 +41,13 @@
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1ca68xpj611529dd4xlvrg538m63q52fgjskxxfghdzgh4c4dy1c"))))
+        (base32 "1xhyz6wi17g4m76lr6qc75q4xnnw7c3dh3d04dg8m5gzk6j0y89x"))))
     (build-system meson-build-system)
     (arguments
      `(#:glib-or-gtk? #t
        #:configure-flags (list "-Ddistro=true")
        #:phases
        (modify-phases %standard-phases
-         (add-after 'unpack 'patch-source
-           (lambda* (#:key inputs #:allow-other-keys)
-             (substitute* "src/Dialogs/NewAccount.vala"
-               (("xdg-mime") (search-input-file inputs "/bin/xdg-mime")))))
          (add-after 'glib-or-gtk-wrap 'symlink-package
            (lambda* (#:key outputs #:allow-other-keys)
              (with-directory-excursion
@@ -72,8 +67,7 @@
            libsecret
            libwebp
            libxml2
-           vala
-           xdg-utils))
+           vala))
     (home-page "https://tuba.geopjr.dev/")
     (synopsis "GTK client for Mastodon")
     (description "Tuba is a GTK client for Mastodon.  It provides a clean,
