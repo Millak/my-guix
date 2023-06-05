@@ -9965,7 +9965,7 @@ used to add and remove interfaces, set up ip addresses and routes, and confiugre
 ipsec.  Netlink communication requires elevated privileges, so in most cases
 this code needs to be run as root.  The low level primitives for netlink are
 contained in the nl subpackage.  This package attempts to provide a high-level
-interface that is loosly modeled on the iproute2 cli.")
+interface that is loosely modeled on the iproute2 cli.")
     (license license:asl2.0)))
 
 (define-public go-github-com-tcnksm-go-httpstat
@@ -9988,7 +9988,7 @@ interface that is loosly modeled on the iproute2 cli.")
     (home-page "https://github.com/tcnksm/go-httpstat")
     (synopsis "go-httpstat")
     (description
-     "Package httpstat traces HTTP latency infomation (DNSLookup, TCP Connection and
+     "Package httpstat traces HTTP latency information (DNSLookup, TCP Connection and
 so on) on any golang HTTP request.  It uses `httptrace` package.  Just create
 `go-httpstat` powered `context.Context` and give it your `http.Request` (no big
 code modification is required).")
@@ -10475,7 +10475,7 @@ used to add and remove interfaces, set up ip addresses and routes, and confiugre
 ipsec.  Netlink communication requires elevated privileges, so in most cases
 this code needs to be run as root.  The low level primitives for netlink are
 contained in the nl subpackage.  This package attempts to provide a high-level
-interface that is loosly modeled on the iproute2 cli.")
+interface that is loosely modeled on the iproute2 cli.")
     (license license:asl2.0)))
 
 (define-public go-github-com-vishvananda-netns
