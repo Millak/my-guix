@@ -34,7 +34,7 @@
 (define-public tailscale
   (package
     (name "tailscale")
-    (version "1.38.4")
+    (version "1.42.0")
     (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -43,7 +43,7 @@
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "02c4nb5l0kg7zb7g2vfbav5zgl923fw82myawvqhpidc7ibpqcqy"))
+                "0qlcsgzrk4hq9xcprmfkykk14myymzl64qkfkszy2l386im1xfr7"))
         (modules '((guix build utils)))
         (snippet
          '(begin
@@ -160,7 +160,7 @@
            ;github.com/dblohm7/wingoes
            go-github-com-dave-jennifer
            go-github-com-creack-pty
-           go-github-com-coreos-go-systemd
+           ;go-github-com-coreos-go-systemd try to do without this one
            go-github-com-coreos-go-iptables
            go-github-com-aws-aws-sdk-go-v2-service-ssm
            go-github-com-aws-aws-sdk-go-v2-service-s3
@@ -215,7 +215,10 @@ the world.")
     (description "Tailscale lets you easily manage access to private resources,
 quickly SSH into devices on your network, and work securely from anywhere in
 the world.")
-    ;(properties `((hidden? . #t)))
+    ;(properties
+    ; `(;(hidden? . #t)
+    ;   (release-monitoring-url . "https://github.com/tailscale/tailscale/releases")
+    ;   (upstream-name . "tailscale")))
     (supported-systems '("x86_64-linux"))
     (license license:bsd-3)))
 
