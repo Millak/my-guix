@@ -35,14 +35,14 @@
 (define-public gotosocial
   (package
     (name "gotosocial")
-    (version "0.7.1")
+    (version "0.9.0")
     (source (origin
               (method url-fetch/tarbomb)
               (uri (string-append "https://github.com/superseriousbusiness"
                                   "/gotosocial/releases/download/v" version
                                   "/gotosocial-" version "-source-code.tar.gz"))
               (sha256
-               (base32 "0x2impm9vjqvpv3p9kvpp1rdyhsi95hq0pwcnf71nilymbq0qjyf"))
+               (base32 "1a1sjm0x758wpwpi3rikbm0ipnr5waxk81zx8rgpp3z9b0n4cy9b"))
               ;(snippet
               ; #~(begin
               ;     (use-modules (guix build utils))
@@ -52,7 +52,7 @@
     (build-system go-build-system)
     (arguments
      `(#:install-source? #f
-       #:go ,go-1.19
+       #:go ,go-1.20
        #:unpack-path "github.com/superseriousbusiness/gotosocial"
        #:import-path "github.com/superseriousbusiness/gotosocial/cmd/gotosocial"
        #:phases
@@ -103,59 +103,71 @@
        sqlite
        ;codeberg.org/gruf/go-bytesize v1.0.2
        ;codeberg.org/gruf/go-byteutil v1.1.2
-       ;codeberg.org/gruf/go-cache/v3 v3.2.3
+       ;codeberg.org/gruf/go-cache/v3 v3.3.3
        ;codeberg.org/gruf/go-debug v1.3.0
-       ;codeberg.org/gruf/go-errors/v2 v2.1.1
-       ;codeberg.org/gruf/go-kv v1.6.0
+       ;codeberg.org/gruf/go-errors/v2 v2.2.0
+       ;codeberg.org/gruf/go-fastcopy v1.1.2
+       ;codeberg.org/gruf/go-kv v1.6.1
        ;codeberg.org/gruf/go-logger/v2 v2.2.1
        ;codeberg.org/gruf/go-mutexes v1.1.5
-       ;codeberg.org/gruf/go-runners v1.6.0
-       ;codeberg.org/gruf/go-store/v2 v2.2.1
+       ;codeberg.org/gruf/go-runners v1.6.1
+       ;codeberg.org/gruf/go-sched v1.2.3
+       ;codeberg.org/gruf/go-store/v2 v2.2.2
+
+       ;github.com/KimMachineGun/automemlimit v0.2.6
+       ;github.com/abema/go-mp4 v0.10.1
        ;github.com/buckket/go-blurhash v1.1.0
-       go-github-com-coreos-go-oidc             ; v3.5.0
-       ;github.com/cornelk/hashmap v1.0.8
+       go-github-com-coreos-go-oidc-v3          ; v3.5.0
        go-github-com-disintegration-imaging     ; v1.6.2
        ;github.com/gin-contrib/cors v1.4.0
        ;github.com/gin-contrib/gzip v0.0.6
        ;github.com/gin-contrib/sessions v0.0.5
-       ;github.com/gin-gonic/gin v1.8.2
+       ;github.com/gin-gonic/gin v1.9.0
        go-github-com-go-fed-httpsig             ; v1.1.0
-       go-github-com-go-playground-validator-v10    ; v10.11.2
+       ;github.com/go-playground/form/v4 v4.2.0
+       go-github-com-go-playground-validator-v10    ; v10.14.0
        go-github-com-google-uuid                ; v1.3.0
        go-github-com-gorilla-feeds              ; v1.1.1
        go-github-com-gorilla-websocket          ; v1.5.0
        ;github.com/h2non/filetype v1.1.3
-       go-github-com-jackc-pgconn               ; v1.13.0
-       go-github-com-jackc-pgx-v4               ; v4.17.2
-       go-github-com-microcosm-cc-bluemonday    ; v1.0.22
-       go-github-com-miekg-dns                  ; v1.1.50
-       go-github-com-minio-minio-go-v7          ; v7.0.48
+       go-github-com-jackc-pgconn               ; v1.14.0
+       go-github-com-jackc-pgx-v5               ; v5.3.1
+       go-github-com-microcosm-cc-bluemonday    ; v1.0.23
+       go-github-com-miekg-dns                  ; v1.1.54
+       ;go-github-com-minio-minio-go-v7          ; v7.0.53
        go-github-com-mitchellh-mapstructure     ; v1.5.0
        go-github-com-oklog-ulid                 ; v1.3.1
-       go-github-com-spf13-cobra                ; v1.6.1
+       go-github-com-spf13-cobra                ; v1.7.0
        go-github-com-spf13-viper                ; v1.15.0
-       go-github-com-stretchr-testify           ; v1.8.1
-       ;github.com/superseriousbusiness/activity v1.2.1-gts
+       go-github-com-stretchr-testify           ; v1.8.2
+       ;github.com/superseriousbusiness/activity v1.3.0-gts
        ;github.com/superseriousbusiness/exif-terminator v0.5.0
-       ;github.com/superseriousbusiness/oauth2/v4 v4.3.2-SSB
-       ;github.com/tdewolff/minify/v2 v2.12.4
-       ;github.com/ulule/limiter/v3 v3.11.0
-       ;github.com/uptrace/bun v1.1.10
-       ;github.com/uptrace/bun/dialect/pgdialect v1.1.10
-       ;github.com/uptrace/bun/dialect/sqlitedialect v1.1.10
+       ;github.com/superseriousbusiness/oauth2/v4 v4.3.2-SSB.0.20230227143000-f4900831d6c8
+       ;github.com/tdewolff/minify/v2 v2.12.5
+       ;github.com/ulule/limiter/v3 v3.11.1
+       ;github.com/uptrace/bun v1.1.13
+       ;github.com/uptrace/bun/dialect/pgdialect v1.1.13
+       ;github.com/uptrace/bun/dialect/sqlitedialect v1.1.13
+       ;github.com/uptrace/bun/extra/bunotel v1.1.12
        ;github.com/wagslane/go-password-validator v0.3.0
-       ;github.com/yuin/goldmark v1.5.4
-       ;go.uber.org/automaxprocs v1.5.1
-       go-golang-org-x-crypto                   ; v0.6.0
-       go-golang-org-x-exp                      ; v0.0.0-20220613132600-b0d781184e0d
-       go-golang-org-x-image                    ; v0.5.0
-       go-golang-org-x-net                      ; v0.7.0
-       ;go-golang-org-x-oauth v0.4.0
-       go-golang-org-x-text                     ; v0.7.0
+       go-github-com-yuin-goldmark              ; 1.5.4
+
+       ;go.opentelemetry.io/otel v1.14.0
+       ;go.opentelemetry.io/otel/exporters/jaeger v1.14.0
+       ;go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.14.0
+       ;go.opentelemetry.io/otel/sdk v1.14.0
+       ;go.opentelemetry.io/otel/trace v1.14.0
+       ;go.uber.org/automaxprocs v1.5.2
+       go-golang-org-x-crypto-0.9               ; v0.9.0
+       go-golang-org-x-exp-0.0.0-20220613132600-b0d781184e0d
+       go-golang-org-x-image-0.7                ; v0.7.0
+       go-golang-org-x-net-0.10                 ; v0.10.0
+       go-golang-org-x-oauth2-0.8               ; 0.8.0
+       go-golang-org-x-text-0.9                 ; v0.9.0
        ;gopkg.in/mcuadros/go-syslog.v2 v2.3.0
-       go-gopkg-in-yaml-v3                      ; v0.3.1
-       go-modernc-org-sqlite                    ; v1.20.4
-       go-mvdan-cc-xurls                        ; v2.4.0
+       go-gopkg-in-yaml-v3                      ; v3.0.1
+       go-modernc-org-sqlite                    ; v1.22.1
+       go-mvdan-cc-xurls                        ; v2.5.0
        ))
     (native-inputs
      `(("gotosocial-web-assets.tar.gz"
@@ -167,7 +179,7 @@
                                "/gotosocial/releases/download/v" version
                                "/gotosocial_" version "_web-assets.tar.gz"))
            (sha256
-            (base32 "0k0i3qw89fq6w2akdbrbg4s3amp5hznr2b5z5dzz2jragvb8a6yx"))))))
+            (base32 "1yxyl8q0dqpv3cqzxj0anh8rskk3rmw9mjnjkm4svc0vgaph1y1s"))))))
     (home-page "https://docs.gotosocial.org/")
     (synopsis "ActivityPub server powered by Go")
     (description
@@ -177,7 +189,31 @@ network server, written in Golang.")
                license:silofl1.1    ; web/assets/{Fork_Awesome,NotoSans*.ttf}
                license:agpl3))))
 
-;(define-public gotosocial-with-newer-go-libraries
-;  (package
-;    (inherit (newer-go-libraries gotosocial))
-;    (name "gotosocial-with-newer-go-libraries")))
+(define-public with-gotosocial-deps
+  (package-input-rewriting/spec
+    `(
+      ;; This one is in Guix twice.
+      ("go-github.com-mattn-go-runewidth" . ,(const go-github-com-mattn-go-runewidth))
+      ;; This isn't picked up for some reason.
+      ;("go-github-com-hashicorp-go-version" . ,(const go-github-com-hashicorp-go-version-1.3.0))
+      ;; We should use the newer versions.
+      ("go-golang-org-x-crypto" . ,(const go-golang-org-x-crypto-0.9))
+      ("go-golang-org-x-exp" . ,(const go-golang-org-x-exp-0.0.0-20220613132600-b0d781184e0d))
+      ("go-golang-org-x-image" . ,(const go-golang-org-x-image-0.7))
+      ;("go-golang-org-x-lint" . ,(const go-golang-org-x-lint-next))
+      ;("go-golang-org-x-mod" . ,(const go-golang-org-x-mod-next))
+      ("go-golang-org-x-net" . ,(const go-golang-org-x-net-0.10))
+      ("go-golang-org-x-oauth2" . ,(const go-golang-org-x-oauth2-0.8))
+      ;("go-golang-org-x-sync" . ,(const go-golang-org-x-sync-next))
+      ("go-golang-org-x-sys" . ,(const go-golang-org-x-sys-0.8))
+      ("go-golang-org-x-term" . ,(const go-golang-org-x-term-0.8))
+      ("go-golang-org-x-text" . ,(const go-golang-org-x-text-0.9))
+      ;("go-golang-org-x-time" . ,(const go-golang-org-x-time-next))
+      ("go-golang-org-x-tools" . ,(const go-golang-org-x-tools-0.6))
+      ;("go-golang-org-x-xerrors" . ,(const go-golang-org-x-xerrors-next))
+      )))
+
+(define-public gotosocial-with-newer-go-libraries
+  (package
+    (inherit (with-gotosocial-deps gotosocial))
+    (name "gotosocial-with-newer-go-libraries")))
