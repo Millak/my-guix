@@ -38,17 +38,17 @@
 (define-public microblog-pub
   (package
     (name "microblog-pub")
-    (version "2.0.0-rc.11")
+    (version "2")
     (source
       (origin
         (method git-fetch)
         (uri (git-reference
                (url "https://git.sr.ht/~tsileo/microblog.pub")
-               (commit version)))
+               (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
          (base32
-          "14rwghxjvak5f89nbcgpymcaakpnsnvdyi209n2yramf1z0jvmsb"))))
+          "193w448cynjhxy73w0p8w1548m0c8iiycrj7jv8c2aidazq16aa8"))))
     (build-system pyproject-build-system)
     (inputs
      (list
@@ -64,7 +64,7 @@
        python-cachetools
        python-dateutil
        python-emoji
-       ;python-fastapi
+       python-fastapi
        ;python-feedgen
        python-greenlet
        python-humanize
@@ -156,56 +156,3 @@ powered microblog.")
     (description
      "Commandline interface to build Sass projects using libsass-python")
     (license license:expat)))
-
-(define-public python-loguru
-  (package
-    (name "python-loguru")
-    (version "0.6.0")
-    (source (origin
-              (method url-fetch)
-              (uri (pypi-uri "loguru" version))
-              (sha256
-               (base32
-                "076l16ilgdb0pjbbkx21d39kzysvlyswdnbghgli79fhb1kx0sq6"))))
-    (build-system python-build-system)
-    (native-inputs
-     (list python-black
-           python-colorama
-           python-docutils
-           python-flake8
-           python-isort
-           python-pytest
-           python-pytest-cov
-           python-sphinx
-           python-sphinx-autobuild
-           python-sphinx-rtd-theme
-           python-tox))
-    (home-page "https://github.com/Delgan/loguru")
-    (synopsis "Python logging made (stupidly) simple")
-    (description "Python logging made (stupidly) simple")
-    (license license:expat)))
-
-;; needs the hatchling pyproject build backend
-(define-public python-fastapi
-  (package
-    (name "python-fastapi")
-    (version "0.89.1")
-    (source (origin
-              (method url-fetch)
-              (uri (pypi-uri "fastapi" version))
-              (sha256
-               (base32
-                "03sqd8vhrivy9ynk999jhpfl2hnfw5r5rbm2bh0jlmrbwlg2gn8m"))))
-    (build-system pyproject-build-system)
-    (propagated-inputs
-     (list
-       python-starlette
-       python-pydantic
-       ))
-    (home-page "https://fastapi.tiangolo.com/")
-    (synopsis
-      "FastAPI framework, high performance, easy to learn, fast to code, ready for production")
-    (description
-      "FastAPI framework, high performance, easy to learn, fast to code, ready for
-      production")
-      (license license:expat)))
