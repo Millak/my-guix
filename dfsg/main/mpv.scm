@@ -27,8 +27,8 @@
   #:use-module (gnu packages lua))
 
 (define-public mpv-sponsorblock-minimal
-  (let ((commit "b8c1a2a878c5b24c49711fb135902fc0ebafffe0")     ; 20220916
-        (revision "6"))
+  (let ((commit "27dd1df4613cc98a857291336d9054d07fc61a29")     ; 20230504
+        (revision "7"))
   (package
     (name "mpv-sponsorblock-minimal")
     (version (git-version "0" revision commit))
@@ -40,7 +40,7 @@
                (commit commit)))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "0y4lkc9vdg50a7d16297mjmzykr86zjk8kybs7sg0a6gzzfvzgg1"))))
+         (base32 "1xvn66qnfym4p18qc33myjmzcdwansrxn30shb991a525ynmnrr8"))))
     (build-system trivial-build-system)
     (arguments
      (list
@@ -67,8 +67,8 @@ sponsored segments of YouTube videos.")
     (license license:gpl3))))
 
 (define-public mpv-twitch-chat
-  (let ((commit "d50c20cdc12c8759e9efd0c6ec7552845c8cab28")     ; 20221215
-        (revision "3"))
+  (let ((commit "eefc30a88e060c98646ee1c4387e4dce781690e8")     ; 20230401
+        (revision "4"))
     (package
       (name "mpv-twitch-chat")
       (version (git-version "0" revision commit))
@@ -80,7 +80,7 @@ sponsored segments of YouTube videos.")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256
-           (base32 "15w4fwjh51ffrz89hrf603znpmm5mb2a8gz9aifsx37wz5msilj7"))))
+           (base32 "0xdmnfmma90190sz2hqw41d5jxlaa1mnd9hv364h9w5pfjm7ld7a"))))
       (build-system trivial-build-system)
       (arguments
        (list
