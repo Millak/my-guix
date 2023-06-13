@@ -38,7 +38,7 @@
 (define-public sigil
   (package
     (name "sigil")
-    (version "1.9.20")
+    (version "1.9.30")
     (source
       (origin
         (method git-fetch)
@@ -47,7 +47,7 @@
                (commit version)))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "0d09ffg1d4ql6fx4x34vd1gj3mna39lrs2arz3dn80v25mg4hd1p"))
+         (base32 "1byx8x4lx4lp8l1q6nmnx019zg5c9jvpf3sjmdwrcmngn7i9v8kx"))
         (snippet
          #~(begin
             (use-modules (guix build utils))
@@ -55,10 +55,9 @@
               (for-each delete-file-recursively
                         '("extra" "hunspell" "minizip" "pcre2" "zlib")))
             (delete-file-recursively "src/Resource_Files/dictionaries")
+            ;(delete-file "src/Resource_Files/polyfills/custom-mathjax.min.js")
             (with-directory-excursion "src/Resource_Files/javascript"
-              ;(delete-file "custom-mathjax.min.js")
               (delete-file "jquery-2.2.4.min.js")
-              (delete-file "jquery.scrollTo-1.4.2-min.js")
               (delete-file "jquery.scrollTo-2.1.2-min.js"))))))
     (build-system qt-build-system)
     (arguments
@@ -111,7 +110,7 @@
            qttools-5))
     ;(propagated-inputs
     ; ;; Needed so when sigil is installed the mathjax addon will be in the correct folder.
-    ; ;; Needs to be mathjax 3.2.2+
+    ; ;; Needs to be mathjax 3.22+
     ; (list js-mathjax-3))
     (inputs
      (list bash-minimal     ; for wrap-program
