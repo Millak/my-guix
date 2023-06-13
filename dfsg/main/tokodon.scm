@@ -28,7 +28,7 @@
 (define-public tokodon
   (package
     (name "tokodon")
-    (version "23.04.1")
+    (version "23.04.2")
     (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -37,7 +37,7 @@
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "06l2rhwinkjh9im83n3rn3124dg1ywm7j4risjhngpyl90dllh3y"))))
+                "1abavpwg01npgywj0lvjmpspcab053s5fjc6c1nzllwb0d9gghq0"))))
     (build-system qt-build-system)
     (arguments
      `(#:phases (modify-phases %standard-phases
@@ -53,6 +53,7 @@
            kio
            kirigami
            kirigami-addons
+           kitemmodels          ; Used at runtime.
            knotifications
            qqc2-desktop-style
            qtbase-5
