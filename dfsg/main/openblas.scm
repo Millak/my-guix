@@ -107,3 +107,17 @@
             (remove (cut string-match "(DYNAMIC_|TARGET).*" <>)
                     #$flags)))))
     (supported-systems '("powerpc-linux"))))
+
+(define-public openblas-ilp64-custom
+  (package/inherit openblas
+    (name "openblas-ilp64-custom")
+    (supported-systems '("x86_64-linux" "aarch64-linux" "mips64el-linux"
+                         "powerpc64le-linux"))
+    (arguments
+     (substitute-keyword-arguments (package-arguments openblas)
+       ((#:make-flags flags #~'())
+        #~(append (list "INTERFACE64=1"
+                        "SYMBOLSUFFIX=64_"
+                        "LIBPREFIX=libopenblas64_")
+                 #$flags))))
+    (synopsis "Optimized BLAS library based on GotoBLAS (ILP64 version)")))
