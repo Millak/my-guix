@@ -1786,32 +1786,6 @@ users are recommended to switch their imports.")
 changed from:")
     (license license:asl2.0)))
 
-(define-public go-github-com-coreos-go-oidc
-  (package
-    (name "go-github-com-coreos-go-oidc")
-    (version "2.2.1+incompatible")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/coreos/go-oidc")
-               (commit (string-append "v" (go-version->git-ref version)))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "11m6slbpi33ynffml7812piq4anhjlf1qszjlsf26f5y7x3qh8n5"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/coreos/go-oidc"))
-    (propagated-inputs
-     (list go-github-com-pquerna-cachecontrol
-           go-golang-org-x-oauth2
-           go-gopkg-in-square-go-jose-v2))
-    (home-page "https://github.com/coreos/go-oidc")
-    (synopsis "go-oidc")
-    (description
-      "Package oidc implements OpenID Connect client logic for the golang.org/x/oauth2
-package.")
-    (license license:asl2.0)))
-
 (define-public go-github-com-coreos-go-systemd-activation
   (package
     (name "go-github-com-coreos-go-systemd-activation")
@@ -8622,33 +8596,6 @@ help improve the encoding/decoding performance of some binary protocols.")
 @@url{https://tools.ietf.org/html/draft-ietf-secsh-filexfer-02,https://tools.ietf.org/html/draft-ietf-secsh-filexfer-02}")
     (license license:bsd-2)))
 
-;; ready to upstream
-(define-public go-github-com-pquerna-cachecontrol
-  (package
-    (name "go-github-com-pquerna-cachecontrol")
-    (version "0.1.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/pquerna/cachecontrol")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "1ds4wgk6hm1sd6037dww5zm59syzs7vrdzh9q5x78s1lfrznsi3k"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/pquerna/cachecontrol"))
-    (native-inputs
-     (list go-github-com-stretchr-testify))
-    (home-page "https://github.com/pquerna/cachecontrol")
-    (synopsis "HTTP caching parser and interpretation")
-    (description
-     "Cachecontrol implements @url{http://tools.ietf.org/html/rfc7234, RFC 7234}
-Hypertext Transfer Protocol (HTTP/1.1): Caching.  It does this by parsing the
-@code{Cache-Control} and other headers, providing information about requests and
-responses.")
-    (license license:asl2.0)))
-
 (define-public go-github-com-pquerna-otp
   (package
     (name "go-github-com-pquerna-otp")
@@ -12784,39 +12731,6 @@ precision for decimal number representation and no support for calculating with
 any specific fixed precision. (Although there is no practical limit on
 precision, inf.Dec can only represent finite decimals.)")
     (license license:bsd-3)))
-
-;; ready to upstream
-(define-public go-gopkg-in-square-go-jose-v2
-  (package
-    (name "go-gopkg-in-square-go-jose-v2")
-    (version "2.6.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://gopkg.in/square/go-jose.v2")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "1b1nhqxfmhzwrfk7pkvp2w3z3d0pf5ir00vizmy2d4xdbnldn70r"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "gopkg.in/square/go-jose.v2"))
-    (propagated-inputs
-     (list go-golang-org-x-crypto))
-    (native-inputs
-     (list go-github-com-google-go-cmp
-           go-github-com-stretchr-testify))
-    (home-page "https://gopkg.in/square/go-jose.v2")
-    (synopsis "JavaScript Object Signing and Encryption in Go")
-    (description
-     "Package jose aims to provide an implementation of the Javascript Object
-Signing and Encryption set of standards.  It implements encryption and signing
-based on the JSON Web Encryption and JSON Web Signature standards, with optional
-JSON Web Token support available in a sub-package.  The library supports both
-the compact and full serialization formats, and has optional support for
-multiple recipients.")
-    (license license:asl2.0)))
 
 (define-public go-gopkg-in-src-d-go-billy-v4
   (package
