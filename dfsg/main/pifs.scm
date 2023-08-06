@@ -53,7 +53,7 @@
          ("automake" ,automake)
          ("pkg-config" ,pkg-config)))
       (inputs
-       `(("fuse" ,fuse-3)))
+       `(("fuse" ,fuse)))
       (home-page "https://github.com/philipl/pifs/")
       (synopsis "πfs - the data-free filesystem")
       (description "πfs is a revolutionary new file system that, instead of

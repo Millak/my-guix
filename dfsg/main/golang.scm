@@ -66,7 +66,7 @@
      (list go-golang-org-x-sys
            go-github-com-tv42-httpunix))
     (native-inputs
-     `(("fuse" ,(@ (gnu packages linux) fuse-3))))
+     `(("fuse" ,(@ (gnu packages linux) fuse))))
     (home-page "https://bazil.org/fuse/")
     (synopsis "Go library for writing filesystems")
     (description "This package is a Go library for writing filesystems.  It is
@@ -6065,7 +6065,7 @@ most simple cli application can be written as follows:")
      (list go-golang-org-x-sys
            go-github-com-tv42-httpunix))
     (native-inputs
-     `(("fuse" ,(@ (gnu packages linux) fuse-3))))
+     `(("fuse" ,(@ (gnu packages linux) fuse))))
     (home-page "https://github.com/keybase/fuse")
     (synopsis "bazil.org/fuse -- Filesystems in Go")
     (description
