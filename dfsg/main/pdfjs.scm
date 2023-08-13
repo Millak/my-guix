@@ -20,7 +20,8 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix utils)
-  #:use-module (guix build-system copy))
+  #:use-module (guix build-system copy)
+  #:use-module (gnu packages fonts))
 
 (define-public pdfjs
   (package
@@ -35,8 +36,25 @@
         (sha256
          (base32 "13451wyanv9gzzamgka90yacqv6kingvlw3xcwjqrp6bbhjbsg9k"))))
     (build-system copy-build-system)
-    (arguments `(#:install-plan
-                 '(("." "share/pdfjs"))))
+    (arguments
+     `(#:install-plan
+       '(("." "share/pdfjs"))
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'install 'install-fonts
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out"))
+                   (liberation (string-append
+                                 (assoc-ref inputs "font-liberation")
+                                 "/share/fonts/truetype/")))
+               (with-directory-excursion
+                 (string-append out "/share/pdfjs/web/standard_fonts/")
+                 (for-each (lambda (file)
+                             (delete-file file)
+                             (symlink (string-append liberation file) file))
+                           (find-files "." "LiberationSans-.*\\.ttf$"))
+                 (delete-file "LICENSE_LIBERATION"))))))))
+    (inputs (list font-liberation))
     (home-page "https://mozilla.github.io/pdf.js/")
     (synopsis "PDF reader in Javascript")
     (description
