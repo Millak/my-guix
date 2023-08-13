@@ -1758,34 +1758,6 @@ users are recommended to switch their imports.")
     (description "Go bindings to systemd.  The project has several packages:")
     (license license:asl2.0)))
 
-(define-public go-github-com-coreos-go-oidc-v3
-  (package
-    (name "go-github-com-coreos-go-oidc-v3")
-    (version "3.5.0")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/coreos/go-oidc")
-                    (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "1a1rsn6wpmv9gqzc1vpny6n87bm3kqmrpr7w90lc490sjid7bvja"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/coreos/go-oidc/v3/oidc"
-       #:unpack-path "github.com/coreos/go-oidc/v3"))
-    (propagated-inputs
-     (list go-golang-org-x-oauth2
-           go-golang-org-x-net
-           go-github-com-go-jose-go-jose-v3))
-    (home-page "https://github.com/coreos/go-oidc")
-    (synopsis "go-oidc")
-    (description
-     "There were two breaking changes made to the v3 branch.  The import path has
-changed from:")
-    (license license:asl2.0)))
-
 (define-public go-github-com-coreos-go-systemd-activation
   (package
     (name "go-github-com-coreos-go-systemd-activation")
@@ -3125,37 +3097,6 @@ services.")
      "cors package is net/http handler to handle CORS related requests as defined by
 @url{http://www.w3.org/TR/cors/,http://www.w3.org/TR/cors/}")
     (license license:expat)))
-
-(define-public go-github-com-go-jose-go-jose-v3
-  (package
-    (name "go-github-com-go-jose-go-jose-v3")
-    (version "3.0.0")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/go-jose/go-jose")
-                    (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "1fnw0p49wc9gmd2xcji2x9jf97dgg9igagd5m6bmq3nw9jjfqdc5"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/go-jose/go-jose/v3"))
-    (propagated-inputs
-     (list go-golang-org-x-crypto
-           go-github-com-stretchr-testify
-           go-github-com-google-go-cmp))
-    (home-page "https://github.com/go-jose/go-jose")
-    (synopsis "Go JOSE")
-    (description
-     "Package jose aims to provide an implementation of the Javascript Object Signing
-and Encryption set of standards.  It implements encryption and signing based on
-the JSON Web Encryption and JSON Web Signature standards, with optional JSON Web
-Token support available in a sub-package.  The library supports both the compact
-and JWS/JWE JSON Serialization formats, and has optional support for multiple
-recipients.")
-    (license license:asl2.0)))
 
 (define-public go-github-com-go-ole-go-ole
   (package
