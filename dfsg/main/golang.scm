@@ -1758,29 +1758,6 @@ users are recommended to switch their imports.")
     (description "Go bindings to systemd.  The project has several packages:")
     (license license:asl2.0)))
 
-(define-public go-github-com-coreos-go-systemd-activation
-  (package
-    (name "go-github-com-coreos-go-systemd-activation")
-    (version "0.0.0-20170731111925-d21964639418")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/coreos/go-systemd")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "1kcgnsm9l1kk8nfv1lkvkrjghy1aavhzv7d9f6l5qi2wqyvj48dw"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:unpack-path "github.com/coreos/go-systemd"
-       #:import-path "github.com/coreos/go-systemd/activation"))
-    (home-page "https://github.com/coreos/go-systemd")
-    (synopsis "go-systemd")
-    (description #f)
-    (license license:asl2.0)))
-
 (define-public go-github-com-coreos-go-systemd-daemon
   (package
     (inherit go-github-com-coreos-go-systemd-activation)
