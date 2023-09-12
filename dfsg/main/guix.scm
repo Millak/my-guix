@@ -1,3 +1,4 @@
+;;; vim: set ft=scheme :
 ;;; Copyright © 2023 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
