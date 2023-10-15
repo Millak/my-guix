@@ -22,7 +22,8 @@
   #:use-module (guix utils)
   #:use-module (guix gexp)
   #:use-module (gnu packages qt)
-  #:use-module (gnu packages web-browsers))
+  #:use-module (gnu packages web-browsers)
+  #:use-module (dfsg main adblock))
 
 (define qtwebengine-with-widevine
   (package/inherit qtwebengine-5
@@ -47,6 +48,12 @@
                         ;;"--webengine-icu=system"
                         "--webengine-pepper-plugins=yes"
                         "-webengine-proprietary-codecs")))))))))
+
+(define-public qutebrowser-with-adblock
+  (package/inherit qutebrowser
+    (name "qutebrowser-with-adblock")
+    (inputs (modify-inputs (package-inputs qutebrowser)
+                           (prepend python-adblock)))))
 
 (define-public qutebrowser-with-widevine
   (package/inherit qutebrowser
