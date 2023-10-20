@@ -76,9 +76,12 @@
              openssl
              (list util-linux "lib")))
       (home-page "https://opensource.apple.com/source/diskdev_cmds/")
-      (synopsis "mkfs and fsck for HFS and HFS+ file systems")
+      (synopsis "@code{mkfs} and @code{fsck} for HFS and HFS+ file systems")
       (description "The HFS+ file system used by Apple Computer for their Mac OS
 is supported by the Linux kernel.  Apple provides mkfs and fsck for HFS+ with
 the Unix core of their operating system, Darwin.  This package is a port of
 Apple's tools for HFS+ filesystems.")
-      (license license:apsl2))))
+      (license ((@@ (guix licenses) license)
+                "Apple \"Open Source\" License 1.2"
+                "file://APPLE_LICENSE"
+                "This package is non-free")))))
