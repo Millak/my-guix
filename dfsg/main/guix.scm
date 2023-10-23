@@ -36,6 +36,6 @@
     (synopsis "Background images for GNU Guix")
     (description "The SVG files in this directory are intended to be used as
 backgrounds for different components of the GNU system like login managers and
-desktop environments. The backgrounds are available in different aspect ratios
+desktop environments.  The backgrounds are available in different aspect ratios
 which are indicated in the file name.")
     (license (list license:public-domain license:cc-by-sa4.0))))
