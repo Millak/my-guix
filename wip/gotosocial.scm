@@ -24,6 +24,7 @@
   #:use-module (guix build-system go)
   #:use-module (gnu packages)
   #:use-module (gnu packages golang)
+  #:use-module (gnu packages golang-check)
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages syncthing)
   #:use-module (dfsg main golang))
