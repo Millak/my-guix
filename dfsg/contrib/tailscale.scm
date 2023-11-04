@@ -185,13 +185,13 @@ the world.")
 (define-public tailscale-bin-amd64
   (package
     (name "tailscale-bin-amd64")
-    (version "1.50.1")
+    (version "1.52.1")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
                                   version "_amd64.tgz"))
               (sha256
-               (base32 "0xmmpx34i9zsb48jg148fqm7xnldi63fdb3xll58y1xm1x46pznr"))))
+               (base32 "1glgmcl9wyqiy36qg4p0b1v971mriqql0vq07v4h7fma3wr5ldz9"))))
     (build-system copy-build-system)
     (arguments
      (list
@@ -227,52 +227,52 @@ the world.")
   (package
     (inherit tailscale-bin-amd64)
     (name "tailscale-bin-386")
-    (version "1.50.1")
+    (version "1.52.1")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
                                   version "_386.tgz"))
               (sha256
-               (base32 "1xsclsz1xydd50xywv91nv66pa3v481i01bi6sjh4vvq6m1s48a0"))))
+               (base32 "0glchny4szd1wh4rpxd34pfkqmwv9b9l5wgk9x4yi7ijp8w5swjw"))))
     (supported-systems '("i686-linux"))))
 
 (define-public tailscale-bin-arm
   (package
     (inherit tailscale-bin-amd64)
     (name "tailscale-bin-arm")
-    (version "1.50.1")
+    (version "1.52.1")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
                                   version "_arm.tgz"))
               (sha256
-               (base32 "0a5i0r9kyw9w8xpp8116amcxwsxwadviydqcvf9qlyanvf133scl"))))
+               (base32 "1p6ky4rrkim34g61j2m2kwwghyha9n9aqy7h5p53aaznswg5avif"))))
     (supported-systems '("armhf-linux"))))
 
 (define-public tailscale-bin-arm64
   (package
     (inherit tailscale-bin-amd64)
     (name "tailscale-bin-arm64")
-    (version "1.50.1")
+    (version "1.52.1")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
                                   version "_arm64.tgz"))
               (sha256
-               (base32 "1xfln29x2zg0dibg0vllrrjiy12mzppv2f6gq2gva58pnhc0vvpz"))))
+               (base32 "1dsxsrfi20965cisr7qlncnsijkgmnxb1xn2h422j11wyh0yijd7"))))
     (supported-systems '("aarch64-linux"))))
 
 (define-public tailscale-bin-riscv64
   (package
     (inherit tailscale-bin-amd64)
     (name "tailscale-bin-riscv64")
-    (version "1.50.1")
+    (version "1.52.1")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
                                   version "_riscv64.tgz"))
               (sha256
-               (base32 "05zvd5s5v8qyrsk3bhz8nzirzv120affsk57nc0g6if1v08mfvb3"))))
+               (base32 "141pg7yc4ldp3v6rxy51a6qp049nn7xi18icagp9wyrf09v3cdja"))))
     (supported-systems '("riscv64-linux"))))
 
 (define-public tailscale-with-newer-go-libraries
