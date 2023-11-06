@@ -27,8 +27,8 @@
   #:use-module (gnu packages lua))
 
 (define-public mpv-sponsorblock-minimal
-  (let ((commit "27dd1df4613cc98a857291336d9054d07fc61a29")     ; 20230504
-        (revision "7"))
+  (let ((commit "ca2844b8cf7674bfccd282d389a50427742251d3")     ; 20230820
+        (revision "8"))
   (package
     (name "mpv-sponsorblock-minimal")
     (version (git-version "0" revision commit))
@@ -40,7 +40,7 @@
                (commit commit)))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "1xvn66qnfym4p18qc33myjmzcdwansrxn30shb991a525ynmnrr8"))))
+         (base32 "010mvw9zz7mxnysa8f7xw5lprixispfx86lnzf2ai16fm5kxdhfv"))))
     (build-system trivial-build-system)
     (arguments
      (list
