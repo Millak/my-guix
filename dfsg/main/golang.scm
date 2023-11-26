@@ -11820,45 +11820,6 @@ provided by the language and \"sync\" and \"sync/atomic\" packages.")
 the operating system.")
     (license license:bsd-3)))
 
-(define-public go-golang-org-x-sys-0.8
-  (package
-    (inherit go-golang-org-x-sys)
-    (name "go-golang-org-x-sys")
-    (version "0.8.0")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://go.googlesource.com/sys")
-                    (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "1p81niiin8dwyrjl2xsc95136w3vdw4kmj0w3mlh0vh5v134s4xq"))))
-    (arguments
-     '(#:import-path "golang.org/x/sys"
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'build
-           (lambda* (#:key import-path build-flags #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'build)
-                  #:build-flags build-flags
-                  #:import-path (string-append "golang.org/x/sys/" directory)))
-               (list "cpu"
-                     "execabs"
-                     "unix"))))
-         (replace 'check
-           (lambda* (#:key tests? import-path #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'check)
-                  #:tests? tests?
-                  #:import-path (string-append "golang.org/x/sys/" directory)))
-               (list "cpu"
-                     "execabs"
-                     "unix")))))))))
-
 (define-public go-golang-org-x-term-next
   (package
     (name "go-golang-org-x-term")
