@@ -812,28 +812,6 @@ and collections.")
      "Package smithy provides the core components for a Smithy SDK.")
     (license license:asl2.0)))
 
-(define-public go-github-com-bits-and-blooms-bitset
-  (package
-    (name "go-github-com-bits-and-blooms-bitset")
-    (version "1.2.2")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/bits-and-blooms/bitset")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0p1g98klqwbdilqk0fkg8n7x8rjncqc52cva95rh7jl0k3q9d9x4"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/bits-and-blooms/bitset"))
-    (home-page "https://github.com/bits-and-blooms/bitset")
-    (synopsis "bitset")
-    (description
-     "Package bitset implements bitsets, a mapping between non-negative integers and
-boolean values.  It should be more efficient than map[uint] bool.")
-    (license license:bsd-3)))
-
 (define-public go-github-com-blevesearch-bleve
   (package
     (name "go-github-com-blevesearch-bleve")
@@ -1952,7 +1930,7 @@ users are recommended to switch their imports.")
     (propagated-inputs
      `(("go-github-com-blevesearch-mmap-go" ,go-github-com-blevesearch-mmap-go)
        ("go-github-com-spf13-cobra" ,go-github-com-spf13-cobra)
-       ("go-github-com-willf-bitset" ,go-github-com-willf-bitset)
+       ("go-github-com-bits-and-blooms-bitset" ,go-github-com-bits-and-blooms-bitset)
        ("go-golang-org-x-sys" ,go-golang-org-x-sys)))
     (home-page "https://github.com/couchbase/vellum")
     (synopsis "vellum")
