@@ -12917,66 +12917,73 @@ and Unmarshal functions.")
 (define-public go-humungus-tedunangst-com-r-webs
   (package
     (name "go-humungus-tedunangst-com-r-webs")
-    (version "0.6.59")
-    (source (origin
-              (method hg-fetch)
-              (uri (hg-reference (url "https://humungus.tedunangst.com/r/webs")
-                                 (changeset (string-append "v" version))))
-              (file-name (string-append name "-" version "-checkout"))
-              (sha256
-               (base32
-                "0bhrnp9c1bdg4n2s06nv0j21dsrvg8gldmrmaczfwpn2l3szicsw"))))
+    (version "0.7.9")
+    (source
+     (origin
+       (method hg-fetch)
+       (uri (hg-reference (url "https://humungus.tedunangst.com/r/webs")
+                          (changeset (string-append "v" version))))
+       (file-name (string-append name "-" version "-checkout"))
+       (sha256
+        (base32 "1xhmb7d3p201ps4bfcy5czgjzlv8ngnqf7aismcpvgik01ff36kl"))))
     (build-system go-build-system)
     (arguments
-     '(#:import-path "humungus.tedunangst.com/r/webs"
+     (list
+       #:go go-1.18
+       #:import-path "humungus.tedunangst.com/r/webs"
+       #:unpack-path "humungus.tedunangst.com/r/webs"
        #:phases
-       (modify-phases %standard-phases
-         (replace 'build
-           (lambda* (#:key import-path build-flags #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'build)
-                  #:build-flags build-flags
-                  #:import-path (string-append "humungus.tedunangst.com/r/webs/" directory)))
-               (list "cache"
-                     "gate"
-                     "htfilter"
-                     "httpsig"
-                     "image"
-                     "junk"
-                     "log"
-                     "login"
-                     "mz"
-                     "rss"
-                     "synlight"
-                     "templates"))))
-         (replace 'check
-           (lambda* (#:key tests? import-path #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'check)
-                  #:tests? tests?
-                  #:import-path (string-append "humungus.tedunangst.com/r/webs/" directory)))
-               (list "cache"
-                     "gate"
-                     "htfilter"
-                     "httpsig"
-                     "image"
-                     "junk"
-                     "log"
-                     "login"
-                     "mz"
-                     "rss"
-                     "synlight"
-                     "templates")))))))
+       #~(modify-phases %standard-phases
+           (replace 'build
+             (lambda* (#:key import-path build-flags #:allow-other-keys)
+               (for-each
+                 (lambda (directory)
+                   ((assoc-ref %standard-phases 'build)
+                    #:build-flags build-flags
+                    #:import-path
+                    (string-append "humungus.tedunangst.com/r/webs/" directory)))
+                 (list "cache"
+                       "gate"
+                       ;"gencache"      ; This one fails with gccgo
+                       "htfilter"
+                       "httpsig"
+                       "image"
+                       "junk"
+                       "log"
+                       "login"
+                       "mz"
+                       "rss"
+                       "synlight"
+                       "templates"))))
+           (replace 'check
+             (lambda* (#:key tests? import-path #:allow-other-keys)
+               (for-each
+                 (lambda (directory)
+                   ((assoc-ref %standard-phases 'check)
+                    #:tests? tests?
+                    #:import-path
+                    (string-append "humungus.tedunangst.com/r/webs/" directory)))
+                 (list "cache"
+                       "gate"
+                       ;"gencache"      ; This one fails with gccgo
+                       "htfilter"
+                       "httpsig"
+                       "image"
+                       "junk"
+                       "log"
+                       "login"
+                       "mz"
+                       "rss"
+                       "synlight"
+                       "templates")))))))
     (propagated-inputs
-     (list go-golang-org-x-net
-           go-golang-org-x-image
-           go-golang-org-x-crypto))
+     (list go-golang-org-x-net          ; 0.14.0
+           go-golang-org-x-image        ; 0.11.0
+           go-golang-org-x-crypto))     ; 0.12.0
     (home-page "https://humungus.tedunangst.com/r/webs")
-    (synopsis #f)
-    (description #f)
-    (license #f)))
+    (synopsis "Web utilities")
+    (description "This package contains a collection of web utilities.")
+    (license license:isc)))
 
 (define-public go-inet-af-peercred
   (package
