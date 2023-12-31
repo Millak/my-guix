@@ -24,7 +24,15 @@
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system trivial)
   #:use-module (gnu packages curl)
-  #:use-module (gnu packages lua))
+  #:use-module (gnu packages lua)
+  #:use-module (gnu packages video))
+
+(define-public my-mpv-mpris
+  (package/inherit mpv-mpris
+    (name "my-mpv-mpris")
+    (inputs
+      (modify-inputs (package-inputs mpv)
+                     (prepend mpv)))))
 
 (define-public mpv-sponsorblock-minimal
   (let ((commit "ca2844b8cf7674bfccd282d389a50427742251d3")     ; 20230820
