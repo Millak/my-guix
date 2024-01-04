@@ -30,6 +30,7 @@
   #:use-module (gnu packages databases)
   #:use-module (gnu packages golang)
   #:use-module (gnu packages golang-check)
+  #:use-module (gnu packages golang-web)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages node)
   #:use-module (gnu packages ssh)
