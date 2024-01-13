@@ -3706,28 +3706,6 @@ back that API. Packages in the Go ecosystem can depend on this package, while
 callers can implement logging with whatever backend is appropriate.")
     (license license:asl2.0)))
 
-(define-public go-github-com-google-btree
-  (package
-    (name "go-github-com-google-btree")
-    (version "1.0.1")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/google/btree")
-                    (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "0fv5577bmpf2gkzw8z271q8mn3x6fqyzqjrbzm580bqld0a1xwnl"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/google/btree"))
-    (home-page "https://github.com/google/btree")
-    (synopsis "BTree implementation for Go")
-    (description
-     "Package btree implements in-memory B-Trees of arbitrary degree.")
-    (license license:asl2.0)))
-
 (define-public go-github-com-googleapis-gax-go-v2
   (package
     (name "go-github-com-googleapis-gax-go-v2")
@@ -7866,7 +7844,7 @@ file handles, and for using named pipes as a net transport.")
                  (apply (assoc-ref %standard-phases 'check) args)))))))
     (propagated-inputs
      (list go-golang-org-x-tools
-           go-golang-org-x-sys-0.8
+           go-golang-org-x-sys
            go-golang-org-x-sync
            go-golang-org-x-net-0.10))
     (home-page "https://github.com/miekg/dns")
@@ -11696,7 +11674,7 @@ themselves.")
     (propagated-inputs
      (list go-golang-org-x-text-0.9
            go-golang-org-x-term-0.8
-           go-golang-org-x-sys-0.8))))
+           go-golang-org-x-sys))))
 
 (define-public go-golang-org-x-oauth2-0.8
   (package
@@ -11862,7 +11840,7 @@ found on UNIX systems.")
     (arguments
      '(#:import-path "golang.org/x/term"))
     (propagated-inputs
-     (list go-golang-org-x-sys-0.8))))
+     (list go-golang-org-x-sys))))
 
 (define-public go-golang-org-x-text-0.9
   (package
@@ -11955,7 +11933,7 @@ transformations, and locale-specific text handling.")
     ; '(#:import-path "golang.org/x/tools"))
     (propagated-inputs
      (list go-golang-org-x-sync
-           go-golang-org-x-sys-0.8
+           go-golang-org-x-sys
            go-golang-org-x-net-0.10
            go-golang-org-x-mod
            go-github-com-yuin-goldmark))))
@@ -13206,7 +13184,7 @@ Kubernetes-like API objects.")
        ("go-golang-org-x-net" ,go-golang-org-x-net)
        ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
        ("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
-       ;("go-github-com-peterbourgon-diskv" ,go-github-com-peterbourgon-diskv)
+       ("go-github-com-peterbourgon-diskv" ,go-github-com-peterbourgon-diskv)
        ("go-github-com-imdario-mergo" ,go-github-com-imdario-mergo)
        ;("go-github-com-gregjones-httpcache" ,go-github-com-gregjones-httpcache)
        ("go-github-com-google-uuid" ,go-github-com-google-uuid)
