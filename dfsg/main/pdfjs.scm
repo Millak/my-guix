@@ -1,4 +1,4 @@
-;;; Copyright © 2023 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2023, 2024 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -26,7 +26,7 @@
 (define-public pdfjs
   (package
     (name "pdfjs")
-    (version "4.0.189")
+    (version "4.0.379")
     (source
       (origin
         (method url-fetch/zipbomb)
@@ -34,7 +34,7 @@
                             "/download/v" version
                             "/pdfjs-" version "-dist.zip"))
         (sha256
-         (base32 "1zvryrbiypzi2s8c2csm2v1z28g0rvrnga8l73k0g48h6mkzlz23"))))
+         (base32 "1p12r5mm3j7yzyn1gj6hncjwv86n6wmncbc31d5kzrr0yq6f1r8i"))))
     (build-system copy-build-system)
     (arguments
      `(#:install-plan
@@ -75,4 +75,4 @@
                             "/download/v" version
                             "/pdfjs-" version "-legacy-dist.zip"))
         (sha256
-         (base32 "1z507zlcmax3a3wdfq18ki76v7l9wlagkaygrrn15x5im4gifxyr"))))))
+         (base32 "14mdcvxcz4wcb5q8im8awmiba4r4hr8g2w46vljvbyf9xnv6pjmq"))))))
