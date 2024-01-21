@@ -1,4 +1,4 @@
-;;; Copyright © 2023 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2023, 2024 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -47,13 +47,15 @@
                         ;; icu4c >= 68 fails.
                         ;;"--webengine-icu=system"
                         "--webengine-pepper-plugins=yes"
-                        "-webengine-proprietary-codecs")))))))))
+                        "--webengine-proprietary-codecs=yes")))))))))
 
 (define-public qutebrowser-with-adblock
   (package/inherit qutebrowser
     (name "qutebrowser-with-adblock")
     (inputs (modify-inputs (package-inputs qutebrowser)
-                           (prepend python-adblock)))))
+                           (prepend python-adblock
+                                    ;; Can only add 1 in the manifest
+                                    qtwayland)))))
 
 (define-public qutebrowser-with-widevine
   (package/inherit qutebrowser
