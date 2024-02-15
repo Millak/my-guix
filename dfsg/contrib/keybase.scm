@@ -23,8 +23,11 @@
   #:use-module (guix utils)
   #:use-module (guix build-system go)
   #:use-module (gnu packages golang)
+  #:use-module (gnu packages golang-build)
   #:use-module (gnu packages golang-check)
+  #:use-module (gnu packages golang-crypto)
   #:use-module (gnu packages golang-web)
+  #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages syncthing)
   #:use-module (dfsg main golang))
 

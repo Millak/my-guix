@@ -20,22 +20,135 @@
   #:use-module (guix build utils)
   #:use-module (guix git-download)
   #:use-module (guix download)
+  #:use-module (guix search-paths)
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix gexp)
   #:use-module (guix build-system copy)
   #:use-module (guix build-system go)
+  #:use-module (gnu packages base)
+  #:use-module (gnu packages certs)
+  #:use-module (gnu packages compression)
+  #:use-module (gnu packages curl)
   #:use-module (gnu packages golang)
   #:use-module (gnu packages golang-check)
+  #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages syncthing)
+  #:use-module (gnu packages version-control)
   #:use-module (gnu packages web)
   #:use-module (dfsg main golang))
+
+(define computed-origin-method (@@ (guix packages) computed-origin-method))
+#;(define tailscale-vendored-sources
+  (let* ((version "1.56.1")
+         (upstream-source
+           (origin
+             (method git-fetch)
+             (uri (git-reference
+                    (url "https://github.com/tailscale/tailscale")
+                    (commit (string-append "v" version))))
+             (file-name (git-file-name "tailscale" version))
+             (sha256
+              (base32 "0h4b153vl7gslfyf6f842i9s0vq6m74hqjvkhhlcnddgy91kkjch")))))
+    (computed-file (string-append "tailscale-vendored-sources-" version ".tar.xz")
+      (with-imported-modules '((guix build utils))
+        #~(begin
+            (use-modules (guix build utils)
+                         ;(ice-9 ftw)
+                         (ice-9 match))
+            (set-path-environment-variable
+              "PATH" '("bin")
+              (list #+(canonical-package gzip)
+                    #+(canonical-package tar)
+                    #+curl
+                    #+git-minimal
+                    #+nss-certs
+                    #+go))
+
+            (for-each (match-lambda
+                        ((env-var (files ...) separator type pattern)
+                         (set-path-environment-variable env-var files
+                                                        input-directories
+                                                        #:separator separator
+                                                        #:type type
+                                                        #:pattern pattern)))
+                      '#$(map search-path-specification->sexp
+                              (package-transitive-native-search-paths
+                                go)))
+
+            (setenv "SOURCE_DATE_EPOCH" "1")
+            ;(setenv "GOINSECURE" "*")
+            (setenv "HOME" (getcwd))
+            (setenv "USER" "homeless-shelter")
+            ;(setenv "GOPROXY" "direct")
+            ;(setenv "GO111MODULE" "on")
+            ;(setenv "GOCACHE" (string-append (getcwd) "/go-cache"))
+            (copy-recursively #+upstream-source
+                              (string-append "tailscale-" #$version))
+            (with-directory-excursion (string-append "tailscale-" #$version)
+              (begin
+                (setenv "CURL_CA_BUNDLE"
+                        (string-append #+nss-certs "/etc/ssl/certs/ca-bundle.crt"))
+                (setenv "GIT_SSL_CAINFO"
+                        (string-append #+nss-certs "/etc/ssl/certs/ca-bundle.crt"))
+                (setenv "SSL_CERT_DIR"
+                        (string-append #+nss-certs "/etc/ssl/certs"))
+                (setenv "SSL_CERT_FILE"
+                        (string-append #+nss-certs "/etc/ssl/certs/ca-bundle.crt"))
+                (setenv "GIT_EXEC_PATH"
+                        (string-append #+git-minimal "/libexec/git-core"))
+                (invoke "go" "mod" "vendor")
+
+                (format #t "Creating the tarball ...~%")
+                (force-output)
+                (with-directory-excursion "../"
+                  (invoke "tar" "czf" #$output
+                          ;; avoid non-determinism in the archive
+                          "--sort=name" "--mtime=@1"
+                          "--owner=root:0" "--group=root:0"
+                          (string-append "tailscale-" #$version))))))))
+    #;(origin
+      (method computed-origin-method)
+      (file-name (string-append "tailscale-vendored-sources-" version ".tar.gz"))
+      (sha256 #f)
+      (uri
+        (delay
+          (with-imported-modules '((guix build utils))
+            #~(begin
+                (use-modules (guix build utils))
+                (set-path-environment-variable
+                  "PATH" '("bin")
+                  (list #+(canonical-package gzip)
+                        #+(canonical-package tar)
+                        #+go
+                        ))
+                (setenv "HOME" (getcwd))
+                (copy-recursively #+upstream-source
+                                  (string-append "tailscale-" #$version))
+                (with-directory-excursion (string-append "tailscale-" #$version)
+                  (begin
+                    (setenv "GIT_SSL_CAINFO"
+                            (string-append #+nss-certs "/etc/ssl/certs/ca-bundle.crt"))
+                    (setenv "SSL_CERT_FILE"
+                            (string-append #+nss-certs "/etc/ssl/certs/ca-bundle.crt"))
+                    (invoke "go" "mod" "vendor")
+
+                    (format #t "Creating the tarball ...~%")
+                    (force-output)
+                    (with-directory-excursion "../"
+                      (invoke "tar" "czf" #$output
+                              ;; avoid non-determinism in the archive
+                              "--sort=name" "--mtime=@0"
+                              "--owner=root:0" "--group=root:0"
+                              (string-append "tailscale-" #$version))))))))))
+  ))
 
 (define-public tailscale
   (package
     (name "tailscale")
-    (version "1.42.0")
+    (version "1.56.1")
+    ;(source tailscale-vendored-sources)
     (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -82,7 +195,7 @@
                  (list "tailscale.com/cmd/tailscale"
                        "tailscale.com/cmd/tailscaled"))))
            )))
-    (inputs
+    #;(inputs
      (list
        ;software.sslmate.com/src/go-pkcs12
        ;sigs.k8s.io/yaml

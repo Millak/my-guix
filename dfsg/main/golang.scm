@@ -29,8 +29,12 @@
   #:use-module (gnu packages check)
   #:use-module (gnu packages databases)
   #:use-module (gnu packages golang)
+  #:use-module (gnu packages golang-build)
   #:use-module (gnu packages golang-check)
+  #:use-module (gnu packages golang-compression)
+  #:use-module (gnu packages golang-crypto)
   #:use-module (gnu packages golang-web)
+  #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages node)
   #:use-module (gnu packages ssh)
@@ -577,27 +581,6 @@ Interface on Windows.")
      "Package miniredis is a pure Go Redis test server, for use in Go unittests.
 There are no dependencies on system binaries, and every server you start will be
 empty.")
-    (license license:expat)))
-
-(define-public go-github-com-anmitsu-go-shlex
-  (package
-    (name "go-github-com-anmitsu-go-shlex")
-    (version "0.0.0-20200514113438-38f4b401e2be")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/anmitsu/go-shlex")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "17iz68yzbnr7y4s493asbagbv79qq8hvl2pkxvm6bvdkgphj8w1g"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/anmitsu/go-shlex"))
-    (home-page "https://github.com/anmitsu/go-shlex")
-    (synopsis "go-shlex")
-    (description
-      "Package shlex provides a simple lexical analysis like Unix shell.")
     (license license:expat)))
 
 (define-public go-github-com-antchfx-htmlquery
@@ -7815,47 +7798,6 @@ operations in Go.  Currently, this is focused on accessing named pipes and other
 file handles, and for using named pipes as a net transport.")
     (license license:expat)))
 
-(define-public go-github-com-miekg-dns
-  (package
-    (name "go-github-com-miekg-dns")
-    (version "1.1.54")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/miekg/dns")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0bgk9h6w8h1d2c54lwidyxsc8kw1iadvvybrisjsqma5ds5pqhcl"))))
-    (build-system go-build-system)
-    (arguments
-     (list
-       #:go go-1.19
-       #:import-path "github.com/miekg/dns"
-       #:phases
-       #~(modify-phases %standard-phases
-           (replace 'check
-             (lambda* (#:key inputs #:allow-other-keys #:rest args)
-               (unless
-                 ;; The tests fail when run with gccgo.
-                 ;; Tests try to access the network.
-                 (false-if-exception (search-input-file inputs "/bin/gccgo"))
-                 (apply (assoc-ref %standard-phases 'check) args)))))))
-    (propagated-inputs
-     (list go-golang-org-x-tools
-           go-golang-org-x-sys
-           go-golang-org-x-sync
-           go-golang-org-x-net-0.10))
-    (home-page "https://github.com/miekg/dns")
-    (synopsis "Alternative (more granular) approach to a DNS library")
-    (description
-      "Package dns implements a full featured interface to the Domain Name System.
-Both server- and client-side programming is supported.  The package allows
-complete control over what is sent out to the DNS.  The API follows the
-less-is-more principle, by presenting a small, clean interface.")
-    (license license:bsd-3)))
-
 (define-public go-github-com-minio-md5-simd
   (package
     (name "go-github-com-minio-md5-simd")
@@ -9328,29 +9270,6 @@ Go.  It supports many data structures including kv, list, hash, zset, set.")
     (home-page "https://github.com/siddontang/rdb")
     (synopsis "Handle Redis RDB format in Golang")
     (description "This package handles Redis RDB format in Golang.")
-    (license license:expat)))
-
-(define-public go-github-com-skip2-go-qrcode
-  (package
-    (name "go-github-com-skip2-go-qrcode")
-    (version "0.0.0-20200617195104-da1b6568686e")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/skip2/go-qrcode")
-                    (commit (go-version->git-ref version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "0pghd6y2x8a5fqy4rjn4d8j5jcslb236naycdza5an7vyvinsgs9"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f
-       ;; conversion from int to string yields a string of one rune, not a string of digits (did you mean fmt.Sprint(x)?)
-       #:import-path "github.com/skip2/go-qrcode"))
-    (home-page "https://github.com/skip2/go-qrcode")
-    (synopsis "go-qrcode")
-    (description "Package qrcode implements a QR Code encoder.")
     (license license:expat)))
 
 (define-public go-github-com-smartystreets-go-aws-auth

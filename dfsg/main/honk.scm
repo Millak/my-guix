@@ -25,6 +25,8 @@
   #:use-module (guix build-system go)
   #:use-module (gnu packages)
   #:use-module (gnu packages golang)
+  #:use-module (gnu packages golang-build)
+  #:use-module (gnu packages golang-web)
   #:use-module (gnu packages man)
   #:use-module (gnu packages sqlite))
 
