@@ -4246,65 +4246,6 @@ projects.")
 as tools to validate data against their schema.")
     (license license:asl2.0)))
 
-(define-public go-github-com-go-playground-assert-v2
-  (package
-    (name "go-github-com-go-playground-assert-v2")
-    (version "2.2.0")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/go-playground/assert")
-                     (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "13mb07dxhcy9ydqbracnrpfj682g6sazjpm56yrlbn2jc1yfy44c"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/go-playground/assert/v2"))
-    (home-page "https://github.com/go-playground/assert")
-    (synopsis "Package assert")
-    (description
-     "Package assert provides some basic assertion functions for testing and also
-     provides the building blocks for creating your own more complex validations.")
-    (license license:expat)))
-
-(define-public go-github-com-go-playground-validator-v10
-  (package
-    (name "go-github-com-go-playground-validator-v10")
-    (version "10.11.2")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/go-playground/validator")
-                     (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "0yq6xj27n73x7z09qkrah813snnwq72rh6w5l1bgcay54viryqnj"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/go-playground/validator/v10"))
-    (propagated-inputs
-     `(("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
-       ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
-       ("go-golang-org-x-text" ,go-golang-org-x-text)
-       ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-       ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-       ("go-github-com-rogpeppe-go-internal" ,go-github-com-rogpeppe-go-internal)
-       ("go-github-com-leodido-go-urn" ,go-github-com-leodido-go-urn)
-       ("go-github-com-kr-pretty" ,go-github-com-kr-pretty)
-       ("go-github-com-go-playground-universal-translator" ,go-github-com-go-playground-universal-translator)
-       ("go-github-com-go-playground-locales" ,go-github-com-go-playground-locales)
-       ("go-github-com-go-playground-assert-v2" ,go-github-com-go-playground-assert-v2)
-       ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)))
-    (home-page "https://github.com/go-playground/validator")
-    (synopsis "Package validator")
-    (description
-      "Package validator implements value validations for structs and individual fields
-      based on tags.")
-    (license license:expat)))
-
 (define-public go-github-com-gopherjs-gopherjs
   (package
     (name "go-github-com-gopherjs-gopherjs")
