@@ -206,7 +206,7 @@ for a full list of sub-packages.")
        #:unpack-path "code.gitea.io/sdk"
        #:import-path "code.gitea.io/sdk/gitea"))
     (propagated-inputs
-     (list go-github-com-hashicorp-go-version-1.3.0))
+     (list go-github-com-hashicorp-go-version))
     (native-inputs
      (list go-github-com-stretchr-testify))
     (home-page "https://code.gitea.io/sdk")
@@ -2049,58 +2049,6 @@ important parts.")
     (home-page "https://github.com/dave/gopackages")
     (synopsis #f)
     (description #f)
-    (license license:expat)))
-
-(define-public go-github-com-dave-jennifer-1.6.0
-  (package
-    (name "go-github-com-dave-jennifer")
-    (version "1.6.0")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/dave/jennifer")
-                     (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "0pyqqhjankcn3xf4548lzldk8w1pgdpqb8wp3fljxrjvmxl8myjf"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/dave/jennifer"))
-    (propagated-inputs
-     (list go-golang-org-x-tools
-           go-github-com-dave-rebecca
-           go-github-com-dave-patsy
-           go-github-com-dave-kerr
-           go-github-com-dave-gopackages
-           go-github-com-dave-courtney
-           go-github-com-dave-brenda
-           go-github-com-dave-astrid))
-    (home-page "https://github.com/dave/jennifer")
-    (synopsis "Jennifer")
-    (description "Package jennifer is a code generator for Go")
-    (license license:expat)))
-
-(define-public go-github-com-dave-jennifer
-  (package
-    (name "go-github-com-dave-jennifer")
-    (version "1.4.1")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/dave/jennifer")
-                     (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-                (base32
-                  "0sv57xs9ih924h9bbiipgrq3m0vzkh4ksm7dgmpjkw16i5pl6bwm"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; Tests depend on kego.io/context/vosctx
-       #:import-path "github.com/dave/jennifer"))
-    (home-page "https://github.com/dave/jennifer")
-    (synopsis "Jennifer")
-    (description "Package jennifer is a code generator for Go")
     (license license:expat)))
 
 (define-public go-github-com-dave-kerr
@@ -4827,23 +4775,6 @@ retries and exponential backoff.  It is a thin wrapper over the standard
 net/http client library and exposes nearly the same public API.  This makes
 retryablehttp very easy to drop into existing programs.")
     (license license:mpl2.0)))
-
-;; update in (gnu packages golang)
-(define-public go-github-com-hashicorp-go-version-1.3.0
-  (package
-    (inherit go-github-com-hashicorp-go-version)
-    (name "go-github-com-hashicorp-go-version")
-    (version "1.3.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/hashicorp/go-version")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "15ygnddqh4wq1l866cicc9cmbcqvym16ai8dj71i0wqyknnfxr3v"))))
-    (arguments '(#:import-path "github.com/hashicorp/go-version"))))
 
 (define-public go-github-com-hdevalence-ed25519consensus
   (package
@@ -8328,33 +8259,6 @@ help improve the encoding/decoding performance of some binary protocols.")
       "Package lz4 implements reading and writing lz4 compressed data.")
     (license license:bsd-3)))
 
-(define-public go-github-com-pkg-sftp
-  (package
-    (name "go-github-com-pkg-sftp")
-    (version "1.13.4")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/pkg/sftp")
-                    (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "18vp6anhczlkw247wy427gkri47y1h4nqbrbvqsdb170h878d6c6"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/pkg/sftp"))
-    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
-                         ("go-golang-org-x-crypto" ,go-golang-org-x-crypto)
-                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-                         ("go-github-com-kr-fs" ,go-github-com-kr-fs)))
-    (home-page "https://github.com/pkg/sftp")
-    (synopsis "sftp")
-    (description
-     "Package sftp implements the SSH File Transfer Protocol as described in
-@@url{https://tools.ietf.org/html/draft-ietf-secsh-filexfer-02,https://tools.ietf.org/html/draft-ietf-secsh-filexfer-02}")
-    (license license:bsd-2)))
-
 (define-public go-github-com-pquerna-otp
   (package
     (name "go-github-com-pquerna-otp")
@@ -10048,53 +9952,6 @@ default browser.")
      "This repository contains the @code{go-codec} library, the @code{codecgen} tool
 and benchmarks for comparing against other libraries.")
     (license license:expat)))
-
-(define-public go-github-com-ugorji-go-codec
-  (package
-    (name "go-github-com-ugorji-go-codec")
-    (version "1.2.6")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/ugorji/go")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0nwqx41f82r9rmdhzi01bgvwpsa7jgcl3s6n3r7q3hq48kw13g67"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/ugorji/go/codec"
-       #:unpack-path "github.com/ugorji/go"))
-    (home-page "https://github.com/ugorji/go")
-    (synopsis "Package Documentation for github.com/ugorji/go/codec")
-    (description
-     "Package codec provides a High Performance, Feature-Rich Idiomatic Go 1.4+
-codec/encoding library for binc, msgpack, cbor, json.")
-    (license license:expat)))
-
-(define-public go-github-com-ulikunitz-xz
-  (package
-    (name "go-github-com-ulikunitz-xz")
-    (version "0.5.10")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/ulikunitz/xz")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "07vynk0sh8i8g7x9p9x04dj8wylvxaf8ypbi43yvcv7j6zd63c72"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/ulikunitz/xz"))
-    (home-page "https://github.com/ulikunitz/xz")
-    (synopsis "Package xz")
-    (description
-      "Package xz supports the compression and decompression of xz files.  It supports
-version 1.0.4 of the specification without the non-LZMA2 filters.  See
-@url{http://tukaani.org/xz/xz-file-format-1.0.4.txt,http://tukaani.org/xz/xz-file-format-1.0.4.txt}")
-    (license license:bsd-3)))
 
 (define-public go-github-com-unknwon-com
   ;; Archived repository, this commit fixes build with go-1.15+
@@ -12643,8 +12500,8 @@ common patterns.")
        ("go-github-com-modern-go-reflect2" ,go-github-com-modern-go-reflect2)
        ("go-github-com-modern-go-concurrent" ,go-github-com-modern-go-concurrent)
        ("go-github-com-json-iterator-go" ,go-github-com-json-iterator-go)
-       ;("go-github-com-hashicorp-go-multierror" ,go-github-com-hashicorp-go-multierror)
-       ;("go-github-com-hashicorp-errwrap" ,go-github-com-hashicorp-errwrap)
+       ("go-github-com-hashicorp-go-multierror" ,go-github-com-hashicorp-go-multierror)
+       ("go-github-com-hashicorp-errwrap" ,go-github-com-hashicorp-errwrap)
        ;("go-github-com-googleapis-gnostic" ,go-github-com-googleapis-gnostic)
        ("go-github-com-google-gofuzz" ,go-github-com-google-gofuzz)
        ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
@@ -13971,7 +13828,6 @@ SHOULD NOT be used for new applications.")
       ;; This one is in Guix twice.
       ("go-github.com-mattn-go-runewidth" . ,(const go-github-com-mattn-go-runewidth))
       ;; This isn't picked up for some reason.
-      ;("go-github-com-hashicorp-go-version" . ,(const go-github-com-hashicorp-go-version-1.3.0))
       ;; We should use the newer versions.
       ("go-golang-org-x-crypto" . ,(const go-golang-org-x-crypto-next))
       ("go-golang-org-x-image" . ,(const go-golang-org-x-image-next))

@@ -198,8 +198,6 @@ network server, written in Golang.")
     `(
       ;; This one is in Guix twice.
       ("go-github.com-mattn-go-runewidth" . ,(const go-github-com-mattn-go-runewidth))
-      ;; This isn't picked up for some reason.
-      ;("go-github-com-hashicorp-go-version" . ,(const go-github-com-hashicorp-go-version-1.3.0))
       ;; We should use the newer versions.
       ("go-golang-org-x-crypto" . ,(const go-golang-org-x-crypto-0.9))
       ("go-golang-org-x-exp" . ,(const go-golang-org-x-exp-0.0.0-20220613132600-b0d781184e0d))
