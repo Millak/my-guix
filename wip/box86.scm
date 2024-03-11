@@ -1,4 +1,4 @@
-;;; Copyright © 2023 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2023, 2024 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -30,7 +30,7 @@
 (define-public box86
   (package
     (name "box86")
-    (version "0.3.0")
+    (version "0.3.4")
     (source
       (origin
         (method git-fetch)
@@ -39,14 +39,25 @@
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32
-          "17kq8iyv935krlza75i6vkszaz2lpb5w6m6nxrjjkwi7dky0mwwx"))
-        ;(snippet
-        ; #~(begin
-        ;     (use-modules (guix build utils))
-        ;     (delete-file "src/dynarec/arm_printer.c")
-        ;     (delete-file-recursively "src/wrapped/generated")
-        ;     (delete-file-recursively "x86lib")))
+         (base32 "1g2acbq1sgyxpg7miwvx10836j80mgbisib3rp1snwvmz7024krw"))
+        (snippet
+         #~(begin
+             (use-modules (guix build utils))
+             ;(substitute* "CMakeLists.txt"
+             ;  ((" /etc/") "${CMAKE_INSTALL_PREFIX}/etc/"))
+             (delete-file "src/dynarec/arm_printer.c")
+             (delete-file "src/dynarec/last_run.txt")
+             (delete-file "src/wrapped/generated/functions_list.txt")
+             ;(delete-file-recursively "src/wrapped/generated")
+             (delete-file-recursively "x86lib")
+             ;(delete-file "tests/bash")
+             ;(delete-file "tests/extensions/mmx")
+             ;(for-each (lambda (file)
+             ;            (let ((generated-file (string-drop-right file 2)))
+             ;              (when (file-exists? generated-file)
+             ;                (delete-file generated-file))))
+             ;          (find-files "tests" "\\.c$"))
+             ))
         ))
     (build-system cmake-build-system)
     (arguments
@@ -60,7 +71,6 @@
                "i686-linux")
               (_
                 (%current-system)))
-       #:out-of-source? #f
        ;; Test10 (cppThreads) fails, all tests in our build environment.
        #:tests? #f
        #:configure-flags
@@ -69,30 +79,32 @@
                        (#$(target-x86?)
                         (list "-DLD80BITS=1"
                               "-DNOALIGN=1"))
-                       (#$(target-arm32?)
+                       #;(#$(target-arm32?)
                         (list "-DARM_DYNAREC=1"))
                        ((and #$(target-powerpc?)
                              #$(target-little-endian?))
                         (list "-DPOWERPCLE=1"))
                        (#t '()))
-                 (list "-DNOGIT=1"))
+                 (list "-DNOGIT=1"
+                       ;; Don't install vendored libraries.
+                       "-DNO_LIB_INSTALL=1"
+                       ))
        #:phases
        #~(modify-phases %standard-phases
-           ;(add-after 'unpack 'rebuild-wrapped-files
-           ;  (lambda _
-           ;    (invoke "python3" "rebuild_printer.py" (getcwd))
-           ;    (invoke "python3" "rebuild_wrappers.py" (getcwd))))
+           (add-after 'unpack 'rebuild-wrapped-files
+             (lambda _
+               (substitute* "CMakeLists.txt"
+                 ((" /etc/") (string-append " " #$output "/etc/"))
+                 ;((" /usr/lib") (string-append " " #$output "/lib"))
+                 )
+               (invoke "python3" "rebuild_printer.py" (getcwd))
+               ;(invoke "python3" "rebuild_wrappers.py" (getcwd))
+               ))
            (add-after 'unpack 'adjust-version-number
              (lambda _
                (substitute* "src/build_info.c"
                  (("nogit") ""))))
-           ;(add-after 'unpack 'always-build-binfmt-file
-           ;  (lambda _
-           ;    (substitute* "CMakeLists.txt"
-           ;      (("enable_testing\\(\\)")
-           ;       (string-append "enable_testing()\n"
-           ;                      "configure_file(system/box86.conf.cmake system/box86.conf)")))))
-           (replace 'install
+           #;(replace 'install
              (lambda* (#:key outputs #:allow-other-keys)
                (let ((out (assoc-ref outputs "out")))
                  (install-file "box86"
@@ -113,7 +125,7 @@ non-x86 Linux systems, like ARM (host system needs to be 32bit little-endian).")
 (define-public box64
   (package
     (name "box64")
-    (version "0.2.2")
+    (version "0.2.6")
     (source
       (origin
         (method git-fetch)
@@ -122,61 +134,55 @@ non-x86 Linux systems, like ARM (host system needs to be 32bit little-endian).")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32
-          "0hdrqngz6crdhwnkd8smrk8nc4s7gcfw92shv9rzklr4gp8cp2v8"))
-        ;(snippet
-        ; #~(begin
-        ;     (use-modules (guix build utils))
-        ;     (delete-file "src/dynarec/arm_printer.c")
-        ;     (delete-file-recursively "src/wrapped/generated")
-        ;     (delete-file-recursively "x64lib")))
+         (base32 "0fpll9x3r8dyfacrww00nlnz9kn4pvhvx19ij3x1cnc4wq32g9kq"))
+        (snippet
+         #~(begin
+             (use-modules (guix build utils))
+             (substitute* "CMakeLists.txt"
+               ((" /etc/") " ${CMAKE_INSTALL_PREFIX}/etc/"))
+             ;(delete-file "src/dynarec/arm64_printer.c")
+             ;(delete-file "src/dynarec/last_run.txt")
+             (delete-file "src/wrapped/generated/functions_list.txt")
+             ;(delete-file-recursively "src/wrapped/generated")
+             (delete-file-recursively "x64lib")
+             ))
         ))
     (build-system cmake-build-system)
     (arguments
      (list
-       #:out-of-source? #f
        ;; Nearly all the tests fail in our build environment.
-       #:tests? #f
+       ;#:tests? #f
        #:configure-flags
        #~(append (cond (#$(target-aarch64?)
-                        (list "-DARM_DYNAREC=ON"))
+                        (list "-DARM_DYNAREC=ON"
+                              "-DPAGE16K=ON"
+                              ;"-DRPI5ARM64=ON"
+                              ))
                        (#$(target-x86-64?)
-                        (list "-DLD80BITS=1"
-                              "-DNOALIGN=1"))
+                        (list "-DLD80BITS=ON"
+                              "-DNOALIGN=ON"))
                        (#$(target-riscv64?)
-                        (list "-DRV64=1"))
+                        (list "-DRV64=ON"
+                              "-DRV64_DYNAREC=ON"))
                        (#$(target-ppc64le?)
-                        (list "-DPPC64LE=1"))
+                        (list "-DPPC64LE=ON"))
                        (#t '()))
-                 (list "-DNOGIT=1"))
+                 (list "-DNOGIT=ON"
+                       "-DSAVE_MEM=ON"
+                       ;; Don't install vendored libraries.
+                       "-DNO_LIB_INSTALL=ON"))
        #:phases
        #~(modify-phases %standard-phases
-           ;(add-after 'unpack 'rebuild-wrapped-files
-           ;  (lambda _
-           ;    (invoke "python3" "rebuild_printer.py" (getcwd))
-           ;    (invoke "python3" "rebuild_wrappers.py" (getcwd))))
            (add-after 'unpack 'adjust-version-number
              (lambda _
                (substitute* "src/build_info.c"
                  (("nogit") ""))))
-           ;(add-after 'unpack 'always-build-binfmt-file
-           ;  (lambda _
-           ;    (substitute* "CMakeLists.txt"
-           ;      (("enable_testing\\(\\)")
-           ;       (string-append "enable_testing()\n"
-           ;                      "configure_file(system/box64.conf.cmake system/box64.conf)")))))
-           (replace 'install
-             (lambda* (#:key outputs #:allow-other-keys)
-               (let ((out (assoc-ref outputs "out")))
-                 (install-file "box64"
-                               (string-append out "/bin"))
-                 (install-file "system/box64.box64rc"
-                               (string-append out "/etc"))
-                 (unless #$(target-x86?)
-                   (install-file "system/box64.conf"
-                                 (string-append out "/etc/binfmt.d")))))))))
+           (replace 'check
+             (lambda* (#:key tests? #:allow-other-keys)
+               (when tests?
+                 (invoke "./box64" "-v")))))))
     (native-inputs
-     (list python))
+     (list python-minimal))
     (home-page "https://box86.org/")
     (synopsis "Linux Userspace x86_64 Emulator")
     (description "Box64 lets you run x86_64 Linux programs (such as games) on
