@@ -43,8 +43,8 @@
         (snippet
          #~(begin
              (use-modules (guix build utils))
-             ;(substitute* "CMakeLists.txt"
-             ;  ((" /etc/") "${CMAKE_INSTALL_PREFIX}/etc/"))
+             (substitute* "CMakeLists.txt"
+               ((" /etc/") " ${CMAKE_INSTALL_PREFIX}/etc/"))
              (delete-file "src/dynarec/arm_printer.c")
              (delete-file "src/dynarec/last_run.txt")
              (delete-file "src/wrapped/generated/functions_list.txt")
@@ -93,10 +93,6 @@
        #~(modify-phases %standard-phases
            (add-after 'unpack 'rebuild-wrapped-files
              (lambda _
-               (substitute* "CMakeLists.txt"
-                 ((" /etc/") (string-append " " #$output "/etc/"))
-                 ;((" /usr/lib") (string-append " " #$output "/lib"))
-                 )
                (invoke "python3" "rebuild_printer.py" (getcwd))
                ;(invoke "python3" "rebuild_wrappers.py" (getcwd))
                ))
@@ -180,7 +176,10 @@ non-x86 Linux systems, like ARM (host system needs to be 32bit little-endian).")
            (replace 'check
              (lambda* (#:key tests? #:allow-other-keys)
                (when tests?
-                 (invoke "./box64" "-v")))))))
+                 (invoke "./box64" "-v"))))
+           (replace 'install
+             (lambda _
+               (install-file "box64" (string-append #$output "/bin")))))))
     (native-inputs
      (list python-minimal))
     (home-page "https://box86.org/")
