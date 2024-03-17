@@ -5451,29 +5451,6 @@ specifying command line options.")
 (@url{https://github.com/bkeepers/dotenv,https://github.com/bkeepers/dotenv})")
     (license license:expat)))
 
-(define-public go-github-com-josharian-intern
-  (package
-    (name "go-github-com-josharian-intern")
-    (version "1.0.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/josharian/intern")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1za48ppvwd5vg8vv25ldmwz1biwpb3p6qhf8vazhsfdg9m07951c"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/josharian/intern"))
-    (home-page "https://github.com/josharian/intern")
-    (synopsis #f)
-    (description
-      "Package intern interns strings.  Interning is best effort only.  Interned
-strings may be removed automatically at any time without notification.  All
-functions may be called concurrently with themselves and each other.")
-    (license license:expat)))
-
 (define-public go-github-com-jrick-logrotate
   (package
     (name "go-github-com-jrick-logrotate")
@@ -6705,31 +6682,6 @@ develop your own applications that integrate with the stellar network.")
     (synopsis "cpuid")
     (description
       "Package cpuid provides information about the CPU running the current program.")
-    (license license:expat)))
-
-(define-public go-github-com-klauspost-pgzip
-  (package
-    (name "go-github-com-klauspost-pgzip")
-    (version "1.2.5")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/klauspost/pgzip")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0m66jcsz27076qvi5qzagzlbyd1sdzh6kbf1njj0sswx86026rx3"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/klauspost/pgzip"))
-    (propagated-inputs
-     (list go-github-com-klauspost-compress))
-    (home-page "https://github.com/klauspost/pgzip")
-    (synopsis "pgzip")
-    (description
-     "Package pgzip implements reading and writing of gzip format compressed files, as
-specified in @url{https://rfc-editor.org/rfc/rfc1952.html,RFC 1952}.")
     (license license:expat)))
 
 (define-public go-github-com-kljensen-snowball
