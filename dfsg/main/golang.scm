@@ -4672,58 +4672,6 @@ RESTful HTTP API into gRPC.  This server is generated according to the
 google.api.http)} annotations in your service definitions.")
     (license license:bsd-3)))
 
-(define-public go-github-com-hashicorp-go-cleanhttp
-  (package
-    (name "go-github-com-hashicorp-go-cleanhttp")
-    (version "0.5.2")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/hashicorp/go-cleanhttp")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1i5xslizzwd966w81bz6dxjwzgml4q9bwqa186bsxd1vi8lqxl9p"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/hashicorp/go-cleanhttp"))
-    (home-page "https://github.com/hashicorp/go-cleanhttp")
-    (synopsis "cleanhttp")
-    (description
-      "Package cleanhttp offers convenience utilities for acquiring \"clean\"
-http.Transport and http.Client structs.")
-    (license license:mpl2.0)))
-
-(define-public go-github-com-hashicorp-go-hclog
-  (package
-    (name "go-github-com-hashicorp-go-hclog")
-    (version "1.0.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/hashicorp/go-hclog")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1bhpqrjjfsr97wkr8dkwzxsvfvxbbmwq6z4cfpgq7zaccda76n9r"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/hashicorp/go-hclog"))
-    (propagated-inputs
-     (list go-github-com-pmezard-go-difflib
-           go-github-com-mattn-go-isatty
-           go-github-com-mattn-go-colorable
-           go-github-com-fatih-color
-           go-github-com-davecgh-go-spew))
-    (native-inputs
-     (list go-github-com-stretchr-testify))
-    (home-page "https://github.com/hashicorp/go-hclog")
-    (synopsis "go-hclog")
-    (description
-      "@code{go-hclog} is a package for Go that provides a simple key/value logging
-interface for use in development and production environments.")
-    (license license:expat)))
-
 (define-public go-github-com-hashicorp-golang-lru
   (package
     (name "go-github-com-hashicorp-golang-lru")
