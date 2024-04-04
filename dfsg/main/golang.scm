@@ -3323,7 +3323,7 @@ free to implement mocks and testing over filesystem operations.")
            go-github-com-sergi-go-diff
            go-github-com-mitchellh-go-homedir
            go-github-com-kevinburke-ssh-config
-           go-github.com-jessevdk-go-flags
+           go-github-com-jessevdk-go-flags
            go-github-com-jbenet-go-context
            go-github-com-imdario-mergo
            go-github-com-google-go-cmp
@@ -3612,30 +3612,6 @@ format.  The logfmt format records key/value pairs in a way that balances
 readability for humans and simplicity of computer parsing.  It is most commonly
 used as a more human friendly alternative to JSON for structured logging.")
     (license license:expat)))
-
-(define-public go-github-com-go-logr-logr
-  (package
-    (name "go-github-com-go-logr-logr")
-    (version "1.2.3")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/go-logr/logr")
-                    (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "1148cph7c9qxjvng94a90szpbm2m5dj4pvllbsjqvgqj5j8prwip"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/go-logr/logr"))
-    (home-page "https://github.com/go-logr/logr")
-    (synopsis "A minimal logging API for Go")
-    (description
-     "Package logr defines a general-purpose logging API and abstract interfaces to
-back that API. Packages in the Go ecosystem can depend on this package, while
-callers can implement logging with whatever backend is appropriate.")
-    (license license:asl2.0)))
 
 (define-public go-github-com-googleapis-gax-go-v2
   (package
@@ -4546,7 +4522,7 @@ It provides a simpler API than package @code{runtime}.")
            go-github-com-mitchellh-go-homedir
            go-github-com-mailru-easyjson
            go-github-com-kr-pretty
-           go-github.com-jessevdk-go-flags
+           go-github-com-jessevdk-go-flags
            go-github-com-gorilla-handlers
            go-github-com-go-swagger-scan-repo-boundary
            go-github-com-go-stack-stack
@@ -5349,33 +5325,6 @@ and can be used with @url{https://github.com/lib/pq,https://github.com/lib/pq}."
     (description "This package provides easy mocking of http responses from
 external sources.")
     (license license:expat)))
-
-(define-public go-github-com-jessevdk-go-flags
-  (package
-    (name "go-github-com-jessevdk-go-flags")
-    (version "1.5.0")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/jessevdk/go-flags")
-                     (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "13ixw1yx4bvcj66lkc8zgwf9j7gkvj686g991gycdsafvdvca0lj"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; Tests don't like SOURCE_DATE_EPOCH
-       #:import-path "github.com/jessevdk/go-flags"))
-    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
-    (home-page "https://github.com/jessevdk/go-flags")
-    (synopsis "go-flags: a go library for parsing command line arguments")
-    (description
-     "Package flags provides an extensive command line option parser.  The flags
-package is similar in functionality to the go built-in flag package but provides
-more options and uses reflection to provide a convenient and succinct way of
-specifying command line options.")
-    (license license:bsd-3)))
 
 (define-public go-github-com-joho-godotenv
   (package
@@ -6372,7 +6321,7 @@ bounded parallelism.")
                          ("go-github-com-alecthomas-repr" ,go-github-com-alecthomas-repr)
                          ("go-github-com-alecthomas-colour" ,go-github-com-alecthomas-colour)
                          ("go-github-com-alecthomas-assert-v2" ,go-github-com-alecthomas-assert-v2)
-                         ;("go-gopkg-in-alecthomas-kingpin-v2" ,go-gopkg-in-alecthomas-kingpin-v2)
+                         ("go-gopkg-in-alecthomas-kingpin-v2" ,go-gopkg-in-alecthomas-kingpin-v2)
                          ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
                          ("go-github-com-blang-semver" ,go-github-com-blang-semver)
                          ("go-github-com-aws-aws-sdk-go" ,go-github-com-aws-aws-sdk-go)
@@ -8137,27 +8086,6 @@ implemented.")
       "The `fwd` package provides a buffered reader and writer.  Each has methods that
 help improve the encoding/decoding performance of some binary protocols.")
     (license license:expat)))
-
-(define-public go-github-com-pierrec-lz4-v4
-  (package
-    (name "go-github-com-pierrec-lz4-v4")
-    (version "4.1.12")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/pierrec/lz4")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "19xl67xbwfcd7bd85a3s1c1ybc3khvbihhfrskhbblmc3bi6cgdj"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/pierrec/lz4/v4"))
-    (home-page "https://github.com/pierrec/lz4")
-    (synopsis "lz4 : LZ4 compression in pure Go")
-    (description
-      "Package lz4 implements reading and writing lz4 compressed data.")
-    (license license:bsd-3)))
 
 (define-public go-github-com-pquerna-otp
   (package
@@ -12476,7 +12404,7 @@ Kubernetes, making it simple to run sandboxed containers.")
     (propagated-inputs
      `(("go-gopkg-in-yaml-v1" ,go-gopkg-in-yaml-v1)
        ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
-       ("go-github-com-jessevdk-go-flags" ,go-github.com-jessevdk-go-flags)))
+       ("go-github-com-jessevdk-go-flags" ,go-github-com-jessevdk-go-flags)))
     (home-page "https://howett.net/plist")
     (synopsis "plist - A pure Go property list transcoder")
     (description
@@ -12712,7 +12640,7 @@ known as the Windows firewall.")
        ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
        ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
-       ;("go-github-com-onsi-ginkgo-v2" ,go-github-com-onsi-ginkgo-v2)
+       ("go-github-com-onsi-ginkgo-v2" ,go-github-com-onsi-ginkgo-v2)
        ("go-github-com-niemeyer-pretty" ,go-github-com-niemeyer-pretty)
        ("go-github-com-modern-go-reflect2" ,go-github-com-modern-go-reflect2)
        ("go-github-com-modern-go-concurrent" ,go-github-com-modern-go-concurrent)
@@ -12894,7 +12822,7 @@ by the -v and -vmodule=file=2 flags.")
                          ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
                          ("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
                          ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
-                         ;("go-github-com-onsi-ginkgo-v2" ,go-github-com-onsi-ginkgo-v2)
+                         ("go-github-com-onsi-ginkgo-v2" ,go-github-com-onsi-ginkgo-v2)
                          ("go-github-com-munnerz-goautoneg" ,go-github-com-munnerz-goautoneg)
                          ("go-github-com-mitchellh-mapstructure" ,go-github-com-mitchellh-mapstructure)
                          ("go-github-com-google-uuid" ,go-github-com-google-uuid)
@@ -13514,7 +13442,7 @@ Token removed.")
        ("go-github-com-prometheus-client-model" ,go-github-com-prometheus-client-model)
        ("go-github-com-prometheus-client-golang" ,go-github-com-prometheus-client-golang)
        ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
-       ;("go-github-com-onsi-ginkgo-v2" ,go-github-com-onsi-ginkgo-v2)
+       ("go-github-com-onsi-ginkgo-v2" ,go-github-com-onsi-ginkgo-v2)
        ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
        ;("go-github-com-go-logr-zapr" ,go-github-com-go-logr-zapr)
        ("go-github-com-go-logr-logr" ,go-github-com-go-logr-logr)
