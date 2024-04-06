@@ -1456,77 +1456,6 @@ SARIF logfiles available at
      "Forwarded headers middleware to use if application is run behind reverse proxy.")
     (license license:expat)))
 
-(define-public go-github-com-chzyer-logex
-  (package
-    (name "go-github-com-chzyer-logex")
-    (version "1.2.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/chzyer/logex")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "07ksz43a8kvx0hm8qji6kb1xm7fbwmwapcvcq9zpc8v337jggs4g"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; https://github.com/chzyer/logex/issues/4
-       #:import-path "github.com/chzyer/logex"))
-    (home-page "https://github.com/chzyer/logex")
-    (synopsis "Enhanced logging library")
-    (description
-     "A golang log lib, supports tracing and level, wrapped by the standard log lib.")
-    (license license:expat)))
-
-(define-public go-github-com-chzyer-readline
-  (package
-    (name "go-github-com-chzyer-readline")
-    (version "0.0.0-20180603132655-2972be24d48e")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/chzyer/readline")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "104q8dazj8yf6b089jjr82fy9h1g80zyyzvp3g8b44a7d8ngjj6r"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/chzyer/readline"))
-    (native-inputs
-     (list go-github-com-chzyer-test))
-    (home-page "https://github.com/chzyer/readline")
-    (synopsis "Golang readline implementation")
-    (description
-     "Readline is a pure go implementation for GNU-Readline kind library.")
-    (license license:expat)))
-
-(define-public go-github-com-chzyer-test
-  (package
-    (name "go-github-com-chzyer-test")
-    (version "0.0.0-20210722231415-061457976a23")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/chzyer/test")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "1jjskijacwzz0qxzrbwsglpg5vil7v4xaq8l40r2fhd2icl9hz7a"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; nil pointer dereference‽
-       #:import-path "github.com/chzyer/test"))
-    (propagated-inputs
-     (list go-github-com-chzyer-logex))
-    (home-page "https://github.com/chzyer/test")
-    (synopsis "Golang test library")
-    (description "This package provides a testing library for
-go-github-com-chzyer packages.")
-    (license license:expat)))
-
 (define-public go-github-com-cilium-ebpf
   (package
     (name "go-github-com-cilium-ebpf")
@@ -3775,33 +3704,6 @@ clients and servers based on gRPC and Google API conventions.")
 and response modifiers.")
     (license license:asl2.0)))
 
-(define-public go-github-com-google-pprof
-  (package
-    (name "go-github-com-google-pprof")
-    (version "0.0.0-20230228050547-1710fef4ab10")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/google/pprof")
-                     (commit (go-version->git-ref version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "12n29ag8x71f91xvh88279x5wbpxzhy4x8yc17b9bmjl6pgbyz12"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/google/pprof"))
-    (propagated-inputs
-     (list go-golang-org-x-sys
-           go-github-com-ianlancetaylor-demangle
-           go-github-com-chzyer-readline))
-    (home-page "https://github.com/google/pprof")
-    (synopsis "Introduction")
-    (description
-     "pprof is a tool for collection, manipulation and visualization of performance
-profiles.")
-    (license license:asl2.0)))
-
 (define-public go-github-com-google-uuid-1.3
   (package
     (name "go-github-com-google-uuid")
@@ -4768,33 +4670,6 @@ retryablehttp very easy to drop into existing programs.")
 below:")
     (license license:expat)))
 
-(define-public go-github-com-ianlancetaylor-demangle
-  (package
-    (name "go-github-com-ianlancetaylor-demangle")
-    (version "0.0.0-20220517205856-0058ec4f073c")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/ianlancetaylor/demangle")
-                     (commit (go-version->git-ref version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "00xfkjr48v96qwsi68fak0chskks0iq5yvpigx8n373z857xbgdf"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/ianlancetaylor/demangle"))
-    (home-page "https://github.com/ianlancetaylor/demangle")
-    (synopsis "github.com/ianlancetaylor/demangle")
-    (description
-     "Package demangle defines functions that demangle GCC/LLVM C++ and Rust symbol
-names.  This package recognizes names that were mangled according to the C++
-ABI defined at
-@@url{http://codesourcery.com/cxx-abi/,http://codesourcery.com/cxx-abi/} and
-the Rust ABI defined at
-@@url{https://rust-lang.github.io/rfcs/2603-rust-symbol-name-mangling-v0.html,https://rust-lang.github.io/rfcs/2603-rust-symbol-name-mangling-v0.html}")
-      (license license:bsd-3)))
-
 (define-public go-github-com-imkira-go-interpol
   (package
     (name "go-github-com-imkira-go-interpol")
@@ -5424,39 +5299,6 @@ external sources.")
 Network routes, IP addresses, Link parameters, Neighbor setups, Queueing
 disciplines, Traffic classes and Packet classifiers may all be controlled.  It
 is based on netlink messages.")
-    (license license:expat)))
-
-(define-public go-github-com-json-iterator-go
-  (package
-    (name "go-github-com-json-iterator-go")
-    (version "1.1.12")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/json-iterator/go")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1c8f0hxm18wivx31bs615x3vxs2j3ba0v6vxchsjhldc8kl311bz"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/json-iterator/go"))
-    (propagated-inputs
-     (list go-github-com-modern-go-reflect2
-           go-github-com-modern-go-concurrent
-           go-github-com-google-gofuzz
-           go-github-com-davecgh-go-spew))
-    (native-inputs
-     (list go-github-com-stretchr-testify))
-    (home-page "https://github.com/json-iterator/go")
-    (synopsis "Benchmark")
-    (description
-      "Package jsoniter implements encoding and decoding of JSON as defined in
-@url{https://rfc-editor.org/rfc/rfc4627.html,RFC 4627} and provides interfaces
-with identical syntax of standard lib encoding/json.  Converting from
-encoding/json to jsoniter is no more than replacing the package with jsoniter
-and variable type declarations (if any).  jsoniter interfaces gives 100%
-compatibility with code using standard lib.")
     (license license:expat)))
 
 (define-public go-github-com-jtolds-gls
@@ -7631,48 +7473,6 @@ object storage.")
     (description
      "ps provides an API for finding and listing processes in a platform-agnostic way.")
     (license license:expat)))
-
-(define-public go-github-com-modern-go-concurrent
-  (package
-    (name "go-github-com-modern-go-concurrent")
-    (version "0.0.0-20180306012644-bacd9c7ef1dd")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/modern-go/concurrent")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "0s0fxccsyb8icjmiym5k7prcqx36hvgdwl588y0491gi18k5i4zs"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/modern-go/concurrent"))
-    (home-page "https://github.com/modern-go/concurrent")
-    (synopsis "concurrent")
-    (description
-      "because sync.Map is only available in go 1.9, we can use concurrent.Map to make
-code portable")
-    (license license:asl2.0)))
-
-(define-public go-github-com-modern-go-reflect2
-  (package
-    (name "go-github-com-modern-go-reflect2")
-    (version "1.0.2")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/modern-go/reflect2")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "05a89f9j4nj8v1bchfkv2sy8piz746ikj831ilbp54g8dqhl8vzr"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/modern-go/reflect2"))
-    (home-page "https://github.com/modern-go/reflect2")
-    (synopsis "reflect2")
-    (description "reflect api that avoids runtime reflect.Value cost")
-    (license license:asl2.0)))
 
 ;; ready to upstream
 (define-public go-github-com-montanaflynn-stats
