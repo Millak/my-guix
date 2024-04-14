@@ -123,8 +123,7 @@
            go-github-com-gocolly-colly-debug
            go-github-com-gocolly-colly-storage
            go-github-com-go-errors-errors
-           go-github-com-golang-groupcache-lru
-           go-github-com-golang-groupcache-singleflight
+           go-github-com-golang-groupcache
            go-github-com-golang-mock-gomock
            go-github-com-hashicorp-golang-lru
            go-github-com-kennygrant-sanitize

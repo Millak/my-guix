@@ -600,7 +600,7 @@ empty.")
     (arguments '(#:import-path "github.com/antchfx/htmlquery"))
     (propagated-inputs
      (list go-github-com-antchfx-xpath
-           go-github-com-golang-groupcache-lru
+           go-github-com-golang-groupcache
            go-golang-org-x-net
            go-golang-org-x-text))
     (home-page "https://github.com/antchfx/htmlquery")
@@ -626,7 +626,7 @@ empty.")
      '(#:import-path "github.com/antchfx/xmlquery"))
     (propagated-inputs
      `(("go-github-com-antchfx-xpath" ,go-github-com-antchfx-xpath)
-       ("go-github-com-golang-groupcache-lru" ,go-github-com-golang-groupcache-lru)
+       ("go-github-com-golang-groupcache" ,go-github-com-golang-groupcache)
        ("go-golang-org-x-net" ,go-golang-org-x-net)
        ("go-golang-org-x-text" ,go-golang-org-x-text)))
     (home-page "https://github.com/antchfx/xmlquery")
@@ -3363,40 +3363,6 @@ formatting variants such as Infof.  It also provides V-style logging controlled
 by the -v and -vmodule=file=2 flags.")
     (license license:asl2.0)))
 
-(define-public go-github-com-golang-groupcache
-  (package
-    (name "go-github-com-golang-groupcache")
-    (version "0.0.0-20210331224755-41bb18bfe9da")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/golang/groupcache")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "07amgr8ji4mnq91qbsw2jlcmw6hqiwdf4kzfdrj8c4b05w4knszc"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/golang/groupcache"))
-    (propagated-inputs
-     (list go-google-golang-org-protobuf))
-    (home-page "https://github.com/golang/groupcache")
-    (synopsis "groupcache")
-    (description
-      "Package groupcache provides a data loading mechanism with caching and
-de-duplication that works across a set of peer processes.")
-    (license license:asl2.0)))
-
-(define-public go-github-com-golang-groupcache-singleflight
-  (package
-    (inherit go-github-com-golang-groupcache-lru)
-    (name "go-github-com-golang-groupcache-singleflight")
-    (arguments
-     '(#:unpack-path "github.com/golang/groupcache"
-       #:import-path "github.com/golang/groupcache/singleflight"))
-    (synopsis "groupcache")
-    (description #f)))
-
 (define-public go-github-com-golang-jwt-jwt
   (package
     (name "go-github-com-golang-jwt-jwt")
@@ -4549,29 +4515,6 @@ RESTful HTTP API into gRPC.  This server is generated according to the
 @url{https://github.com/googleapis/googleapis/raw/master/google/api/http.proto#L46,(code
 google.api.http)} annotations in your service definitions.")
     (license license:bsd-3)))
-
-(define-public go-github-com-hashicorp-golang-lru
-  (package
-    (name "go-github-com-hashicorp-golang-lru")
-    (version "0.5.4")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/hashicorp/golang-lru")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "1sdbymypp9vrnzp8ashw0idlxvaq0rb0alwxx3x8g27yjlqi9jfn"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/hashicorp/golang-lru"))
-    (home-page "https://github.com/hashicorp/golang-lru")
-    (synopsis "golang-lru")
-    (description
-     "Package lru provides three different LRU caches of varying sophistication.")
-    (license license:mpl2.0)))
 
 (define-public go-github-com-hashicorp-go-retryablehttp
   (package
