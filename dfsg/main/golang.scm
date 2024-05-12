@@ -45,41 +45,6 @@
 
 ;; These packages are sorted alphabetically for lack of a better option.
 
-(define-public go-bazil-org-fuse
-  (package
-    (name "go-bazil-org-fuse")
-    (version "0.0.0-20200424023519-3c101025617f")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/bazil/fuse")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0bz43m3ajg1v3d4n5g90lik5p88qpm0flywn8l2v3clnp5njbzr2"))
-       (snippet
-        #~(begin
-            (use-modules (guix build utils))
-            (substitute* '("mount_linux.go"
-                           "unmount_linux.go")
-              (("\"fusermount\"") "\"fusermount3\""))))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "bazil.org/fuse"
-       #:tests? #f))  ; Tests require fuse kernel module and a fuse device.
-    (propagated-inputs
-     (list go-golang-org-x-sys
-           go-github-com-tv42-httpunix))
-    (native-inputs
-     `(("fuse" ,(@ (gnu packages linux) fuse))))
-    (home-page "https://bazil.org/fuse/")
-    (synopsis "Go library for writing filesystems")
-    (description "This package is a Go library for writing filesystems.  It is
-a from-scratch implementation of the kernel-userspace communication protocol,
-and does not use the C library from the project called FUSE.")
-    (license license:bsd-3)))
-
 (define-public go-camlistore-org-pkg-buildinfo
   (let ((commit "c55c8602d3cea4511081630e17bca7ed601abc44")
         (revision "1"))
@@ -3362,28 +3327,6 @@ INFO/ERROR/V setup.  It provides functions Info, Warning, Error, Fatal, plus
 formatting variants such as Infof.  It also provides V-style logging controlled
 by the -v and -vmodule=file=2 flags.")
     (license license:asl2.0)))
-
-(define-public go-github-com-golang-jwt-jwt
-  (package
-    (name "go-github-com-golang-jwt-jwt")
-    (version "3.2.2+incompatible")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/golang-jwt/jwt")
-               (commit (string-append "v" (go-version->git-ref version)))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "0hq8wz11g6kddx9ab0icl5h3k4lrivk1ixappnr5db2ng2wjks9c"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/golang-jwt/jwt"))
-    (home-page "https://github.com/golang-jwt/jwt")
-    (synopsis "jwt-go")
-    (description
-      "Package jwt is a Go implementation of JSON Web Tokens:
-@url{http://self-issued.info/docs/draft-jones-json-web-token.html,http://self-issued.info/docs/draft-jones-json-web-token.html}")
-    (license license:expat)))
 
 (define-public go-github-com-golang-mock-gomock
   (package
@@ -13053,41 +12996,6 @@ Token removed.")
 
 (define-public go-mvdan-cc-xurls-v2
   (deprecated-package "go-mvdan-cc-xurls-v2" go-mvdan-cc-xurls))
-
-(define-public go-nhooyr-io-websocket
-  (package
-    (name "go-nhooyr-io-websocket")
-    (version "1.8.7")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/nhooyr/websocket")
-                    (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "11bz96vh0nkw6f8kczzcs07ixdhjy8s7bl398j0cf1hh40zxvass"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; TODO
-       #:import-path "nhooyr.io/websocket"))
-    (propagated-inputs `(("go-golang-org-x-time" ,go-golang-org-x-time)
-                         ("go-github-com-klauspost-compress" ,go-github-com-klauspost-compress)
-                         ("go-github-com-gorilla-websocket" ,go-github-com-gorilla-websocket)
-                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-                         ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
-                         ;("go-github-com-gobwas-pool" ,go-github-com-gobwas-pool)
-                         ;("go-github-com-gobwas-httphead" ,go-github-com-gobwas-httphead)
-                         ;("go-github-com-gin-gonic-gin" ,go-github-com-gin-gonic-gin)
-                         ))
-    ;(native-inputs
-    ; (list go-github-com-gobwas-ws))
-    (home-page "https://nhooyr.io/websocket")
-    (synopsis "websocket")
-    (description
-     "Package websocket implements the
-@@url{https://rfc-editor.org/rfc/rfc6455.html,RFC 6455} WebSocket protocol.")
-    (license license:expat)))
 
 (define-public go-rsc-io-qr
   (package
