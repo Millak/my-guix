@@ -200,7 +200,7 @@
            go-github-com-quasoft-websspi
            go-github-com-sergi-go-diff
            go-github-com-shurcool-vfsgen
-           go-github-com-syndtr-goleveldb
+           go-github-com-syndtr-goleveldb-leveldb
            go-github-com-tstranex-u2f
            go-github-com-unknwon-com
            go-github-com-unknwon-i18n
