@@ -1615,16 +1615,6 @@ users are recommended to switch their imports.")
     (description "Go bindings to systemd.  The project has several packages:")
     (license license:asl2.0)))
 
-(define-public go-github-com-coreos-go-systemd-daemon
-  (package
-    (inherit go-github-com-coreos-go-systemd-activation)
-    (name "go-github-com-coreos-go-systemd-daemon")
-    (arguments
-     '(#:unpack-path "github.com/coreos/go-systemd"
-       #:import-path "github.com/coreos/go-systemd/daemon"))
-    (synopsis "go-systemd")
-    (description #f)))
-
 (define-public go-github-com-coreos-go-systemd-util
   (package
     (inherit go-github-com-coreos-go-systemd-activation)
