@@ -3499,7 +3499,7 @@ clients and servers based on gRPC and Google API conventions.")
                          ;("go-github-com-stoewer-go-strcase" ,go-github-com-stoewer-go-strcase)
                          ("go-github-com-kr-pretty" ,go-github-com-kr-pretty)
                          ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
-                         ;("go-github-com-docopt-docopt-go" ,go-github-com-docopt-docopt-go)
+                         ("go-github-com-docopt-docopt-go" ,go-github-com-docopt-docopt-go)
                          ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)))
     (home-page "https://github.com/google/gnostic")
     (synopsis "⨁ gnostic")
@@ -9320,30 +9320,6 @@ code modification is required).")
     (description #f)
     (license license:expat)))
 
-;; ready to upstream
-(define-public go-github-com-tidwall-pretty
-  (package
-    (name "go-github-com-tidwall-pretty")
-    (version "1.2.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/tidwall/pretty")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "11zi5hxb75yapgxq67r4lmv8n910iqmw7994ig1fy4gnr4d51i3s"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/tidwall/pretty"))
-    (home-page "https://github.com/tidwall/pretty")
-    (synopsis "JSON formatter in go")
-    (description
-     "Pretty is a Go package that provides methods for formatting JSON for human
-readability, or to compact JSON for smaller payloads.")
-    (license license:expat)))
-
 (define-public go-github-com-tinylib-msgp
   (package
     (name "go-github-com-tinylib-msgp")
@@ -9667,7 +9643,7 @@ format as binary16.")
                          ("go-github-com-dustin-go-humanize" ,go-github-com-dustin-go-humanize)
                          ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
                          ("go-github-com-creack-pty" ,go-github-com-creack-pty)
-                         ;("go-github-com-cenkalti-backoff-v4" ,go-github-com-cenkalti-backoff-v4)
+                         ("go-github-com-cenkalti-backoff-v4" ,go-github-com-cenkalti-backoff-v4)
                          ;("go-github-com-c-bata-go-prompt" ,go-github-com-c-bata-go-prompt)
                          ;("go-github-com-beevik-ntp" ,go-github-com-beevik-ntp)
                          ))
