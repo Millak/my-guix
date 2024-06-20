@@ -112,9 +112,7 @@
            go-github-com-blevesearch-bleve
            go-github-com-btcsuite-btcutil
            go-github-com-buger-jsonparser
-           go-github-com-coreos-go-systemd-activation
-           go-github-com-coreos-go-systemd-daemon
-           go-github-com-coreos-go-systemd-util
+           go-github-com-coreos-go-systemd-v22
            go-github-com-deckarep-golang-set
            go-github-com-dustin-go-humanize-20150824
            go-github-com-eapache-channels

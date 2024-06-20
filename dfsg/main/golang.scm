@@ -1617,7 +1617,7 @@ users are recommended to switch their imports.")
 
 (define-public go-github-com-coreos-go-systemd-util
   (package
-    (inherit go-github-com-coreos-go-systemd-activation)
+    (inherit go-github-com-coreos-go-systemd)
     (name "go-github-com-coreos-go-systemd-util")
     (arguments
      '(#:unpack-path "github.com/coreos/go-systemd"
@@ -1626,28 +1626,6 @@ users are recommended to switch their imports.")
      `(("go-github-com-coreos-pkg-dlopen" ,go-github-com-coreos-pkg-dlopen)))
     (synopsis "go-systemd")
     (description #f)))
-
-(define-public go-github-com-coreos-go-systemd-v22
-  (package
-    (name "go-github-com-coreos-go-systemd-v22")
-    (version "22.3.2")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/coreos/go-systemd")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1ndi86b8va84ha93njqgafypz4di7yxfd5r5kf1r0s3y3ghcjajq"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/coreos/go-systemd/v22"))
-    (propagated-inputs
-     (list go-github-com-godbus-dbus-v5))
-    (home-page "https://github.com/coreos/go-systemd")
-    (synopsis "go-systemd")
-    (description "Go bindings to systemd.  The project has several packages:")
-    (license license:asl2.0)))
 
 (define-public go-github-com-coreos-pkg-dlopen
   (package
@@ -8057,8 +8035,7 @@ identifiers.")
            go-golang-org-x-crypto
            go-github-com-rs-xid
            go-github-com-pkg-errors
-           ;go-github-com-coreos-go-systemd-v22
-           ))
+           go-github-com-coreos-go-systemd-v22))
     (home-page "https://github.com/rs/zerolog")
     (synopsis "Zero Allocation JSON Logger")
     (description
@@ -12015,7 +11992,7 @@ common patterns.")
        ("go-github-com-gogo-protobuf" ,go-github-com-gogo-protobuf)
        ;("go-github-com-gofrs-flock" ,go-github-com-gofrs-flock)
        ("go-github-com-godbus-dbus-v5" ,go-github-com-godbus-dbus-v5)
-       ;("go-github-com-coreos-go-systemd-v22" ,go-github-com-coreos-go-systemd-v22)
+       ("go-github-com-coreos-go-systemd-v22" ,go-github-com-coreos-go-systemd-v22)
        ;("go-github-com-containerd-typeurl" ,go-github-com-containerd-typeurl)
        ;("go-github-com-containerd-go-runc" ,go-github-com-containerd-go-runc)
        ;("go-github-com-containerd-fifo" ,go-github-com-containerd-fifo)
