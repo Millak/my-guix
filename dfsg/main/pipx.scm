@@ -54,29 +54,3 @@ their CLI applications so you can run them from anywhere.
 @end itemize")
     (license (list license:bsd-3
                    license:expat))))
-
-(define-public python-userpath
-  (package
-    (name "python-userpath")
-    (version "1.4.1")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "userpath" version))
-        (sha256
-         (base32
-          "0mfjmvx286z1dmnrc7bm65x8gj8qrmkcyagl0vf5ywfq0bm48591"))))
-    (build-system python-build-system)
-    (arguments '(#:tests? #f))  ; tests all use 'docker-compose'.
-    (propagated-inputs
-     `(("python-distro" ,python-distro)))
-    (native-inputs
-     `(("python-pytest" ,python-pytest)))
-    (home-page "https://github.com/ofek/userpath")
-    (synopsis "Add locations to the user PATH")
-    (description
-     "@code{userpath} is a command-line tool and Python library to add custom
-locations to user PATH.  Only user-specific PATH is changed, avoiding the need
-for elevated privileges.")
-    (license (list license:asl2.0
-                   license:expat))))
