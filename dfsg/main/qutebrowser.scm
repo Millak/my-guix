@@ -55,7 +55,7 @@
     (name "qutebrowser-with-adblock")
     (inputs (modify-inputs (package-inputs qutebrowser)
                            (prepend python-adblock
-                                    rofi
+                                    rofi-wayland
                                     ;; Can only add 1 in the manifest
                                     qtwayland)))
     (arguments
