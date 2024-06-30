@@ -162,7 +162,7 @@
        ;go.opentelemetry.io/otel/sdk v1.14.0
        ;go.opentelemetry.io/otel/trace v1.14.0
        ;go.uber.org/automaxprocs v1.5.2
-       go-golang-org-x-crypto-0.9               ; v0.9.0
+       go-golang-org-x-crypto                   ; v0.9.0
        go-golang-org-x-exp-0.0.0-20220613132600-b0d781184e0d
        go-golang-org-x-image-0.7                ; v0.7.0
        go-golang-org-x-net-0.10                 ; v0.10.0
@@ -199,14 +199,12 @@ network server, written in Golang.")
       ;; This one is in Guix twice.
       ("go-github.com-mattn-go-runewidth" . ,(const go-github-com-mattn-go-runewidth))
       ;; We should use the newer versions.
-      ("go-golang-org-x-crypto" . ,(const go-golang-org-x-crypto-0.9))
       ("go-golang-org-x-exp" . ,(const go-golang-org-x-exp-0.0.0-20220613132600-b0d781184e0d))
       ("go-golang-org-x-image" . ,(const go-golang-org-x-image-0.7))
       ;("go-golang-org-x-lint" . ,(const go-golang-org-x-lint-next))
       ;("go-golang-org-x-mod" . ,(const go-golang-org-x-mod-next))
       ("go-golang-org-x-net" . ,(const go-golang-org-x-net-0.10))
       ("go-golang-org-x-oauth2" . ,(const go-golang-org-x-oauth2-0.8))
-      ;("go-golang-org-x-sync" . ,(const go-golang-org-x-sync-next))
       ("go-golang-org-x-term" . ,(const go-golang-org-x-term-0.8))
       ("go-golang-org-x-text" . ,(const go-golang-org-x-text-0.9))
       ;("go-golang-org-x-time" . ,(const go-golang-org-x-time-next))

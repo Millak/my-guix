@@ -784,7 +784,7 @@ and collections.")
        ("go-github-com-blevesearch-snowballstem" ,go-github-com-blevesearch-snowballstem)
        ("go-github-com-couchbase-vellum" ,go-github-com-couchbase-vellum)
        ("go-github-com-edsrzf-mmap-go" ,go-github-com-edsrzf-mmap-go)
-       ("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto)
+       ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
        ("go-github-com-golang-snappy" ,go-github-com-golang-snappy)
        ("go-github-com-roaringbitmap-roaring" ,go-github-com-roaringbitmap-roaring)
        ("go-github-com-steveyen-gtreap" ,go-github-com-steveyen-gtreap)
@@ -841,7 +841,7 @@ and collections.")
            go-github-com-spf13-cobra
            go-github-com-rcrowley-go-metrics
            go-github-com-kljensen-snowball
-           go-github-com-golang-protobuf-proto
+           go-github-com-golang-protobuf
            go-github-com-couchbase-moss
            go-github-com-blevesearch-zapx-v15
            go-github-com-blevesearch-zapx-v14
@@ -3178,7 +3178,7 @@ free to implement mocks and testing over filesystem operations.")
      (list go-gopkg-in-warnings-v0
            go-gopkg-in-check-v1
            go-golang-org-x-text
-           go-golang-org-x-sys-next
+           go-golang-org-x-sys
            go-golang-org-x-net
            go-golang-org-x-crypto
            go-github-com-xanzy-ssh-agent
@@ -3318,32 +3318,6 @@ by the -v and -vmodule=file=2 flags.")
     (synopsis "gomock")
     (description #f)
     (license license:asl2.0)))
-
-(define-public go-github-com-golang-protobuf
-  (deprecated-package "go-github-com-golang-protobuf" go-github-com-golang-protobuf-proto))
-;  (package
-;    (name "go-github-com-golang-protobuf")
-;    (version "1.5.2")
-;    (source
-;      (origin
-;        (method git-fetch)
-;        (uri (git-reference
-;               (url "https://github.com/golang/protobuf")
-;               (commit (string-append "v" version))))
-;        (file-name (git-file-name name version))
-;        (sha256
-;          (base32 "1mh5fyim42dn821nsd3afnmgscrzzhn3h8rag635d2jnr23r1zhk"))))
-;    (build-system go-build-system)
-;    (arguments '(#:import-path "github.com/golang/protobuf"))
-;    (propagated-inputs
-;      `(;("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-;        ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)))
-;    (home-page "https://github.com/golang/protobuf")
-;    (synopsis "Go support for Protocol Buffers")
-;    (description
-;      "This module (@url{https://pkg.go.dev/mod/github.com/golang/protobuf,(code
-;github.com/golang/protobuf)}) contains Go bindings for protocol buffers.")
-;    (license license:bsd-3)))
 
 (define-public go-github-com-golang-sql-civil
   (package
@@ -6256,27 +6230,6 @@ develop your own applications that integrate with the stellar network.")
     (description "This package provides various compression algorithms.")
     (license license:bsd-3)))
 
-(define-public go-github-com-klauspost-cpuid-v2
-  (package
-    (name "go-github-com-klauspost-cpuid-v2")
-    (version "2.0.9")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/klauspost/cpuid")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "12bx0kip3yv2416f4ilafk5674m69mn873gnadhyv473cy4jy499"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/klauspost/cpuid/v2"))
-    (home-page "https://github.com/klauspost/cpuid")
-    (synopsis "cpuid")
-    (description
-      "Package cpuid provides information about the CPU running the current program.")
-    (license license:expat)))
-
 (define-public go-github-com-kljensen-snowball
   (package
     (name "go-github-com-kljensen-snowball")
@@ -6816,28 +6769,6 @@ applications.  Your mileage may vary, but I find them to be pretty darn helpful.
     (description
       "Package goth provides a simple, clean, and idiomatic way to write authentication
 packages for Go web applications.")
-    (license license:expat)))
-
-(define-public go-github-com-masterminds-semver-v3
-  (package
-    (name "go-github-com-masterminds-semver-v3")
-    (version "3.1.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/Masterminds/semver")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "0dsqa585ixz6pbff60p0pk709kp3kksh668mjwrlxgqiammxa1p8"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/Masterminds/semver/v3"))
-    (home-page "https://github.com/Masterminds/semver")
-    (synopsis "SemVer")
-    (description
-      "Package semver provides the ability to work with Semantic Versions
-(@url{http://semver.org,http://semver.org}) in Go.")
     (license license:expat)))
 
 (define-public go-github-com-matryer-is
@@ -10270,158 +10201,6 @@ inet.af/netaddr package moved to the standard library in Go 1.18 as net/netip.")
 @url{https://haveibeenpwned.com/,HaveIBeenPwned}.")
     (license license:expat)))
 
-(define-public go-golang-org-x-crypto-next
-  (package
-    (name "go-golang-org-x-crypto")
-    (version "0.0.0-20211215153901-e495a2d5b3d3")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://go.googlesource.com/crypto")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "06xw3x5sf6aq6gxdh24jlhfzi26zpym5jc4g43s63v8gh1fghg6m"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "golang.org/x/crypto"
-       #:modules ((guix build go-build-system)
-                  (guix build utils)
-                  (srfi srfi-1))
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'build
-           (lambda* (#:key import-path build-flags #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'build)
-                  #:build-flags build-flags
-                  #:import-path (string-drop directory 4)))
-               (find-files "src/golang.org/x/crypto"
-                 (lambda (file stat)
-                   (and
-                     (eq? (stat:type stat) 'directory)
-                     (let ((files (find-files file "\\.go$")))
-                       (and
-                         (not (null? files))
-                         (not (string-contains file "internal"))
-                         (not (null?
-                                (filter-map
-                                  (lambda (test-entry)
-                                    (not (string-contains test-entry file-name-separator-string)))
-                                  (map (lambda (entry)
-                                         (string-drop entry (1+ (string-length file))))
-                                       files))))))))
-                 #:directories? #t))))
-         (replace 'check
-           (lambda* (#:key tests? import-path #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'check)
-                  #:tests? tests?
-                  #:import-path (string-drop directory 4)))
-               (find-files "src/golang.org/x/crypto"
-                 (lambda (file stat)
-                   (and
-                     (eq? (stat:type stat) 'directory)
-                     (let ((files (find-files file "\\.go$")))
-                       (and
-                         (not (null? files))
-                         (not (string-contains file "internal"))
-                         (not (null?
-                                (filter-map
-                                  (lambda (test-entry)
-                                    (not (string-contains test-entry file-name-separator-string)))
-                                  (map (lambda (entry)
-                                         (string-drop entry (1+ (string-length file))))
-                                       files))))))))
-                 #:directories? #t)))))))
-    (propagated-inputs
-     (list go-golang-org-x-text-next
-           go-golang-org-x-term-next
-           go-golang-org-x-sys-next
-           go-golang-org-x-net-next))
-    (home-page "https://golang.org/x/crypto")
-    (synopsis "Go Cryptography")
-    (description
-      "This repository holds supplementary Go cryptography libraries.")
-    (license license:bsd-3)))
-
-(define-public go-golang-org-x-crypto-0.9
-  (package
-    (inherit go-golang-org-x-crypto)
-    (name "go-golang-org-x-crypto")
-    (version "0.9.0")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://go.googlesource.com/crypto")
-                    (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "1dh625h2xk0gnwy3l7rsz344algmnjhdrkhpgf8nx8q1w57z66wj"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "golang.org/x/crypto"
-       #:modules ((guix build go-build-system)
-                  (guix build utils)
-                  (srfi srfi-1))
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'build
-           (lambda* (#:key import-path build-flags #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'build)
-                  #:build-flags build-flags
-                  #:import-path (string-drop directory 4)))
-               (find-files "src/golang.org/x/crypto"
-                 (lambda (file stat)
-                   (and
-                     (eq? (stat:type stat) 'directory)
-                     (let ((files (find-files file "\\.go$")))
-                       (and
-                         (not (null? files))
-                         (not (string-contains file "internal"))
-                         (not (null?
-                                (filter-map
-                                  (lambda (test-entry)
-                                    (not (string-contains test-entry file-name-separator-string)))
-                                  (map (lambda (entry)
-                                         (string-drop entry (1+ (string-length file))))
-                                       files))))))))
-                 #:directories? #t))))
-         (replace 'check
-           (lambda* (#:key tests? import-path #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'check)
-                  #:tests? tests?
-                  #:import-path (string-drop directory 4)))
-               (find-files "src/golang.org/x/crypto"
-                 (lambda (file stat)
-                   (and
-                     (eq? (stat:type stat) 'directory)
-                     (let ((files (find-files file "\\.go$")))
-                       (and
-                         (not (null? files))
-                         (not (string-contains file "internal"))
-                         (not (null?
-                                (filter-map
-                                  (lambda (test-entry)
-                                    (not (string-contains test-entry file-name-separator-string)))
-                                  (map (lambda (entry)
-                                         (string-drop entry (1+ (string-length file))))
-                                       files))))))))
-                 #:directories? #t)))))))
-    (propagated-inputs
-     (list go-golang-org-x-text
-           go-golang-org-x-term
-           go-golang-org-x-sys
-           go-golang-org-x-net))))
-
 (define-public go-golang-org-x-exp-0.0.0-20220613132600-b0d781184e0d
   (package
     (inherit go-golang-org-x-exp)
@@ -10671,7 +10450,7 @@ inet.af/netaddr package moved to the standard library in Go 1.18 as net/netip.")
                      "zip")))))))
     (propagated-inputs
      (list go-golang-org-x-xerrors-next
-           go-golang-org-x-crypto-next))
+           go-golang-org-x-crypto))
     (inputs
      (list go-golang-org-x-tools-bootstrap))
     (home-page "https://golang.org/x/mod")
@@ -10761,7 +10540,7 @@ themselves.")
     (propagated-inputs
      (list go-golang-org-x-text-next
            go-golang-org-x-term-next
-           go-golang-org-x-sys-next))
+           go-golang-org-x-sys))
     (home-page "https://golang.org/x/net")
     (synopsis "Go Networking")
     (description
@@ -10881,98 +10660,6 @@ HTTP requests, as specified in @@url{https://rfc-editor.org/rfc/rfc6749.html,RFC
 6749}.  It can additionally grant authorization with Bearer JWT.")
     (license license:bsd-3)))
 
-(define-public go-golang-org-x-sync-next
-  (package
-    (name "go-golang-org-x-sync")
-    (version "0.0.0-20210220032951-036812b2e83c")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://go.googlesource.com/sync")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1gl202py3s4gl6arkaxlf8qa6f0jyyg2f95m6f89qnfmr416h85b"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "golang.org/x/sync"
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'build
-           (lambda* (#:key import-path build-flags #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'build)
-                  #:build-flags build-flags
-                  #:import-path (string-append "golang.org/x/sync/" directory)))
-               (list "errgroup"
-                     "semaphore"
-                     "singleflight"
-                     "syncmap"))))
-         (replace 'check
-           (lambda* (#:key tests? import-path #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'check)
-                  #:tests? tests?
-                  #:import-path (string-append "golang.org/x/sync/" directory)))
-               (list "errgroup"
-                     "semaphore"
-                     "singleflight"
-                     "syncmap")))))))
-    (home-page "https://golang.org/x/sync")
-    (synopsis "Go Sync")
-    (description
-      "This repository provides Go concurrency primitives in addition to the ones
-provided by the language and \"sync\" and \"sync/atomic\" packages.")
-    (license license:bsd-3)))
-
-(define-public go-golang-org-x-sys-next
-  (package
-    (name "go-golang-org-x-sys")
-    (version "0.0.0-20211216021012-1d35b9e2eb4e")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://go.googlesource.com/sys")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "09xmnw6hhpqnakm99xxigg0znbx46f084lpacz67p5rbcdngjxis"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "golang.org/x/sys"
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'build
-           (lambda* (#:key import-path build-flags #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'build)
-                  #:build-flags build-flags
-                  #:import-path (string-append "golang.org/x/sys/" directory)))
-               (list "cpu"
-                     "execabs"
-                     "unix"))))
-         (replace 'check
-           (lambda* (#:key tests? import-path #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'check)
-                  #:tests? tests?
-                  #:import-path (string-append "golang.org/x/sys/" directory)))
-               (list "cpu"
-                     "execabs"
-                     "unix")))))))
-    (home-page "https://golang.org/x/sys")
-    (synopsis "sys")
-    (description
-      "This repository holds supplemental Go packages for low-level interactions with
-the operating system.")
-    (license license:bsd-3)))
-
 (define-public go-golang-org-x-term-next
   (package
     (name "go-golang-org-x-term")
@@ -10989,7 +10676,7 @@ the operating system.")
     (build-system go-build-system)
     (arguments '(#:import-path "golang.org/x/term"))
     (propagated-inputs
-     (list go-golang-org-x-sys-next))
+     (list go-golang-org-x-sys))
     (home-page "https://golang.org/x/term")
     (synopsis "Go terminal/console support")
     (description
@@ -11080,8 +10767,8 @@ transformations, and locale-specific text handling.")
     ; (list
     ;       go-golang-org-x-xerrors-next
     ;       go-golang-org-x-text-next
-    ;       go-golang-org-x-sys-next
-    ;       go-golang-org-x-sync-next
+    ;       go-golang-org-x-sys
+    ;       go-golang-org-x-sync
     ;       go-golang-org-x-net-next
     ;       go-golang-org-x-mod-next
     ;       go-github-com-yuin-goldmark
@@ -11209,8 +10896,8 @@ transformations, and locale-specific text handling.")
            ;go-golang-org-x-mod-next
            go-golang-org-x-mod
            go-golang-org-x-net-next
-           go-golang-org-x-sync-next
-           go-golang-org-x-sys-next
+           go-golang-org-x-sync
+           go-golang-org-x-sys
            go-golang-org-x-text-next
            go-golang-org-x-xerrors-next))))
 
@@ -11363,7 +11050,7 @@ for a full list of sub-packages.")
     (arguments
      '(#:import-path "google.golang.org/appengine"))
     (propagated-inputs
-     `(("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto)
+     `(("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
        ("go-golang-org-x-net" ,go-golang-org-x-net)))
     (home-page "https://google.golang.org/appengine")
     (synopsis "Internal support for package appengine")
@@ -11399,7 +11086,7 @@ It provides APIs for interacting with App Engine services.")
                  (false-if-exception (search-input-file inputs "/bin/gccgo"))
                  (apply (assoc-ref %standard-phases 'check) args)))))))
     (propagated-inputs
-     (list go-github-com-golang-protobuf-proto
+     (list go-github-com-golang-protobuf
            go-golang-org-x-net))
     (home-page "https://google.golang.org/appengine")
     (synopsis "Go App Engine packages")
@@ -11414,7 +11101,7 @@ It provides APIs for interacting with App Engine services.")
      '(#:unpack-path "google.golang.org/appengine"
        #:import-path "google.golang.org/appengine/urlfetch"))
     (propagated-inputs
-     `(("go-github-com-golang-protobuf-proto" ,go-github-com-golang-protobuf-proto)
+     `(("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
        ("go-golang-org-x-net" ,go-golang-org-x-net)))
     (synopsis "Go App Engine packages")
     (description #f)))
@@ -13251,14 +12938,11 @@ SHOULD NOT be used for new applications.")
       ("go-github.com-mattn-go-runewidth" . ,(const go-github-com-mattn-go-runewidth))
       ;; This isn't picked up for some reason.
       ;; We should use the newer versions.
-      ("go-golang-org-x-crypto" . ,(const go-golang-org-x-crypto-next))
       ("go-golang-org-x-image" . ,(const go-golang-org-x-image-next))
       ("go-golang-org-x-lint" . ,(const go-golang-org-x-lint-next))
       ;("go-golang-org-x-mod" . ,(const go-golang-org-x-mod-next))
       ("go-golang-org-x-net" . ,(const go-golang-org-x-net-next))
       ;("go-golang-org-x-oauth2" . ,(const go-golang-org-x-oauth2-next))
-      ("go-golang-org-x-sync" . ,(const go-golang-org-x-sync-next))
-      ("go-golang-org-x-sys" . ,(const go-golang-org-x-sys-next))
       ("go-golang-org-x-term" . ,(const go-golang-org-x-term-next))
       ("go-golang-org-x-text" . ,(const go-golang-org-x-text-next))
       ;("go-golang-org-x-time" . ,(const go-golang-org-x-time-next))
