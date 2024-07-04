@@ -2122,51 +2122,6 @@ complicated buffering strategies")
     (description "Package nio provides a few buffered io primitives.")
     (license license:expat)))
 
-(define-public go-github-com-dsnet-compress
-  (package
-    (name "go-github-com-dsnet-compress")
-    (version "0.0.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/dsnet/compress")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1wwjaymzb1xxq3ybch3nwn72xhi2s40cvz0cl986yad3w1xwzj91"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/dsnet/compress"))
-    (propagated-inputs
-     (list go-github-com-ulikunitz-xz
-           go-github-com-klauspost-cpuid
-           go-github-com-klauspost-compress
-           go-github-com-dsnet-golib))
-    (home-page "https://github.com/dsnet/compress")
-    (synopsis "Collection of compression libraries for Go")
-    (description "Package compress is a collection of compression libraries.")
-    (license license:bsd-3)))
-
-(define-public go-github-com-dsnet-golib
-  (package
-    (name "go-github-com-dsnet-golib")
-    (version "1.0.2")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/dsnet/golib")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1f314wzr16w6ix3bs7ginjkizgyl3b1r3j2gvvqzr8dv53r4s5cq"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/dsnet/golib"))
-    (home-page "https://github.com/dsnet/golib")
-    (synopsis "Collection of helper libraries for Go")
-    (description "Package golib is a collection of unrelated libraries.")
-    (license license:bsd-3)))
-
 ;; Keybase needs this older version
 (define-public go-github-com-dustin-go-humanize-20150824
   (package
@@ -7259,28 +7214,6 @@ object storage.")
      "ps provides an API for finding and listing processes in a platform-agnostic way.")
     (license license:expat)))
 
-;; ready to upstream
-(define-public go-github-com-montanaflynn-stats
-  (package
-    (name "go-github-com-montanaflynn-stats")
-    (version "0.6.6")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/montanaflynn/stats")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0r0ad2275saw79kgh3ywafii8f6rja2z6mzm9izs11k2lvkqpz6z"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/montanaflynn/stats"))
-    (home-page "https://github.com/montanaflynn/stats")
-    (synopsis "Golang statistics library")
-    (description "Stats is a comprehensive Golang statistics library package
-with no dependencies.")
-    (license license:expat)))
-
 (define-public go-github-com-mrjones-oauth
   (package
     (name "go-github-com-mrjones-oauth")
@@ -8126,27 +8059,6 @@ logging.")
       "Package snaker provides methods to convert CamelCase names to snake_case and
 back.  It considers the list of allowed initialsms used by
 github.com/golang/lint/golint (e.g.  ID or HTTP)")
-    (license license:expat)))
-
-(define-public go-github-com-shopspring-decimal
-  (package
-    (name "go-github-com-shopspring-decimal")
-    (version "1.3.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/shopspring/decimal")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1w1wjv2aqyqp22s8gc2nxp8gk4h0dxvp15xsn5lblghaqjcd239h"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/shopspring/decimal"))
-    (home-page "https://github.com/shopspring/decimal")
-    (synopsis "decimal")
-    (description
-      "Package decimal implements an arbitrary precision fixed-point decimal.")
     (license license:expat)))
 
 (define-public go-github-com-shurcool-go
