@@ -189,7 +189,7 @@
            go-github-com-stellar-go-xdr
            ;go-github-com-stellar-go
            go-github-com-stretchr-testify
-           go-github-com-syndtr-goleveldb-leveldb  ; use keybase fork instead
+           go-github-com-syndtr-goleveldb  ; use keybase fork instead
            go-github-com-vividcortex-ewma
            go-github-com-temoto-robotstxt
            go-golang-org-x-crypto

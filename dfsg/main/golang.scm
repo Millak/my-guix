@@ -343,7 +343,7 @@ management for @code{go-chi}.")
     (build-system go-build-system)
     (arguments '(#:import-path "gitea.com/lunny/levelqueue"))
     (propagated-inputs
-     (list go-github-com-syndtr-goleveldb-leveldb))
+     (list go-github-com-syndtr-goleveldb))
     (native-inputs
      (list go-github-com-stretchr-testify))
     (home-page "https://gitea.com/lunny/levelqueue")
@@ -836,7 +836,7 @@ and collections.")
     (propagated-inputs
      (list go-golang-org-x-text
            go-go-etcd-io-bbolt
-           go-github-com-syndtr-goleveldb-leveldb
+           go-github-com-syndtr-goleveldb
            go-github-com-steveyen-gtreap
            go-github-com-spf13-cobra
            go-github-com-rcrowley-go-metrics
@@ -6552,7 +6552,7 @@ semantics.")
      (list go-github-com-burntsushi-toml
            go-github-com-lunny-log
            go-github-com-siddontang-go-snappy
-           go-github-com-syndtr-goleveldb-leveldb))
+           go-github-com-syndtr-goleveldb))
     (home-page "https://github.com/lunny/nodb")
     (synopsis "NoDB")
     (description "Package nodb is a high performance embedded NoSQL.")
@@ -8408,7 +8408,7 @@ generates Go code that statically implements the provided http.FileSystem.")
            go-github-com-siddontang-go
            go-github-com-siddontang-goredis
            go-github-com-siddontang-rdb
-           go-github-com-syndtr-goleveldb-leveldb
+           go-github-com-syndtr-goleveldb
            go-github-com-ugorji-go
            go-github-com-yuin-gopher-lua
            go-golang-org-x-net))
@@ -12823,7 +12823,7 @@ SHOULD NOT be used for new applications.")
      (list go-xorm-io-builder
            ;go-modernc-org-sqlite
            ;go-github-com-ziutek-mymysql
-           go-github-com-syndtr-goleveldb-leveldb
+           go-github-com-syndtr-goleveldb
            ;go-github-com-stretchr-testify
            ;go-github-com-shopspring-decimal
            ;go-github-com-mattn-go-sqlite3
