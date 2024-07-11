@@ -2527,34 +2527,6 @@ goroutines.  copied out of the cockroachdb source tree with slight modifications
 to be more re-useable")
     (license license:bsd-3)))
 
-(define-public go-github-com-fxamacker-cbor-v2
-  (package
-    (name "go-github-com-fxamacker-cbor-v2")
-    (version "2.4.0")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/fxamacker/cbor")
-                     (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "0366l3976js426c2m9s3qb2qvv9227fhy6jqvb8iyzvr6dyan0rg"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/fxamacker/cbor/v2"))
-    (propagated-inputs
-     (list go-github-com-x448-float16))
-    (home-page "https://github.com/fxamacker/cbor")
-    (synopsis "CBOR Codec in Go")
-    (description
-     "Package cbor is a modern CBOR codec
-(@@url{https://rfc-editor.org/rfc/rfc8949.html,RFC 8949} &
-@@url{https://rfc-editor.org/rfc/rfc7049.html,RFC 7049}) with CBOR tags, Go
-struct tags (toarray/keyasint/omitempty), Core Deterministic Encoding, CTAP2,
-Canonical CBOR, float64->32->16, and duplicate map key detection.")
-    (license license:expat)))
-
 (define-public go-github-com-gammazero-deque
   (package
     (name "go-github-com-gammazero-deque")
@@ -9363,32 +9335,6 @@ programming language.")
 JSON, XML, binary data, and HTML templates.")
     (license license:expat)))
 
-(define-public go-github-com-x448-float16
-  (package
-    (name "go-github-com-x448-float16")
-    (version "0.8.4")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/x448/float16")
-                     (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "0qg6ya30fra20hpa2qzqqzs8l95lvw9yzd87fdzq195xqi6crb2l"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/x448/float16"))
-    (home-page "https://github.com/x448/float16")
-    (synopsis "Float16 (Binary16) in Go/Golang")
-    (description
-     "@@code{float16} package provides
-@@url{https://en.wikipedia.org/wiki/Half-precision_floating-point_format,IEEE
-754 half-precision floating-point format (binary16)} with IEEE 754 default
-rounding for conversions.  IEEE 754-2008 refers to this 16-bit floating-point
-format as binary16.")
-    (license license:expat)))
-
 (define-public go-github-com-u-root-u-root
   (package
     (name "go-github-com-u-root-u-root")
@@ -9456,7 +9402,7 @@ format as binary16.")
                          ("go-github-com-insomniacslk-dhcp" ,go-github-com-insomniacslk-dhcp)
                          ("go-github-com-google-uuid" ,go-github-com-google-uuid)
                          ;("go-github-com-google-goexpect" ,go-github-com-google-goexpect)
-                         ;("go-github-com-google-go-tpm" ,go-github-com-google-go-tpm)
+                         ("go-github-com-google-go-tpm" ,go-github-com-google-go-tpm)
                          ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
                          ;("go-github-com-gojuno-minimock-v3" ,go-github-com-gojuno-minimock-v3)
                          ("go-github-com-gliderlabs-ssh" ,go-github-com-gliderlabs-ssh)
