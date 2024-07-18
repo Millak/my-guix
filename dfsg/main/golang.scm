@@ -10082,84 +10082,6 @@ inet.af/netaddr package moved to the standard library in Go 1.18 as net/netip.")
            go-golang-org-x-tools
            go-golang-org-x-mod))))
 
-(define-public go-golang-org-x-image-next
-  (package
-    (name "go-golang-org-x-image")
-    (version "0.0.0-20211028202545-6944b10bf410")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://go.googlesource.com/image")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0sjbdd6dxvwpxksw9w7i2f6kg9vrpha9qgi5az5gmy09hwv53f9m"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "golang.org/x/image"
-       #:modules ((guix build go-build-system)
-                  (guix build utils)
-                  (srfi srfi-1))
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'build
-           (lambda* (#:key import-path build-flags #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'build)
-                  #:build-flags build-flags
-                  #:import-path (string-drop directory 4)))
-               (find-files "src/golang.org/x/image"
-                 (lambda (file stat)
-                   (and
-                     (eq? (stat:type stat) 'directory)
-                     (let ((files (find-files file "\\.go$")))
-                       (and
-                         (not (null? files))
-                         (not (string-contains file "webp-manual-test"))
-                         (not (string-contains file "example/font"))
-                         (not (string-contains file "font/gofont"))
-                         (not (null?
-                                (filter-map
-                                  (lambda (test-entry)
-                                    (not (string-contains test-entry file-name-separator-string)))
-                                  (map (lambda (entry)
-                                         (string-drop entry (1+ (string-length file))))
-                                       files))))))))
-                 #:directories? #t))))
-         (replace 'check
-           (lambda* (#:key tests? import-path #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'check)
-                  #:tests? tests?
-                  #:import-path (string-drop directory 4)))
-               (find-files "src/golang.org/x/image"
-                 (lambda (file stat)
-                   (and
-                     (eq? (stat:type stat) 'directory)
-                     (let ((files (find-files file "\\.go$")))
-                       (and
-                         (not (null? files))
-                         (not (string-contains file "webp-manual-test"))
-                         (not (string-contains file "example/font"))
-                         (not (string-contains file "font/gofont"))
-                         (not (null?
-                                (filter-map
-                                  (lambda (test-entry)
-                                    (not (string-contains test-entry file-name-separator-string)))
-                                  (map (lambda (entry)
-                                         (string-drop entry (1+ (string-length file))))
-                                       files))))))))
-                 #:directories? #t)))))))
-    (propagated-inputs
-     (list go-golang-org-x-text-next))
-    (home-page "https://golang.org/x/image")
-    (synopsis "Go Images")
-    (description "This repository holds supplementary Go image libraries.")
-    (license license:bsd-3)))
-
 (define-public go-golang-org-x-image-0.7
   (package
     (inherit go-golang-org-x-image)
@@ -10236,173 +10158,6 @@ inet.af/netaddr package moved to the standard library in Go 1.18 as net/netip.")
     (home-page "https://golang.org/x/image")
     (synopsis "Go Images")
     (description "This repository holds supplementary Go image libraries.")
-    (license license:bsd-3)))
-
-(define-public go-golang-org-x-lint-next
-  (package
-    (name "go-golang-org-x-lint")
-    (version "0.0.0-20210508222113-6edffad5e616")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://go.googlesource.com/lint")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1n7lrr3282q3li4f06afms444qy13rfd316za0drqihakwyki2jk"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; Tests fail
-       #:import-path "golang.org/x/lint"))
-    (propagated-inputs
-     (list go-golang-org-x-tools-bootstrap))
-    (home-page "https://golang.org/x/lint")
-    (synopsis "Installation")
-    (description "Package lint contains a linter for Go source code.")
-    (license license:bsd-3)))
-
-(define-public go-golang-org-x-mod-next
-  (package
-    (name "go-golang-org-x-mod")
-    (version "0.5.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://go.googlesource.com/mod")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "11ck0f35pa91hhxpf98igmj6gg0lms3b3pjm1y7sna1zz52m8f09"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "golang.org/x/mod"
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'build
-           (lambda* (#:key import-path build-flags #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'build)
-                  #:build-flags build-flags
-                  #:import-path (string-append "golang.org/x/mod/" directory)))
-               (list "gosumcheck"
-                     "modfile"
-                     "module"
-                     "semver"
-                     "sumdb"
-                     "zip"))))
-         (replace 'check
-           (lambda* (#:key tests? import-path #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'check)
-                  #:tests? tests?
-                  #:import-path (string-append "golang.org/x/mod/" directory)))
-               (list "gosumcheck"
-                     "modfile"
-                     "module"
-                     "semver"
-                     "sumdb"
-                     "zip")))))))
-    (propagated-inputs
-     (list go-golang-org-x-xerrors-next
-           go-golang-org-x-crypto))
-    (inputs
-     (list go-golang-org-x-tools-bootstrap))
-    (home-page "https://golang.org/x/mod")
-    (synopsis "mod")
-    (description
-      "This repository holds packages for writing tools that work directly with Go
-module mechanics.  That is, it is for direct manipulation of Go modules
-themselves.")
-    (license license:bsd-3)))
-
-(define-public go-golang-org-x-net-next
-  (package
-    (name "go-golang-org-x-net")
-    (version "0.0.0-20211216030914-fe4d6282115f")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://go.googlesource.com/net")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "16p3fqc0nb00gn8csiz5y2416r22yma4mg44f6zp0l7ra0a800qq"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "golang.org/x/net"
-       #:modules ((guix build go-build-system)
-                  (guix build utils)
-                  (srfi srfi-1))
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'build
-           (lambda* (#:key import-path build-flags #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'build)
-                  #:build-flags build-flags
-                  #:import-path (string-drop directory 4)))
-               (find-files "src/golang.org/x/net"
-                 (lambda (file stat)
-                   (and
-                     (eq? (stat:type stat) 'directory)
-                     (let ((files (find-files file "\\.go$")))
-                       (and
-                         (not (null? files))
-                         (not (string-contains file "net/lif"))
-                         (not (string-contains file "net/route"))
-                         (not (null?
-                                (filter-map
-                                  (lambda (test-entry)
-                                    (not (string-contains test-entry file-name-separator-string)))
-                                  (map (lambda (entry)
-                                         (string-drop entry (1+ (string-length file))))
-                                       files))))))))
-                 #:directories? #t))))
-         (replace 'check
-           (lambda* (#:key tests? import-path #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'check)
-                  #:tests? tests?
-                  #:import-path (string-drop directory 4)))
-               (find-files "src/golang.org/x/net"
-                 (lambda (file stat)
-                   (and
-                     (eq? (stat:type stat) 'directory)
-                     (let ((files (find-files file "\\.go$")))
-                       (and
-                         (not (null? files))
-                         (not (string-contains file "net/lif"))
-                         (not (string-contains file "net/route"))
-                         ;; These tests fail with gccgo.
-                         (not (string-contains file "net/bpf"))
-                         (not (string-contains file "net/icmp"))
-                         (not (string-contains file "net/internal/socket"))
-                         (not (string-contains file "net/ipv4"))
-                         (not (string-contains file "net/ipv6"))
-
-                         (not (null?
-                                (filter-map
-                                  (lambda (test-entry)
-                                    (not (string-contains test-entry file-name-separator-string)))
-                                  (map (lambda (entry)
-                                         (string-drop entry (1+ (string-length file))))
-                                       files))))))))
-                 #:directories? #t)))))))
-    (propagated-inputs
-     (list go-golang-org-x-text-next
-           go-golang-org-x-term-next
-           go-golang-org-x-sys))
-    (home-page "https://golang.org/x/net")
-    (synopsis "Go Networking")
-    (description
-     "This repository holds supplementary Go networking libraries.")
     (license license:bsd-3)))
 
 (define-public go-golang-org-x-net-0.10
@@ -10518,30 +10273,6 @@ HTTP requests, as specified in @@url{https://rfc-editor.org/rfc/rfc6749.html,RFC
 6749}.  It can additionally grant authorization with Bearer JWT.")
     (license license:bsd-3)))
 
-(define-public go-golang-org-x-term-next
-  (package
-    (name "go-golang-org-x-term")
-    (version "0.0.0-20210927222741-03fcf44c2211")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://go.googlesource.com/term")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "0aw5lgwq5w5kvwfa3jl7l83p9c827ksy4a99dqzzsqxvmk2zdi8f"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "golang.org/x/term"))
-    (propagated-inputs
-     (list go-golang-org-x-sys))
-    (home-page "https://golang.org/x/term")
-    (synopsis "Go terminal/console support")
-    (description
-      "Package term provides support functions for dealing with terminals, as commonly
-found on UNIX systems.")
-    (license license:bsd-3)))
-
 (define-public go-golang-org-x-term-0.8
   (package
     (inherit go-golang-org-x-term)
@@ -10580,31 +10311,6 @@ found on UNIX systems.")
     (native-inputs
      (list go-golang-org-x-tools))))    ;0.6
 
-(define-public go-golang-org-x-text-next
-  (package
-    (name "go-golang-org-x-text")
-    (version "0.3.7")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://go.googlesource.com/text")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "0xkw0qvfjyifdqd25y7nxdqkdh92inymw3q7841nricc9s01p4jy"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "golang.org/x/text"))
-    (inputs
-     (list go-golang-org-x-tools-bootstrap))
-    (home-page "https://golang.org/x/text")
-    (synopsis "Go Text")
-    (description
-      "text is a repository of text-related packages related to internationalization
-(i18n) and localization (l10n), such as character encodings, text
-transformations, and locale-specific text handling.")
-    (license license:bsd-3)))
-
 (define go-golang-org-x-tools-bootstrap
   (package
     (inherit go-golang-org-x-tools)
@@ -10623,12 +10329,11 @@ transformations, and locale-specific text handling.")
     ;(arguments '(#:import-path "golang.org/x/tools"))
     ;(propagated-inputs
     ; (list
-    ;       go-golang-org-x-xerrors-next
-    ;       go-golang-org-x-text-next
+    ;       go-golang-org-x-xerrors
     ;       go-golang-org-x-sys
     ;       go-golang-org-x-sync
-    ;       go-golang-org-x-net-next
-    ;       go-golang-org-x-mod-next
+    ;       go-golang-org-x-net
+    ;       go-golang-org-x-mod
     ;       go-github-com-yuin-goldmark
     ;       ))
     (properties `((hidden? . #t)))
@@ -10656,128 +10361,6 @@ transformations, and locale-specific text handling.")
            go-golang-org-x-net-0.10
            go-golang-org-x-mod
            go-github-com-yuin-goldmark))))
-
-(define-public go-golang-org-x-tools-next
-  (package
-    (inherit go-golang-org-x-tools)
-    (name "go-golang-org-x-tools")
-    (version "0.1.8")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://go.googlesource.com/tools")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "0h9ip7sry1y8z94jypygas4ylb403wji3vljcc5jlb54rf51x3z7"))))
-    (arguments
-     '(#:import-path "golang.org/x/tools"
-       #:modules ((guix build go-build-system)
-                  (guix build utils)
-                  (srfi srfi-1))
-       #:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'patch-filepaths
-           (lambda* (#:key inputs #:allow-other-keys)
-             (substitute* (find-files "src/golang.org/x/tools" "\\.go$")
-               (("/usr/bin/diff") (search-input-file inputs "/bin/diff")))))
-         (replace 'build
-           (lambda* (#:key import-path build-flags #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'build)
-                  #:build-flags build-flags
-                  #:import-path (string-drop directory 4)))
-               (find-files "src/golang.org/x/tools"
-                 (lambda (file stat)
-                   (and
-                     (eq? (stat:type stat) 'directory)
-                     (let ((files (find-files file "\\.go$")))
-                       (and
-                         (not (null? files))
-                         (not (string-contains file "copyright"))
-                         (not (string-contains file "gopls"))
-                         (not (string-contains file "testdata"))
-                         (not (null?
-                                (filter-map
-                                  (lambda (test-entry)
-                                    (not (string-contains test-entry file-name-separator-string)))
-                                  (map (lambda (entry)
-                                         (string-drop entry (1+ (string-length file))))
-                                       files))))))))
-                 #:directories? #t))))
-         (replace 'check
-           (lambda* (#:key tests? import-path #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'check)
-                  #:tests? tests?
-                  #:import-path (string-drop directory 4)))
-               (find-files "src/golang.org/x/tools"
-                 (lambda (file stat)
-                   (and
-                     (eq? (stat:type stat) 'directory)
-                     (let ((files (find-files file "\\.go$")))
-                       (and
-                         (not (null? files))
-                         (not (string-contains file "copyright"))
-                         (not (string-contains file "cmd/stringer"))    ; Tries to 'go get'.
-                         (not (string-contains file "gcexportdata"))
-                         (not (string-contains file "go/packages"))
-                         (not (string-contains file "go/ssa"))
-                         (not (string-contains file "godoc"))
-                         (not (string-contains file "gopls"))
-                         (not (string-contains file "internal"))
-                         (not (string-contains file "testdata"))
-                         ;; These tests fail with gccgo.
-                         (not (string-contains file "tools/cmd/bundle"))
-                         (not (string-contains file "tools/cmd/callgraph"))
-                         (not (string-contains file "tools/cmd/gorename"))
-                         (not (string-contains file "tools/cmd/guru"))
-                         (not (string-contains file "tools/go/analysis/multichecker"))
-                         (not (string-contains file "tools/go/analysis/passes"))
-                         (not (string-contains file "tools/go/loader"))
-                         (not (string-contains file "tools/go/pointer"))
-                         (not (string-contains file "tools/refactor"))
-
-                         (not (null?
-                                (filter-map
-                                  (lambda (test-entry)
-                                    (not (string-contains test-entry file-name-separator-string)))
-                                  (map (lambda (entry)
-                                         (string-drop entry (1+ (string-length file))))
-                                       files))))))))
-                 #:directories? #t)))))))
-    (propagated-inputs
-     (list go-github-com-yuin-goldmark
-           ;go-golang-org-x-mod-next
-           go-golang-org-x-mod
-           go-golang-org-x-net-next
-           go-golang-org-x-sync
-           go-golang-org-x-sys
-           go-golang-org-x-text-next
-           go-golang-org-x-xerrors-next))))
-
-(define-public go-golang-org-x-xerrors-next
-  (package
-    (name "go-golang-org-x-xerrors")
-    (version "0.0.0-20200804184101-5ec99f83aff1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://go.googlesource.com/xerrors")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1dbzc3gmf2haazpv7cgmv97rq40g2xzwbglc17vas8dwhgwgwrzb"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "golang.org/x/xerrors"))
-    (home-page "https://golang.org/x/xerrors")
-    (synopsis #f)
-    (description "Package xerrors implements functions to manipulate errors.")
-    (license license:bsd-3)))
 
 ;; ready to upstream
 (define-public go-go-mongodb-org-mongo-driver
@@ -11173,7 +10756,7 @@ within your PATH with the name:")
            go-github-com-imkira-go-interpol
            go-github-com-stretchr-testify
            go-github-com-valyala-fasthttp
-           ;go-golang-org-x-net-next
+           go-golang-org-x-net
            go-github-com-xeipuuv-gojsonschema
            go-github-com-yalp-jsonpath
            go-github-com-yudai-gojsondiff
@@ -12796,14 +12379,4 @@ SHOULD NOT be used for new applications.")
       ("go-github.com-mattn-go-runewidth" . ,(const go-github-com-mattn-go-runewidth))
       ;; This isn't picked up for some reason.
       ;; We should use the newer versions.
-      ("go-golang-org-x-image" . ,(const go-golang-org-x-image-next))
-      ("go-golang-org-x-lint" . ,(const go-golang-org-x-lint-next))
-      ;("go-golang-org-x-mod" . ,(const go-golang-org-x-mod-next))
-      ("go-golang-org-x-net" . ,(const go-golang-org-x-net-next))
-      ;("go-golang-org-x-oauth2" . ,(const go-golang-org-x-oauth2-next))
-      ("go-golang-org-x-term" . ,(const go-golang-org-x-term-next))
-      ("go-golang-org-x-text" . ,(const go-golang-org-x-text-next))
-      ;("go-golang-org-x-time" . ,(const go-golang-org-x-time-next))
-      ("go-golang-org-x-tools" . ,(const go-golang-org-x-tools-next))
-      ("go-golang-org-x-xerrors" . ,(const go-golang-org-x-xerrors-next))
       )))
