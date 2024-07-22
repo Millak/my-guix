@@ -7011,39 +7011,6 @@ replacement of golint. .")
 specifically the sequence in Section 7.1 (page 21).")
     (license license:asl2.0)))
 
-(define-public go-github-com-mholt-archiver-v3
-  (package
-    (name "go-github-com-mholt-archiver-v3")
-    (version "3.5.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/mholt/archiver")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "1py186hfy4p69wghqmbsyi1r3xvw1nyl55pz8f97a5qhmwxb3mwp"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/mholt/archiver/v3"))
-    (propagated-inputs
-     (list go-github-com-xi2-xz
-           go-github-com-ulikunitz-xz
-           go-github-com-pierrec-lz4-v4
-           go-github-com-nwaples-rardecode
-           go-github-com-klauspost-pgzip
-           go-github-com-klauspost-compress
-           go-github-com-golang-snappy
-           go-github-com-dsnet-compress
-           go-github-com-andybalholm-brotli))
-    (home-page "https://github.com/mholt/archiver")
-    (synopsis "archiver")
-    (description
-      "Package archiver facilitates convenient, cross-platform, high-level archival and
-compression operations for a variety of formats and compression algorithms.")
-    (license license:expat)))
-
 (define-public go-github-com-microsoft-go-winio
   (package
     (name "go-github-com-microsoft-go-winio")
@@ -7341,35 +7308,6 @@ they should occur.  Actions mutate the context and transition to another state."
       "This package is no longer being updated! Please look for alternatives if that bothers you.")
     (description "Package resize implements various image resizing methods.")
     (license license:isc)))
-
-(define-public go-github-com-niklasfasching-go-org
-  (package
-    (name "go-github-com-niklasfasching-go-org")
-    (version "1.6.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/niklasfasching/go-org")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "04ml4w5ip7kzqj9fv92rzcqlxarbpxwm5vsv7238cdmrcqv3q96g"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/niklasfasching/go-org"))
-    (propagated-inputs
-     (list go-golang-org-x-net
-           go-github-com-danwakefield-fnmatch
-           go-github-com-dlclark-regexp2
-           go-github-com-shurcool-sanitized-anchor-name
-           go-github-com-russross-blackfriday
-           go-github-com-pmezard-go-difflib
-           ;go-github-com-chaseadamsio-goorgeous
-           go-github-com-alecthomas-chroma))
-    (home-page "https://github.com/niklasfasching/go-org")
-    (synopsis #f)
-    (description #f)
-    (license license:expat)))
 
 (define-public go-github-com-nwaples-rardecode
   (package
@@ -9610,27 +9548,6 @@ this code needs to be run as root.")
     (synopsis #f)
     (description #f)
     (license license:asl2.0)))
-
-(define-public go-github-com-xi2-xz
-  (package
-    (name "go-github-com-xi2-xz")
-    (version "0.0.0-20171230120015-48954b6210f8")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/xi2/xz")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "178r0fa2dpzxf0sabs7dn0c8fa7vs87zlxk6spkn374ls9pir7nq"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/xi2/xz"))
-    (home-page "https://github.com/xi2/xz")
-    (synopsis #f)
-    (description #f)
-    ;; same license as xz?
-    (license #f)))
 
 (define-public go-github-com-yalp-jsonpath
   (package
