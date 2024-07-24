@@ -359,7 +359,7 @@ the world.")
               (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
                                   version "_arm.tgz"))
               (sha256
-               (base32 1i2l8jy3j2apy39wc907f9h9g6mmg8ig4yf6p8wda6r24bviyzsb"))))
+               (base32 "1i2l8jy3j2apy39wc907f9h9g6mmg8ig4yf6p8wda6r24bviyzsb"))))
     (supported-systems '("armhf-linux"))))
 
 (define-public tailscale-bin-arm64
