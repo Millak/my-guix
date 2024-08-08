@@ -33,10 +33,13 @@
   #:use-module (gnu packages golang-check)
   #:use-module (gnu packages golang-compression)
   #:use-module (gnu packages golang-crypto)
+  #:use-module (gnu packages golang-maths)
   #:use-module (gnu packages golang-web)
   #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages linux)
+  #:use-module (gnu packages networking)
   #:use-module (gnu packages node)
+  #:use-module (gnu packages prometheus)
   #:use-module (gnu packages ssh)
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages syncthing)
@@ -2720,7 +2723,7 @@ the API is very similar.")
      (list go-github-com-golang-snappy))
     (native-inputs
      (list go-github-com-glycerine-goconvey
-           go-github.com-jtolds-gls))
+           go-github-com-jtolds-gls))
     (home-page "https://github.com/glycerine/go-unsnap-stream")
     (synopsis "go-unsnap-stream")
     (description
@@ -3177,28 +3180,6 @@ free to implement mocks and testing over filesystem operations.")
 @url{https://github.com/gogits/go-gogs-client/wiki,Wiki} for documentation.")
     (license license:expat)))
 
-(define-public go-github-com-go-kit-log
-  (package
-    (name "go-github-com-go-kit-log")
-    (version "0.2.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/go-kit/log")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "13gbqrwvqy9j903j44x0kix5gnn34a8hl8skbdijy7arpkxpj6h3"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-kit/log"))
-    (propagated-inputs
-     (list go-github-com-go-logfmt-logfmt))
-    (home-page "https://github.com/go-kit/log")
-    (synopsis "package log")
-    (description "Package log provides a structured logger.")
-    (license license:expat)))
-
 (define-public go-github-com-golang-glog
   (package
     (name "go-github-com-golang-glog")
@@ -3296,30 +3277,6 @@ calendar with exactly 24-hour days, 60-minute hours, and 60-second minutes.")
   ;  (description "Package ldap provides basic LDAP v3 functionality.")
   ;  (license license:expat)))
 
-(define-public go-github-com-go-logfmt-logfmt
-  (package
-    (name "go-github-com-go-logfmt-logfmt")
-    (version "0.5.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/go-logfmt/logfmt")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "01fs4x2aqw2qcsz18s4nfvyqv3rcwz5xmgpk3bic6nzgyzsjd7dp"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/go-logfmt/logfmt"))
-    (home-page "https://github.com/go-logfmt/logfmt")
-    (synopsis "logfmt")
-    (description
-      "Package logfmt implements utilities to marshal and unmarshal data in the logfmt
-format.  The logfmt format records key/value pairs in a way that balances
-readability for humans and simplicity of computer parsing.  It is most commonly
-used as a more human friendly alternative to JSON for structured logging.")
-    (license license:expat)))
-
 (define-public go-github-com-googleapis-gax-go-v2
   (package
     (name "go-github-com-googleapis-gax-go-v2")
@@ -3385,9 +3342,6 @@ clients and servers based on gRPC and Google API conventions.")
     (description
      "Gnostic is a tool for building better REST APIs through knowledge.")
     (license license:asl2.0)))
-
-(define-public go-github-com-google-go-cmp
-  (deprecated-package "go-github-com-google-go-cmp" go-github-com-google-go-cmp-cmp))
 
 (define-public go-github-com-google-go-github-v32
   (package
@@ -7199,27 +7153,6 @@ actions.  States describe which actions are possible, and with what probability
 they should occur.  Actions mutate the context and transition to another state.")
     (license license:asl2.0)))
 
-(define-public go-github-com-munnerz-goautoneg
-  (package
-    (name "go-github-com-munnerz-goautoneg")
-    (version "0.0.0-20191010083416-a7dc8b61c822")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/munnerz/goautoneg")
-                    (commit (go-version->git-ref version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "1m4v6bw6yf1g0kvpc46isjp0qfhx2y8gnvlnyjf637jy64613mgg"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/munnerz/goautoneg"))
-    (home-page "https://github.com/munnerz/goautoneg")
-    (synopsis #f)
-    (description #f)
-    (license license:bsd-3)))
-
 (define-public go-github-com-neelance-astrewrite
   (package
     (name "go-github-com-neelance-astrewrite")
@@ -9302,7 +9235,7 @@ JSON, XML, binary data, and HTML templates.")
                          ("go-github-com-mdlayher-raw" ,go-github-com-mdlayher-raw)
                          ("go-github-com-mdlayher-netlink" ,go-github-com-mdlayher-netlink)
                          ("go-github-com-mdlayher-ethernet" ,go-github-com-mdlayher-ethernet)
-                         ;("go-github-com-mattn-go-tty" ,go-github-com-mattn-go-tty)
+                         ("go-github-com-mattn-go-tty" ,go-github-com-mattn-go-tty)
                          ("go-github-com-mattn-go-runewidth" ,go-github-com-mattn-go-runewidth)
                          ("go-github-com-mattn-go-isatty" ,go-github-com-mattn-go-isatty)
                          ("go-github-com-mattn-go-colorable" ,go-github-com-mattn-go-colorable)
@@ -9411,36 +9344,6 @@ ipsec.  Netlink communication requires elevated privileges, so in most cases
 this code needs to be run as root.  The low level primitives for netlink are
 contained in the nl subpackage.  This package attempts to provide a high-level
 interface that is loosely modeled on the iproute2 cli.")
-    (license license:asl2.0)))
-
-(define-public go-github-com-vishvananda-netns
-  (package
-    (name "go-github-com-vishvananda-netns")
-    (version "0.0.0-20211101163701-50045581ed74")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/vishvananda/netns")
-                    (commit (go-version->git-ref version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "0kam780m036mk77fmc0w0z6qz4b5awkllcd1dps71zd1n82mr407"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; Tests need network access
-       #:import-path "github.com/vishvananda/netns"))
-    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
-    (home-page "https://github.com/vishvananda/netns")
-    (synopsis "netns - network namespaces in go")
-    (description
-     "Package netns allows ultra-simple network namespace handling.  NsHandles can be
-retrieved and set.  Note that the current namespace is thread local so actions
-that set and reset namespaces should use LockOSThread to make sure the namespace
-doesn't change due to a goroutine switch.  It is best to close NsHandles when
-you are done with them.  This can be accomplished via a `defer ns.Close()` on
-the handle.  Changing namespaces requires elevated privileges, so in most cases
-this code needs to be run as root.")
     (license license:asl2.0)))
 
 (define-public go-github-com-xanzy-go-gitlab
@@ -10534,7 +10437,7 @@ interacting with Google's gRPC APIs.")
            ;go-github-com-envoyproxy-go-control-plane
            ;go-github-com-cncf-xds-go
            ;go-github-com-cncf-udpa-go
-           ;go-github-com-cespare-xxhash
+           go-github-com-cespare-xxhash
            ))
     (home-page "https://google.golang.org/grpc")
     (synopsis "gRPC-Go")
@@ -12063,8 +11966,8 @@ Token removed.")
        ("go-github-com-evanphx-json-patch" ,go-github-com-evanphx-json-patch)
        ("go-github-com-emicklei-go-restful-v3" ,go-github-com-emicklei-go-restful-v3)
        ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
-       ;("go-github-com-cespare-xxhash-v2" ,go-github-com-cespare-xxhash-v2)
-       ;("go-github-com-beorn7-perks" ,go-github-com-beorn7-perks)
+       ("go-github-com-cespare-xxhash-v2" ,go-github-com-cespare-xxhash-v2)
+       ("go-github-com-beorn7-perks" ,go-github-com-beorn7-perks)
        ("go-sigs-k8s-io-yaml" ,go-sigs-k8s-io-yaml)
        ("go-k8s-io-utils" ,go-k8s-io-utils)
        ("go-k8s-io-klog-v2" ,go-k8s-io-klog-v2)

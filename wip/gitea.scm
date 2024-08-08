@@ -30,6 +30,7 @@
   #:use-module (gnu packages golang-web)
   #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages node)
+  #:use-module (gnu packages prometheus)
   #:use-module (gnu packages ssh)
   #:use-module (gnu packages syncthing)
   #:use-module (gnu packages version-control)
