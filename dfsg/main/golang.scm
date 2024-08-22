@@ -2365,7 +2365,7 @@ validate such constraints.")
 @url{https://www.github.com/blevesearch/bleve,bleve indexing library}")
     (license license:expat)))
 
-(define-public go-github-com-evanphx-json-patch
+(define-public go-github-com-evanphx-json-patch-v4
   (package
     (name "go-github-com-evanphx-json-patch")
     (version "4.12.0+incompatible")
@@ -9663,37 +9663,6 @@ goldmark(@url{http://github.com/yuin/goldmark,http://github.com/yuin/goldmark}).
 goldmark(@url{http://github.com/yuin/goldmark,http://github.com/yuin/goldmark}).")
     (license license:expat)))
 
-(define-public go-github-com-yuin-gopher-lua
-  (package
-    (name "go-github-com-yuin-gopher-lua")
-    (version "0.0.0-20210529063254-f4c35e4016d9")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/yuin/gopher-lua")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "1knkabycjvjkjb7vdj1cm0g856fsc8yzm3yqlwhlbzbpkfq4xjcf"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/yuin/gopher-lua"
-       #:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'fix-tests
-           (lambda _
-             (with-directory-excursion "src/github.com/yuin/gopher-lua"
-               (substitute* "script_test.go"
-                 ;; Procduces stack overflow.
-                 ((".*files\\.lua.*") ""))))))))
-    (propagated-inputs
-     (list go-github-com-chzyer-readline))
-    (home-page "https://github.com/yuin/gopher-lua")
-    (synopsis "Lua compiler in Go")
-    (description "GopherLua is a VM and compiler for Lua in Go.")
-    (license license:expat)))
-
 (define-public go-github-com-zeripath-jwt
   (package
     (name "go-github-com-zeripath-jwt")
@@ -10932,18 +10901,18 @@ common patterns.")
        ;("go-github-com-syndtr-gocapability" ,go-github-com-syndtr-gocapability)
        ("go-github-com-sirupsen-logrus" ,go-github-com-sirupsen-logrus)
        ;("go-github-com-opencontainers-runtime-spec" ,go-github-com-opencontainers-runtime-spec)
-       ;("go-github-com-mohae-deepcopy" ,go-github-com-mohae-deepcopy)
-       ;("go-github-com-mattbaird-jsonpatch" ,go-github-com-mattbaird-jsonpatch)
+       ("go-github-com-mohae-deepcopy" ,go-github-com-mohae-deepcopy)
+       ("go-github-com-mattbaird-jsonpatch" ,go-github-com-mattbaird-jsonpatch)
        ;("go-github-com-kr-pty" ,go-github-com-kr-pty)
-       ;("go-github-com-google-subcommands" ,go-github-com-google-subcommands)
+       ("go-github-com-google-subcommands" ,go-github-com-google-subcommands)
        ("go-github-com-google-btree" ,go-github-com-google-btree)
        ("go-github-com-gogo-protobuf" ,go-github-com-gogo-protobuf)
-       ;("go-github-com-gofrs-flock" ,go-github-com-gofrs-flock)
+       ("go-github-com-gofrs-flock" ,go-github-com-gofrs-flock)
        ("go-github-com-godbus-dbus-v5" ,go-github-com-godbus-dbus-v5)
        ("go-github-com-coreos-go-systemd-v22" ,go-github-com-coreos-go-systemd-v22)
-       ;("go-github-com-containerd-typeurl" ,go-github-com-containerd-typeurl)
+       ("go-github-com-containerd-typeurl" ,go-github-com-containerd-typeurl)
        ;("go-github-com-containerd-go-runc" ,go-github-com-containerd-go-runc)
-       ;("go-github-com-containerd-fifo" ,go-github-com-containerd-fifo)
+       ("go-github-com-containerd-fifo" ,go-github-com-containerd-fifo)
        ;("go-github-com-containerd-containerd" ,go-github-com-containerd-containerd)
        ("go-github-com-containerd-console" ,go-github-com-containerd-console)
        ;("go-github-com-containerd-cgroups" ,go-github-com-containerd-cgroups)
@@ -11242,7 +11211,7 @@ known as the Windows firewall.")
        ("go-github-com-google-gnostic" ,go-github-com-google-gnostic)
        ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
        ("go-github-com-gogo-protobuf" ,go-github-com-gogo-protobuf)
-       ("go-github-com-evanphx-json-patch" ,go-github-com-evanphx-json-patch)
+       ("go-github-com-evanphx-json-patch" ,go-github-com-evanphx-json-patch-v4)
        ;("go-github-com-elazarl-goproxy" ,go-github-com-elazarl-goproxy)
        ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
        ("go-github-com-armon-go-socks5" ,go-github-com-armon-go-socks5)))
@@ -11316,7 +11285,7 @@ Kubernetes-like API objects.")
        ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
        ("go-github-com-golang-groupcache" ,go-github-com-golang-groupcache)
        ("go-github-com-gogo-protobuf" ,go-github-com-gogo-protobuf)
-       ("go-github-com-evanphx-json-patch" ,go-github-com-evanphx-json-patch)
+       ("go-github-com-evanphx-json-patch" ,go-github-com-evanphx-json-patch-v4)
        ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)))
     (home-page "https://k8s.io/client-go")
     (synopsis "client-go")
@@ -11963,7 +11932,7 @@ Token removed.")
        ("go-github-com-go-openapi-swag" ,go-github-com-go-openapi-swag)
        ("go-github-com-go-openapi-jsonreference" ,go-github-com-go-openapi-jsonreference)
        ("go-github-com-go-openapi-jsonpointer" ,go-github-com-go-openapi-jsonpointer)
-       ("go-github-com-evanphx-json-patch" ,go-github-com-evanphx-json-patch)
+       ("go-github-com-evanphx-json-patch" ,go-github-com-evanphx-json-patch-v4)
        ("go-github-com-emicklei-go-restful-v3" ,go-github-com-emicklei-go-restful-v3)
        ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
        ("go-github-com-cespare-xxhash-v2" ,go-github-com-cespare-xxhash-v2)
