@@ -31,6 +31,7 @@
   #:use-module (gnu packages rust-apps))
 
 (define-public python-adblock
+  ;; A few commits after the 0.6.0 release to fix build issues.
   (let ((commit "a340dfcb37b402b0427b2dd7ac3c64cfe7edb38b")
         (revision "1"))
     (package

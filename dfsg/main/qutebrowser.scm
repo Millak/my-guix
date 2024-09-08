@@ -62,7 +62,7 @@
      (substitute-keyword-arguments (package-arguments qutebrowser)
        ((#:phases phases '%standard-phases)
         #~(modify-phases #$phases
-            (add-after 'wrap-qt-process 'wrap-qutebrowser-binary
+            (add-after 'wrap-qt-process-path 'wrap-qutebrowser-binary
               (lambda* (#:key inputs outputs #:allow-other-keys)
                 (wrap-program (search-input-file outputs "bin/qutebrowser")
                  `("PATH" prefix
