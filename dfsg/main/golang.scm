@@ -2785,29 +2785,6 @@ services.")
     (synopsis "Colly")
     (description #f)))
 
-(define-public go-github-com-godbus-dbus-v5
-  (package
-    (name "go-github-com-godbus-dbus-v5")
-    (version "5.0.6")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/godbus/dbus")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0d7740bjprd6mhs1wmhd53fb3kf61dz0hp1a0dda3dc28w2z84pp"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f                  ; Tests expect running dbus session.
-       #:import-path "github.com/godbus/dbus/v5"))
-    (home-page "https://github.com/godbus/dbus")
-    (synopsis "dbus")
-    (description
-      "Package dbus implements bindings to the D-Bus message bus system.")
-    (license license:bsd-2)))
-
 (define-public go-github-com-go-enry-go-enry-v2
   (package
     (name "go-github-com-go-enry-go-enry-v2")
@@ -5605,7 +5582,7 @@ with other software in any manner of languages or platforms.")
                          ;("go-github-com-sebest-xff" ,go-github-com-sebest-xff)
                          ;("go-github-com-rubenv-sql-migrate" ,go-github-com-rubenv-sql-migrate)
                          ;("go-github-com-rs-xhandler" ,go-github-com-rs-xhandler)
-                         ;("go-github-com-rs-cors" ,go-github-com-rs-cors)
+                         ("go-github-com-rs-cors" ,go-github-com-rs-cors)
                          ("go-github-com-rcrowley-go-metrics" ,go-github-com-rcrowley-go-metrics)
                          ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
                          ("go-github-com-opentracing-opentracing-go" ,go-github-com-opentracing-opentracing-go)
@@ -7909,7 +7886,7 @@ for examples.")
        ;("go-github-com-sebest-xff" ,go-github-com-sebest-xff)
        ;("go-github-com-rubenv-sql-migrate" ,go-github-com-rubenv-sql-migrate)
        ;("go-github-com-rs-xhandler" ,go-github-com-rs-xhandler)
-       ;("go-github-com-rs-cors" ,go-github-com-rs-cors)
+       ("go-github-com-rs-cors" ,go-github-com-rs-cors)
        ("go-github-com-rcrowley-go-metrics" ,go-github-com-rcrowley-go-metrics)
        ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
        ("go-github-com-opentracing-opentracing-go" ,go-github-com-opentracing-opentracing-go)
