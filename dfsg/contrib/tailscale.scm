@@ -322,7 +322,28 @@ the world.")
                  `("PATH" ":" prefix (,(dirname (search-input-file
                                                   inputs "/sbin/iptables"))
                                       ,(dirname (search-input-file
-                                                  inputs "/sbin/ip"))))))))))
+                                                  inputs "/sbin/ip")))))))
+           (add-after 'install 'install-shell-completions
+             (lambda* (#:key outputs #:allow-other-keys)
+               (let* ((out #$output)
+                      (tailscale (string-append out "/bin/tailscale"))
+                      (share (string-append out "/share"))
+                      (bash (string-append out "/etc/bash_completion.d/tailscale"))
+                      (fish (string-append
+                              share "/fish/vendor_completions.d/tailscale.fish"))
+                      (zsh (string-append share "/zsh/site-functions/_tailscale")))
+                 (mkdir-p (dirname bash))
+                 (mkdir-p (dirname fish))
+                 (mkdir-p (dirname zsh))
+                 (with-output-to-file bash
+                   (lambda ()
+                     (invoke tailscale "completion" "bash")))
+                 (with-output-to-file fish
+                   (lambda ()
+                     (invoke tailscale "completion" "fish")))
+                 (with-output-to-file zsh
+                   (lambda ()
+                     (invoke tailscale "completion" "zsh")))))))))
     (inputs (list iproute iptables))
     (home-page "https://github.com/tailscale/tailscale")
     (synopsis "Tailscale VPN client")
