@@ -56,7 +56,6 @@
     (build-system go-build-system)
     (arguments
      `(#:install-source? #f
-       #:go ,go-1.20
        #:unpack-path "github.com/superseriousbusiness/gotosocial"
        #:import-path "github.com/superseriousbusiness/gotosocial/cmd/gotosocial"
        #:phases

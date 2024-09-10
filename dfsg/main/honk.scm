@@ -54,7 +54,6 @@
     (arguments
      (list
        #:install-source? #f
-       #:go go-1.18
        #:import-path "humungus.tedunangst.com/r/honk"
        #:phases
        #~(modify-phases %standard-phases
@@ -135,7 +134,6 @@ less time operating it.")
     (build-system go-build-system)
     (arguments
      (list
-       #:go go-1.18
        #:import-path "humungus.tedunangst.com/r/webs"
        #:unpack-path "humungus.tedunangst.com/r/webs"
        #:phases

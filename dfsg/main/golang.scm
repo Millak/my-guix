@@ -3107,30 +3107,6 @@ free to implement mocks and testing over filesystem operations.")
 @url{https://github.com/gogits/go-gogs-client/wiki,Wiki} for documentation.")
     (license license:expat)))
 
-(define-public go-github-com-golang-glog
-  (package
-    (name "go-github-com-golang-glog")
-    (version "1.0.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/golang/glog")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "0vm206qrvhn3d571bqcman6fnavw4y3a31ffrmv2xkk0li74h2bf"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/golang/glog"))
-    (home-page "https://github.com/golang/glog")
-    (synopsis "glog")
-    (description
-      "Package glog implements logging analogous to the Google-internal C++
-INFO/ERROR/V setup.  It provides functions Info, Warning, Error, Fatal, plus
-formatting variants such as Infof.  It also provides V-style logging controlled
-by the -v and -vmodule=file=2 flags.")
-    (license license:asl2.0)))
-
 (define-public go-github-com-golang-mock-gomock
   (package
     (name "go-github-com-golang-mock-gomock")
@@ -3869,7 +3845,7 @@ easier.")
         ;("go-golang-org-x-net" ,go-golang-org-x-net)
         ;("go-github-com-rogpeppe-fastuuid" ,go-github-com-rogpeppe-fastuuid)
         ;("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
-        ;("go-github-com-golang-glog" ,go-github-com-golang-glog)
+        ("go-github-com-golang-glog" ,go-github-com-golang-glog)
         ;("go-github-com-ghodss-yaml" ,go-github-com-ghodss-yaml)
         ;("go-github-com-antihax-optional" ,go-github-com-antihax-optional)
         ))
@@ -4379,7 +4355,6 @@ and can be used with @url{https://github.com/lib/pq,https://github.com/lib/pq}."
     (build-system go-build-system)
     (arguments
      (list
-       #:go go-1.19
        #:tests? #f      ; undefined: assert.ErrorContains
        #:import-path "github.com/jackc/pgx/v5"))
     (propagated-inputs
@@ -4448,7 +4423,6 @@ and can be used with @url{https://github.com/lib/pq,https://github.com/lib/pq}."
     (build-system go-build-system)
     (arguments
      (list
-      #:go go-1.19
       #:import-path "github.com/jackc/puddle/v2"))
     (propagated-inputs
      (list go-golang-org-x-sync
@@ -4555,62 +4529,6 @@ external sources.")
     (synopsis "logrotate: slightly better than")
     (description #f)
     (license license:bsd-2)))
-
-(define-public go-github-com-josharian-native
-  (package
-    (name "go-github-com-josharian-native")
-    (version "1.0.0")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/josharian/native")
-                     (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "1rpb08slzlfy0g3n0k4y7b50p5i43sbbi3z3kzh0nc35lfn1dgmr"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/josharian/native"))
-    (home-page "https://github.com/josharian/native")
-    (synopsis #f)
-    (description "Package native provides easy access to native byte order.")
-    (license license:expat)))
-
-(define-public go-github-com-jsimonetti-rtnetlink
-  (package
-    (name "go-github-com-jsimonetti-rtnetlink")
-    (version "1.3.2")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/jsimonetti/rtnetlink")
-                    (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "08hh8nxx5dzw36vr0y9a7951yrqnklwiivadpzhd3q2c1r0ffnvj"))))
-    (build-system go-build-system)
-    (arguments
-     `(#:go ,go-1.20
-       #:import-path "github.com/jsimonetti/rtnetlink"))
-    (propagated-inputs
-     `(("go-golang-org-x-sync" ,go-golang-org-x-sync)
-       ("go-golang-org-x-net" ,go-golang-org-x-net)
-       ("go-github-com-mdlayher-socket" ,go-github-com-mdlayher-socket)
-       ("go-github-com-josharian-native" ,go-github-com-josharian-native)
-       ("go-golang-org-x-sys" ,go-golang-org-x-sys)
-       ("go-github-com-mdlayher-netlink" ,go-github-com-mdlayher-netlink)
-       ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-       ("go-github-com-cilium-ebpf" ,go-github-com-cilium-ebpf)))
-    (home-page "https://github.com/jsimonetti/rtnetlink")
-    (synopsis "rtnetlink")
-    (description
-     "Package rtnetlink allows the kernel's routing tables to be read and altered.
-Network routes, IP addresses, Link parameters, Neighbor setups, Queueing
-disciplines, Traffic classes and Packet classifiers may all be controlled.  It
-is based on netlink messages.")
-    (license license:expat)))
 
 (define-public go-github-com-jtolds-gls
   (package
@@ -5955,8 +5873,7 @@ for the end-user to do what they will with.")
            go-github-com-lestrrat-go-blackmagic
            go-github-com-lestrrat-go-backoff-v2
            go-github-com-goccy-go-json
-           ;go-github-com-decred-dcrd-dcrec-secp256k1-v4)     ; TODO: import
-           ))
+           go-github-com-decred-dcrd-dcrec-secp256k1-v4))
     (native-inputs
      (list go-github-com-stretchr-testify))
     (home-page "https://github.com/lestrrat-go/jwx")
@@ -6294,8 +6211,7 @@ II frames and IEEE 802.1Q VLAN tags.")
                 "0vppn8071nh8pnbyq9769j1zcgq76iadd5fry90xkmfq429if356"))))
     (build-system go-build-system)
     (arguments
-     `(#:go ,go-1.20
-       #:tests? #f      ; Tests need network access
+     `(#:tests? #f      ; Tests need network access
        #:import-path "github.com/mdlayher/genetlink"))
     (propagated-inputs
      `(("go-golang-org-x-sync" ,go-golang-org-x-sync)
@@ -6309,36 +6225,6 @@ II frames and IEEE 802.1Q VLAN tags.")
     (synopsis "genetlink")
     (description
      "Package genetlink implements generic netlink interactions and data types.")
-    (license license:expat)))
-
-(define-public go-github-com-mdlayher-netlink
-  (package
-    (name "go-github-com-mdlayher-netlink")
-    (version "1.7.1")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/mdlayher/netlink")
-                    (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "0lfpnssvqmkd41bc3yqkblf7h3is4aaxqf7hky17018ph7ijay2b"))))
-    (build-system go-build-system)
-    (arguments
-     `(#:go ,go-1.20
-       #:import-path "github.com/mdlayher/netlink"))
-    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
-                         ("go-golang-org-x-net" ,go-golang-org-x-net)
-                         ("go-github-com-mdlayher-socket" ,go-github-com-mdlayher-socket)
-                         ("go-github-com-josharian-native" ,go-github-com-josharian-native)
-                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)))
-    (native-inputs
-     (list iproute))
-    (home-page "https://github.com/mdlayher/netlink")
-    (synopsis "netlink")
-    (description
-     "Package netlink provides low-level access to Linux netlink sockets (AF_NETLINK).")
     (license license:expat)))
 
 (define-public go-github-com-mdlayher-packet
@@ -6356,8 +6242,7 @@ II frames and IEEE 802.1Q VLAN tags.")
                 "0bryji73rn3flqa2d803js7lpbyl3b95mlm9y3h49k8gqxv3gv4j"))))
     (build-system go-build-system)
     (arguments
-     `(;#:go ,go-1.18
-       #:import-path "github.com/mdlayher/packet"
+     `(#:import-path "github.com/mdlayher/packet"
        #:phases
        (modify-phases %standard-phases
          (delete 'build)
@@ -6431,35 +6316,6 @@ network interface.")
     (description
      "Package sdnotify implements systemd readiness notifications as described in
 @@url{https://www.freedesktop.org/software/systemd/man/sd_notify.html,https://www.freedesktop.org/software/systemd/man/sd_notify.html}.")
-    (license license:expat)))
-
-(define-public go-github-com-mdlayher-socket
-  (package
-    (name "go-github-com-mdlayher-socket")
-    (version "0.4.1")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/mdlayher/socket")
-                    (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "1lb20cnlml61j4n666bbjpzaxb5r8c9w3xw534ax0g6zm9hnk17m"))))
-    (build-system go-build-system)
-    (arguments
-     `(#:go ,go-1.20
-       #:import-path "github.com/mdlayher/socket"))
-    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
-                         ("go-golang-org-x-sync" ,go-golang-org-x-sync)
-                         ("go-golang-org-x-net" ,go-golang-org-x-net)
-                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)))
-    (home-page "https://github.com/mdlayher/socket")
-    (synopsis "socket")
-    (description
-     "Package socket provides a low-level network connection type which integrates
-with Go's runtime network poller to provide asynchronous I/O and deadline
-support.")
     (license license:expat)))
 
 (define-public go-github-com-mgechev-dots
@@ -9151,7 +9007,6 @@ either a read-only []byte or a string.")
     (build-system go-build-system)
     (arguments
      `(#:tests? #f      ; TODO
-       #:go ,go-1.20
        #:import-path "go4.org/netipx"))
     (propagated-inputs `(("go-golang-org-x-tools" ,go-golang-org-x-tools)
                          ("go-golang-org-x-sys" ,go-golang-org-x-sys)
@@ -9725,7 +9580,7 @@ interacting with Google's gRPC APIs.")
            ;go-github-com-google-uuid
            ;go-github-com-google-go-cmp
            go-github-com-golang-protobuf
-           ;go-github-com-golang-glog
+           go-github-com-golang-glog
            ;go-github-com-envoyproxy-go-control-plane
            ;go-github-com-cncf-xds-go
            ;go-github-com-cncf-udpa-go
@@ -10223,7 +10078,7 @@ common patterns.")
        ("go-github-com-vishvananda-netlink" ,go-github-com-vishvananda-netlink)
        ;("go-github-com-syndtr-gocapability" ,go-github-com-syndtr-gocapability)
        ("go-github-com-sirupsen-logrus" ,go-github-com-sirupsen-logrus)
-       ;("go-github-com-opencontainers-runtime-spec" ,go-github-com-opencontainers-runtime-spec)
+       ("go-github-com-opencontainers-runtime-spec" ,go-github-com-opencontainers-runtime-spec)
        ("go-github-com-mohae-deepcopy" ,go-github-com-mohae-deepcopy)
        ("go-github-com-mattbaird-jsonpatch" ,go-github-com-mattbaird-jsonpatch)
        ;("go-github-com-kr-pty" ,go-github-com-kr-pty)
@@ -10238,7 +10093,7 @@ common patterns.")
        ("go-github-com-containerd-fifo" ,go-github-com-containerd-fifo)
        ;("go-github-com-containerd-containerd" ,go-github-com-containerd-containerd)
        ("go-github-com-containerd-console" ,go-github-com-containerd-console)
-       ;("go-github-com-containerd-cgroups" ,go-github-com-containerd-cgroups)
+       ("go-github-com-containerd-cgroups" ,go-github-com-containerd-cgroups)
        ("go-github-com-cilium-ebpf" ,go-github-com-cilium-ebpf)
        ;("go-github-com-cenkalti-backoff" ,go-github-com-cenkalti-backoff)
        ;("go-github-com-bazelbuild-rules-go" ,go-github-com-bazelbuild-rules-go)
@@ -10322,7 +10177,6 @@ and Unmarshal functions.")
     (build-system go-build-system)
     (arguments
      (list
-       #:go go-1.18
        #:import-path "humungus.tedunangst.com/r/webs"
        #:unpack-path "humungus.tedunangst.com/r/webs"
        #:phases
@@ -10451,8 +10305,7 @@ known as the Windows firewall.")
                 "0kcx7x87235k8pd6mc95d83qk7ip5a82gckddfb8jwq6ryf3qr7p"))))
     (build-system go-build-system)
     (arguments
-     `(#:go ,go-1.20
-       #:import-path "k8s.io/api"))
+     `(#:import-path "k8s.io/api"))
     (propagated-inputs
      `(("go-k8s-io-apimachinery" ,go-k8s-io-apimachinery)
        ("go-sigs-k8s-io-yaml" ,go-sigs-k8s-io-yaml)
@@ -10703,8 +10556,7 @@ repo.")
                 "08jr05q82rkvgma1cn1p0ijlmhdfmi6d9l6vzr7ih1gikhfiym3r"))))
     (build-system go-build-system)
     (arguments
-     `(#:go ,go-1.20
-       #:import-path "k8s.io/utils"
+     `(#:import-path "k8s.io/utils"
        #:phases
        (modify-phases %standard-phases
          (delete 'build)
@@ -10931,8 +10783,7 @@ implements selected parts of the C standard library.")
                 "101cqy6lrm1g27ww2cih9dn2zjrlzm66pd97akqh36wkgxz258cz"))))
     (build-system go-build-system)
     (arguments
-     `(#:go ,go-1.18
-       #:tests? #f      ; The tests regularly timeout.
+     `(#:tests? #f      ; The tests regularly timeout.
        #:import-path "modernc.org/memory"))
     (propagated-inputs
      (list go-modernc-org-mathutil))
@@ -10976,8 +10827,7 @@ implements selected parts of the C standard library.")
                 "0rl01gmbfp5fnjiflwq85qdiy78fa1myxkm0d9vvrrgd1jbx3k03"))))
     (build-system go-build-system)
     (arguments
-     `(#:go ,go-1.18
-       #:tests? #f      ; Tests hang forever
+     `(#:tests? #f      ; Tests hang forever
        #:import-path "modernc.org/sqlite"))
     (propagated-inputs
      (list go-modernc-org-tcl
@@ -11190,8 +11040,7 @@ Token removed.")
                 "08gq6xygmpx4ixlnid40pa7c3h8karphrn7nb8f2ga33mh99mppy"))))
     (build-system go-build-system)
     (arguments
-     `(#:go ,go-1.20
-       #:import-path "sigs.k8s.io/controller-runtime"))
+     `(#:import-path "sigs.k8s.io/controller-runtime"))
     (propagated-inputs
      `(("go-sigs-k8s-io-structured-merge-diff-v4" ,go-sigs-k8s-io-structured-merge-diff-v4)
        ("go-sigs-k8s-io-json" ,go-sigs-k8s-io-json)
@@ -11278,8 +11127,7 @@ Kubernetes APIs.")
                 "1ykph9nqks2xif0fffpp5nbzp4r3c5pvgi1wrnwn7lxp1718g4jm"))))
     (build-system go-build-system)
     (arguments
-     `(#:go ,go-1.20
-       #:import-path "sigs.k8s.io/json"))
+     `(#:import-path "sigs.k8s.io/json"))
     (home-page "https://sigs.k8s.io/json")
     (synopsis "sigs.k8s.io/json")
     (description
@@ -11305,8 +11153,7 @@ based on @@code{encoding/json} @@code{Unmarshal()}.")
                 "02db3a0ln64fv8s7lis7jnsprphxbr33cspxb0kdw9l9zy8dg45k"))))
     (build-system go-build-system)
     (arguments
-     `(#:go ,go-1.20
-       #:import-path "sigs.k8s.io/structured-merge-diff/v4/value"
+     `(#:import-path "sigs.k8s.io/structured-merge-diff/v4/value"
        #:unpack-path "sigs.k8s.io/structured-merge-diff/v4"))
     (propagated-inputs `(("go-github-com-modern-go-concurrent" ,go-github-com-modern-go-concurrent)
                          ("go-github-com-json-iterator-go" ,go-github-com-json-iterator-go)
