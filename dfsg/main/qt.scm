@@ -28,13 +28,10 @@
     (source #f)
     (build-system trivial-build-system)
     (arguments
-     '(#:modules ((guix build utils)
-                  (guix build union))
+     '(#:modules ((guix build utils))
        #:builder
        (begin
-         (use-modules (ice-9 match)
-                      (guix build utils)
-                      (guix build union))
+         (use-modules (guix build utils))
          (let ((out (assoc-ref %outputs "out"))
                (qtbase-5    (assoc-ref %build-inputs "qtbase-5"))
                (qtbase      (assoc-ref %build-inputs "qtbase"))
@@ -43,21 +40,29 @@
          (mkdir-p (string-append out "/lib/qt5"))
          (mkdir-p (string-append out "/lib/qt6"))
          (mkdir-p (string-append out "/share"))
-         (union-build (string-append out "/lib/qt5/plugins")
-                      (list (string-append qtbase-5 "/lib/qt5/plugins")
-                            (string-append qtwayland-5 "/lib/qt5/plugins")))
-         (union-build (string-append out "/lib/qt6/plugins")
-                      (list (string-append qtbase "/lib/qt6/plugins")
-                            (string-append qtwayland "/lib/qt6/plugins")))
-         (union-build (string-append out "/share/doc")
-                      (list (string-append qtbase-5 "/share/doc")
-                            (string-append qtbase "/share/doc")
-                            (string-append qtwayland-5 "/share/doc")
-                            (string-append qtwayland "/share/doc")))
-         (symlink (string-append qtwayland "/lib/qt5/qml")
-                  (string-append out "/lib/qt5/qml"))
-         (symlink (string-append qtwayland "/lib/qt6/qml")
-                  (string-append out "/lib/qt6/qml"))
+         ;; We use copy-recursively instead of union-build because the
+         ;; union-build used for profile generation can't add other plugins
+         ;; to an existing union-build.
+         (copy-recursively (string-append qtbase-5 "/lib/qt5/plugins")
+                           (string-append out "/lib/qt5/plugins"))
+         (copy-recursively (string-append qtwayland-5 "/lib/qt5/plugins")
+                           (string-append out "/lib/qt5/plugins"))
+         (copy-recursively (string-append qtbase "/lib/qt6/plugins")
+                           (string-append out "/lib/qt6/plugins"))
+         (copy-recursively (string-append qtwayland "/lib/qt6/plugins")
+                           (string-append out "/lib/qt6/plugins"))
+         (copy-recursively (string-append qtbase-5 "/share/doc")
+                           (string-append out "/share/doc"))
+         (copy-recursively (string-append qtbase "/share/doc")
+                           (string-append out "/share/doc"))
+         (copy-recursively (string-append qtwayland-5 "/share/doc")
+                           (string-append out "/share/doc"))
+         (copy-recursively (string-append qtwayland "/share/doc")
+                           (string-append out "/share/doc"))
+         (copy-recursively (string-append qtwayland-5 "/lib/qt5/qml")
+                           (string-append out "/lib/qt5/qml"))
+         (copy-recursively (string-append qtwayland "/lib/qt6/qml")
+                           (string-append out "/lib/qt6/qml"))
          (delete-file-recursively (string-append out "/share/doc/qt5"))
          (delete-file-recursively (string-append out "/share/doc/qt6"))))))
     (inputs
@@ -67,13 +72,12 @@
        ("qtwayland" ,qtwayland)))
     (native-search-paths
      (delete-duplicates
-       (append
-       (package-native-search-paths qtbase-5)
-       (package-native-search-paths qtbase))))
+       (append (package-native-search-paths qtbase-5)
+               (package-native-search-paths qtbase))))
     (home-page (package-home-page qtbase))
     (synopsis "Helper package to display Qt applications in wayland")
     (description "This package provides a helper package which can be used to
-enable Qt (Qt-5 and Qt-6) packages to run under wayland.")
+enable Qt (Qt5 and Qt6) packages to run under wayland.")
     (license (delete-duplicates
                (append (package-license qtbase-5)
                        (package-license qtbase)
