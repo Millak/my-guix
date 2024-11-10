@@ -384,7 +384,7 @@ management for @code{go-chi}.")
 (define-public go-github-com-6543-go-version
   (package
     (name "go-github-com-6543-go-version")
-    (version "1.3.1")
+    (version "1.4.0")
     (source
       (origin
         (method git-fetch)
@@ -393,9 +393,11 @@ management for @code{go-chi}.")
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-          (base32 "0ags84q6yvdg6c77zadkw45hnjxp221ik3d7374q86jz1hss981v"))))
+         (base32 "0qlgwxhw9r2r88ap1m9q1hknn4g3xvcdpjgq14gswcqzd34pyg2v"))))
     (build-system go-build-system)
     (arguments '(#:import-path "github.com/6543/go-version"))
+    (native-inputs
+     (list go-github-com-stretchr-testify))
     (home-page "https://github.com/6543/go-version")
     (synopsis "Versioning Library for Go")
     (description
