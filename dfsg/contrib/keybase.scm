@@ -212,8 +212,3 @@ do online.")
     (properties
       '((release-monitoring-url . "https://github.com/keybase/client/releases")))
     (license license:bsd-3)))
-
-(define-public keybase-with-newer-go-libraries
-  (package
-    (inherit (newer-go-libraries keybase))
-    (name "keybase-with-newer-go-libraries")))

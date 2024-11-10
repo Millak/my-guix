@@ -420,9 +420,3 @@ the world.")
         ;; Probably the least overhead for qemu
         (else tailscale-bin-arm)))
 ;(export tailscale-bin-for-system)
-
-(define-public tailscale-with-newer-go-libraries
-  (package
-    (inherit (newer-go-libraries tailscale))
-    (name "tailscale-with-newer-go-libraries")))
-

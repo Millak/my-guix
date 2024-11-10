@@ -238,8 +238,3 @@
     (properties
       '((release-monitoring-url . "https://github.com/go-gitea/gitea/releases")))
     (license license:expat)))
-
-;(define-public gitea-with-newer-go-libraries
-;  (package
-;    (inherit (newer-go-libraries gitea))
-;    (name "gitea-with-newer-go-libraries")))

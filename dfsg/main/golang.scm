@@ -10910,16 +10910,3 @@ SHOULD NOT be used for new applications.")
     (synopsis "xorm")
     (description "Package xorm is a simple and powerful ORM for Go.")
     (license license:bsd-3)))
-
-;;;
-;;;
-;;;
-
-(define-public newer-go-libraries
-  (package-input-rewriting/spec
-    `(
-      ;; This one is in Guix twice.
-      ("go-github.com-mattn-go-runewidth" . ,(const go-github-com-mattn-go-runewidth))
-      ;; This isn't picked up for some reason.
-      ;; We should use the newer versions.
-      )))
