@@ -224,7 +224,7 @@
            go-gopkg-in-gomail-v2
            go-gopkg-in-ini-v1
            go-gopkg-in-yaml-v2
-           go-mvdan-cc-xurls
+           go-mvdan-cc-xurls-v2
            go-strk-kbt-io-projects-go-libravatar
            go-xorm-io-builder
            go-xorm-io-xorm

@@ -170,7 +170,7 @@
        ;gopkg.in/mcuadros/go-syslog.v2 v2.3.0
        go-gopkg-in-yaml-v3                      ; v3.0.1
        go-modernc-org-sqlite                    ; v1.22.1
-       go-mvdan-cc-xurls                        ; v2.5.0
+       go-mvdan-cc-xurls-v2                     ; v2.5.0
        ))
     (native-inputs
      `(("gotosocial-web-assets.tar.gz"
