@@ -67,8 +67,8 @@ sponsored segments of YouTube videos.")
     (license license:gpl3))))
 
 (define-public mpv-twitch-chat
-  (let ((commit "e115e4ef26390c63d7d4d863ff684d8c4a69c8e1")     ; 20230729
-        (revision "5"))
+  (let ((commit "bb0c2e84675f4f1e0c221c8e1d3516b60242b985")     ; 20240623
+        (revision "6"))
     (package
       (name "mpv-twitch-chat")
       (version (git-version "0" revision commit))
@@ -80,7 +80,7 @@ sponsored segments of YouTube videos.")
                  (commit commit)))
           (file-name (git-file-name name version))
           (sha256
-           (base32 "00pkgaqf9v7vv6qvzdhfyhyvd5waap1yiwpv97fsd0v7357s32fw"))))
+           (base32 "1b65b3kfdijwcypbjv6sva3k3ylim8604nrkmvplzr9c4194y8sv"))))
       (build-system trivial-build-system)
       (arguments
        (list
