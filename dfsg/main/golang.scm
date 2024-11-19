@@ -6780,26 +6780,6 @@ suited to represent sets of integers over relatively small ranges.  See
 @url{http://roaringbitmap.org,http://roaringbitmap.org} for details.")
     (license license:asl2.0)))
 
-(define-public go-github-com-russross-blackfriday-v2
-  (package
-    (name "go-github-com-russross-blackfriday-v2")
-    (version "2.1.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/russross/blackfriday")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "0d1rg1drrfmabilqjjayklsz5d0n3hkf979sr3wsrw92bfbkivs7"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/russross/blackfriday/v2"))
-    (home-page "https://github.com/russross/blackfriday")
-    (synopsis "Blackfriday")
-    (description "Package blackfriday is a markdown processor.")
-    (license license:bsd-2)))
-
 (define-public go-github-com-rwcarlsen-goexif
   (package
     (name "go-github-com-rwcarlsen-goexif")
