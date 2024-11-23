@@ -1269,39 +1269,6 @@ barcodes.")
     (description #f)
     (license license:expat)))
 
-(define-public go-github-com-caddyserver-certmagic
-  (package
-    (name "go-github-com-caddyserver-certmagic")
-    (version "0.14.5")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/caddyserver/certmagic")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "0fda736d9787bw1zirs7ns5chsalgzbn6dsb8sagl1hy1kj55w4s"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; Tests require network access.
-       #:import-path "github.com/caddyserver/certmagic"))
-    (propagated-inputs
-     (list go-github-com-klauspost-cpuid-v2
-           go-github-com-libdns-libdns
-           go-github-com-mholt-acmez
-           go-github-com-miekg-dns
-           go-go-uber-org-zap
-           go-golang-org-x-crypto
-           go-golang-org-x-net))
-    (home-page "https://github.com/caddyserver/certmagic")
-    (synopsis "Fully-managed TLS certificate issuance and renewal")
-    (description
-     "Package certmagic automates the obtaining and renewal of TLS certificates,
-including TLS & HTTPS best practices such as robust OCSP stapling, caching,
-HTTP->HTTPS redirects, and more.")
-    (license license:asl2.0)))
-
 (define-public go-github-com-census-instrumentation-opencensus-proto
   (package
     (name "go-github-com-census-instrumentation-opencensus-proto")
@@ -5694,29 +5661,6 @@ such as JWT, JWS, JWE, etc in Go.")
       "Base object for what I call the \"Optional Parameters Pattern\".")
     (license license:expat)))
 
-(define-public go-github-com-libdns-libdns
-  (package
-    (name "go-github-com-libdns-libdns")
-    (version "0.2.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/libdns/libdns")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1ix668h4n2n9iph4xiznzdfw7hy0ijy906mvnys4kq9f0v9ih4bg"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/libdns/libdns"))
-    (home-page "https://github.com/libdns/libdns")
-    (synopsis "libdns - Universal DNS provider APIs for Go")
-    (description
-      "Package libdns defines core interfaces that should be implemented by DNS
-provider clients.  They are small and idiomatic Go interfaces with well-defined
-semantics.")
-    (license license:expat)))
-
 (define-public go-github-com-lunny-dingtalk-webhook
   (package
     (name "go-github-com-lunny-dingtalk-webhook")
@@ -6136,35 +6080,6 @@ network interface.")
       "Fast, configurable, extensible, flexible, and beautiful linter for Go.  Drop-in
 replacement of golint. .")
     (license license:expat)))
-
-(define-public go-github-com-mholt-acmez
-  (package
-    (name "go-github-com-mholt-acmez")
-    (version "1.0.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/mholt/acmez")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "1lylggivc4l4qlrl81lz7f7z3s893pzxplpkq8dmciywj8pwx4bw"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/mholt/acmez"))
-    (propagated-inputs
-     (list go-golang-org-x-net
-           go-golang-org-x-text
-           go-go-uber-org-zap))
-    (home-page "https://github.com/mholt/acmez")
-    (synopsis "acmez - ACME client library for Go")
-    (description
-     "Package acmez implements the higher-level flow of the ACME specification,
-@url{https://rfc-editor.org/rfc/rfc8555.html,RFC 8555}:
-@url{https://tools.ietf.org/html/rfc8555,https://tools.ietf.org/html/rfc8555},
-specifically the sequence in Section 7.1 (page 21).")
-    (license license:asl2.0)))
 
 (define-public go-github-com-microsoft-go-winio
   (package
