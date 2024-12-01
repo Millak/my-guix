@@ -1,4 +1,5 @@
 ;;; Copyright © 2022-2024 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2024 umanwizard <brennan@umanwizard.com>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -22,162 +23,117 @@
   #:use-module (guix download)
   #:use-module (guix search-paths)
   #:use-module (guix packages)
+  #:use-module (guix records)
+  #:use-module (guix modules)
   #:use-module (guix utils)
   #:use-module (guix gexp)
   #:use-module (guix build-system copy)
+  #:use-module (guix build-system gnu)
   #:use-module (guix build-system go)
   #:use-module (gnu packages base)
   #:use-module (gnu packages certs)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages curl)
   #:use-module (gnu packages golang)
-  #:use-module (gnu packages golang-build)
-  #:use-module (gnu packages golang-check)
-  #:use-module (gnu packages golang-web)
-  #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages linux)
-  #:use-module (gnu packages syncthing)
   #:use-module (gnu packages version-control)
-  #:use-module (gnu packages web)
-  #:use-module (dfsg main golang))
+  #:use-module (ice-9 match))
 
-(define computed-origin-method (@@ (guix packages) computed-origin-method))
-#;(define tailscale-vendored-sources
-  (let* ((version "1.56.1")
-         (upstream-source
-           (origin
-             (method git-fetch)
-             (uri (git-reference
-                    (url "https://github.com/tailscale/tailscale")
-                    (commit (string-append "v" version))))
-             (file-name (git-file-name "tailscale" version))
-             (sha256
-              (base32 "0h4b153vl7gslfyf6f842i9s0vq6m74hqjvkhhlcnddgy91kkjch")))))
-    (computed-file (string-append "tailscale-vendored-sources-" version ".tar.xz")
-      (with-imported-modules '((guix build utils))
+(define-record-type* <go-git-reference>
+  go-git-reference make-go-git-reference
+  go-git-reference?
+  (url    go-git-reference-url)
+  (commit go-git-reference-commit)
+  (sha    go-git-reference-sha256))
+
+(define-record-type* <go-url-reference>
+  go-url-reference make-go-url-reference
+  go-url-reference?
+  (url go-url-reference-url)
+  (sha go-url-reference-sha))
+
+(define* (go-fetch-vendored uri hash-algorithm hash-value name #:key system)
+  (let ((src
+          (match uri
+                 (($ <go-git-reference> url commit sha)
+                  (origin
+                    (method git-fetch)
+                    (uri (git-reference
+                           (url url)
+                           (commit commit)))
+                    (sha256 sha)))
+                 (($ <go-url-reference> url commit sha)
+                  (origin
+                    (method url-fetch)
+                    (uri url)
+                    (sha256 sha)))))
+        (name (or name "go-git-checkout")))
+    (gexp->derivation
+      (string-append name "-vendored.tar.gz")
+      (with-imported-modules (append '((guix build utils))
+                                     %default-gnu-imported-modules)
         #~(begin
-            (use-modules (guix build utils)
-                         ;(ice-9 ftw)
-                         (ice-9 match))
-            (set-path-environment-variable
-              "PATH" '("bin")
-              (list #+(canonical-package gzip)
-                    #+(canonical-package tar)
-                    #+curl
-                    #+git-minimal
-                    #+nss-certs
-                    #+go))
+            (use-modules ((guix build gnu-build-system) #:prefix gnu:)
+                         (guix build utils))
+            (let ((inputs (list
+                            #+go-1.23
+                            #+tar
+                            #+bzip2
+                            #+gzip)))
+              (set-path-environment-variable "PATH" '("/bin") inputs))
+            ((assoc-ref gnu:%standard-phases 'unpack) #:source #$src)
 
-            (for-each (match-lambda
-                        ((env-var (files ...) separator type pattern)
-                         (set-path-environment-variable env-var files
-                                                        input-directories
-                                                        #:separator separator
-                                                        #:type type
-                                                        #:pattern pattern)))
-                      '#$(map search-path-specification->sexp
-                              (package-transitive-native-search-paths
-                                go)))
+            (setenv "GOCACHE" "/tmp/gc")
+            (setenv "GOMODCACHE" "/tmp/gmc")
+            (setenv "SSL_CERT_DIR" #+(file-append nss-certs "/etc/ssl/certs/"))
 
-            (setenv "SOURCE_DATE_EPOCH" "1")
-            ;(setenv "GOINSECURE" "*")
-            (setenv "HOME" (getcwd))
-            (setenv "USER" "homeless-shelter")
-            ;(setenv "GOPROXY" "direct")
-            ;(setenv "GO111MODULE" "on")
-            ;(setenv "GOCACHE" (string-append (getcwd) "/go-cache"))
-            (copy-recursively #+upstream-source
-                              (string-append "tailscale-" #$version))
-            (with-directory-excursion (string-append "tailscale-" #$version)
-              (begin
-                (setenv "CURL_CA_BUNDLE"
-                        (string-append #+nss-certs "/etc/ssl/certs/ca-bundle.crt"))
-                (setenv "GIT_SSL_CAINFO"
-                        (string-append #+nss-certs "/etc/ssl/certs/ca-bundle.crt"))
-                (setenv "SSL_CERT_DIR"
-                        (string-append #+nss-certs "/etc/ssl/certs"))
-                (setenv "SSL_CERT_FILE"
-                        (string-append #+nss-certs "/etc/ssl/certs/ca-bundle.crt"))
-                (setenv "GIT_EXEC_PATH"
-                        (string-append #+git-minimal "/libexec/git-core"))
-                (invoke "go" "mod" "vendor")
+            (invoke "go" "mod" "vendor")
 
-                (format #t "Creating the tarball ...~%")
-                (force-output)
-                (with-directory-excursion "../"
-                  (invoke "tar" "czf" #$output
-                          ;; avoid non-determinism in the archive
-                          "--sort=name" "--mtime=@1"
-                          "--owner=root:0" "--group=root:0"
-                          (string-append "tailscale-" #$version))))))))
-    #;(origin
-      (method computed-origin-method)
-      (file-name (string-append "tailscale-vendored-sources-" version ".tar.gz"))
-      (sha256 #f)
-      (uri
-        (delay
-          (with-imported-modules '((guix build utils))
-            #~(begin
-                (use-modules (guix build utils))
-                (set-path-environment-variable
-                  "PATH" '("bin")
-                  (list #+(canonical-package gzip)
-                        #+(canonical-package tar)
-                        #+go
-                        ))
-                (setenv "HOME" (getcwd))
-                (copy-recursively #+upstream-source
-                                  (string-append "tailscale-" #$version))
-                (with-directory-excursion (string-append "tailscale-" #$version)
-                  (begin
-                    (setenv "GIT_SSL_CAINFO"
-                            (string-append #+nss-certs "/etc/ssl/certs/ca-bundle.crt"))
-                    (setenv "SSL_CERT_FILE"
-                            (string-append #+nss-certs "/etc/ssl/certs/ca-bundle.crt"))
-                    (invoke "go" "mod" "vendor")
-
-                    (format #t "Creating the tarball ...~%")
-                    (force-output)
-                    (with-directory-excursion "../"
-                      (invoke "tar" "czf" #$output
-                              ;; avoid non-determinism in the archive
-                              "--sort=name" "--mtime=@0"
-                              "--owner=root:0" "--group=root:0"
-                              (string-append "tailscale-" #$version))))))))))
-  ))
+            (invoke "tar" "czvf" #$output
+                    ;; Avoid non-determinism in the archive.
+                    "--mtime=@0"
+                    "--owner=root:0"
+                    "--group=root:0"
+                    "--sort=name"
+                    "--hard-dereference"
+                    ".")))
+      #:hash hash-value
+      #:hash-algo hash-algorithm)))
 
 (define-public tailscale
   (package
     (name "tailscale")
-    (version "1.56.1")
-    ;(source tailscale-vendored-sources)
+    (version "1.76.6")
     (source (origin
-              (method git-fetch)
-              (uri (git-reference
+              (method go-fetch-vendored)
+              (uri (go-git-reference
                     (url "https://github.com/tailscale/tailscale")
-                    (commit (string-append "v" version))))
+                    (commit (string-append "v" version))
+                    (sha
+                     (base32
+                      "14xlzfnis9qkypbyyj67k15y6f53zicjlnirnakxs60qyz7hb3kk"))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "0qlcsgzrk4hq9xcprmfkykk14myymzl64qkfkszy2l386im1xfr7"))
-        (modules '((guix build utils)))
-        (snippet
-         '(begin
-            (substitute* (find-files "." "\\.go$")
-              (("github\\.com/tailscale/golang-x-crypto/ssh")
-               "golang.org/x/crypto/ssh")
-              (("github\\.com/tailscale/netlink")
-               "github.com/vishvananda/netlink")
-              )
-            ))))
+                "0pjywlxhfbj0rqhcqv5n2y08fahwh4l72qygf3anvis47l9ijzc1"))))
     (build-system go-build-system)
     (arguments
      (list
-       #:go go-1.20
+       #:go go-1.23
        #:install-source? #f
+       #:tests? #f
        #:import-path "tailscale.com"
        #:phases
        #~(modify-phases %standard-phases
+           #;
+           (add-after 'unpack 'fix-source
+             (lambda* (#:key import-path #:allow-other-keys)
+               (with-directory-excursion (string-append "src/" import-path)
+                 (substitute* "ipn/ipnlocal/ssh.go"
+                   (("github.com/tailscale/golang-x-crypto/ssh")
+                    (string-append
+                      "github.com/tailscale/golang-x-crypto/ssh\"\n"
+                      "        \"golang.org/x/crypto/ssh"))))))
            (replace 'build
              (lambda* (#:key import-path build-flags #:allow-other-keys)
                (for-each
@@ -196,99 +152,28 @@
                     #:import-path directory))
                  (list "tailscale.com/cmd/tailscale"
                        "tailscale.com/cmd/tailscaled"))))
-           )))
-    #;(inputs
-     (list
-       ;software.sslmate.com/src/go-pkcs12
-       ;sigs.k8s.io/yaml
-       ;sigs.k8s.io/controller-runtime
-       go-nhooyr-io-websocket
-           go-k8s-io-client-go
-           ;k8s.io/apimachinery
-           ;k8s.io/api
-           ;go-inet-af-wf
-           ;inet.af/tcpproxy
-           go-inet-af-peercred
-           go-honnef-co-go-tools
-           go-gvisor-dev-gvisor
-           ;go-golang-zx2c4-com-wireguard-windows
-           ;golang.zx2c4.com/wintun
-           go-golang-org-x-tools
-           go-golang-org-x-time
-           go-golang-org-x-term
-           go-golang-org-x-sys
-           go-golang-org-x-sync
-           go-golang-org-x-oauth2
-           go-golang-org-x-net
-           go-golang-org-x-exp
-           go-golang-org-x-crypto
-           go-go4-org-netipx
-           go-go4-org-mem
-           ;go.uber.org/zap
-           go-github-com-vishvananda-netlink
-           go-github-com-u-root-u-root
-           go-github-com-toqueteos-webbrowser
-           go-github-com-tcnksm-go-httpstat
-           ;github.com/tc-hib/winres
-           ;;;github.com/tailscale/wireguard-go
-           ;go-github-com-tailscale-netlink
-           ;go-github-com-tailscale-mkctr
-           ;go-github-com-tailscale-hujson
-           go-github-com-tailscale-goupnp
-           ;go-github-com-tailscale-golang-x-crypto
-           ;go-github-com-tailscale-goexpect
-           ;go-github-com-tailscale-depaware
-           ;go-github-com-tailscale-certstore
-           go-github-com-skip2-go-qrcode
-           ;github.com/pkg/errors
-           go-github-com-pkg-sftp
-           go-github-com-peterbourgon-ff-v3
-           go-github-com-mitchellh-go-ps
-           go-github-com-miekg-dns
-           go-github-com-mdlayher-sdnotify
-           go-github-com-mdlayher-netlink
-           go-github-com-mdlayher-genetlink
-           ;github.com/mattn/go-isatty
-           ;github.com/mattn/go-colorable
-           go-github-com-kortschak-wol
-           go-github-com-klauspost-compress
-           go-github-com-kballard-go-shellquote
-           go-github-com-jsimonetti-rtnetlink
-           ;github.com/josharian/native
-           go-github-com-insomniacslk-dhcp
-           ;;;github.com/illarion/gonotify
-           go-github-com-iancoleman-strcase
-           go-github-com-hdevalence-ed25519consensus
-           ;go-github-com-goreleaser-nfpm           ; Try to do without this one
-           go-github-com-google-uuid
-           ;github.com/google/nftables
-           ;github.com/google/go-containerregistry
-           go-github-com-google-go-cmp
-           go-github-com-golang-groupcache
-           go-github-com-godbus-dbus-v5
-           go-github-com-go-ole-go-ole
-           ;github.com/go-logr/zapr
-           ;github.com/go-json-experiment/json
-           go-github-com-fxamacker-cbor-v2
-           go-github-com-frankban-quicktest
-           esbuild ;go-github-com-evanw-esbuild
-           ;github.com/dsnet/try
-           ;github.com/dblohm7/wingoes
-           go-github-com-dave-jennifer
-           go-github-com-creack-pty
-           ;go-github-com-coreos-go-systemd try to do without this one
-           go-github-com-coreos-go-iptables
-           go-github-com-aws-aws-sdk-go-v2-service-ssm
-           go-github-com-aws-aws-sdk-go-v2-service-s3
-           go-github-com-aws-aws-sdk-go-v2-feature-s3-manager
-           go-github-com-aws-aws-sdk-go-v2-config
-           go-github-com-aws-aws-sdk-go-v2
-           go-github-com-anmitsu-go-shlex
-           go-github-com-andybalholm-brotli
-           ;go-github-com-alexbrainman-sspi          ; Windows
-           go-github-com-akutz-memconn
-           ;github.com/Microsoft/go-winio
-           go-filippo-io-mkcert))
+           (add-after 'install 'install-shell-completions
+             (lambda* (#:key outputs #:allow-other-keys)
+               (let* ((out #$output)
+                      (tailscale (string-append out "/bin/tailscale"))
+                      (share (string-append out "/share"))
+                      (bash (string-append out "/etc/bash_completion.d/tailscale"))
+                      (fish (string-append
+                              share "/fish/vendor_completions.d/tailscale.fish"))
+                      (zsh (string-append share "/zsh/site-functions/_tailscale")))
+                 (mkdir-p (dirname bash))
+                 (mkdir-p (dirname fish))
+                 (mkdir-p (dirname zsh))
+                 (with-output-to-file bash
+                   (lambda ()
+                     (invoke tailscale "completion" "bash")))
+                 (with-output-to-file fish
+                   (lambda ()
+                     (invoke tailscale "completion" "fish")))
+                 (with-output-to-file zsh
+                   (lambda ()
+                     (invoke tailscale "completion" "zsh")))))))))
+    (inputs (list iproute iptables))
     (home-page "https://github.com/tailscale/tailscale")
     (synopsis "Tailscale VPN client")
     (description "Tailscale lets you easily manage access to private resources,
