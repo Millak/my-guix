@@ -123,17 +123,26 @@
        #:install-source? #f
        #:tests? #f
        #:import-path "tailscale.com"
+       ;#:build-flags
+       ;#~(list (string-append
+       ;          "-tags="
+       ;          "-X" (string-append "tailscale.com/version.longStamp=" #$version)
+       ;          "-X" (string-append "tailscale.com/version.shortStamp=" #$version)))
        #:phases
        #~(modify-phases %standard-phases
            #;
            (add-after 'unpack 'fix-source
              (lambda* (#:key import-path #:allow-other-keys)
                (with-directory-excursion (string-append "src/" import-path)
-                 (substitute* "ipn/ipnlocal/ssh.go"
+                 (substitute* (cons* "ipn/ipnlocal/ssh.go"
+                                     "ssh/tailssh/tailssh.go"
+                                     (find-files "tempfork/gliderlabs/ssh" "\\.go$"))
                    (("github.com/tailscale/golang-x-crypto/ssh")
-                    (string-append
-                      "github.com/tailscale/golang-x-crypto/ssh\"\n"
-                      "        \"golang.org/x/crypto/ssh"))))))
+                    "golang.org/x/crypto/ssh"
+                    ;(string-append
+                    ;  "github.com/tailscale/golang-x-crypto/ssh\"\n"
+                    ;  "        \"golang.org/x/crypto/ssh")
+                    )))))
            (replace 'build
              (lambda* (#:key import-path build-flags #:allow-other-keys)
                (for-each
