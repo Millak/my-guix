@@ -162,11 +162,11 @@
        ;go.opentelemetry.io/otel/trace v1.14.0
        ;go.uber.org/automaxprocs v1.5.2
        go-golang-org-x-crypto                   ; v0.9.0
-       go-golang-org-x-exp-0.0.0-20220613132600-b0d781184e0d
-       go-golang-org-x-image-0.7                ; v0.7.0
-       go-golang-org-x-net-0.10                 ; v0.10.0
-       go-golang-org-x-oauth2-0.8               ; 0.8.0
-       go-golang-org-x-text-0.9                 ; v0.9.0
+       go-golang-org-x-exp                      ;-0.0.0-20220613132600-b0d781184e0d
+       go-golang-org-x-image                    ; v0.7.0
+       go-golang-org-x-net                      ; v0.10.0
+       go-golang-org-x-oauth2                   ; 0.8.0
+       go-golang-org-x-text                     ; v0.9.0
        ;gopkg.in/mcuadros/go-syslog.v2 v2.3.0
        go-gopkg-in-yaml-v3                      ; v3.0.1
        go-modernc-org-sqlite                    ; v1.22.1
