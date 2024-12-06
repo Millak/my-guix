@@ -44,29 +44,29 @@
   go-git-reference?
   (url    go-git-reference-url)
   (commit go-git-reference-commit)
-  (sha    go-git-reference-sha256))
+  (hash   go-git-reference-sha256))
 
 (define-record-type* <go-url-reference>
   go-url-reference make-go-url-reference
   go-url-reference?
-  (url go-url-reference-url)
-  (sha go-url-reference-sha))
+  (url  go-url-reference-url)
+  (hash go-url-reference-hash))
 
 (define* (go-fetch-vendored uri hash-algorithm hash-value name #:key system)
   (let ((src
           (match uri
-                 (($ <go-git-reference> url commit sha)
+                 (($ <go-git-reference> url commit hash)
                   (origin
                     (method git-fetch)
                     (uri (git-reference
                            (url url)
                            (commit commit)))
-                    (sha256 sha)))
-                 (($ <go-url-reference> url commit sha)
+                    (sha256 hash)))
+                 (($ <go-url-reference> url commit hash)
                   (origin
                     (method url-fetch)
                     (uri url)
-                    (sha256 sha)))))
+                    (sha256 hash)))))
         (name (or name "go-git-checkout")))
     (gexp->derivation
       (string-append name "-vendored.tar.gz")
@@ -103,19 +103,19 @@
 (define-public tailscale
   (package
     (name "tailscale")
-    (version "1.76.6")
+    (version "1.78.1")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
                     (url "https://github.com/tailscale/tailscale")
                     (commit (string-append "v" version))
-                    (sha
+                    (hash
                      (base32
-                      "14xlzfnis9qkypbyyj67k15y6f53zicjlnirnakxs60qyz7hb3kk"))))
+                      "0fahkx6his4c8mc55n78y8xw7qm2mxlayjs376kcjc3p22zwcwhw"))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "0pjywlxhfbj0rqhcqv5n2y08fahwh4l72qygf3anvis47l9ijzc1"))))
+                "11ixvhap14mf8vq02dx6avfk8zv68v6r8wsfhxs7pq727p4aa6ji"))))
     (build-system go-build-system)
     (arguments
      (list
