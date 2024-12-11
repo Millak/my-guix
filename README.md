@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/Millak/my-guix.svg?branch=master)](https://travis-ci.org/Millak/my-guix)
-
 Efraim's Guix Channel
 =====================
 
