@@ -26,7 +26,7 @@
 (define-public pdfjs
   (package
     (name "pdfjs")
-    (version "4.8.69")
+    (version "4.9.155")
     (source
       (origin
         (method url-fetch/zipbomb)
@@ -34,7 +34,7 @@
                             "/download/v" version
                             "/pdfjs-" version "-dist.zip"))
         (sha256
-         (base32 "1inji1frcgcn4xf4zricxyzwg0a5wdgsxicwz7d3c8fs1ignwyl8"))))
+         (base32 "0pwjrk0rx0h2ylan96g724wg8810advyzjqb3m9llqvsji8bln8h"))))
     (build-system copy-build-system)
     (arguments
      `(#:install-plan
@@ -75,4 +75,4 @@
                             "/download/v" version
                             "/pdfjs-" version "-legacy-dist.zip"))
         (sha256
-         (base32 "1cyrh2i9364scikh0lgq9iwlb8aa70qk07ql2h53vmk1nqc7qm76"))))))
+         (base32 "0wvg4nv0hk30chjg545hvnzzjgk4rbls93mpd72kdswq084phiqg"))))))
