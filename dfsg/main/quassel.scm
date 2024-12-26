@@ -32,7 +32,4 @@
         #~`("-DBUILD_TESTING=ON"
             "-DWANT_CORE=OFF"
             "-DWANT_MONO=OFF"))))
-    (inputs
-     (modify-inputs (package-inputs quassel)
-       (append qtdeclarative-5 qtwayland-5 qtwebchannel-5 qtwebengine-5)))
     (properties '((upstream-name . "quassel")))))
