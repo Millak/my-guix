@@ -191,27 +191,3 @@ network server, written in Golang.")
     (license (list
                license:silofl1.1    ; web/assets/{Fork_Awesome,NotoSans*.ttf}
                license:agpl3))))
-
-(define-public with-gotosocial-deps
-  (package-input-rewriting/spec
-    `(
-      ;; This one is in Guix twice.
-      ("go-github.com-mattn-go-runewidth" . ,(const go-github-com-mattn-go-runewidth))
-      ;; We should use the newer versions.
-      ("go-golang-org-x-exp" . ,(const go-golang-org-x-exp-0.0.0-20220613132600-b0d781184e0d))
-      ("go-golang-org-x-image" . ,(const go-golang-org-x-image-0.7))
-      ;("go-golang-org-x-lint" . ,(const go-golang-org-x-lint))
-      ;("go-golang-org-x-mod" . ,(const go-golang-org-x-mod))
-      ("go-golang-org-x-net" . ,(const go-golang-org-x-net-0.10))
-      ("go-golang-org-x-oauth2" . ,(const go-golang-org-x-oauth2-0.8))
-      ("go-golang-org-x-term" . ,(const go-golang-org-x-term-0.8))
-      ("go-golang-org-x-text" . ,(const go-golang-org-x-text-0.9))
-      ;("go-golang-org-x-time" . ,(const go-golang-org-x-time))
-      ("go-golang-org-x-tools" . ,(const go-golang-org-x-tools-0.6))
-      ;("go-golang-org-x-xerrors" . ,(const go-golang-org-x-xerrors))
-      )))
-
-(define-public gotosocial-with-newer-go-libraries
-  (package
-    (inherit (with-gotosocial-deps gotosocial))
-    (name "gotosocial-with-newer-go-libraries")))
