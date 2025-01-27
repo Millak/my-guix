@@ -671,31 +671,6 @@ US style dates when there is a conflict.")
      '(#:import-path "github.com/aws/aws-sdk-go-v2/service/ssm"
        #:unpack-path "github.com/aws/aws-sdk-go-v2"))))
 
-(define-public go-github-com-aws-smithy-go
-  (package
-    (name "go-github-com-aws-smithy-go")
-    (version "1.13.4")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/aws/smithy-go")
-                     (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "0xw7a3iah92w1mbh646gn9i3079a7ddbr72yjklq4rsngfakx08k"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/aws/smithy-go"))
-    (propagated-inputs
-     (list go-github-com-jmespath-go-jmespath
-           go-github-com-google-go-cmp))
-    (home-page "https://github.com/aws/smithy-go")
-    (synopsis "Smithy Go")
-    (description
-     "Package smithy provides the core components for a Smithy SDK.")
-    (license license:asl2.0)))
-
 (define-public go-github-com-blevesearch-bleve
   (package
     (name "go-github-com-blevesearch-bleve")
@@ -3111,30 +3086,6 @@ interface.  It is an alternative to gorilla/mux that showcases how it can be
 used as a base for different API flavors.  Package pat is documented at:")
     (license license:bsd-3)))
 
-(define-public go-github-com-gorilla-sessions
-  (package
-    (name "go-github-com-gorilla-sessions")
-    (version "1.2.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/gorilla/sessions")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1zjw2s37yggk9231db0vmgs67z8m3am8i8l4gpgz6fvlbv52baxp"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/gorilla/sessions"))
-    (propagated-inputs
-     (list go-github-com-gorilla-securecookie))
-    (home-page "https://github.com/gorilla/sessions")
-    (synopsis "sessions")
-    (description
-      "Package sessions provides cookie and filesystem sessions and infrastructure for
-custom session backends.")
-    (license license:bsd-3)))
-
 (define-public go-github-com-go-swagger-go-swagger
   (package
     (name "go-github-com-go-swagger-go-swagger")
@@ -3555,26 +3506,6 @@ in Go.")
     (synopsis "logrotate: slightly better than")
     (description #f)
     (license license:bsd-2)))
-
-(define-public go-github-com-jtolds-gls
-  (package
-    (name "go-github-com-jtolds-gls")
-    (version "4.20.0+incompatible")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/jtolio/gls")
-               (commit (string-append "v" (go-version->git-ref version)))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1k7xd2q2ysv2xsh373qs801v6f359240kx0vrl0ydh7731lngvk6"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/jtolds/gls"))
-    (home-page "https://github.com/jtolds/gls")
-    (synopsis "gls")
-    (description "Package gls implements goroutine-local storage.")
-    (license license:expat)))
 
 (define-public go-github-com-k0kubun-colorstring
   (package
@@ -5531,27 +5462,6 @@ they should occur.  Actions mutate the context and transition to another state."
     (description "Package resize implements various image resizing methods.")
     (license license:isc)))
 
-(define-public go-github-com-nwaples-rardecode
-  (package
-    (name "go-github-com-nwaples-rardecode")
-    (version "1.1.2")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/nwaples/rardecode")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-          (base32 "1v89hkai3qr5kizqhdsn4kg5vskpxbxz7fpbldfvn8g7756q0v6z"))))
-    (build-system go-build-system)
-    (arguments '(#:import-path "github.com/nwaples/rardecode"))
-    (home-page "https://github.com/nwaples/rardecode")
-    (synopsis "rardecode")
-    (description
-      "This package provides a go package for reading RAR archives.")
-    (license license:bsd-2)))
-
 (define-public go-github-com-oliamb-cutter
   (package
     (name "go-github-com-oliamb-cutter")
@@ -7230,112 +7140,6 @@ JSON, XML, binary data, and HTML templates.")
     (description #f)
     (license license:bsd-3)))
 
-(define-public go-github-com-vishvananda-netlink
-  (package
-    (name "go-github-com-vishvananda-netlink")
-    (version "1.1.1-0.20211118161826-650dca95af54")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/vishvananda/netlink")
-                    (commit (go-version->git-ref version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "18j88lzynik932i4h4qrpdwz9w5667sb845kh33zsl10ywyipx74"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; Tests need network access
-       #:import-path "github.com/vishvananda/netlink"))
-    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)
-                         ("go-github-com-vishvananda-netns" ,go-github-com-vishvananda-netns)))
-    (home-page "https://github.com/vishvananda/netlink")
-    (synopsis "netlink - netlink library for go")
-    (description
-     "Package netlink provides a simple library for netlink.  Netlink is the interface
-a user-space program in linux uses to communicate with the kernel.  It can be
-used to add and remove interfaces, set up ip addresses and routes, and confiugre
-ipsec.  Netlink communication requires elevated privileges, so in most cases
-this code needs to be run as root.  The low level primitives for netlink are
-contained in the nl subpackage.  This package attempts to provide a high-level
-interface that is loosely modeled on the iproute2 cli.")
-    (license license:asl2.0)))
-
-(define-public go-github-com-xeipuuv-gojsonpointer
-  (package
-    (name "go-github-com-xeipuuv-gojsonpointer")
-    (version "0.0.0-20190905194746-02993c407bfb")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/xeipuuv/gojsonpointer")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "0y7gmpgsm8c12ax4a0ij9srmd9d424iq224n172ckwfqf37amvzy"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/xeipuuv/gojsonpointer"))
-    (native-inputs
-     `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
-    (home-page "https://github.com/xeipuuv/gojsonpointer")
-    (synopsis "gojsonpointer")
-    (description #f)
-    (license license:asl2.0)))
-
-(define-public go-github-com-xeipuuv-gojsonreference
-  (package
-    (name "go-github-com-xeipuuv-gojsonreference")
-    (version "0.0.0-20180127040603-bd5ef7bd5415")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/xeipuuv/gojsonreference")
-               (commit (go-version->git-ref version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "1xby79padc7bmyb8rfbad8wfnfdzpnh51b1n8c0kibch0kwc1db5"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/xeipuuv/gojsonreference"))
-    (propagated-inputs
-     `(("go-github-com-xeipuuv-gojsonpointer" ,go-github-com-xeipuuv-gojsonpointer)))
-    (home-page "https://github.com/xeipuuv/gojsonreference")
-    (synopsis "gojsonreference")
-    (description #f)
-    (license license:asl2.0)))
-
-(define-public go-github-com-xeipuuv-gojsonschema
-  (package
-    (name "go-github-com-xeipuuv-gojsonschema")
-    (version "1.2.0")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/xeipuuv/gojsonschema")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "1mqiq0r8qw4qlfp3ls8073r6514rmzwrmdn4j33rppk3zh942i6l"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/xeipuuv/gojsonschema"
-       #:tests? #f))
-    (propagated-inputs
-     `(("go-github-com-xeipuuv-gojsonreference" ,go-github-com-xeipuuv-gojsonreference)))
-    (native-inputs
-     `(("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)))
-    (home-page "https://github.com/xeipuuv/gojsonschema")
-    (synopsis #f)
-    (description #f)
-    (license license:asl2.0)))
-
 (define-public go-github-com-yalp-jsonpath
   (package
     (name "go-github-com-yalp-jsonpath")
@@ -8551,36 +8355,6 @@ called @@code{runsc} that provides an isolation boundary between the application
 and the host kernel.  The @@code{runsc} runtime integrates with Docker and
 Kubernetes, making it simple to run sandboxed containers.")
     (license license:asl2.0)))
-
-(define-public go-howett-net-plist
-  (package
-    (name "go-howett-net-plist")
-    (version "1.0.0")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/DHowett/go-plist")
-                     (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "0rh8z67y527czv25ljmzqpmr0qsmn8cbaal7pw97c49y75kaj95k"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "howett.net/plist"))
-    (propagated-inputs
-     `(("go-gopkg-in-yaml-v1" ,go-gopkg-in-yaml-v1)
-       ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
-       ("go-github-com-jessevdk-go-flags" ,go-github-com-jessevdk-go-flags)))
-    (home-page "https://howett.net/plist")
-    (synopsis "plist - A pure Go property list transcoder")
-    (description
-     "Package plist implements encoding and decoding of Apple's \"property
-list\" format.  Property lists come in three sorts: plain text (GNUStep and
-OpenStep), XML and binary.  plist supports all of them.  The mapping between
-property list and Go objects is described in the documentation for the Marshal
-and Unmarshal functions.")
-      (license (list license:bsd-2 license:bsd-3))))
 
 (define-public go-humungus-tedunangst-com-r-go-sqlite3
   (package
