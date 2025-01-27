@@ -1,4 +1,4 @@
-;;; Copyright © 2022-2024 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2022-2025 Efraim Flashner <efraim@flashner.co.il>
 ;;; Copyright © 2024 umanwizard <brennan@umanwizard.com>
 ;;;
 ;;; This file is an addendum to GNU Guix.
@@ -33,10 +33,19 @@
   #:use-module (gnu packages base)
   #:use-module (gnu packages certs)
   #:use-module (gnu packages compression)
-  #:use-module (gnu packages curl)
+  #:use-module (gnu packages dns)
   #:use-module (gnu packages golang)
+  #:use-module (gnu packages golang-build)
+  #:use-module (gnu packages golang-check)
+  #:use-module (gnu packages golang-compression)
+  #:use-module (gnu packages golang-crypto)
+  #:use-module (gnu packages golang-web)
+  #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages linux)
+  #:use-module (gnu packages prometheus)
   #:use-module (gnu packages version-control)
+  #:use-module (gnu packages web)
+  #:use-module (dfsg main golang)
   #:use-module (ice-9 match))
 
 (define-record-type* <go-git-reference>
@@ -103,7 +112,7 @@
 (define-public tailscale
   (package
     (name "tailscale")
-    (version "1.78.1")
+    (version "1.78.3")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
@@ -111,11 +120,11 @@
                     (commit (string-append "v" version))
                     (hash
                      (base32
-                      "0fahkx6his4c8mc55n78y8xw7qm2mxlayjs376kcjc3p22zwcwhw"))))
+                      "1bn7g6kcmwmig6fl5i747r21x4xcf8xdd659r1d5ycp9w36dwrcz"))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "11ixvhap14mf8vq02dx6avfk8zv68v6r8wsfhxs7pq727p4aa6ji"))))
+                "1rb1qji7zw425ik7l5vz97gbdvxg8x3x44c6nnc1a6p0lj1bnfgy"))))
     (build-system go-build-system)
     (arguments
      (list
@@ -123,26 +132,39 @@
        #:install-source? #f
        #:tests? #f
        #:import-path "tailscale.com"
-       ;#:build-flags
-       ;#~(list (string-append
-       ;          "-tags="
-       ;          "-X" (string-append "tailscale.com/version.longStamp=" #$version)
-       ;          "-X" (string-append "tailscale.com/version.shortStamp=" #$version)))
        #:phases
        #~(modify-phases %standard-phases
-           #;
-           (add-after 'unpack 'fix-source
+           (add-after 'unpack 'adjust-source
              (lambda* (#:key import-path #:allow-other-keys)
                (with-directory-excursion (string-append "src/" import-path)
-                 (substitute* (cons* "ipn/ipnlocal/ssh.go"
-                                     "ssh/tailssh/tailssh.go"
-                                     (find-files "tempfork/gliderlabs/ssh" "\\.go$"))
-                   (("github.com/tailscale/golang-x-crypto/ssh")
-                    "golang.org/x/crypto/ssh"
-                    ;(string-append
-                    ;  "github.com/tailscale/golang-x-crypto/ssh\"\n"
-                    ;  "        \"golang.org/x/crypto/ssh")
-                    )))))
+                 ;; Tries to import "golang.org/x/crypto/ssh"
+                 (delete-file "vendor/github.com/tailscale/golang-x-crypto/ssh/doc.go")
+                 ;; Adjust the --version output:
+                 (substitute* "version/version.go"
+                   (("ERR-BuildInfo") "GNU-Guix")))))
+           (add-after 'unpack 'adjust-calls-to-binaries
+             (lambda* (#:key import-path inputs #:allow-other-keys)
+               (with-directory-excursion (string-append "src/" import-path)
+                 (define* (substitute-command-block* file command full-command)
+                          (substitute* file
+                            (((string-append "exec\\.Command\\(\"" command "\""))
+                             (string-append "exec.Command(\"" full-command "\""))))
+                 (substitute-command-block* "util/linuxfw/iptables.go"
+                   "iptables" (search-input-file inputs "sbin/iptables"))
+                 (substitute-command-block* "util/linuxfw/iptables.go"
+                   "ip6tables" (search-input-file inputs "sbin/ip6tables"))
+                 (substitute-command-block* "util/linuxfw/iptables_runner.go"
+                   "modprobe" (search-input-file inputs "bin/modprobe"))
+                 (substitute-command-block* "net/dns/openresolv.go"
+                   "resolvconf" (search-input-file inputs "sbin/resolvconf"))
+                 (substitute-command-block* "net/netutil/ip_forward.go"
+                   "sysctl" (search-input-file inputs "sbin/sysctl"))
+                 (substitute-command-block* "net/tstun/tun_linux.go"
+                   "/sbin/modprobe" (search-input-file inputs "bin/modprobe"))
+                 (substitute-command-block* "net/tstun/tun_linux.go"
+                   "find" (search-input-file inputs "bin/find"))
+                 (substitute-command-block* "wgengine/router/router_linux.go"
+                   "ip" (search-input-file inputs "sbin/ip")))))
            (replace 'build
              (lambda* (#:key import-path build-flags #:allow-other-keys)
                (for-each
@@ -182,7 +204,136 @@
                  (with-output-to-file zsh
                    (lambda ()
                      (invoke tailscale "completion" "zsh")))))))))
-    (inputs (list iproute iptables))
+    (inputs
+     (list findutils iproute iptables kmod openresolv procps)
+     #;
+     (list findutils iproute iptables kmod openresolv procps
+
+           go-k8s-io-utils
+           ;go-k8s-io-apiextensions-apiserver
+           go-gopkg-in-yaml-v3
+           ;go-github-com-tailscale-go-winio
+           go-github-com-stretchr-testify
+           go-github-com-prometheus-client-model
+           go-github-com-mdlayher-socket
+           go-github-com-gorilla-csrf
+           go-github-com-fsnotify-fsnotify
+           ;go-github-com-aleksi-pointer
+           go-software-sslmate-com-src-go-pkcs12
+           go-sigs-k8s-io-yaml
+           ;go-sigs-k8s-io-controller-tools
+           go-sigs-k8s-io-controller-runtime
+           go-k8s-io-client-go
+           ;go-k8s-io-apiserver
+           go-k8s-io-apimachinery
+           go-k8s-io-api
+           go-honnef-co-go-tools
+           go-gvisor-dev-gvisor
+           ;go-gopkg-in-square-go-jose-v2
+           ;go-golang-zx2c4-com-wireguard-windows
+           ;go-golang-zx2c4-com-wintun
+           go-golang-org-x-tools
+           go-golang-org-x-time
+           go-golang-org-x-term
+           go-golang-org-x-sys
+           go-golang-org-x-sync
+           go-golang-org-x-oauth2
+           go-golang-org-x-net
+           go-golang-org-x-mod
+           go-golang-org-x-exp
+           go-golang-org-x-crypto
+           go-go4-org-netipx
+           go-go4-org-mem
+           go-go-uber-org-zap
+           go-github-com-vishvananda-netns
+           go-github-com-u-root-u-root
+           go-github-com-toqueteos-webbrowser
+           go-github-com-tcnksm-go-httpstat
+           ;go-github-com-tc-hib-winres
+           ;go-github-com-tailscale-xnet
+           ;go-github-com-tailscale-wireguard-go
+           ;go-github-com-tailscale-wf
+           ;go-github-com-tailscale-web-client-prebuilt
+           ;go-github-com-tailscale-peercred
+           go-github-com-tailscale-netlink
+           ;go-github-com-tailscale-mkctr
+           ;go-github-com-tailscale-hujson
+           go-github-com-tailscale-goupnp
+           go-github-com-tailscale-golang-x-crypto
+           ;go-github-com-tailscale-goexpect
+           ;go-github-com-tailscale-depaware
+           ;go-github-com-tailscale-certstore
+           ;go-github-com-studio-b12-gowebdav
+           go-github-com-skip2-go-qrcode
+           go-github-com-safchain-ethtool
+           ;go-github-com-prometheus-prometheus
+           go-github-com-prometheus-common
+           go-github-com-prometheus-client-golang
+           go-github-com-prometheus-community-pro-bing
+           go-github-com-pkg-sftp
+           go-github-com-pkg-errors
+           go-github-com-peterbourgon-ff-v3
+           go-github-com-mitchellh-go-ps
+           go-github-com-miekg-dns
+           go-github-com-mdlayher-sdnotify
+           go-github-com-mdlayher-netlink
+           go-github-com-mdlayher-genetlink
+           go-github-com-mattn-go-isatty
+           go-github-com-mattn-go-colorable
+           go-github-com-kortschak-wol
+           go-github-com-klauspost-compress
+           go-github-com-kballard-go-shellquote
+           go-github-com-jsimonetti-rtnetlink
+           go-github-com-josharian-native
+           ;go-github-com-jellydator-ttlcache-v3
+           go-github-com-insomniacslk-dhcp
+           ;go-github-com-inetaf-tcpproxy
+           ;go-github-com-illarion-gonotify-v2
+           go-github-com-hdevalence-ed25519consensus
+           ;go-github-com-goreleaser-nfpm-v2
+           go-github-com-google-uuid
+           ;go-github-com-google-nftables
+           go-github-com-google-gopacket
+           ;go-github-com-google-go-containerregistry
+           go-github-com-google-go-cmp
+           ;go-github-com-golangci-golangci-lint
+           go-github-com-golang-snappy
+           go-github-com-golang-groupcache
+           go-github-com-godbus-dbus-v5
+           go-github-com-go-ole-go-ole
+           ;go-github-com-go-logr-zapr
+           ;go-github-com-go-json-experiment-json
+           go-github-com-gaissmai-bart
+           go-github-com-fxamacker-cbor-v2
+           go-github-com-frankban-quicktest
+           go-github-com-fogleman-gg
+           esbuild ;go-github-com-evanw-esbuild
+           ;go-github-com-elastic-crd-ref-docs
+           ;go-github-com-dsnet-try
+           go-github-com-djherbis-times
+           ;go-github-com-distribution-reference
+           ;go-github-com-digitalocean-go-smbios
+           ;go-github-com-dblohm7-wingoes
+           go-github-com-dave-patsy
+           go-github-com-dave-courtney
+           go-github-com-creack-pty
+           go-github-com-coreos-go-systemd
+           go-github-com-coreos-go-iptables
+           go-github-com-coder-websocket
+           go-github-com-cilium-ebpf
+           ;go-github-com-bramvdbogaerde-go-scp
+           go-github-com-aws-aws-sdk-go-v2-service-ssm
+           go-github-com-aws-aws-sdk-go-v2-service-s3
+           go-github-com-aws-aws-sdk-go-v2-feature-s3-manager
+           go-github-com-aws-aws-sdk-go-v2-config
+           go-github-com-aws-aws-sdk-go-v2
+           go-github-com-atotto-clipboard
+           go-github-com-anmitsu-go-shlex
+           go-github-com-andybalholm-brotli
+           go-github-com-alexbrainman-sspi
+           go-github-com-akutz-memconn
+           ;go-fyne-io-systray
+           go-filippo-io-mkcert))
     (home-page "https://github.com/tailscale/tailscale")
     (synopsis "Tailscale VPN client")
     (description "Tailscale lets you easily manage access to private resources,
