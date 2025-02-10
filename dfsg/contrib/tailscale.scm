@@ -244,7 +244,6 @@ the world.")
        #:phases
        #~(modify-phases %standard-phases
            ;; This uses the host binaries when cross compiling
-           #;
            (add-after 'install 'wrap-binary
              (lambda* (#:key inputs outputs #:allow-other-keys)
                (wrap-program
@@ -274,7 +273,7 @@ the world.")
                  (with-output-to-file zsh
                    (lambda ()
                      (invoke tailscale "completion" "zsh")))))))))
-    ;(inputs (list iproute iptables))
+    (inputs (list iproute iptables))
     (home-page "https://github.com/tailscale/tailscale")
     (synopsis "Tailscale VPN client")
     (description "Tailscale lets you easily manage access to private resources,
