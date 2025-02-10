@@ -142,30 +142,10 @@
                  ;; Adjust the --version output:
                  (substitute* "version/version.go"
                    (("ERR-BuildInfo") "GNU-Guix")))))
-           ;; This uses the host binaries when cross compiling
-           ;(add-after 'unpack 'adjust-calls-to-binaries
-           ;  (lambda* (#:key import-path inputs #:allow-other-keys)
-           ;    (with-directory-excursion (string-append "src/" import-path)
-           ;      (define* (substitute-command-block* file command full-command)
-           ;               (substitute* file
-           ;                 (((string-append "exec\\.Command\\(\"" command "\""))
-           ;                  (string-append "exec.Command(\"" full-command "\""))))
-           ;      (substitute-command-block* "util/linuxfw/iptables.go"
-           ;        "iptables" (search-input-file inputs "sbin/iptables"))
-           ;      (substitute-command-block* "util/linuxfw/iptables.go"
-           ;        "ip6tables" (search-input-file inputs "sbin/ip6tables"))
-           ;      (substitute-command-block* "util/linuxfw/iptables_runner.go"
-           ;        "modprobe" (search-input-file inputs "bin/modprobe"))
-           ;      (substitute-command-block* "net/dns/openresolv.go"
-           ;        "resolvconf" (search-input-file inputs "sbin/resolvconf"))
-           ;      (substitute-command-block* "net/netutil/ip_forward.go"
-           ;        "sysctl" (search-input-file inputs "sbin/sysctl"))
-           ;      (substitute-command-block* "net/tstun/tun_linux.go"
-           ;        "/sbin/modprobe" (search-input-file inputs "bin/modprobe"))
-           ;      (substitute-command-block* "net/tstun/tun_linux.go"
-           ;        "find" (search-input-file inputs "bin/find"))
-           ;      (substitute-command-block* "wgengine/router/router_linux.go"
-           ;        "ip" (search-input-file inputs "sbin/ip")))))
+           (add-after 'unpack 'adjust-calls-to-binaries
+             (lambda* (#:key import-path #:allow-other-keys)
+               (substitute* (string-append "src/" import-path "/net/tstun/tun_linux.go")
+                 (("/sbin/modprobe") "modprobe"))))
            (replace 'build
              (lambda* (#:key import-path build-flags #:allow-other-keys)
                (for-each
@@ -205,6 +185,25 @@
                  (with-output-to-file zsh
                    (lambda ()
                      (invoke tailscale "completion" "zsh"))))))
+           ;; Make sure this comes after 'install-binaries.
+           (add-before 'strip 'wrap-binaries
+             (lambda* (#:key inputs outputs #:allow-other-keys)
+               (for-each (lambda (binary)
+                           (wrap-program binary
+                             `("PATH" ":" prefix
+                               (,(dirname (search-input-file
+                                            inputs "/sbin/iptables"))
+                                ,(dirname (search-input-file
+                                            inputs "/bin/modprobe"))
+                                ,(dirname (search-input-file
+                                            inputs "/sbin/resolvconf"))
+                                ,(dirname (search-input-file
+                                            inputs "/sbin/sysctl"))
+                                ,(dirname (search-input-file
+                                            inputs "/bin/find"))
+                                ,(dirname (search-input-file
+                                            inputs "/sbin/ip"))))))
+                         (find-files (string-append #$output "/bin")))))
            #$@(if (%current-target-system)
                   #~((add-after 'setup-go-environment 'fix-go-environment
                        (lambda _
@@ -215,7 +214,7 @@
                                      (install-file binary (string-append #$output "/bin")))
                                    (find-files "bin")))))
                   #~()))))
-    #;(inputs
+    (inputs
      (list findutils iproute iptables kmod openresolv procps))
     (home-page "https://github.com/tailscale/tailscale")
     (synopsis "Tailscale VPN client")
