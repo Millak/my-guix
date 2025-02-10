@@ -345,13 +345,13 @@ the world.")
 (define-public tailscale-bin-amd64
   (package
     (name "tailscale-bin-amd64")
-    (version "1.78.1")
+    (version "1.80.0")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
                                   version "_amd64.tgz"))
               (sha256
-               (base32 "12aa8zr8b8x374vg48p6lcfzfwjjf2k9ywvbrdrj2080d2yr3d1x"))))
+               (base32 "0sq1zw657chwqgpy3kw6kydnccp8ns6b5a5dhkiacd3wpk61yfq8"))))
     (build-system copy-build-system)
     (arguments
      (list
@@ -360,6 +360,8 @@ the world.")
            ("tailscale" "bin/"))
        #:phases
        #~(modify-phases %standard-phases
+           ;; This uses the host binaries when cross compiling
+           #;
            (add-after 'install 'wrap-binary
              (lambda* (#:key inputs outputs #:allow-other-keys)
                (wrap-program
@@ -389,7 +391,7 @@ the world.")
                  (with-output-to-file zsh
                    (lambda ()
                      (invoke tailscale "completion" "zsh")))))))))
-    (inputs (list iproute iptables))
+    ;(inputs (list iproute iptables))
     (home-page "https://github.com/tailscale/tailscale")
     (synopsis "Tailscale VPN client")
     (description "Tailscale lets you easily manage access to private resources,
@@ -406,52 +408,52 @@ the world.")
   (package
     (inherit tailscale-bin-amd64)
     (name "tailscale-bin-386")
-    (version "1.78.1")
+    (version "1.80.0")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
                                   version "_386.tgz"))
               (sha256
-               (base32 "1gpajhhfbm96f72smmivxl6k31v02yqmx635p2640xv1qalljkhw"))))
+               (base32 "0hl7qnpqhipg7hqykhgir5njbck06swwcfc0xzz40kpxvhgsrjh5"))))
     (supported-systems '("i686-linux"))))
 
 (define-public tailscale-bin-arm
   (package
     (inherit tailscale-bin-amd64)
     (name "tailscale-bin-arm")
-    (version "1.78.1")
+    (version "1.80.0")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
                                   version "_arm.tgz"))
               (sha256
-               (base32 "01fhp249s3fnl6p052l2n0dj3f3xf5mbvi5iyhp0ry3kj07nb5kf"))))
+               (base32 "0jwsyhn18ixj94yg0zbz10l673v118d0dq5phim0khzrsgmkfrmr"))))
     (supported-systems '("armhf-linux"))))
 
 (define-public tailscale-bin-arm64
   (package
     (inherit tailscale-bin-amd64)
     (name "tailscale-bin-arm64")
-    (version "1.78.1")
+    (version "1.80.0")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
                                   version "_arm64.tgz"))
               (sha256
-               (base32 "1qw7y34c31i7r8jh9v4g166k5vz6a5vb68lp6ynbx01gmh8sxc4f"))))
+               (base32 "07icbn45lwlyf7d5kmzjy5iyz3iajls67cgqbqygnp62p35zrjjw"))))
     (supported-systems '("aarch64-linux"))))
 
 (define-public tailscale-bin-riscv64
   (package
     (inherit tailscale-bin-amd64)
     (name "tailscale-bin-riscv64")
-    (version "1.78.1")
+    (version "1.80.0")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://pkgs.tailscale.com/stable/tailscale_"
                                   version "_riscv64.tgz"))
               (sha256
-               (base32 "09dgy18sl87jmkdrjck9k2s9a5x842vv0b8pkncpqpqhzgvgfbkk"))))
+               (base32 "01c9q47paz6fhbmv2bsr0ik615ysbb0fn5pnakd6k4hxb9yhh8wy"))))
     (supported-systems '("riscv64-linux"))))
 
 #;
