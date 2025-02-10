@@ -54,7 +54,7 @@
         (mkdir-p (dirname #$(tailscaled-configuration-state-file config)))
         (mkdir-p (dirname #$(tailscaled-configuration-socket-file config)))
         (system* #$(file-append (tailscaled-configuration-package config)
-                                "/sbin/tailscaled") "--cleanup"))))
+                                "/bin/tailscaled") "--cleanup"))))
 
 ;; Can this service be limited to /var/lib/tailscale, /var/run/tailscale and /var/log?
 (define (tailscaled-shepherd-service config)
@@ -67,7 +67,7 @@
         (documentation "Tailscaled networking daemon")
         (requirement '(networking))
         (start #~(make-forkexec-constructor
-                   (list #$(file-append package "/sbin/tailscaled")
+                   (list #$(file-append package "/bin/tailscaled")
                          #$@(if dev-net-tun?
                               '()
                               '("--tun=userspace-networking"))
@@ -95,7 +95,8 @@
                                tailscaled-shepherd-service)
             (service-extension activation-service-type
                                tailscaled-activation)
-            (service-extension rottlog-service-type
+            #;
+            (service-extension log-rotation-service-type
                                (const %tailscaled-log-rotation))
             (service-extension profile-service-type
                                (compose list tailscaled-configuration-package))))

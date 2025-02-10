@@ -238,15 +238,15 @@ the world.")
     (arguments
      (list
        #:install-plan
-       #~'(("tailscaled" "sbin/")
+       #~'(("tailscaled" "bin/")
            ("tailscale" "bin/"))
        #:phases
        #~(modify-phases %standard-phases
-           ;; This uses the host binaries when cross compiling
+           ;; This uses the host binaries when cross compiling because of the copy-build-system.
            (add-after 'install 'wrap-binary
              (lambda* (#:key inputs outputs #:allow-other-keys)
                (wrap-program
-                 (string-append (assoc-ref outputs "out") "/sbin/tailscaled")
+                 (string-append (assoc-ref outputs "out") "/bin/tailscaled")
                  `("PATH" ":" prefix (,(dirname (search-input-file
                                                   inputs "/sbin/iptables"))
                                       ,(dirname (search-input-file
