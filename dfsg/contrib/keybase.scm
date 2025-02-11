@@ -1,4 +1,5 @@
-;;; Copyright © 2020, 2021, 2023 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2020, 2021, 2023, 2025 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2024 umanwizard <brennan@umanwizard.com>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -19,196 +20,148 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build utils)
   #:use-module (guix git-download)
+  #:use-module (guix gexp)
   #:use-module (guix packages)
+  #:use-module (guix records)
   #:use-module (guix utils)
+  #:use-module (guix build-system gnu)
   #:use-module (guix build-system go)
+  #:use-module (gnu packages base)
+  #:use-module (gnu packages certs)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages golang)
-  #:use-module (gnu packages golang-build)
-  #:use-module (gnu packages golang-check)
-  #:use-module (gnu packages golang-crypto)
-  #:use-module (gnu packages golang-maths)
-  #:use-module (gnu packages golang-web)
-  #:use-module (gnu packages golang-xyz)
-  #:use-module (gnu packages syncthing)
-  #:use-module (dfsg main golang))
+  #:use-module (ice-9 match))
+
+(define-record-type* <go-git-reference>
+  go-git-reference make-go-git-reference
+  go-git-reference?
+  (url    go-git-reference-url)
+  (commit go-git-reference-commit)
+  (hash   go-git-reference-sha256))
+
+(define-record-type* <go-url-reference>
+  go-url-reference make-go-url-reference
+  go-url-reference?
+  (url  go-url-reference-url)
+  (hash go-url-reference-hash))
+
+(define* (go-fetch-vendored uri hash-algorithm hash-value name #:key system)
+  (let ((src
+          (match uri
+                 (($ <go-git-reference> url commit hash)
+                  (origin
+                    (method git-fetch)
+                    (uri (git-reference
+                           (url url)
+                           (commit commit)))
+                    (sha256 hash)))
+                 (($ <go-url-reference> url commit hash)
+                  (origin
+                    (method url-fetch)
+                    (uri url)
+                    (sha256 hash)))))
+        (name (or name "go-git-checkout")))
+    (gexp->derivation
+      (string-append name "-vendored.tar.gz")
+      (with-imported-modules (append '((guix build utils))
+                                     %default-gnu-imported-modules)
+        #~(begin
+            (use-modules ((guix build gnu-build-system) #:prefix gnu:)
+                         (guix build utils))
+            (let ((inputs (list
+                            #+go
+                            #+tar
+                            #+bzip2
+                            #+gzip)))
+              (set-path-environment-variable "PATH" '("/bin") inputs))
+            ((assoc-ref gnu:%standard-phases 'unpack) #:source #$src)
+
+            (setenv "GOCACHE" "/tmp/gc")
+            (setenv "GOMODCACHE" "/tmp/gmc")
+            (setenv "SSL_CERT_DIR" #+(file-append nss-certs "/etc/ssl/certs/"))
+
+            (with-directory-excursion "go"
+              (invoke "go" "mod" "vendor"))
+
+            (invoke "tar" "czvf" #$output
+                    ;; Avoid non-determinism in the archive.
+                    "--mtime=@0"
+                    "--owner=root:0"
+                    "--group=root:0"
+                    "--sort=name"
+                    "--hard-dereference"
+                    "../")))
+      #:hash hash-value
+      #:hash-algo hash-algorithm)))
 
 (define-public keybase
   (package
     (name "keybase")
-    (version "6.0.4")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/keybase/client")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "0cky0slb3f53lqbdzls69j6xys6bqgiin07qfifvnvyyjzcc4r9j"))
-        (modules '((guix build utils)))
-        (snippet
-         '(begin
-            (for-each delete-file-recursively
-                      (list "osx"
-                            "shared"
-                            "browser"       ; GUI
-                            "protocol"      ; protocol generator and tester
-                            "pvl-tools"
-                            "media"
-                            "packaging"))
-            (substitute* (find-files "go" "\\.go$")
-              (("github\\.com/stellar/go/build")
-               "github.com/stellar/go/txnbuild")
-              (("github.com/stellar/go/clients/horizon")
-               "github.com/stellar/go/clients/horizonclient")
-              )
-            ))))
+    (version "6.4.0")
+    (source (origin
+              (method go-fetch-vendored)
+              (uri (go-git-reference
+                    (url "https://github.com/keybase/client")
+                    (commit (string-append "v" version))
+                    (hash
+                     (base32
+                      "0s0ppic97gm2cskkgvs1k9xklcbyv43w4hrzdw55abqgd01v26l5"))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1vay0i02zwqn9bi35wdhbkpr2gqja0123zdb3f3lbyc7rx6vryr5"))
+              (snippet
+               #~(begin
+                   (use-modules (guix build utils))
+                   (for-each delete-file-recursively
+                             (list "osx"
+                                   "shared"
+                                   "browser"    ; GUI
+                                   "protocol"   ; protocol generator and tester
+                                   "pvl-tools"
+                                   "media"
+                                   "packaging"))))))
     (build-system go-build-system)
     (arguments
-     `(#:install-source? #f
+     (list
+       #:install-source? #f
        #:import-path "github.com/keybase/client/go/keybase"
        #:unpack-path "github.com/keybase/client"
-       #:build-flags '("-tags" "production")
+       #:build-flags #~(list "-tags" "production")
        #:phases
-       (modify-phases %standard-phases
-         (replace 'build
-           (lambda* (#:key import-path build-flags #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'build)
-                  #:build-flags build-flags
-                  #:import-path directory))
-               (list import-path
-                     "github.com/keybase/client/go/kbfs/kbfsfuse"
-                     "github.com/keybase/client/go/kbfs/kbfsgit/git-remote-keybase"
-                     "github.com/keybase/client/go/kbfs/redirector"
-                     "github.com/keybase/client/go/kbnm"))))
-         (replace 'check
-           (lambda* (#:key tests? import-path #:allow-other-keys)
-             (for-each
-               (lambda (directory)
-                 ((assoc-ref %standard-phases 'check)
-                  #:tests? tests?
-                  #:import-path directory))
-               (list import-path
-                     "github.com/keybase/client/go/kbfs/kbfsfuse"
-                     "github.com/keybase/client/go/kbfs/kbfsgit/git-remote-keybase"
-                     "github.com/keybase/client/go/kbfs/redirector"
-                     "github.com/keybase/client/go/kbnm"))))
-         (add-after 'install 'install-license
-           (lambda* (#:key outputs #:allow-other-keys)
-             (let ((out (assoc-ref outputs "out")))
+       #~(modify-phases %standard-phases
+           (replace 'build
+             (lambda* (#:key import-path build-flags #:allow-other-keys)
+               (for-each
+                 (lambda (directory)
+                   ((assoc-ref %standard-phases 'build)
+                    #:build-flags build-flags
+                    #:import-path directory))
+                 (list import-path
+                       "github.com/keybase/client/go/kbfs/kbfsfuse"
+                       "github.com/keybase/client/go/kbfs/kbfsgit/git-remote-keybase"
+                       "github.com/keybase/client/go/kbfs/redirector"
+                       "github.com/keybase/client/go/kbnm"))))
+           (replace 'check
+             (lambda* (#:key import-path tests? #:allow-other-keys)
+               (when tests?
+                 (with-directory-excursion (string-append "src/" import-path)
+                   (invoke "go" "test" "-v" "go/...")))))
+           (add-after 'install 'install-license
+             (lambda _
                (install-file "src/github.com/keybase/client/LICENSE"
-                             (string-append out "/share/doc/"
-                                            ,name "-" ,version "/"))))))))
-    (inputs
-     (list go-bazil-org-fuse
-           go-camlistore-org-pkg-buildinfo ; camlistore/pkg/images
-           go-camlistore-org-pkg-images
-           go-github-com-antchfx-htmlquery
-           go-github-com-antchfx-xmlquery
-           go-github-com-araddon-dateparse
-           go-github-com-blang-semver
-           go-github-com-blevesearch-bleve
-           go-github-com-btcsuite-btcutil
-           go-github-com-buger-jsonparser
-           go-github-com-coreos-go-systemd-v22
-           go-github-com-deckarep-golang-set
-           go-github-com-dustin-go-humanize-20150824
-           go-github-com-eapache-channels
-           go-github-com-gammazero-workerpool
-           go-github-com-gobwas-glob
-           go-github-com-gocolly-colly-debug
-           go-github-com-gocolly-colly-storage
-           go-github-com-go-errors-errors
-           go-github-com-golang-groupcache
-           go-github-com-golang-mock-gomock
-           go-github-com-hashicorp-golang-lru
-           go-github-com-kennygrant-sanitize
-           ;go-github-com-keybase-backoff
-           go-github-com-keybase-cli
-           go-github-com-keybase-clockwork
-           go-github-com-keybase-colly
-           go-github-com-keybase-go-codec
-           go-github-com-keybase-go-crypto
-           go-github-com-keybase-go-framed-msgpack-rpc
-           go-github-com-keybase-go-jsonw
-           ;go-github-com-keybase-go-kext   ; macos specific
-           go-github-com-keybase-go-keychain
-           go-github-com-keybase-go-logging
-           go-github-com-keybase-go-merkle-tree
-           go-github-com-keybase-go-porterstemmer
-           go-github-com-keybase-go-ps
-           go-github-com-keybase-go-triplesec
-           go-github-com-keybase-go-triplesec-insecure
-           go-github-com-keybase-go-updater
-           ;go-github-com-keybase-go-winio  ; win32 specific
-           go-github-com-keybase-go-dbus
-           go-github-com-keybase-golang-ico
-           go-github-com-keybase-gomounts
-           ;go-github-com-keybase-keybase-test-vectors
-           go-github-com-keybase-pipeliner
-           ;go-github-com-keybase-release
-           go-github-com-keybase-saltpack
-           go-github-com-keybase-stellarnet
-           go-github-com-kr-text
-           go-github-com-kyokomi-emoji
-           go-github-com-mattn-go-isatty
-           go-github-com-miekg-dns
-           go-github-com-nfnt-resize
-           go-github-com-pkg-errors
-           go-github-com-puerkitobio-goquery
-           go-github-com-qrtz-nativemessaging
-           go-github-com-rcrowley-go-metrics
-           go-github-com-shirou-gopsutil
-           go-github-com-saintfish-chardet
-           go-github-com-shopspring-decimal
-           go-github-com-stellar-go-address
-           ;go-github-com-stellar-go-build  ; Deprecated upstream, fails to unpack
-           ;go-github-com-stellar-go-clients-federation ; fails to unpack
-           ;go-github-com-stellar-go-clients-horizon  ; Deprecated upstream, fails to unpack
-           go-github-com-stellar-go-clients-horizonclient
-           go-github-com-stellar-go-clients-stellartoml
-           go-github-com-stellar-go-crc16
-           go-github-com-stellar-go-hash
-           go-github-com-stellar-go-keypair
-           go-github-com-stellar-go-network
-           go-github-com-stellar-go-price
-           go-github-com-stellar-go-protocols-federation
-           go-github-com-stellar-go-protocols-horizon
-           go-github-com-stellar-go-strkey
-           ;go-github-com-stellar-go-support-clock  ; not in codebase
-           go-github-com-stellar-go-support-errors
-           ;go-github-com-stellar-go-support-http-httpdecode
-           go-github-com-stellar-go-support-log
-           go-github-com-stellar-go-support-render-hal
-           go-github-com-stellar-go-support-render-httpjson
-           go-github-com-stellar-go-support-render-problem
-           go-github-com-stellar-go-support-url
-           go-github-com-stellar-go-txnbuild
-           go-github-com-stellar-go-xdr
-           ;go-github-com-stellar-go
-           go-github-com-stretchr-testify
-           go-github-com-syndtr-goleveldb  ; use keybase fork instead
-           go-github-com-vividcortex-ewma
-           go-github-com-temoto-robotstxt
-           go-golang-org-x-crypto
-           go-golang-org-x-net
-           go-golang-org-x-sync
-           go-golang-org-x-text
-           go-golang-org-x-time
-           go-google-golang-org-appengine-internal
-           go-google-golang-org-appengine-urlfetch
-           go-gopkg-in-src-d-go-billy-v4
-           go-gopkg-in-src-d-go-git-v4 ; use keybase fork instead
-           go-mvdan-cc-xurls-v2
-           go-rsc-io-qr
-           go-stathat-com-c-ramcache))
+                             (string-append #$output "/share/doc/"
+                                            #$name "-" #$version "/")))))))
     (home-page "https://keybase.io")
     (synopsis "Secure messaging and file-sharing")
-    (description "Keybase is a safe, secure, and private app for everything you
-do online.")
-    (properties
-      '((release-monitoring-url . "https://github.com/keybase/client/releases")))
+    (description "Keybase is a key directory that maps social media identities
+to encryption keys (including, but not limited to PGP keys) in a publicly
+auditable manner.  Additionally it offers an end-to-end encrypted chat and
+cloud storage system, called Keybase Chat and the Keybase Filesystem
+respectively.  Files placed in the public portion of the filesystem are served
+from a public endpoint, as well as locally from a filesystem union-mounted by
+the Keybase client.")
+    ;; Release-monitoring-url doesn't work with go-git-reference.
+    ;(properties
+    ; '((release-monitoring-url . "https://github.com/keybase/client/releases")))
     (license license:bsd-3)))
