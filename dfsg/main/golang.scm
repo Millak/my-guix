@@ -92,7 +92,7 @@ of storing, syncing, sharing, modelling and backing up content.")
        #:unpack-path "camlistore.org"))
     (propagated-inputs `(("go-github-com-nf-cr2" ,go-github-com-nf-cr2)
                          ("go-github-com-rwcarlsen-goexif" ,go-github-com-rwcarlsen-goexif)
-                         ("go-go4-org-readerutil" ,go-go4-org-readerutil)
+                         ("go-go4-org" ,go-go4-org)
                          ("go-golang-org-x-image" ,go-golang-org-x-image)))))
 
 (define-public go-cloud-google-com-go
@@ -112,12 +112,12 @@ of storing, syncing, sharing, modelling and backing up content.")
     (arguments
      '(#:import-path "cloud.google.com/go"))
     (propagated-inputs `(;; ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-                         ;; ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
+                         ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
                          ;; ("go-google-golang-org-genproto" ,go-google-golang-org-genproto)
                          ;; ("go-google-golang-org-api" ,go-google-golang-org-api)
                          ;; ("go-golang-org-x-xerrors" ,go-golang-org-x-xerrors)
                          ;; ("go-golang-org-x-oauth2" ,go-golang-org-x-oauth2)
-                         ;; ("go-go-opencensus-io" ,go-go-opencensus-io)
+                         ("go-go-opencensus-io" ,go-go-opencensus-io)
                          ;; ("go-github-com-googleapis-gax-go-v2" ,go-github-com-googleapis-gax-go-v2)
                          ;; ("go-github-com-google-martian-v3" ,go-github-com-google-martian-v3)
                          ;; ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
@@ -153,34 +153,6 @@ for a full list of sub-packages.")
     (home-page "https://code.gitea.io/gitea-vet")
     (synopsis "Golang vet tool for gitea development")
     (description "@code{go vet} tool for Gitea.")
-    (license license:expat)))
-
-(define-public go-code-gitea-io-sdk-gitea
-  (package
-    (name "go-code-gitea-io-sdk-gitea")
-    (version "0.14.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://gitea.com/gitea/go-sdk")
-             (commit (string-append "gitea/v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0a5dp0wlinnjacv7a6qkkg9ninqqbf8qrdfjr7is0kxvlkr0ih7f"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f ;Requires a running gitea instance.
-       #:unpack-path "code.gitea.io/sdk"
-       #:import-path "code.gitea.io/sdk/gitea"))
-    (propagated-inputs (list go-github-com-hashicorp-go-version))
-    (native-inputs (list go-github-com-stretchr-testify))
-    (home-page "https://code.gitea.io/sdk")
-    (synopsis "Gitea SDK for Go")
-    (description
-     "This project acts as a client SDK implementation written in Go to interact
-with the Gitea API implementation.  For further information take a look at the
-current @url{https://godoc.org/code.gitea.io/sdk/gitea,documentation}.")
     (license license:expat)))
 
 (define-public go-filippo-io-mkcert
@@ -1087,29 +1059,6 @@ which maintains file format compatibility, but removes dependency on bleve, and
 instead depends only on the independent interface modules:")
     (license license:asl2.0)))
 
-(define-public go-github-com-boombuler-barcode
-  (package
-    (name "go-github-com-boombuler-barcode")
-    (version "1.0.1")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/boombuler/barcode")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0v4ypgh3xarzfpgys838mgkfabqacbjklhf4kfqnycs0v0anvnlr"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/boombuler/barcode"))
-    (home-page "https://github.com/boombuler/barcode")
-    (synopsis "Introduction")
-    (description
-     "This is a package for GO which can be used to create different types of
-barcodes.")
-    (license license:expat)))
-
 (define-public go-github-com-btcsuite-btcd-chaincfg
   (package
     (inherit go-github-com-btcsuite-btcd-btcec)
@@ -1320,7 +1269,7 @@ users are recommended to switch their imports.")
     (arguments
      '(#:import-path "github.com/cncf/xds/go"
        #:unpack-path "github.com/cncf/xds"))
-    (propagated-inputs `( ;("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
+    (propagated-inputs `(("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
                          ;; ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
                          ;; ("go-github-com-envoyproxy-protoc-gen-validate" ,go-github-com-envoyproxy-protoc-gen-validate)
                          ))
@@ -1949,7 +1898,7 @@ and manipulator for Go.")
     (arguments
      '(#:import-path "github.com/envoyproxy/go-control-plane"))
     (propagated-inputs (list ;go-google-golang-org-protobuf
-                             ;; go-google-golang-org-grpc
+                             go-google-golang-org-grpc
                              ;; go-google-golang-org-genproto
                              ;; go-golang-org-x-sys
                              ;; go-golang-org-x-net
@@ -2160,27 +2109,6 @@ goroutines.  copied out of the cockroachdb source tree with slight modifications
 to be more re-useable")
     (license license:bsd-3)))
 
-(define-public go-github-com-gammazero-deque
-  (package
-    (name "go-github-com-gammazero-deque")
-    (version "0.0.0-20201010052221-3932da5530cc")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/gammazero/deque")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1wc4b8li1hsxggm5f9x7km9jmplnkchxp6wkhx1ljnxnrxzs5h09"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/gammazero/deque"))
-    (home-page "https://github.com/gammazero/deque")
-    (synopsis "deque")
-    (description #f)
-    (license license:expat)))
-
 (define-public go-github-com-gammazero-workerpool
   (package
     (name "go-github-com-gammazero-workerpool")
@@ -2223,30 +2151,6 @@ to be more re-useable")
     (synopsis "monotime")
     (description #f)
     (license license:asl2.0)))
-
-(define-public go-github-com-ghodss-yaml
-  (package
-    (name "go-github-com-ghodss-yaml")
-    (version "1.0.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/ghodss/yaml")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0skwmimpy7hlh7pva2slpcplnm912rp3igs98xnqmn859kwa5v8g"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/ghodss/yaml"))
-    (propagated-inputs (list go-gopkg-in-yaml-v2))
-    (home-page "https://github.com/ghodss/yaml")
-    (synopsis "YAML marshaling and unmarshaling support for Go")
-    (description
-     "Copyright 2013 The Go Authors.  All rights reserved.  Use of this source code is
-governed by a BSD-style license that can be found in the LICENSE file.")
-    (license license:expat)))
 
 (define-public go-github-com-glendc-gopher-json
   (package
@@ -2425,36 +2329,6 @@ identification.")
 expression library (based on @url{https://github.com/kkos/oniguruma,oniguruma})
 that supports Ruby's regex syntax.")
     (license license:expat)))
-
-(define-public go-github-com-go-fed-httpsig
-  (package
-    (name "go-github-com-go-fed-httpsig")
-    (version "1.1.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/go-fed/httpsig")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1h2yk2ih8vrma8zrs1z8bd4r48hbqdwhgbqykrs4siyj9c80ykd2"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f ;TODO: Fix
-       #:import-path "github.com/go-fed/httpsig"))
-    (propagated-inputs (list go-golang-org-x-crypto))
-    (home-page "https://github.com/go-fed/httpsig")
-    (synopsis "httpsig")
-    (description
-     "This package implements HTTP request and response signing and verification.
-Supports the major MAC and asymmetric key signature algorithms.  It has several
-safety restrictions: One, none of the widely known non-cryptographically safe
-algorithms are permitted; Two, the RSA SHA256 algorithms must be available in
-the binary (and it should, barring export restrictions); Finally, the library
-assumes either the Authorizationn or Signature headers are to be set (but not
-both).")
-    (license license:bsd-3)))
 
 (define-public go-github-com-go-ole-go-ole
   (package
@@ -2951,8 +2825,7 @@ calendar with exactly 24-hour days, 60-minute hours, and 60-second minutes.")
     (arguments
      '(#:import-path "github.com/google/martian/v3"))
     (propagated-inputs `(;; ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-                         ;; ("go-google-golang-org-grpc-cmd-protoc-gen-go-grpc" ,go-google-golang-org-grpc-cmd-protoc-gen-go-grpc)
-                         ;; ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
+                         ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
                          ;; ("go-golang-org-x-net" ,go-golang-org-x-net)
                          ;; ("go-github-com-golang-snappy" ,go-github-com-golang-snappy)
                          ;; ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
@@ -2981,7 +2854,7 @@ and response modifiers.")
     (arguments
      '(#:import-path "github.com/googleapis/gax-go/v2"))
     (propagated-inputs `(;; ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-                         ;; ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
+                         ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
                          ;; ("go-google-golang-org-genproto" ,go-google-golang-org-genproto)
                          ;; ("go-google-golang-org-api" ,go-google-golang-org-api)
                          ;; ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
@@ -3088,8 +2961,8 @@ front-end code in Go which will still run in all browsers.")
                              ;; go-github-com-daixiang0-gci
                              ;; go-github-com-blakesmith-ar
                              go-github-com-alecthomas-units
-                             go-github-com-alecthomas-template
-                             go-github-com-alecthomas-kingpin
+                             ;; go-github-com-alecthomas-template
+                             ;; go-github-com-alecthomas-kingpin
                              go-github-com-microsoft-go-winio
                              go-github-com-masterminds-semver-v3
                              ;; go-github-com-djarvur-go-err113
@@ -3165,7 +3038,7 @@ used as a base for different API flavors.  Package pat is documented at:")
     (arguments
      '(#:import-path "github.com/grpc-ecosystem/grpc-gateway"))
     (propagated-inputs `(;; ("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-                         ;; ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
+                         ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
                          ;; ("go-google-golang-org-genproto" ,go-google-golang-org-genproto)
                          ;; ("go-golang-org-x-xerrors" ,go-golang-org-x-xerrors)
                          ;; ("go-golang-org-x-oauth2" ,go-golang-org-x-oauth2)
@@ -3173,7 +3046,7 @@ used as a base for different API flavors.  Package pat is documented at:")
                          ("go-github-com-rogpeppe-fastuuid" ,go-github-com-rogpeppe-fastuuid)
                          ;; ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
                          ("go-github-com-golang-glog" ,go-github-com-golang-glog)
-                         ;; ("go-github-com-ghodss-yaml" ,go-github-com-ghodss-yaml)
+                         ("go-github-com-ghodss-yaml" ,go-github-com-ghodss-yaml)
                          ;; ("go-github-com-antihax-optional" ,go-github-com-antihax-optional)
                          ))
     (home-page "https://github.com/grpc-ecosystem/grpc-gateway")
@@ -4226,7 +4099,8 @@ bounded parallelism.")
                          ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
                          ("go-github-com-blang-semver" ,go-github-com-blang-semver)
                          ("go-github-com-aws-aws-sdk-go" ,go-github-com-aws-aws-sdk-go)
-                         ("go-github-com-alecthomas-template" ,go-github-com-alecthomas-template)))
+                         ;; ("go-github-com-alecthomas-template" ,go-github-com-alecthomas-template)
+                         ))
     (home-page "https://github.com/keybase/release")
     (synopsis "Release")
     (description
@@ -4375,7 +4249,7 @@ with other software in any manner of languages or platforms.")
                          ;; ("go-github-com-facebookgo-stack" ,go-github-com-facebookgo-stack)
                          ;; ("go-github-com-facebookgo-inject" ,go-github-com-facebookgo-inject)
                          ;; ("go-github-com-facebookgo-ensure" ,go-github-com-facebookgo-ensure)
-                         ;; ("go-github-com-elazarl-go-bindata-assetfs" ,go-github-com-elazarl-go-bindata-assetfs)
+                         ("go-github-com-elazarl-go-bindata-assetfs" ,go-github-com-elazarl-go-bindata-assetfs)
                          ("go-github-com-aws-aws-sdk-go" ,go-github-com-aws-aws-sdk-go)
                          ("go-github-com-asaskevich-govalidator" ,go-github-com-asaskevich-govalidator)
                          ("go-github-com-ajg-form" ,go-github-com-ajg-form)
@@ -5059,64 +4933,6 @@ operations in Go.  Currently, this is focused on accessing named pipes and other
 file handles, and for using named pipes as a net transport.")
     (license license:expat)))
 
-(define-public go-github-com-minio-md5-simd
-  (package
-    (name "go-github-com-minio-md5-simd")
-    (version "1.1.2")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/minio/md5-simd")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0qj8ipifbdg3ppilyqj8zy68f72rmqy8flli1vch3fibrbw8vpd0"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/minio/md5-simd"))
-    (propagated-inputs (list go-github-com-klauspost-cpuid-v2))
-    (home-page "https://github.com/minio/md5-simd")
-    (synopsis "md5-simd")
-    (description
-     "This is a SIMD accelerated MD5 package, allowing up to either 8 (AVX2) or 16
-(AVX512) independent MD5 sums to be calculated on a single CPU core.")
-    (license license:asl2.0)))
-
-(define-public go-github-com-minio-minio-go-v7
-  (package
-    (name "go-github-com-minio-minio-go-v7")
-    (version "7.0.53")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/minio/minio-go")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1zim60k2h22j7igy90swwqafp456566m175kyjjk278gnihfcxmq"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/minio/minio-go/v7"))
-    (propagated-inputs (list go-gopkg-in-ini-v1
-                             go-golang-org-x-net
-                             go-golang-org-x-crypto
-                             go-github-com-sirupsen-logrus
-                             go-github-com-rs-xid
-                             go-github-com-minio-sha256-simd-1.0.0
-                             go-github-com-minio-md5-simd
-                             go-github-com-klauspost-compress
-                             go-github-com-json-iterator-go
-                             go-github-com-google-uuid
-                             go-github-com-dustin-go-humanize))
-    (home-page "https://github.com/minio/minio-go")
-    (synopsis "MinIO Go Client SDK for Amazon S3 Compatible Cloud Storage")
-    (description
-     "The MinIO Go Client SDK provides simple APIs to access any Amazon S3 compatible
-object storage.")
-    (license license:asl2.0)))
-
 (define-public go-github-com-minio-sha256-simd-1.0.0
   (package
     (name "go-github-com-minio-sha256-simd")
@@ -5338,7 +5154,7 @@ they should occur.  Actions mutate the context and transition to another state."
     (arguments
      '(#:tests? #f ;Tests require elasticsearch node.
        #:import-path "github.com/olivere/elastic/v7"))
-    (propagated-inputs (list ;go-go-opencensus-io
+    (propagated-inputs (list go-go-opencensus-io
                              ;; go-github-com-smarty-gunit
                              ;; go-github-com-smartystreets-go-aws-auth
                              go-github-com-smarty-assertions
@@ -5356,31 +5172,6 @@ they should occur.  Actions mutate the context and transition to another state."
      "Package elastic provides an interface to the Elasticsearch server
 (@url{https://www.elastic.co/products/elasticsearch,https://www.elastic.co/products/elasticsearch}).")
     (license license:expat)))
-
-(define-public go-github-com-peterbourgon-ff-v3
-  (package
-    (name "go-github-com-peterbourgon-ff-v3")
-    (version "3.1.2")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/peterbourgon/ff")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1i3kczf0afv3ba0a6g02wg5l7rk4agid3d85lgamyy13v2lzif7k"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; TODO: Fix tests
-       #:import-path "github.com/peterbourgon/ff/v3"))
-    (propagated-inputs `(("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-                         ("go-github-com-pelletier-go-toml" ,go-github-com-pelletier-go-toml)))
-    (home-page "https://github.com/peterbourgon/ff")
-    (synopsis "ff")
-    (description
-     "Package ff is a flags-first helper package for configuring programs.")
-    (license license:asl2.0)))
 
 (define-public go-github-com-peterh-liner
   (package
@@ -5560,46 +5351,6 @@ fast compressed bitmap data structures (also called bitset).  They are ideally
 suited to represent sets of integers over relatively small ranges.  See
 @url{http://roaringbitmap.org,http://roaringbitmap.org} for details.")
     (license license:asl2.0)))
-
-(define-public go-github-com-rwcarlsen-goexif
-  (package
-    (name "go-github-com-rwcarlsen-goexif")
-    (version "0.0.0-20190401172101-9e8deecbddbd")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/rwcarlsen/goexif")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1drqhzplg72lvrf3qmb9awbggnjqp23hwn2pgvksi3spv17kc9h2"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/rwcarlsen/goexif"
-       #:phases (modify-phases %standard-phases
-                  (replace 'build
-                    (lambda* (#:key import-path build-flags #:allow-other-keys)
-                      (for-each (lambda (directory)
-                                  ((assoc-ref %standard-phases
-                                              'build)
-                                   #:build-flags build-flags
-                                   #:import-path directory))
-                                (list "github.com/rwcarlsen/goexif/exif"
-                                      "github.com/rwcarlsen/goexif/tiff"))))
-                  (replace 'check
-                    (lambda* (#:key tests? import-path #:allow-other-keys)
-                      (for-each (lambda (directory)
-                                  ((assoc-ref %standard-phases
-                                              'check)
-                                   #:tests? tests?
-                                   #:import-path directory))
-                                (list "github.com/rwcarlsen/goexif/exif"
-                                      "github.com/rwcarlsen/goexif/tiff")))))))
-    (home-page "https://github.com/rwcarlsen/goexif")
-    (synopsis "goexif")
-    (description #f)
-    (license license:bsd-2)))
 
 (define-public go-github-com-saintfish-chardet
   (package
@@ -6218,7 +5969,7 @@ for examples.")
                          ;; ("go-github-com-facebookgo-stack" ,go-github-com-facebookgo-stack)
                          ;; ("go-github-com-facebookgo-inject" ,go-github-com-facebookgo-inject)
                          ;; ("go-github-com-facebookgo-ensure" ,go-github-com-facebookgo-ensure)
-                         ;; ("go-github-com-elazarl-go-bindata-assetfs" ,go-github-com-elazarl-go-bindata-assetfs)
+                         ("go-github-com-elazarl-go-bindata-assetfs" ,go-github-com-elazarl-go-bindata-assetfs)
                          ("go-github-com-aws-aws-sdk-go" ,go-github-com-aws-aws-sdk-go)
                          ("go-github-com-asaskevich-govalidator" ,go-github-com-asaskevich-govalidator)
                          ("go-github-com-ajg-form" ,go-github-com-ajg-form)
@@ -7201,34 +6952,6 @@ documentation, please contact me.")
 @url{https://haveibeenpwned.com/,HaveIBeenPwned}.")
     (license license:expat)))
 
-(define-public go-go-opencensus-io
-  (package
-    (name "go-go-opencensus-io")
-    (version "0.23.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/census-instrumentation/opencensus-go")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0gw4f7inf8y2ik00yfb36xganiq9rl4w2d1a41bsjqsh83ajz2km"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "go.opencensus.io"))
-    (propagated-inputs (list ;go-google-golang-org-grpc
-                             ;; go-golang-org-x-net
-                             ;; go-github-com-stretchr-testify
-                             ;; go-github-com-google-go-cmp
-                             ;; go-github-com-golang-protobuf
-                             ;; go-github-com-golang-groupcache
-                             ))
-    (home-page "https://go.opencensus.io")
-    (synopsis "OpenCensus Libraries for Go")
-    (description "Package opencensus contains Go support for OpenCensus.")
-    (license license:asl2.0)))
-
 (define-public go-go-opentelemetry-io-proto-otlp
   (package
     (name "go-go-opentelemetry-io-proto-otlp")
@@ -7246,92 +6969,12 @@ documentation, please contact me.")
     (arguments
      '(#:import-path "go.opentelemetry.io/proto/otlp"))
     (propagated-inputs `(;; ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-                         ;; ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
+                         ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
                          ;; ("go-github-com-grpc-ecosystem-grpc-gateway" ,go-github-com-grpc-ecosystem-grpc-gateway)
                          ;; ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
                          ))
     (home-page "https://go.opentelemetry.io/proto/otlp")
     (synopsis #f)
-    (description #f)
-    (license license:asl2.0)))
-
-(define-public go-go4-org-mem
-  (package
-    (name "go-go4-org-mem")
-    (version "0.0.0-20210711025021-927187094b94")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/go4org/mem")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0rcijgwf1xr1rwi7sqw17mx5kwy6ykfvca1ybw4rdyr5ldprjg4y"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "go4.org/mem"))
-    (home-page "https://go4.org/mem")
-    (synopsis "go4.org/mem")
-    (description
-     "Package mem provides the mem.RO type that allows you to cheaply pass & access
-either a read-only []byte or a string.")
-    (license license:asl2.0)))
-
-(define-public go-go4-org-netipx
-  (package
-    (name "go-go4-org-netipx")
-    (version "0.0.0-20220725152314-7e7bdc8411bf")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/go4org/netipx")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0s9hnl1n6bfvwyxcgzrx4vdfm64ajiix9nnwx60xmh248h8f4z9a"))))
-    (build-system go-build-system)
-    (arguments
-     `(#:tests? #f ;TODO
-       #:import-path "go4.org/netipx"))
-    (propagated-inputs `(("go-golang-org-x-tools" ,go-golang-org-x-tools)
-                         ("go-golang-org-x-sys" ,go-golang-org-x-sys)
-                         ("go-golang-org-x-mod" ,go-golang-org-x-mod)
-                         ("go-golang-org-x-exp" ,go-golang-org-x-exp)
-                         ;; ("go-go4-org-unsafe-assume-no-moving-gc" ,go-go4-org-unsafe-assume-no-moving-gc)
-                         ("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)
-                         ("go-honnef-co-go-tools" ,go-honnef-co-go-tools)
-                         ;; ("go-github-com-dvyukov-go-fuzz" ,go-github-com-dvyukov-go-fuzz)
-                         ))
-    ;; (native-inputs
-    ;; (list go-go4-org-intern))
-    (home-page "https://go4.org/netipx")
-    (synopsis "netipx")
-    (description
-     "Package netipx contains code and types that were left behind when the old
-inet.af/netaddr package moved to the standard library in Go 1.18 as net/netip.")
-    (license license:bsd-3)))
-
-(define-public go-go4-org-readerutil
-  (package
-    (name "go-go4-org-readerutil")
-    (version "0.0.0-20201209231011-d4a079459e60")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/go4org/go4")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0pimk20p34lnhhwgxl7mc1s2ggv3rxrdwydv10rhg1pgp54dxmal"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "go4.org/readerutil"
-       #:unpack-path "go4.org"))
-    (home-page "https://go4.org")
-    (synopsis "go4")
     (description #f)
     (license license:asl2.0)))
 
@@ -7351,14 +6994,14 @@ inet.af/netaddr package moved to the standard library in Go 1.18 as net/netip.")
     (build-system go-build-system)
     (arguments
      '(#:import-path "google.golang.org/api"))
-    (propagated-inputs `(;; ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
+    (propagated-inputs `(("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
                          ;; ("go-google-golang-org-genproto" ,go-google-golang-org-genproto)
                          ;; ("go-google-golang-org-appengine" ,go-google-golang-org-appengine)
                          ;; ("go-golang-org-x-sys" ,go-golang-org-x-sys)
                          ;; ("go-golang-org-x-sync" ,go-golang-org-x-sync)
                          ;; ("go-golang-org-x-oauth2" ,go-golang-org-x-oauth2)
                          ;; ("go-golang-org-x-net" ,go-golang-org-x-net)
-                         ;; ("go-go-opencensus-io" ,go-go-opencensus-io)
+                         ("go-go-opencensus-io" ,go-go-opencensus-io)
                          ;; ("go-github-com-googleapis-gax-go-v2" ,go-github-com-googleapis-gax-go-v2)
                          ;; ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
                          ;; ("go-cloud-google-com-go" ,go-cloud-google-com-go)
@@ -7436,7 +7079,7 @@ for a full list of sub-packages.")
                   (delete 'build)
                   (delete 'check))))
     (propagated-inputs (list ;go-google-golang-org-protobuf
-                             ;; go-google-golang-org-grpc
+                             go-google-golang-org-grpc
                              ;; go-golang-org-x-text
                              ;; go-golang-org-x-sys
                              ;; go-golang-org-x-net
@@ -7448,69 +7091,6 @@ for a full list of sub-packages.")
      "This repository contains the generated Go packages for common protocol buffer
 types, and the generated @url{http://grpc.io,gRPC} code necessary for
 interacting with Google's gRPC APIs.")
-    (license license:asl2.0)))
-
-(define-public go-google-golang-org-grpc
-  (package
-    (name "go-google-golang-org-grpc")
-    (version "1.43.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/grpc/grpc-go")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "10f9363yir4l7rnj5z897qk79si7913vsyzy4nw5xhxjhxsppji8"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "google.golang.org/grpc"
-       #:phases (modify-phases %standard-phases
-                  (delete 'build)
-                  (delete 'check))))
-    (propagated-inputs (list go-google-golang-org-protobuf
-                             go-google-golang-org-genproto
-                             go-golang-org-x-text
-                             go-golang-org-x-sys
-                             ;; go-golang-org-x-oauth2
-                             go-golang-org-x-net
-                             ;; go-github-com-google-uuid
-                             ;; go-github-com-google-go-cmp
-                             go-github-com-golang-protobuf
-                             go-github-com-golang-glog
-                             ;; go-github-com-envoyproxy-go-control-plane
-                             ;; go-github-com-cncf-xds-go
-                             ;; go-github-com-cncf-udpa-go
-                             go-github-com-cespare-xxhash))
-    (home-page "https://google.golang.org/grpc")
-    (synopsis "gRPC-Go")
-    (description "Package grpc implements an RPC system called gRPC.")
-    (license license:asl2.0)))
-
-(define-public go-google-golang-org-grpc-cmd-protoc-gen-go-grpc
-  (package
-    (name "go-google-golang-org-grpc-cmd-protoc-gen-go-grpc")
-    (version "1.2.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/grpc/grpc-go")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1f3zr5a49pdy531aznjapslf8z821wdnk9xrdq564jvva0i8k7m4"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "google.golang.org/grpc/cmd/protoc-gen-go-grpc"))
-    (propagated-inputs (list go-google-golang-org-protobuf))
-    (home-page "https://google.golang.org/grpc/cmd/protoc-gen-go-grpc")
-    (synopsis "protoc-gen-go-grpc")
-    (description
-     "protoc-gen-go-grpc is a plugin for the Google protocol buffer compiler to
-generate Go code.  Install it by building this program and making it accessible
-within your PATH with the name:")
     (license license:asl2.0)))
 
 (define-public go-gopkg-in-alexcesaro-quotedprintable-v3
@@ -7956,7 +7536,7 @@ connection, using various OS-specific facilities.")
                          ("go-github-com-burntsushi-toml" ,go-github-com-burntsushi-toml)
                          ("go-honnef-co-go-tools" ,go-honnef-co-go-tools)
                          ("go-golang-org-x-sys" ,go-golang-org-x-sys)
-                         ("go-go4-org-netipx" ,go-go4-org-netipx)
+                         ("go-go4-org" ,go-go4-org)
                          ("go-github-com-peterbourgon-ff-v3" ,go-github-com-peterbourgon-ff-v3)
                          ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)))
     (home-page "https://inet.af/wf")
