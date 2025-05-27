@@ -35,6 +35,7 @@
   #:use-module (gnu packages web)
   #:use-module (gnu packages xml))
 
+#;
 (define-public gawk-full
   (package/inherit gawk
     (source

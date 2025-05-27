@@ -85,7 +85,7 @@
             (use-modules ((guix build gnu-build-system) #:prefix gnu:)
                          (guix build utils))
             (let ((inputs (list
-                            #+go-1.23
+                            #+go-1.24
                             #+tar
                             #+bzip2
                             #+gzip)))
@@ -112,7 +112,7 @@
 (define-public tailscale
   (package
     (name "tailscale")
-    (version "1.80.3")
+    (version "1.84.0")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
@@ -120,15 +120,15 @@
                     (commit (string-append "v" version))
                     (hash
                      (base32
-                      "07s8kwksvd0f9r65zkrhp3sn4jrv0c8g5w0wbiv9qq950l8gdv2h"))))
+                      "1dpx3r4ryv64z51vzxdyrpxydnfxkm5frbbv26p441jfpm907ygk"))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "13bn8fb4869fys8p71nqrrwys23dzgiy9yn0dlrb3m20jq8yzbl8"))))
+                "0niq1n8b7zbflr6xa85bsq39ijwinc30xfirgc2wr4qi9h8ii7bp"))))
     (build-system go-build-system)
     (arguments
      (list
-       #:go go-1.23
+       #:go go-1.24
        #:install-source? #f
        #:tests? #f
        #:import-path "tailscale.com"
@@ -137,15 +137,15 @@
            (add-after 'unpack 'adjust-source
              (lambda* (#:key import-path #:allow-other-keys)
                (with-directory-excursion (string-append "src/" import-path)
-                 ;; Tries to import "golang.org/x/crypto/ssh"
-                 (delete-file "vendor/github.com/tailscale/golang-x-crypto/ssh/doc.go")
                  ;; Adjust the --version output:
                  (substitute* "version/version.go"
                    (("ERR-BuildInfo") "GNU-Guix")))))
            (add-after 'unpack 'adjust-calls-to-binaries
              (lambda* (#:key import-path #:allow-other-keys)
                (substitute* (string-append "src/" import-path "/net/tstun/tun_linux.go")
-                 (("/sbin/modprobe") "modprobe"))))
+                 (("/sbin/modprobe") "modprobe"))
+               (substitute* (string-append "src/" import-path "/ipn/ipnlocal/c2n.go")
+                 (("/usr/local/bin") (string-append #$output "/bin")))))
            (replace 'build
              (lambda* (#:key import-path build-flags #:allow-other-keys)
                (for-each
