@@ -5173,30 +5173,6 @@ they should occur.  Actions mutate the context and transition to another state."
 (@url{https://www.elastic.co/products/elasticsearch,https://www.elastic.co/products/elasticsearch}).")
     (license license:expat)))
 
-(define-public go-github-com-peterh-liner
-  (package
-    (name "go-github-com-peterh-liner")
-    (version "1.2.1")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/peterh/liner")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0ma4wk01f63s1vshdly3m7pn56xlapi1hfmhqvs8yqx5pqi2w2yf"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/peterh/liner"))
-    (propagated-inputs (list go-github-com-mattn-go-runewidth))
-    (home-page "https://github.com/peterh/liner")
-    (synopsis "Line editor in Golang")
-    (description
-     "Package liner implements a simple command line editor, inspired by
-@url{https://github.com/antirez/linenoise/,linenoise}.")
-    (license license:expat)))
-
 (define-public go-github-com-pquerna-otp
   (package
     (name "go-github-com-pquerna-otp")
