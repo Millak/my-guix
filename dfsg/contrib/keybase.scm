@@ -69,7 +69,7 @@
             (use-modules ((guix build gnu-build-system) #:prefix gnu:)
                          (guix build utils))
             (let ((inputs (list
-                            #+go
+                            #+go-1.23
                             #+tar
                             #+bzip2
                             #+gzip)))
@@ -97,7 +97,7 @@
 (define-public keybase
   (package
     (name "keybase")
-    (version "6.4.0")
+    (version "6.5.1")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
@@ -105,11 +105,11 @@
                     (commit (string-append "v" version))
                     (hash
                      (base32
-                      "0s0ppic97gm2cskkgvs1k9xklcbyv43w4hrzdw55abqgd01v26l5"))))
+                      "0f33i9c9bdjp4y412glksqb7ncgcgaj30r2scm1q2cshrivdwyq7"))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "1vay0i02zwqn9bi35wdhbkpr2gqja0123zdb3f3lbyc7rx6vryr5"))
+                "1pvczym7v4whdfcdv86rqxpj9pa0cm7fg7xqf53r3ap1c17zd6zv"))
               (snippet
                #~(begin
                    (use-modules (guix build utils))
@@ -124,6 +124,7 @@
     (build-system go-build-system)
     (arguments
      (list
+       #:go go-1.23
        #:install-source? #f
        #:import-path "github.com/keybase/client/go/keybase"
        #:unpack-path "github.com/keybase/client"
@@ -151,7 +152,16 @@
              (lambda _
                (install-file "src/github.com/keybase/client/LICENSE"
                              (string-append #$output "/share/doc/"
-                                            #$name "-" #$version "/")))))))
+                                            #$name "-" #$version "/"))))
+           (add-after 'install 'install-shell-completions
+             (lambda* (#:key outputs #:allow-other-keys)
+               (let* ((out #$output)
+                      (keybase (string-append out "/bin/keybase"))
+                      (bash (string-append out "/share/bash-completion/completions/keybase")))
+                 (mkdir-p (dirname bash))
+                 (with-output-to-file bash
+                   (lambda ()
+                     (invoke keybase "--generate-bash-completion")))))))))
     (home-page "https://keybase.io")
     (synopsis "Secure messaging and file-sharing")
     (description "Keybase is a key directory that maps social media identities
