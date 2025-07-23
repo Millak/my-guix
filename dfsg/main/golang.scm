@@ -1812,49 +1812,6 @@ complicated buffering strategies")
        (sha256
         (base32 "0543bdyvg6x45wbiz6v13vl48wh0l61mk65ac0ha8p8sfvajglx3"))))))
 
-(define-public go-github-com-eapache-channels
-  (package
-    (name "go-github-com-eapache-channels")
-    (version "1.1.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/eapache/channels")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "179ryd2rqsccnv5nk35f8j4nfbqr8cgb2bjm0j8isvf5nzks8s9y"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/eapache/channels"))
-    (propagated-inputs `(("go-github-com-eapache-queue" ,go-github-com-eapache-queue)))
-    (home-page "https://github.com/eapache/channels")
-    (synopsis "channels")
-    (description #f)
-    (license license:expat)))
-
-(define-public go-github-com-eapache-queue
-  (package
-    (name "go-github-com-eapache-queue")
-    (version "1.1.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/eapache/queue")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "07dp54n94gn3gsvdcki56yqh7py7wqqigxbamhxwgbr05n61fqyg"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/eapache/queue"))
-    (home-page "https://github.com/eapache/queue")
-    (synopsis "Queue")
-    (description #f)
-    (license license:expat)))
-
 (define-public go-github-com-editorconfig-editorconfig-core-go-v2
   (package
     (name "go-github-com-editorconfig-editorconfig-core-go-v2")
@@ -3083,28 +3040,6 @@ google.api.http)} annotations in your service definitions.")
      "Package ed25519consensus implements Ed25519 verification according to ZIP215.")
     (license license:bsd-3)))
 
-(define-public go-github-com-hugelgupf-socketpair
-  (package
-    (name "go-github-com-hugelgupf-socketpair")
-    (version "0.0.0-20190730060125-05d35a94e714")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/hugelgupf/socketpair")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1kc243zdrh8n8wmcylyzam3gcqd6zbqnn9a5liaa4jhvn8rwym3j"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/hugelgupf/socketpair"))
-    (home-page "https://github.com/hugelgupf/socketpair")
-    (synopsis "socketpair")
-    (description
-     "Package socketpair provides bidirectionally connected net.Conns.")
-    (license license:bsd-3)))
-
 (define-public go-github-com-imkira-go-interpol
   (package
     (name "go-github-com-imkira-go-interpol")
@@ -3146,58 +3081,6 @@ google.api.http)} annotations in your service definitions.")
     (synopsis "mousetrap")
     (description "mousetrap is a tiny library that answers a single question.")
     (license license:asl2.0)))
-
-(define-public go-github-com-insomniacslk-dhcp
-  (package
-    (name "go-github-com-insomniacslk-dhcp")
-    (version "0.0.0-20221215072855-de60144f33f8")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/insomniacslk/dhcp")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1203aiphxvwa1jx6p1d1d6x9ba8x9ad36751hm5p00s2pv71l215"))))
-    (build-system go-build-system)
-    (arguments
-     (list
-      #:import-path "github.com/insomniacslk/dhcp"
-      #:phases
-      #~(modify-phases %standard-phases
-          (replace 'build
-            (lambda* (#:key import-path build-flags #:allow-other-keys)
-              (for-each (lambda (directory)
-                          ((assoc-ref %standard-phases 'build)
-                           #:build-flags build-flags
-                           #:import-path (string-append import-path directory)))
-                        (list "/dhcpv4" "/dhcpv6"))))
-          (replace 'check
-            (lambda* (#:key tests? import-path #:allow-other-keys)
-              (for-each (lambda (directory)
-                          ((assoc-ref %standard-phases 'check)
-                           ;#:tests? tests?
-                           #:import-path (string-append import-path directory)))
-                        (list "/dhcpv4" "/dhcpv6")))))))
-    (propagated-inputs (list go-golang-org-x-sys
-                             go-golang-org-x-net
-                             go-github-com-u-root-uio
-                             go-github-com-stretchr-testify
-                             go-github-com-smartystreets-goconvey
-                             go-github-com-mdlayher-raw
-                             go-github-com-mdlayher-netlink
-                             go-github-com-mdlayher-ethernet
-                             go-github-com-jsimonetti-rtnetlink
-                             go-github-com-hugelgupf-socketpair
-                             ;; go-github-com-fanliao-go-promise
-                             ))
-    (home-page "https://github.com/insomniacslk/dhcp")
-    (synopsis "dhcp")
-    (description
-     "DHCPv4 and DHCPv6 decoding/encoding library with client and server code, written
-in Go.")
-    (license license:bsd-3)))
 
 (define-public go-github-com-issue9-assert
   (package
@@ -4740,62 +4623,6 @@ applications.  Your mileage may vary, but I find them to be pretty darn helpful.
 packages for Go web applications.")
     (license license:expat)))
 
-(define-public go-github-com-mdlayher-ethernet
-  (package
-    (name "go-github-com-mdlayher-ethernet")
-    (version "0.0.0-20220221185849-529eae5b6118")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/mdlayher/ethernet")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "154jx1i5g5nphzlbx0hr2v0rhhri2p9z80hjnnngbzcqzmy1npbm"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; TODO: Fix tests
-       #:import-path "github.com/mdlayher/ethernet"))
-    (propagated-inputs (list go-golang-org-x-net go-github-com-mdlayher-packet))
-    (home-page "https://github.com/mdlayher/ethernet")
-    (synopsis "ethernet")
-    (description
-     "Package ethernet implements marshaling and unmarshaling of IEEE 802.3 Ethernet
-II frames and IEEE 802.1Q VLAN tags.")
-    (license license:expat)))
-
-(define-public go-github-com-mdlayher-packet
-  (package
-    (name "go-github-com-mdlayher-packet")
-    (version "1.1.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/mdlayher/packet")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0bryji73rn3flqa2d803js7lpbyl3b95mlm9y3h49k8gqxv3gv4j"))))
-    (build-system go-build-system)
-    (arguments
-     `(#:import-path "github.com/mdlayher/packet"
-       #:phases (modify-phases %standard-phases
-                  (delete 'build)
-                  (delete 'check))))
-    (propagated-inputs (list go-golang-org-x-sync
-                             go-golang-org-x-sys
-                             go-golang-org-x-net
-                             go-github-com-mdlayher-socket
-                             go-github-com-josharian-native
-                             go-github-com-google-go-cmp))
-    (home-page "https://github.com/mdlayher/packet")
-    (synopsis "packet")
-    (description
-     "Package packet provides access to Linux packet sockets (AF_PACKET).")
-    (license license:expat)))
-
 (define-public go-github-com-mdlayher-raw
   (package
     (name "go-github-com-mdlayher-raw")
@@ -5751,30 +5578,6 @@ Go.  It supports many data structures including kv, list, hash, zset, set.")
     (description "This package handles Redis RDB format in Golang.")
     (license license:expat)))
 
-(define-public go-github-com-smartystreets-go-aws-auth
-  (package
-    (name "go-github-com-smartystreets-go-aws-auth")
-    (version "0.0.0-20180515143844-0c1422d1fdb9")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/smartystreets-archives/go-aws-auth")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0krfdpgn3gfii1z9fi8ydfw0wwfqyvp6w3rji7w92m528zkjl93d"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/smartystreets/go-aws-auth"))
-    (home-page "https://github.com/smartystreets/go-aws-auth")
-    (synopsis "go-aws-auth")
-    (description
-     "Package awsauth implements AWS request signing using Signed Signature Version 2,
-Signed Signature Version 3, and Signed Signature Version 4.  Supports S3 and
-STS.")
-    (license license:expat)))
-
 (define-public go-github-com-smartystreets-gunit
   (package
     (name "go-github-com-smartystreets-gunit")
@@ -6606,31 +6409,6 @@ programming language.")
     (home-page "https://github.com/u-root/u-root")
     (synopsis "u-root")
     (description "u-root embodies four different projects.")
-    (license license:bsd-3)))
-
-(define-public go-github-com-u-root-uio
-  (package
-    (name "go-github-com-u-root-uio")
-    (version "0.0.0-20221210192040-301ac5150d9e")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/u-root/uio")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1h11mhxgxwyvmlm8a2j9n0lg8d6scblz9fhqpk5ljkc6407ywsqy"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/u-root/uio"
-       #:phases (modify-phases %standard-phases
-                  (delete 'build)
-                  (delete 'check))))
-    (propagated-inputs `(("go-golang-org-x-sys" ,go-golang-org-x-sys)))
-    (home-page "https://github.com/u-root/uio")
-    (synopsis "uio")
-    (description #f)
     (license license:bsd-3)))
 
 (define-public go-github-com-unknwon-i18n
