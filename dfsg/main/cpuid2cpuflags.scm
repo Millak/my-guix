@@ -1,4 +1,4 @@
-;;; Copyright © 2018, 2020, 2022 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2018, 2020, 2022, 2025 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -24,18 +24,18 @@
 (define-public cpuid2cpuflags
   (package
     (name "cpuid2cpuflags")
-    (version "12")
+    (version "16")
     (source
       (origin
         (method url-fetch)
-        (uri (string-append "https://github.com/mgorny/cpuid2cpuflags/releases/"
+        (uri (string-append "https://github.com/projg2/cpuid2cpuflags/releases/"
                             "download/v" version "/"
                             "cpuid2cpuflags-" version ".tar.bz2"))
         (sha256
          (base32
-          "1llkhzaf863swvkxsqx0bzy7n08jvfwnv7jbl5m02dka642gldwx"))))
+          "0ml7s0ax8j9vying68nqv0zbfzhq2qs77hxgsw3hsrjhdyj5i1f5"))))
     (build-system gnu-build-system)
-    (home-page "https://github.com/mgorny/cpuid2cpuflags")
+    (home-page "https://github.com/projg2/cpuid2cpuflags")
     (synopsis "Tool to generate CPU_FLAGS_* for your CPU")
     (description "This program attempts to obtain the identification and
 capabilities of the currently used CPU, and print the matching set of
