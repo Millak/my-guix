@@ -1,4 +1,4 @@
-;;; Copyright © 2023 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2023, 2025 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -20,15 +20,15 @@
   #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils)
-  #:use-module (guix build-system python)
-  #:use-module (gnu packages video))
+  #:use-module (guix build-system pyproject)
+  #:use-module (gnu packages python-build))
 
 (define-public seashells
-  (let ((commit "119f3d7c897a3028e08a638f870d83ca0bddb8f3") ;2023-03-05
+  (let ((commit "9d80defe43f044ffcb3b3e3ee7423b663a440c0c") ;2024-12-27
         (revision "1"))
     (package
       (name "seashells")
-      (version (git-version "0.1.2" revision commit))
+      (version "1.0.0")
       (source (origin
                 (method git-fetch)
                 (uri (git-reference
@@ -37,10 +37,12 @@
                 (file-name (git-file-name name version))
                 (sha256
                  (base32
-                  "019d0np7gb6k392q7jr73vlw8d1krdzlbwsr6hj5x6pagqdw1ncl"))))
-      (build-system python-build-system)
+                  "0cr25c013q6qj60s5n1jjf5sfhkbg1ql3n4l5pzpnk1a28rf7ds2"))))
+      (build-system pyproject-build-system)
       (arguments
        `(#:tests? #f)) ;No tests
+      (native-inputs
+       (list python-hatchling))
       (home-page "https://seashells.io/")
       (synopsis "Official client for seashells.io")
       (description
