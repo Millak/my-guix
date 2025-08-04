@@ -1,4 +1,4 @@
-;;; Copyright © 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2020, 2025 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -20,17 +20,18 @@
   #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils)
+  #:use-module (guix gexp)
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages curl)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages xml))
 
 (define-public rdrview
-  (let ((commit "444ce3d6efd8989cd6ecfdc0560071b20e622636")     ; May 30, 2021
-        (revision "3"))
+  (let ((commit "ee87dc4c93dc250cf7cd1251c9e3e2f8d21baa4d")     ; 2025-06-28
+        (revision "1"))
     (package
       (name "rdrview")
-      (version (git-version "0.0.0" revision commit))
+      (version (git-version "0.1.4" revision commit))
       (source
         (origin
           (method git-fetch)
@@ -40,36 +41,34 @@
           (file-name (git-file-name name version))
           (sha256
            (base32
-            "0fgv6lhrj4vfk4w0fbb9mdcnqy1ybgdzqx4064gw0x8gpzr44rfk"))))
+            "0s742wnv01ia0lj83nc7hjdpnz8dk9zpcq5nszrjn714jgjd3apc"))))
       (build-system gnu-build-system)
       (arguments
-       `(#:tests? #f              ; Test suite needs work.
-         #:make-flags (list (string-append "CC=" ,(cc-for-target))
-                            (string-append "PREFIX=" (assoc-ref %outputs "out")))
+       (list
+         #:tests? #f              ; Test suite needs work.
+         #:make-flags #~(list (string-append "CC=" #$(cc-for-target))
+                              (string-append "PREFIX=" #$output)
+                              (string-append "GIT_COMMIT=" #$version))
          #:phases
-         (modify-phases %standard-phases
-           (delete 'configure)    ; no configure script.
-           (add-before 'check 'pre-check
-             (lambda _
-               (setenv "HOME" (getcwd))
-               (with-output-to-file ".mailcap"
-                 (lambda ()
-                   (display "text/html;      links -dump %s; copiousoutput\n")))
-               #t))
-           (replace 'check
-             (lambda* (#:key tests? #:allow-other-keys)
-               (if tests?
-                 (with-directory-excursion "tests"
-                   (invoke "./check" "-V"))
-                 #t))))))
+         #~(modify-phases %standard-phases
+             (delete 'configure)    ; no configure script.
+             (add-before 'check 'pre-check
+               (lambda _
+                 (setenv "HOME" (getcwd))
+                 (with-output-to-file ".mailcap"
+                   (lambda ()
+                     (display "text/html;      links -dump %s; copiousoutput\n")))))
+             (replace 'check
+               (lambda* (#:key tests? #:allow-other-keys)
+                 (if tests?
+                   (with-directory-excursion "tests"
+                     (invoke "./check" "-V"))))))))
       (native-inputs
-       `(("links" ,(@ (gnu packages web-browsers) links))
-         ("tidy" ,(@ (gnu packages web) tidy))
-         ("valgrind" ,(@ (gnu packages valgrind) valgrind))))
+       (list (@ (gnu packages web-browsers) links)
+             (@ (gnu packages web) tidy)
+             (@ (gnu packages valgrind) valgrind/pinned)))
       (inputs
-       `(("curl" ,curl)
-         ("libseccomp" ,libseccomp)
-         ("libxml2" ,libxml2)))
+       (list curl libseccomp libxml2))
       (home-page "https://github.com/eafer/rdrview")
       (synopsis "Extract the main content from a webpage")
       (description "Command line tool to extract the main content from a
