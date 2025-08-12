@@ -1966,34 +1966,6 @@ documents, as well as for calculating & applying
 @@url{https://tools.ietf.org/html/rfc7396,RFC7396 JSON merge patches}.")
     (license license:bsd-3)))
 
-(define-public go-github-com-evanphx-json-patch-v5
-  (package
-    (name "go-github-com-evanphx-json-patch-v5")
-    (version "5.6.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/evanphx/json-patch")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0xrqha67ps24wmzx4yv87pkl25hk4v7lvcga0f18928jzzk4wbvk"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; TODO: Add test-flags
-       #:import-path "github.com/evanphx/json-patch/v5"))
-    (propagated-inputs `(("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-                         ("go-github-com-jessevdk-go-flags" ,go-github-com-jessevdk-go-flags)))
-    (home-page "https://github.com/evanphx/json-patch")
-    (synopsis "JSON-Patch")
-    (description
-     "@@code{jsonpatch} is a library which provides functionality for both applying
-@@url{http://tools.ietf.org/html/rfc6902,RFC6902 JSON patches} against
-documents, as well as for calculating & applying
-@@url{https://tools.ietf.org/html/rfc7396,RFC7396 JSON merge patches}.")
-    (license license:bsd-3)))
-
 (define-public go-github-com-fanliao-go-promise
   (package
     (name "go-github-com-fanliao-go-promise")
@@ -2308,27 +2280,6 @@ that supports Ruby's regex syntax.")
     (synopsis "Go OLE")
     (description
      "Go bindings for Windows COM using shared libraries instead of cgo.")
-    (license license:expat)))
-
-(define-public go-github-com-go-openapi-inflect
-  (package
-    (name "go-github-com-go-openapi-inflect")
-    (version "0.19.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/go-openapi/inflect")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1bsv7cb9ylkgglcn5nk99v417c1120523v2pgp5nqir8sgsplbwd"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/go-openapi/inflect"))
-    (home-page "https://github.com/go-openapi/inflect")
-    (synopsis #f)
-    (description #f)
     (license license:expat)))
 
 (define-public go-github-com-go-redis-redis
@@ -4124,7 +4075,7 @@ with other software in any manner of languages or platforms.")
                          ("go-github-com-go-ini-ini" ,go-github-com-go-ini-ini)
                          ("go-github-com-go-errors-errors" ,go-github-com-go-errors-errors)
                          ("go-github-com-go-chi-chi" ,go-github-com-go-chi-chi)
-                         ("go-github-com-getsentry-raven-go" ,go-github-com-getsentry-raven-go)
+                         ;("go-github-com-getsentry-raven-go" ,go-github-com-getsentry-raven-go)
                          ("go-github-com-gavv-monotime" ,go-github-com-gavv-monotime)
                          ("go-github-com-fatih-structs" ,go-github-com-fatih-structs)
                          ;; ("go-github-com-facebookgo-subset" ,go-github-com-facebookgo-subset)
@@ -5740,7 +5691,7 @@ for examples.")
                          ("go-github-com-go-ini-ini" ,go-github-com-go-ini-ini)
                          ("go-github-com-go-errors-errors" ,go-github-com-go-errors-errors)
                          ("go-github-com-go-chi-chi" ,go-github-com-go-chi-chi)
-                         ("go-github-com-getsentry-raven-go" ,go-github-com-getsentry-raven-go)
+                         ;("go-github-com-getsentry-raven-go" ,go-github-com-getsentry-raven-go)
                          ("go-github-com-gavv-monotime" ,go-github-com-gavv-monotime)
                          ("go-github-com-fatih-structs" ,go-github-com-fatih-structs)
                          ;; ("go-github-com-facebookgo-subset" ,go-github-com-facebookgo-subset)
@@ -6705,32 +6656,6 @@ documentation, please contact me.")
     (description "Go library for interacting with
 @url{https://haveibeenpwned.com/,HaveIBeenPwned}.")
     (license license:expat)))
-
-(define-public go-go-opentelemetry-io-proto-otlp
-  (package
-    (name "go-go-opentelemetry-io-proto-otlp")
-    (version "0.11.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/open-telemetry/opentelemetry-proto-go")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1kyysszlkzwrvsis4lz7gby62nf9f0hbn342cq2n89h1y4bvxzw4"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "go.opentelemetry.io/proto/otlp"))
-    (propagated-inputs `(;; ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-                         ("go-google-golang-org-grpc" ,go-google-golang-org-grpc)
-                         ;; ("go-github-com-grpc-ecosystem-grpc-gateway" ,go-github-com-grpc-ecosystem-grpc-gateway)
-                         ;; ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
-                         ))
-    (home-page "https://go.opentelemetry.io/proto/otlp")
-    (synopsis #f)
-    (description #f)
-    (license license:asl2.0)))
 
 (define-public go-google-golang-org-api
   (package
