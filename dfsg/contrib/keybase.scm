@@ -27,9 +27,9 @@
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system go)
   #:use-module (gnu packages base)
-  #:use-module (gnu packages certs)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages golang)
+  #:use-module (gnu packages nss)
   #:use-module (ice-9 match))
 
 (define-record-type* <go-git-reference>
