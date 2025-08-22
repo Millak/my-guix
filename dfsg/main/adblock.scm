@@ -1,4 +1,4 @@
-;;; Copyright © 2023 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2023, 2025 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -25,10 +25,11 @@
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system pyproject)
   #:use-module (gnu packages check)
-  #:use-module (gnu packages crates-io)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-build)
-  #:use-module (gnu packages rust-apps))
+  #:use-module (gnu packages rust)
+  #:use-module (gnu packages rust-apps)
+  #:use-module (dfsg main rust-crates))
 
 (define-public python-adblock
   ;; A few commits after the 0.6.0 release to fix build issues.
@@ -45,45 +46,38 @@
                 (file-name (git-file-name name version))
                 (sha256
                  (base32
-                  "129q3wljhm12s9im9lvvs1n52sjbz21rkb38qhchd2nc66a0mjp5"))
-                (snippet
-                 #~(begin
-                     (use-modules (guix build utils))
-                     (substitute* "Cargo.toml"
-                       (("\"=([[:digit:]]+(\\.[[:digit:]]+)*)" _ version)
-                        (string-append "\"^" version))
-                       ;; Only make the cdylib.
-                       (("\"rlib\",") ""))))))
-      (build-system cargo-build-system)
+                  "129q3wljhm12s9im9lvvs1n52sjbz21rkb38qhchd2nc66a0mjp5"))))
+      (build-system pyproject-build-system)
       (arguments
        (list
          #:imported-modules `(,@%cargo-build-system-modules
                               ,@%pyproject-build-system-modules)
-         #:modules '((guix build cargo-build-system)
-                     ((guix build pyproject-build-system) #:prefix py:)
+         #:modules '(((guix build cargo-build-system) #:prefix cargo:)
+                     (guix build pyproject-build-system)
                      (guix build utils))
-         #:install-source? #f
-         #:cargo-inputs
-         `(("rust-adblock" ,rust-adblock-0.5)
-           ("rust-pyo3" ,rust-pyo3-0.16))
          #:phases
          #~(modify-phases %standard-phases
-             (add-after 'build 'build-wheel
-               (lambda _
-                 (invoke "maturin" "build" "--release" "--out" "dist/")))
-             (replace 'install
-               (assoc-ref py:%standard-phases 'install))
-             ;; Move 'check after 'install like with the pyproject-build-system.
-             (add-after 'install 'check
-               (lambda* (#:key inputs outputs tests? #:allow-other-keys)
-                 (py:add-installed-pythonpath inputs outputs)
-                 (when tests?
-                   (invoke "pytest" "-vv" "tests" "--color=yes")))))))
+             (add-after 'ensure-no-cythonized-files 'prepare-cargo-build-system
+               (lambda args
+                 (for-each
+                   (lambda (phase)
+                     (format #t "Running cargo phase: ~a~%" phase)
+                     (apply (assoc-ref cargo:%standard-phases phase)
+                            #:vendor-dir "vendor"
+                            args))
+                   '(unpack-rust-crates
+                     configure
+                     check-for-pregenerated-files
+                     patch-cargo-checksums)))))))
       (native-inputs
        (list maturin
              python-pytest
              python-toml
-             python-wrapper))
+             python-wrapper
+             rust
+             `(,rust "cargo")))
+      (inputs
+       (cargo-inputs 'python-adblock #:module '(dfsg main rust-crates)))
       (home-page "https://github.com/ArniDagur/python-adblock")
       (synopsis "Adblock library in Python")
       (description
