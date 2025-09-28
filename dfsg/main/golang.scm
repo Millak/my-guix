@@ -4008,7 +4008,7 @@ with other software in any manner of languages or platforms.")
                          ("go-github-com-shurcool-httpfs" ,go-github-com-shurcool-httpfs)
                          ("go-github-com-sergi-go-diff" ,go-github-com-sergi-go-diff)
                          ("go-github-com-segmentio-go-loggly" ,go-github-com-segmentio-go-loggly)
-                         ;; ("go-github-com-sebest-xff" ,go-github-com-sebest-xff)
+                         ("go-github-com-sebest-xff" ,go-github-com-sebest-xff)
                          ;; ("go-github-com-rubenv-sql-migrate" ,go-github-com-rubenv-sql-migrate)
                          ;; ("go-github-com-rs-xhandler" ,go-github-com-rs-xhandler)
                          ("go-github-com-rs-cors" ,go-github-com-rs-cors)
@@ -4536,28 +4536,6 @@ file handles, and for using named pipes as a net transport.")
 and ARM64 for ARM. On AVX512 it provides an up to 8x improvement (over 3 GB/s
 per core).  SHA Extensions give a performance boost of close to 4x over native.")
     (license license:asl2.0)))
-
-(define-public go-github-com-mitchellh-go-ps
-  (package
-    (name "go-github-com-mitchellh-go-ps")
-    (version "1.0.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/mitchellh/go-ps")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0ipcbz66x7q8xczi7cyfq06y7n7v0syvkp730vn9jrn7s8f5ag0z"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "github.com/mitchellh/go-ps"))
-    (home-page "https://github.com/mitchellh/go-ps")
-    (synopsis "Process List Library for Go")
-    (description
-     "ps provides an API for finding and listing processes in a platform-agnostic way.")
-    (license license:expat)))
 
 (define-public go-github-com-mrjones-oauth
   (package
@@ -5451,7 +5429,7 @@ for examples.")
                          ("go-github-com-shurcool-httpfs" ,go-github-com-shurcool-httpfs)
                          ("go-github-com-sergi-go-diff" ,go-github-com-sergi-go-diff)
                          ("go-github-com-segmentio-go-loggly" ,go-github-com-segmentio-go-loggly)
-                         ;; ("go-github-com-sebest-xff" ,go-github-com-sebest-xff)
+                         ("go-github-com-sebest-xff" ,go-github-com-sebest-xff)
                          ;; ("go-github-com-rubenv-sql-migrate" ,go-github-com-rubenv-sql-migrate)
                          ;; ("go-github-com-rs-xhandler" ,go-github-com-rs-xhandler)
                          ("go-github-com-rs-cors" ,go-github-com-rs-cors)
@@ -6655,33 +6633,6 @@ interacting with Google's gRPC APIs.")
 efficiently.")
     (license license:expat)))
 
-(define-public go-gopkg-in-inf-v0
-  (package
-    (name "go-gopkg-in-inf-v0")
-    (version "0.9.1")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://gopkg.in/inf.v0")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "00k5iqjcp371fllqxncv7jkf80hn1zww92zm78cclbcn4ybigkng"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:import-path "gopkg.in/inf.v0"
-       #:unpack-path "gopkg.in/inf.v0"))
-    (home-page "https://gopkg.in/inf.v0")
-    (synopsis #f)
-    (description
-     "Package inf (type inf.Dec) implements \"infinite-precision\" decimal arithmetic.
-\"Infinite precision\" describes two characteristics: practically unlimited
-precision for decimal number representation and no support for calculating with
-any specific fixed precision. (Although there is no practical limit on
-precision, inf.Dec can only represent finite decimals.)")
-    (license license:bsd-3)))
-
 (define-public go-gopkg-in-src-d-go-billy-v4
   (package
     (inherit go-github-com-go-git-go-billy-v5)
@@ -7073,67 +7024,6 @@ known as the Windows firewall.")
      "Schema of the external API types that are served by the Kubernetes API server.")
     (license license:asl2.0)))
 
-(define-public go-k8s-io-apimachinery
-  (package
-    (name "go-k8s-io-apimachinery")
-    (version "0.26.1")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/kubernetes/apimachinery")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0z8aj1q7gs86yh2hmjyw6xq78mc6j5bqmdzflb3fffbp9dw4dvxy"))))
-    (build-system go-build-system)
-    (arguments
-     '(#:tests? #f      ; TODO: Add test flags
-       #:import-path "k8s.io/apimachinery"))
-    (propagated-inputs `(("go-gopkg-in-yaml-v3" ,go-gopkg-in-yaml-v3)
-                         ("go-gopkg-in-yaml-v2" ,go-gopkg-in-yaml-v2)
-                         ("go-gopkg-in-check-v1" ,go-gopkg-in-check-v1)
-                         ("go-google-golang-org-protobuf" ,go-google-golang-org-protobuf)
-                         ("go-golang-org-x-text" ,go-golang-org-x-text)
-                         ("go-github-com-pmezard-go-difflib" ,go-github-com-pmezard-go-difflib)
-                         ("go-github-com-pkg-errors" ,go-github-com-pkg-errors)
-                         ("go-github-com-onsi-gomega" ,go-github-com-onsi-gomega)
-                         ("go-github-com-onsi-ginkgo-v2" ,go-github-com-onsi-ginkgo-v2)
-                         ;; ("go-github-com-niemeyer-pretty" ,go-github-com-niemeyer-pretty)
-                         ("go-github-com-modern-go-reflect2" ,go-github-com-modern-go-reflect2)
-                         ("go-github-com-modern-go-concurrent" ,go-github-com-modern-go-concurrent)
-                         ("go-github-com-kr-text" ,go-github-com-kr-text)
-                         ("go-github-com-json-iterator-go" ,go-github-com-json-iterator-go)
-                         ("go-github-com-go-logr-logr" ,go-github-com-go-logr-logr)
-                         ("go-sigs-k8s-io-yaml" ,go-sigs-k8s-io-yaml)
-                         ("go-sigs-k8s-io-structured-merge-diff-v4" ,go-sigs-k8s-io-structured-merge-diff-v4)
-                         ("go-sigs-k8s-io-json" ,go-sigs-k8s-io-json)
-                         ("go-k8s-io-utils" ,go-k8s-io-utils)
-                         ("go-k8s-io-kube-openapi" ,go-k8s-io-kube-openapi)
-                         ("go-k8s-io-klog-v2" ,go-k8s-io-klog-v2)
-                         ("go-gopkg-in-inf-v0" ,go-gopkg-in-inf-v0)
-                         ("go-golang-org-x-net" ,go-golang-org-x-net)
-                         ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
-                         ("go-github-com-spf13-pflag" ,go-github-com-spf13-pflag)
-                         ;; ("go-github-com-mxk-go-flowrate" ,go-github-com-mxk-go-flowrate)
-                         ;; ("go-github-com-moby-spdystream" ,go-github-com-moby-spdystream)
-                         ("go-github-com-google-uuid" ,go-github-com-google-uuid)
-                         ("go-github-com-google-gofuzz" ,go-github-com-google-gofuzz)
-                         ("go-github-com-google-go-cmp" ,go-github-com-google-go-cmp)
-                         ("go-github-com-google-gnostic" ,go-github-com-google-gnostic)
-                         ("go-github-com-golang-protobuf" ,go-github-com-golang-protobuf)
-                         ("go-github-com-gogo-protobuf" ,go-github-com-gogo-protobuf)
-                         ("go-github-com-evanphx-json-patch" ,go-github-com-evanphx-json-patch-v4)
-                         ;; ("go-github-com-elazarl-goproxy" ,go-github-com-elazarl-goproxy)
-                         ("go-github-com-davecgh-go-spew" ,go-github-com-davecgh-go-spew)
-                         ("go-github-com-armon-go-socks5" ,go-github-com-armon-go-socks5)))
-    (home-page "https://k8s.io/apimachinery")
-    (synopsis "apimachinery")
-    (description
-     "Scheme, typing, encoding, decoding, and conversion packages for Kubernetes and
-Kubernetes-like API objects.")
-    (license license:asl2.0)))
-
 (define-public go-k8s-io-client-go
   (package
     (name "go-k8s-io-client-go")
@@ -7165,7 +7055,7 @@ Kubernetes-like API objects.")
                          ("go-github-com-munnerz-goautoneg" ,go-github-com-munnerz-goautoneg)
                          ("go-github-com-modern-go-reflect2" ,go-github-com-modern-go-reflect2)
                          ("go-github-com-modern-go-concurrent" ,go-github-com-modern-go-concurrent)
-                         ;; ("go-github-com-moby-spdystream" ,go-github-com-moby-spdystream)
+                         ("go-github-com-moby-spdystream" ,go-github-com-moby-spdystream)
                          ("go-github-com-mailru-easyjson" ,go-github-com-mailru-easyjson)
                          ("go-github-com-json-iterator-go" ,go-github-com-json-iterator-go)
                          ("go-github-com-josharian-intern" ,go-github-com-josharian-intern)
