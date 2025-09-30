@@ -22,6 +22,7 @@
   #:use-module (guix utils)
   #:use-module (guix gexp)
   #:use-module (gnu packages qt)
+  #:use-module (gnu packages vulkan)
   #:use-module (gnu packages web-browsers)
   #:use-module (gnu packages xdisorg)
   #:use-module (dfsg main adblock))
@@ -56,6 +57,7 @@
     (inputs (modify-inputs (package-inputs qutebrowser)
                            (prepend python-adblock
                                     rofi
+                                    vulkan-loader
                                     ;; Can only add 1 in the manifest
                                     qtwayland)))
     (arguments
@@ -71,7 +73,11 @@
                  `("QT_PLUGIN_PATH" prefix
                    (,(dirname
                        (search-input-directory
-                         inputs "lib/qt6/plugins/wayland-decoration-client")))))))))))))
+                         inputs "lib/qt6/plugins/wayland-decoration-client"))))
+                 ;; These two are needed for vulkan rendering to work.
+                 `("LD_LIBRARY_PATH" =
+                   (,(dirname (search-input-file inputs "lib/libvulkan.so.1"))))
+                 `("QSG_RHI_BACKEND" = ("vulkan")))))))))))
 
 (define-public qutebrowser-with-widevine
   (package/inherit qutebrowser
