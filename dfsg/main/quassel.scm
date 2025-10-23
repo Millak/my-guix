@@ -1,4 +1,4 @@
-;;; Copyright © 2022, 2023 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2022, 2023, 2025 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -32,4 +32,7 @@
         #~`("-DBUILD_TESTING=ON"
             "-DWANT_CORE=OFF"
             "-DWANT_MONO=OFF"))))
+    (inputs
+     (modify-inputs (package-inputs quassel)
+                    (delete "snorenotify")))
     (properties '((upstream-name . "quassel")))))
