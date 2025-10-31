@@ -65,7 +65,7 @@
                      (invoke "./check" "-V"))))))))
       (native-inputs
        (list (@ (gnu packages web-browsers) links)
-             (@ (gnu packages web) tidy)
+             (@ (gnu packages web) tidy-html)
              (@ (gnu packages valgrind) valgrind/pinned)))
       (inputs
        (list curl libseccomp libxml2))
