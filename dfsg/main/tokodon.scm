@@ -21,7 +21,6 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system qt)
-  #:use-module (gnu packages kde)
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages qt))
 
