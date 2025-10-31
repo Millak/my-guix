@@ -1,4 +1,4 @@
-;;; Copyright © 2020 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2020, 2025 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -49,11 +49,9 @@
              (lambda _
                (invoke "autoreconf" "-vfi"))))))
       (native-inputs
-       `(("autoconf" ,autoconf)
-         ("automake" ,automake)
-         ("pkg-config" ,pkg-config)))
+       (list autoconf automake pkg-config))
       (inputs
-       `(("fuse" ,fuse)))
+       (list fuse-2))
       (home-page "https://github.com/philipl/pifs/")
       (synopsis "πfs - the data-free filesystem")
       (description "πfs is a revolutionary new file system that, instead of
