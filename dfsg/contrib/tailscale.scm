@@ -76,7 +76,7 @@
             (use-modules ((guix build gnu-build-system) #:prefix gnu:)
                          (guix build utils))
             (let ((inputs (list
-                            #+go-1.24
+                            #+go-1.25
                             #+tar
                             #+bzip2
                             #+gzip)))
@@ -103,7 +103,7 @@
 (define-public tailscale
   (package
     (name "tailscale")
-    (version "1.84.3")
+    (version "1.90.5")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
@@ -111,15 +111,15 @@
                     (commit (string-append "v" version))
                     (hash
                      (base32
-                      "1cdmr6z351i2ammr82gvbs2x3cp9w75q0nzvvk91rsx2khvd8yyh"))))
+                      "0jg80y06kmg9q4dpsgw3rz4kkbkndcqhpa4yj86w8ahr6dap0cqb"))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "0p46r7r6wa45c6fx4m7bk9lagb8ndr0kp6yp7hf0p53w4qz9d3pv"))))
+                "0wzsij8byfhb7x756110c1lsxivgcq4nj9sjx652hpvfq8dgy1jm"))))
     (build-system go-build-system)
     (arguments
      (list
-       #:go go-1.24
+       #:go go-1.25
        #:install-source? #f
        #:tests? #f
        #:import-path "tailscale.com"
@@ -135,7 +135,7 @@
              (lambda* (#:key import-path #:allow-other-keys)
                (substitute* (string-append "src/" import-path "/net/tstun/tun_linux.go")
                  (("/sbin/modprobe") "modprobe"))
-               (substitute* (string-append "src/" import-path "/ipn/ipnlocal/c2n.go")
+               (substitute* (string-append "src/" import-path "/feature/clientupdate/clientupdate.go")
                  (("/usr/local/bin") (string-append #$output "/bin")))))
            (replace 'build
              (lambda* (#:key import-path build-flags #:allow-other-keys)
@@ -160,7 +160,8 @@
                (let* ((out #$output)
                       (tailscale (string-append out "/bin/tailscale"))
                       (share (string-append out "/share"))
-                      (bash (string-append out "/etc/bash_completion.d/tailscale"))
+                      (bash (string-append
+                              share "/bash-completion/completions/tailscale"))
                       (fish (string-append
                               share "/fish/vendor_completions.d/tailscale.fish"))
                       (zsh (string-append share "/zsh/site-functions/_tailscale")))

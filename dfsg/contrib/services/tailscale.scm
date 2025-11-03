@@ -79,6 +79,8 @@
                               '())
                          "-verbose" (number->string #$verbosity))
                    #:log-file "/var/log/tailscaled.log"))
+        ;(stop #~(not (system* #$(file-append (tailscaled-configuration-package config)
+        ;                                     "/bin/tailscaled") "--cleanup")))
         (stop #~(make-kill-destructor))))))
 
 (define %tailscaled-log-rotation
