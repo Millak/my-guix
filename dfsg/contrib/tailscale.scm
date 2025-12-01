@@ -122,6 +122,10 @@
        #:go go-1.25
        #:install-source? #f
        #:tests? #f
+       #:modules
+       '((guix build go-build-system)
+         (guix build utils)
+         (ice-9 match))
        #:import-path "tailscale.com"
        #:phases
        #~(modify-phases %standard-phases
@@ -156,27 +160,21 @@
                  (list "tailscale.com/cmd/tailscale"
                        "tailscale.com/cmd/tailscaled"))))
            (add-after 'install 'install-shell-completions
-             (lambda* (#:key outputs #:allow-other-keys)
-               (let* ((out #$output)
-                      (tailscale (string-append out "/bin/tailscale"))
-                      (share (string-append out "/share"))
-                      (bash (string-append
-                              share "/bash-completion/completions/tailscale"))
-                      (fish (string-append
-                              share "/fish/vendor_completions.d/tailscale.fish"))
-                      (zsh (string-append share "/zsh/site-functions/_tailscale")))
-                 (mkdir-p (dirname bash))
-                 (mkdir-p (dirname fish))
-                 (mkdir-p (dirname zsh))
-                 (with-output-to-file bash
-                   (lambda ()
-                     (invoke tailscale "completion" "bash")))
-                 (with-output-to-file fish
-                   (lambda ()
-                     (invoke tailscale "completion" "fish")))
-                 (with-output-to-file zsh
-                   (lambda ()
-                     (invoke tailscale "completion" "zsh"))))))
+             (lambda* (#:key native-inputs #:allow-other-keys)
+               (for-each
+                 (match-lambda
+                   ((shell . path)
+                    (mkdir-p (in-vicinity #$output (dirname path)))
+                    (let ((binary
+                            (if #$(%current-target-system)
+                                (search-input-file native-inputs "bin/tailscale")
+                                (in-vicinity #$output "bin/tailscale"))))
+                      (with-output-to-file (in-vicinity #$output path)
+                                           (lambda _
+                                             (invoke binary "completion" shell))))))
+                 '(("bash" . "share/bash-completion/completions/tailscale")
+                   ("fish" . "share/fish/vendor_completions.d/tailscale.fish")
+                   ("zsh"  . "share/zsh/site-functions/_tailscale")))))
            ;; Make sure this comes after 'install-binaries.
            (add-before 'strip 'wrap-binaries
              (lambda* (#:key inputs outputs #:allow-other-keys)
@@ -208,6 +206,10 @@
                   #~()))))
     (inputs
      (list findutils iproute iptables kmod openresolv procps))
+    (native-inputs
+      (if (%current-target-system)
+          (list this-package)
+          '()))
     (home-page "https://github.com/tailscale/tailscale")
     (synopsis "Tailscale VPN client")
     (description "Tailscale lets you easily manage access to private resources,
