@@ -100,10 +100,11 @@
       #:hash hash-value
       #:hash-algo hash-algorithm)))
 
+;; 1.92.1+ needs go-1.25.5+
 (define-public tailscale
   (package
     (name "tailscale")
-    (version "1.90.9")
+    (version "1.92.0")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
@@ -111,11 +112,11 @@
                     (commit (string-append "v" version))
                     (hash
                      (base32
-                      "0hyn7lxfgfvrvwi2vffz4xqcj1grydcp40zv8zavxlxxb0zn7yl1"))))
+                      "09zypisjhgyn1gvxa8l0dpjff3s1myhfd8n375z6ksdfp0gssdx7"))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "1r7inymz07lgr45bxfw2kw6qs59nxpaw2ppd2pb98kk4pzw9ynml"))))
+                "10r1lggc5d3sqw2pa3f1n8x73q0spkh6ahv4kjss6xii7gbdad95"))))
     (build-system go-build-system)
     (arguments
      (list
