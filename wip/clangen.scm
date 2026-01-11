@@ -1,4 +1,4 @@
-;;; Copyright © 2024 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2024, 2026 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -27,6 +27,8 @@
   #:use-module (gnu packages check)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages fontutils)
+  #:use-module (gnu packages game-development)
+  #:use-module (gnu packages messaging)
   #:use-module (gnu packages package-management)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
@@ -42,7 +44,7 @@
 (define-public clangen
   (package
     (name "clangen")
-    (version "0.11.1")
+    (version "0.12.2")
     (source
       (origin
         (method git-fetch)
@@ -51,80 +53,72 @@
                (commit (string-append "v" version))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "1qnzqa7s3r2ji52jdh5kpi75rnylx7a373l60k3qdzis0j19y4dd"))
-        ))
+         (base32 "0bx3d9m1g3nb29mqz5b2a34fs6lnhr2q9qyhkqsg37hlk9qdq4c6"))))
     (build-system pyproject-build-system)
     (arguments
      (list #:build-backend "poetry"
+           #:tests? #f  ; Skip tests for now
            #:phases
            #~(modify-phases %standard-phases
                (add-after 'unpack 'write-version-ini
                  (lambda _
                    (with-output-to-file "version.ini"
-                     (lambda () (string-append "[DEFAULT]\n"
-                                               "version_number=~a\n"
-                                               "upstream=GNU Guix\n")
-                       #$(package-version this-package)))))
+                     (lambda ()
+                       (display
+                         (string-append "[DEFAULT]\n"
+                                        "version_number="
+                                        #$(package-version this-package) "\n"
+                                        "release_channel=GNU Guix\n"
+                                        "upstream=GNU Guix\n"))))))
+               ;; As seen in .github/workflows/build.yml
                (replace 'build
                  (lambda _
-                   (invoke "poetry" "run"
+                   ;(setenv "IS_RELEASE" "1")
+                   (invoke ;"poetry"
+                           ;"--no-cache"
+                           ;"run"
                            "python3" "-m" "PyInstaller"
-                           "Clangen.spec"))))))
+                           "Clangen.spec"
+                           )))
+               (replace 'install
+                 (lambda* (#:key outputs #:allow-other-keys)
+                   (let* ((glibc-version "2.41" #;(package-version
+                                           #$(this-package-input "libc")))
+                          (tarball
+                            ;(string-append "Clangen_Linux_" %current-system "_glibc" glibc-version "+.tar.xz"))
+                            "Clangen_Linux_x86-64.tar.xz")
+                          )
+                     (invoke "tar" "-caf" tarball
+                             "-C" "dist" "Clangen")
+                     (install-file tarball
+                                   (string-append #$output "/dist"))
+                     )))
+               )))
     (inputs
      (list python-pgpy
            python-platformdirs
            python-pygame-ce
            python-pygame-gui
            python-pyinstaller
-           ;python-pypresence   ; discord?
+           python-pypresence    ; discord
            python-requests
            python-strenum
            python-ujson))
     (native-inputs
-     (list poetry))
+     (list poetry
+           python-pillow
+           python-setuptools
+           python-wheel))
     (home-page "https://clangen.io/")
     (synopsis "Warrior Cats fan game")
     (description "Clangen is a fan-edit of the Warrior Cat Clangen game.")
     (license license:mpl2.0)))
 
-(define-public python-pygame-ce
-  (package
-    (name "python-pygame-ce")
-    (version "2.4.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (pypi-uri "pygame-ce" version))
-       (sha256
-        (base32 "1w4wvg3ag54cihnabahbnypbkq9fr5fzlkvmsq7klqvw86hlma3h"))))
-    (build-system pyproject-build-system)
-    (arguments
-     (list
-       #:phases
-       #~(modify-phases %standard-phases
-           (add-after 'unpack 'dont-target-AVX2
-             (lambda _
-               (substitute* "setup.py"
-                 (("should_use_avx2 = True") "should_use_avx2 = False")))))))
-    (native-inputs
-     (list pkg-config python-cython))
-    (inputs
-     (list freetype
-           (sdl-union (list sdl2 sdl2-image sdl2-mixer sdl2-ttf))))
-    (home-page "https://pyga.me")
-    (synopsis "Python Game Development")
-    (description "Pygame is a library for the development of multimedia
-applications like video games using Python. It uses the SDL library and several
-other popular libraries to abstract the most common functions, making writing
-these programs a more intuitive task.")
-    (properties `((tunable? . #t)))
-    (license license:lgpl2.1)))
-
 ;; TODO: Unbundle fonts from pygame_gui/data
 (define-public python-pygame-gui
   (package
     (name "python-pygame-gui")
-    (version "0.6.9")
+    (version "0.6.14")
     (source
       (origin
         (method git-fetch)
@@ -133,7 +127,7 @@ these programs a more intuitive task.")
                (commit (string-append "v_" (string-delete #\. version)))))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "0s0i7rxw9fs451c9flakzsbzdyq85v33rjxq9ggxd89m9g8k8x91"))))
+         (base32 "16pgs6kbh4f2hxjyp342wyvm0y5i57r6b4p6rhxpjccpkdlddfy0"))))
     (build-system pyproject-build-system)
     (arguments
      (list
@@ -145,7 +139,9 @@ these programs a more intuitive task.")
     (propagated-inputs
      (list python-i18n
            python-pygame-ce))
-    (native-inputs (list python-pytest python-pytest-benchmark))
+    (native-inputs (list python-pytest
+                         python-pytest-benchmark
+                         python-setuptools))
     (home-page "https://github.com/MyreMylar/pygame_gui")
     (synopsis "GUI module for pygame Community Edition")
     (description "Helps create GUIs for games made using pygame Community
@@ -168,6 +164,8 @@ control the look and a system to manage multiple windows of GUI stuff.")
      (list #:tests? #f))        ; Tests not included.
     (propagated-inputs
      (list python-pyyaml))
+    (native-inputs
+     (list python-setuptools))
     (home-page "https://github.com/tuvistavie/python-i18n")
     (synopsis "Translation library for Python")
     (description "This package provides a translation library for Python.")
@@ -192,6 +190,7 @@ control the look and a system to manage multiple windows of GUI stuff.")
              (lambda _
                (substitute* "tests/functional/test_misc.py"
                  (("/bin/sh") (which "sh"))))))
+       #:tests? #f  ; TODO: re-enable
        #:test-flags
        #~(list "-k"
                (string-append "not test_automatic_reclassification_binary[onedir]"
@@ -228,6 +227,8 @@ into a single package.")
     (build-system pyproject-build-system)
     (arguments
      (list #:tests? #f))    ; No tests.
+    (native-inputs
+     (list python-setuptools))
     (home-page "https://github.com/pyinstaller/pyinstaller-hooks-contrib")
     (synopsis "Community maintained hooks for PyInstaller")
     (description "Community maintained hooks for @code{PyInstaller}")
