@@ -56,7 +56,7 @@
          (base32 "0bx3d9m1g3nb29mqz5b2a34fs6lnhr2q9qyhkqsg37hlk9qdq4c6"))))
     (build-system pyproject-build-system)
     (arguments
-     (list #:build-backend "poetry"
+     (list ;#:build-backend "poetry"
            #:tests? #f  ; Skip tests for now
            #:phases
            #~(modify-phases %standard-phases
@@ -68,16 +68,21 @@
                          (string-append "[DEFAULT]\n"
                                         "version_number="
                                         #$(package-version this-package) "\n"
-                                        "release_channel=GNU Guix\n"
+                                        "release_channel=stable\n"
                                         "upstream=GNU Guix\n"))))))
                ;; As seen in .github/workflows/build.yml
+               (add-before 'build 'pre-build
+                 (lambda _
+                   (setenv "IS_RELEASE" "1")
+                   (setenv "HOME" "/tmp")
+                   ))
                (replace 'build
                  (lambda _
-                   ;(setenv "IS_RELEASE" "1")
-                   (invoke ;"poetry"
-                           ;"--no-cache"
+                   (invoke "poetry" "--no-cache"
                            ;"run"
-                           "python3" "-m" "PyInstaller"
+                           "run" "pyinstaller"
+                           ;"python3" "-m"
+                           ;"PyInstaller"
                            "Clangen.spec"
                            )))
                (replace 'install
@@ -88,7 +93,7 @@
                             ;(string-append "Clangen_Linux_" %current-system "_glibc" glibc-version "+.tar.xz"))
                             "Clangen_Linux_x86-64.tar.xz")
                           )
-                     (invoke "tar" "-caf" tarball
+                     (invoke "tar" "-cvf" tarball
                              "-C" "dist" "Clangen")
                      (install-file tarball
                                    (string-append #$output "/dist"))
