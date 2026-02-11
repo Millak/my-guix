@@ -1,4 +1,4 @@
-;;; Copyright © 2021-2025 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2021-2026 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -27,8 +27,8 @@
   #:use-module (gnu packages lua))
 
 (define-public mpv-sponsorblock-minimal
-  (let ((commit "fc0db1fbffc873ca02ced7602274393fde8857e5")     ; 20250909
-        (revision "9"))
+  (let ((commit "8f4b186d6ea46e6fe0e5e94a53dda2f50dceb576")     ; 20251221
+        (revision "10"))
   (package
     (name "mpv-sponsorblock-minimal")
     (version (git-version "0" revision commit))
@@ -40,7 +40,7 @@
                (commit commit)))
         (file-name (git-file-name name version))
         (sha256
-         (base32 "0fvxb0myxnr9y329wi1ybb7hgs6ygn0bfshf4l2z4vbj0vb0ks0c"))))
+         (base32 "19pa8yaqmd57rqjavmkr0n9w7wqv0nn08yq8i6kld70m51rawnnv"))))
     (build-system trivial-build-system)
     (arguments
      (list
