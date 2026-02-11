@@ -1,4 +1,4 @@
-;;; Copyright © 2023 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2023, 2026 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -27,7 +27,7 @@
 (define-public mptcpd
   (package
     (name "mptcpd")
-    (version "0.12")
+    (version "0.14")
     (source (origin
               (method url-fetch)
               (uri (string-append
@@ -35,7 +35,7 @@
                      version "/mptcpd-" version ".tar.gz"))
               (sha256
                (base32
-                "1ghwhgnjp3hah0cndjs1v7cgr50qnj04cpykihb3lxrv72bx81q5"))))
+                "10jcqn50mmxdmb09mw8yfg3zimzzkddinm1nsgq1zkmv0mbxdkld"))))
     (build-system gnu-build-system)
     (inputs
      (list ell))
