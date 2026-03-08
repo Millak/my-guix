@@ -27,7 +27,8 @@
 
 (define rust-adblock-0.5.6
   (crate-source "adblock" "0.5.6"
-                "05c3iw2i6nyimxknd4avg61ibv7mzpzfrqgkvv98zj4vp3smwy17"))
+                "05c3iw2i6nyimxknd4avg61ibv7mzpzfrqgkvv98zj4vp3smwy17"
+                #:snippet '(delete-file-recursively "data/test")))
 
 (define rust-addr-0.14.0
   (crate-source "addr" "0.14.0"
@@ -71,7 +72,8 @@
 
 (define rust-flate2-1.0.24
   (crate-source "flate2" "1.0.24"
-                "1xmzzg91c0hdl39qz0hwph0w629bva1dh21j3zyqp7xd4x60yazq"))
+                "1xmzzg91c0hdl39qz0hwph0w629bva1dh21j3zyqp7xd4x60yazq"
+                #:snippet '(delete-file-recursively "tests")))
 
 (define rust-form-urlencoded-1.0.1
   (crate-source "form_urlencoded" "1.0.1"
@@ -199,7 +201,8 @@
 
 (define rust-seahash-3.0.7
   (crate-source "seahash" "3.0.7"
-                "0iqg12lxkn0ivsfa1gkylcwj5wmi6zl87mbizlrkg918s6hprxaq"))
+                "0iqg12lxkn0ivsfa1gkylcwj5wmi6zl87mbizlrkg918s6hprxaq"
+                #:snippet '(delete-file "logo.png")))
 
 (define rust-serde-1.0.139
   (crate-source "serde" "1.0.139"
@@ -243,7 +246,8 @@
 
 (define rust-unicode-ident-1.0.2
   (crate-source "unicode-ident" "1.0.2"
-                "19zf5lzhzix2s35lp5lckdy90sw0kfi5a0ii49d24dcj7yk1pihm"))
+                "19zf5lzhzix2s35lp5lckdy90sw0kfi5a0ii49d24dcj7yk1pihm"
+                #:snippet '(delete-file-recursively "tests")))
 
 (define rust-unicode-normalization-0.1.21
   (crate-source "unicode-normalization" "0.1.21"
