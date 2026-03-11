@@ -50,7 +50,7 @@
                (install-file "b43-fwcutter" (string-append #$output "/bin"))
                (install-file "b43-fwcutter.1"
                              (string-append #$output "/share/man/man1")))))))
-    (home-page "https://wireless.wiki.kernel.org/en/users/Drivers/b43")
+    (home-page "https://wireless.docs.kernel.org/en/latest/en/users/drivers/b43.html")
     (synopsis "Tool to extract firmware from binary Broadcom 43xx driver files")
     (description "@code{b43-fwcutter} can extract the firmware for your
 Broadcom 43xx hardware from different closed source drivers.  The b43 driver

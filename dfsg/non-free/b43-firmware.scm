@@ -71,7 +71,7 @@ Supported chipsets:
 @item BCM43227;
 @item BCM43228;
 @item BCM4331;
-@item BCM47xx (detection not reliable, may not support all versions)
+@item BCM47xx (detection not reliable, may not support all versions).
 @end enumerate")
     (license ((@@ (guix licenses) license)
               "Nonfree"

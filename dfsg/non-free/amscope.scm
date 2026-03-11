@@ -23,6 +23,7 @@
   #:use-module (guix gexp)
   #:use-module (guix build-system copy)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages bash)
   #:use-module (gnu packages bootstrap) ; glibc-dynamic-linker
   #:use-module (gnu packages compression)
   #:use-module (gnu packages elf)
@@ -78,32 +79,33 @@
                   (string-append "Icon=" #$output "/share/icons/hicolor/128x128/apps")))))
            (add-before 'install 'patchelf
              (lambda* (#:key inputs outputs #:allow-other-keys)
-               (let* ((ld-so  (search-input-file inputs #$(glibc-dynamic-linker)))
-                      (rpath  (string-join
-                                (list (dirname ld-so)
-                                      (dirname
-                                        (search-input-file inputs "/lib/libz.so.1"))
-                                      (dirname
-                                        (search-input-file inputs "/lib/libfontconfig.so.1"))
-                                      (dirname
-                                        (search-input-file inputs "/lib/libfreetype.so.6"))
-                                      (dirname
-                                        (search-input-file inputs "/lib/libxcb-glx.so.0"))
-                                      (dirname
-                                        (search-input-file inputs "/lib/libX11-xcb.so.1"))
-                                      (dirname
-                                        (search-input-file inputs "/lib/libX11.so.6"))
-                                      (dirname
-                                        (search-input-file inputs "/lib/libXrender.so.1"))
-                                      (dirname
-                                        (search-input-file inputs "/lib/libxcb.so.1"))
-                                      (dirname
-                                        (search-input-file inputs "/lib/libGL.so.1"))
-                                      (dirname
-                                        (search-input-file inputs "/lib/libstdc++.so.6"))
-                                      (dirname
-                                        (search-input-file inputs "/lib/libgcc_s.so.1")))
-                                ":")))
+               (let* ((ld-so (search-input-file inputs #$(glibc-dynamic-linker)))
+                      (rpath
+                        (string-join
+                          (list (dirname ld-so)
+                                (dirname
+                                  (search-input-file inputs "/lib/libz.so.1"))
+                                (dirname
+                                  (search-input-file inputs "/lib/libfontconfig.so.1"))
+                                (dirname
+                                  (search-input-file inputs "/lib/libfreetype.so.6"))
+                                (dirname
+                                  (search-input-file inputs "/lib/libxcb-glx.so.0"))
+                                (dirname
+                                  (search-input-file inputs "/lib/libX11-xcb.so.1"))
+                                (dirname
+                                  (search-input-file inputs "/lib/libX11.so.6"))
+                                (dirname
+                                  (search-input-file inputs "/lib/libXrender.so.1"))
+                                (dirname
+                                  (search-input-file inputs "/lib/libxcb.so.1"))
+                                (dirname
+                                  (search-input-file inputs "/lib/libGL.so.1"))
+                                (dirname
+                                  (search-input-file inputs "/lib/libstdc++.so.6"))
+                                (dirname
+                                  (search-input-file inputs "/lib/libgcc_s.so.1")))
+                          ":")))
                  (invoke "patchelf" "--set-rpath" (dirname ld-so) "libamcam.so")
                  (invoke "patchelf" "--set-rpath" (dirname ld-so) "libamnam.so")
                  (invoke "patchelf" "--set-rpath" (dirname ld-so) "libamsam.so")
@@ -135,7 +137,8 @@
          #:strip-binaries? #f       ; Causes RUNPATH validation to fail.
          #:tests? #f))              ; No tests.
     (native-inputs (list patchelf sed))
-    (inputs (list fontconfig
+    (inputs (list bash-minimal
+                  fontconfig
                   freetype
                   libxrender
                   `(,gcc "lib")

@@ -41,7 +41,7 @@
     (inputs
      `(("bzip2" ,bzip2)
        ("zlib" ,zlib)))
-    (home-page "http://www.hercules-390.eu/")
+    (home-page "https://www.hercules-390.eu/")
     (synopsis "System/370, ESA/390 and z/Architecture Emulator")
     (description
      "Hercules is an open source software implementation of the mainframe

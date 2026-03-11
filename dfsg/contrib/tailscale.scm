@@ -31,6 +31,7 @@
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system go)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages bash)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages dns)
   #:use-module (gnu packages golang)
@@ -137,10 +138,11 @@
                    (("ERR-BuildInfo") "GNU-Guix")))))
            (add-after 'unpack 'adjust-calls-to-binaries
              (lambda* (#:key import-path #:allow-other-keys)
-               (substitute* (string-append "src/" import-path "/net/tstun/tun_linux.go")
-                 (("/sbin/modprobe") "modprobe"))
-               (substitute* (string-append "src/" import-path "/feature/clientupdate/clientupdate.go")
-                 (("/usr/local/bin") (string-append #$output "/bin")))))
+               (let ((base (string-append "src/" import-path)))
+                 (substitute* (string-append base "/net/tstun/tun_linux.go")
+                   (("/sbin/modprobe") "modprobe"))
+                 (substitute* (string-append base "/feature/clientupdate/clientupdate.go")
+                   (("/usr/local/bin") (string-append #$output "/bin"))))))
            (replace 'build
              (lambda* (#:key import-path build-flags #:allow-other-keys)
                (for-each
@@ -200,18 +202,19 @@
                          (unsetenv "GOBIN")))
                      (add-before 'install-shell-completions 'install-binaries
                        (lambda _
-                         (for-each (lambda (binary)
-                                     (install-file binary (string-append #$output "/bin")))
-                                   (find-files "bin")))))
+                         (for-each
+                           (lambda (binary)
+                             (install-file binary (string-append #$output "/bin")))
+                           (find-files "bin")))))
                   #~()))))
     (inputs
-     (list findutils iproute iptables kmod openresolv procps))
+     (list bash-minimal findutils iproute iptables kmod openresolv procps))
     (native-inputs
       (if (%current-target-system)
           (list this-package)
           '()))
     (home-page "https://github.com/tailscale/tailscale")
-    (synopsis "Tailscale VPN client")
+    (synopsis "VPN client for the Tailscale network")
     (description "Tailscale lets you easily manage access to private resources,
 quickly SSH into devices on your network, and work securely from anywhere in
 the world.")
