@@ -1,4 +1,4 @@
-;;; Copyright © 2017, 2018, 2019, 2021 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2017-2019, 2021, 2026 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -20,8 +20,10 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix utils)
+  #:use-module (guix gexp)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system trivial)
+  #:use-module (gnu packages base)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages perl))
 
@@ -38,21 +40,19 @@
           "04zah2yyby7g0jwqhrvxvjhfxhkq2r8k4ixxx79d059dkzdvyhvr"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/baud"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let ((dest (string-append #$output "/bin/baud"))
+                   (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Run commands safley at their native baud")
     (description "This allows older commands to be executed safely at their
@@ -82,27 +82,26 @@ fastcommands(5), that lists commands that are high speed link safe.")
           "1mr3a46qxzbn00gaqgfbwcjd3lxgbgnirvv8xj60vdja63s10g8z"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out     (assoc-ref %outputs "out"))
-                (dest    (string-append out "/bin/ishadm"))
-                (perl    (assoc-ref %build-inputs "perl"))
-                (netstat (string-append (assoc-ref %build-inputs "net-tools")
-                                        "/bin/netstat"))
-                (source  (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (substitute* dest
-             (("netstat") netstat))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let* ((dest    (string-append #$output "/bin/ishadm"))
+                    (perl    (assoc-ref %build-inputs "perl"))
+                    (netstat (string-append (assoc-ref %build-inputs "net-tools")
+                                            "/bin/netstat")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (substitute* dest
+                 (("(\\$ENV\\{PATH\\} = \").*\"" _ ENV)
+                  (string-append
+                    ENV (dirname (search-input-file %build-inputs "bin/netstat")) "\"")))
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
     (inputs
-     `(("net-tools" ,net-tools)
-       ("perl" ,perl)))
+     (list net-tools perl))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Information Super Highway Administration")
     (description "This checks and enables network routes to the Information
@@ -124,26 +123,25 @@ update the routes.")
           "0liq55l3nnd77pd2zs0rcgk2afszgzkxjcambl7v405ylgxl04b6"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/turbo"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let* ((dest (string-append #$output "/bin/turbo"))
+                    (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Toggle the turbo button")
     (description "Once upon a time computers were made with a physical turbo
 button that doubled the CPU speed.  These days we need to make do with a
 script.")
+    (properties `((lint-hidden-cve . ("CVE-2025-66803"))))
     (license license:gpl2+)))
 
 ;;;TODO: Write a service.
@@ -160,24 +158,22 @@ script.")
           "1i9jlly3758mz4pagxcnrjs50a6anr9npkjraixanhd1ga76wl0b"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/icmpcharger"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (icmp   (string-append (assoc-ref %build-inputs "headers")
-                                       "/include/linux"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (substitute* dest
-             (("/usr/include") icmp))
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let* ((dest (string-append #$output "/bin/icmpcharger"))
+                    (perl (assoc-ref %build-inputs "perl"))
+                    (icmp (string-append (assoc-ref %build-inputs "headers")
+                                         "/include/linux")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (substitute* dest
+                 (("/usr/include") icmp))
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
     (inputs
      `(("headers" ,linux-libre-headers)
        ("perl" ,perl)))
@@ -212,21 +208,23 @@ L1, L2 and TLB caches with ICMP driver entries.")
           "1ziarv1whhqv43w0k6zbvqs7w25py5izb16w1ipm278raxqqwgq7"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/bottom"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let* ((dest (string-append #$output "/bin/bottom"))
+                    (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (substitute* dest
+                 (("(\\$ENV\\{PATH\\} = \").*\"" _ ENV)
+                  (string-append
+                    ENV (dirname (search-input-file %build-inputs "bin/ps")) "\"")))
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl procps))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Display bottom processes")
     (description "This is the opposite of @code{top}, it displays processes
@@ -246,21 +244,19 @@ that are using the least CPU.  It is the companion to the \"prstat\" command.")
           "0gr25mh0daklc590lk324mn3i5mdj1zaipjnr8jxlvv92nk9l8n6"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/ltzip"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let ((dest (string-append #$output "/bin/ltzip"))
+                   (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Lossy Text Compression")
     (description "This program compresses text files using a unique lossy text
@@ -284,21 +280,19 @@ bytes - and weigh less when stored on disk.")
           "154fk9lw2450ij3b78rbqy3wl88wjbg0afmnvlamk1n2qgz7k3bv"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/ltunzip"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let ((dest (string-append #$output "/bin/ltunzip"))
+                   (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Lossy Text Uncompression")
     (description "This program uncompresses text files that were compressed
@@ -321,21 +315,19 @@ The result file has a \".un\" extension, and  the original ltz file remains.")
           "195hylz46lh8z0skl0hwsrsk64qn0bx0fwb9z3dcnrfjymi266ss"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/maybe"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let* ((dest (string-append #$output "/bin/maybe"))
+                    (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Sometimes true, sometimes false")
     (description "Maybe is a companion to @code{/usr/bin/true} and
@@ -355,21 +347,19 @@ The result file has a \".un\" extension, and  the original ltz file remains.")
           "1gd5issqwacl4ypgibj6b1hmclslv54mz0xc361f7zmsss5ywrdr"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/onstat"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let ((dest (string-append #$output "/bin/onstat"))
+                   (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Server on status")
     (description "Onstat tells you if your server is switched on.  A common
@@ -390,21 +380,19 @@ switched on.  This may help diagnose such a situation.")
           "18sai89dv46v746s8xpjis77lk885ri2y8h9xmrsrwd36ggbn6v7"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/cdrewind"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let ((dest (string-append #$output "/bin/cdrewind"))
+                   (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Rewind CDROMs before ejection")
     (description "Many Unix based operating systems neglect to rewind CDROMs
@@ -433,21 +421,23 @@ through to servers.")
           "1xrxyw13aab1d8d2ibs3ajd6l5hl9my342682ppj4scxqg60gkcn"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/psss"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let ((dest (string-append #$output "/bin/psss"))
+                   (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               ;; It's either this or wrap-script
+               (substitute* dest
+                 (("`ps -eo")
+                  (string-append "`" (search-input-file %build-inputs "bin/ps") " -eo")))
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl procps))
     (home-page "https://www.brendangregg.com/Specials/psss_chart.html")
     (synopsis "Process Status with StarSign")
     (description "@code{psss} is ps with StarSign, and inserts a field to
@@ -470,21 +460,23 @@ this program currently does not use.")
           "00czx5wih03s8djpsj021aabin04m6b9gwpwxazzmkyvrxhv19i6"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/lsss"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let ((dest (string-append #$output "/bin/lsss"))
+                   (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (substitute* dest
+                 (("#(\\$ENV\\{PATH\\} = \").*" _ ENV)
+                  (string-append
+                    ENV (dirname (search-input-file %build-inputs "bin/ls")) "\";\n")))
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list coreutils perl))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "StarSign version of @code{ls}")
     (description "@code{lsss} is ls with StarSign, an improved @code{ls}
@@ -505,21 +497,19 @@ starsign of each file.")
           "1rkggpn6ydxil1r9d9li8kdh8g54l7rzc3smb3wk6rk473flmd11"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/gwhiz"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let ((dest (string-append #$output "/bin/gwhiz"))
+                   (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Whiz files or output streams")
     (description "@code{gwhiz} will whiz files or commands, making them easier
@@ -540,21 +530,19 @@ color, @code{gwhiz} can highlight in colour using the \"-c\" option.")
           "08rl0qk4vfijncaykfjsc6g94ih7c0qv642h3vpwfyvanqdydg0j"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/l33t"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let ((dest (string-append #$output "/bin/l33t"))
+                   (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Auto l33t converter")
     (description "This program converts text to l33t-speak.  This is helpful to
@@ -575,21 +563,19 @@ that is easy to follow.")
           "1znn983c05ma4ck31b0irwdpf3m6dy83nlgmc2l8x35k47q2rm35"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/3rot13"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let ((dest (string-append #$output "/bin/3rot13"))
+                   (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Heavyweight encryption algorithm: Triple ROT13")
     (description "This implements a new encryption algorithm, 3ROT13.  This is a
@@ -614,22 +600,20 @@ a higher performance be desired this code can be reworked in C.")
           "0xq76d39hglf53mp24g0sdl2688by0yyh9v69rc4xi5sbzmdxaya"))))
     (build-system trivial-build-system)
     (arguments
-     `(#:modules ((guix build utils))
+     (list
        #:builder
-       (begin
-         (use-modules (guix build utils))
-         (let* ((out    (assoc-ref %outputs "out"))
-                (dest   (string-append out "/bin/nrot13"))
-                (perl   (assoc-ref %build-inputs "perl"))
-                (source (assoc-ref %build-inputs "source")))
-           (mkdir-p (string-append out "/bin"))
-           (copy-file source dest) ; not install-file
-           (patch-shebang dest
-             (list (string-append perl "/bin")))
-           (chmod dest #o555)))))
-    (native-inputs `(("source" ,source)))
-    (inputs `(("perl" ,perl)))
-    (home-page "http://www.brendangregg.com/specials.html")
+       (with-imported-modules '((guix build utils))
+         #~(begin
+             (use-modules (guix build utils))
+             (let ((dest (string-append #$output "/bin/nrot13"))
+                   (perl (assoc-ref %build-inputs "perl")))
+               (mkdir-p (dirname dest))
+               (copy-file #$source dest)    ; not install-file
+               (patch-shebang dest
+                 (list (string-append perl "/bin")))
+               (chmod dest #o555))))))
+    (inputs (list perl))
+    (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Configurable encryption algorithm: NROT13")
     (description "This implements a new configurable encryption algorithm,
 NROT13.  This is similar to the 3ROT13 algorithm, a symmetric stateless
@@ -651,18 +635,18 @@ supersymmetric 31ROT13.")
           "04fciciykphswj12vwlbvii3sjcqqf2j6kiqynsg5n14qyghr6cl"))))
     (build-system gnu-build-system)
     (arguments
-     `(#:tests? #f ; no test suite
+     (list
+       #:tests? #f ; no test suite
        #:phases
-       (modify-phases %standard-phases
-         (delete 'configure)
-         (delete 'unpack)
-         (replace 'build
-           (lambda* (#:key source #:allow-other-keys)
-             (invoke ,(cc-for-target) "-o" "mkzombie" source)))
-         (replace 'install
-           (lambda* (#:key outputs #:allow-other-keys)
-             (let ((out  (assoc-ref outputs "out")))
-               (install-file "mkzombie" (string-append out "/bin"))))))))
+       #~(modify-phases %standard-phases
+           (delete 'configure)
+           (delete 'unpack)
+           (replace 'build
+             (lambda _
+               (invoke #$(cc-for-target) "-o" "mkzombie" #$source)))
+           (replace 'install
+             (lambda _
+               (install-file "mkzombie" (string-append #$output "/bin")))))))
     (home-page "https://www.brendangregg.com/specials.html")
     (synopsis "Make zombie processes")
     (description "This program creates one or more zombies and a daemon their
