@@ -1,4 +1,4 @@
-;;; Copyright © 2025 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2021, 2026 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -38,9 +38,10 @@
   (package      dbxfs-configuration-package
                 (default dbxfs))        ; package
   (mountpoint   dbxfs-configuration-mountpoint
-                (default (string-append (getenv "HOME") "/Dropbox")))  ; string
+                (default (string-append (getenv "HOME") "/Dropbox")))   ; string
   (config-json  dbxfs-configuration-config-json
-                (default #f))           ; #f or string
+                (default (string-append (getenv "XDG_CONFIG_HOME")
+                                        "/dbxfs/config.json")))         ; #f or string
   (autostart?   dbxfs-configuration-autostart?
                 (default #t))
   (verbosity    tailscaled-configuration-verbosity
@@ -53,7 +54,7 @@
     (list
       (shepherd-service
         (documentation "Provide access to Dropbox™")
-        (provision '(dropbox dbxfs))
+        (provision '(dbxfs dropbox))
         ;(requirement '(networking))
         (start #~(make-forkexec-constructor
                    (list #$(file-append package "/bin/dbxfs")
@@ -62,21 +63,13 @@
                               (1 '("--verbose"))
                               (2 '("--verbose" "--verbose"))
                               (_ '()))
-                         #$@(if config-json
-                                #~("--config-file" #$config-json)
-                                '())
+                         "--config-file" #$config-json
                          #$mountpoint)
                    #:log-file #$(string-append %logdir "/dbxfs.log")))
         (stop #~(make-system-destructor
                   #$(string-append "fusermount -u " mountpoint)))
-        #;
         (actions
-         (list (shepherd-configuration-action
-                 #~(zero? (system* #$(file-append package "/bin/dbxfs")
-                                   #$@(if config-json
-                                          #~("--config-file" #$config-json)
-                                          '())
-                                   "--print-default-config-file")))))
+         (list (shepherd-configuration-action config-json)))
         (auto-start? autostart?)
         (respawn? #f)))))
 
