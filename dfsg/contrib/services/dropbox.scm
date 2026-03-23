@@ -22,15 +22,10 @@
   #:use-module (guix records)
   #:use-module (guix gexp)
   #:use-module (gnu packages file-systems)
+  #:use-module (shepherd support)
   #:use-module (ice-9 match)
   #:export (dbxfs-configuration
             home-dbxfs-service-type))
-
-(define %logdir
-  (string-append
-    (or (getenv "XDG_STATE_HOME")
-        (string-append (getenv "HOME") "/.local/state"))
-    "/log"))
 
 (define-record-type* <dbxfs-configuration>
   dbxfs-configuration make-dbxfs-configuration
@@ -38,10 +33,10 @@
   (package      dbxfs-configuration-package
                 (default dbxfs))        ; package
   (mountpoint   dbxfs-configuration-mountpoint
-                (default (string-append (getenv "HOME") "/Dropbox")))   ; string
+                (default (string-append user-homedir "/Dropbox")))      ; string
   (config-json  dbxfs-configuration-config-json
-                (default (string-append (getenv "XDG_CONFIG_HOME")
-                                        "/dbxfs/config.json")))         ; string
+                (default (string-append user-homedir
+                                        "/.config/dbxfs/config.json"))) ; string
   (autostart?   dbxfs-configuration-autostart?
                 (default #t))
   (verbosity    tailscaled-configuration-verbosity
@@ -65,7 +60,7 @@
                               (_ '()))
                          "--config-file" #$config-json
                          #$mountpoint)
-                   #:log-file #$(string-append %logdir "/dbxfs.log")))
+                   #:log-file #$(string-append %user-log-dir "/dbxfs.log")))
         (stop #~(make-system-destructor
                   #$(string-append "fusermount -u " mountpoint)))
         (actions
@@ -76,7 +71,7 @@
         (respawn? #f)))))
 
 (define %dbxfs-log-rotation
-  (list (string-append %logdir "/dbxfs.log")))
+  (list (string-append %user-log-dir "/dbxfs.log")))
 
 (define home-dbxfs-service-type
   (service-type
