@@ -45,6 +45,8 @@
   (verbosity    tailscaled-configuration-verbosity
                 (default 0)))          ; number
 
+;; After experimentation `tailscaled --cleanup` needs to be an activation
+;; script and not the stop action.
 (define (tailscaled-activation config)
   "Create the necessary directories for tailscale and run 'tailscaled
 --cleanup' at startup, as recommended."
@@ -57,6 +59,7 @@
                                 "/bin/tailscaled") "--cleanup"))))
 
 ;; Can this service be limited to /var/lib/tailscale, /var/run/tailscale and /var/log?
+;; NB: It would also need to access the network namespace.
 (define (tailscaled-shepherd-service config)
   "Return a <shepherd-service> for Tailscaled with CONFIG"
   (match-record config <tailscaled-configuration>
@@ -69,18 +72,16 @@
         (start #~(make-forkexec-constructor
                    (list #$(file-append package "/bin/tailscaled")
                          #$@(if dev-net-tun?
-                              '()
-                              '("--tun=userspace-networking"))
+                                '()
+                                '("--tun=userspace-networking"))
                          "-state" #$state-file
                          "-socket" #$socket-file
                          "-port" (number->string #$listen-port)
                          #$@(if no-logs?
-                              '("-no-logs-no-support")
-                              '())
+                                '("-no-logs-no-support")
+                                '())
                          "-verbose" (number->string #$verbosity))
                    #:log-file "/var/log/tailscaled.log"))
-        ;(stop #~(not (system* #$(file-append (tailscaled-configuration-package config)
-        ;                                     "/bin/tailscaled") "--cleanup")))
         (stop #~(make-kill-destructor))))))
 
 (define %tailscaled-log-rotation
