@@ -41,7 +41,7 @@
                 (default (string-append (getenv "HOME") "/Dropbox")))   ; string
   (config-json  dbxfs-configuration-config-json
                 (default (string-append (getenv "XDG_CONFIG_HOME")
-                                        "/dbxfs/config.json")))         ; #f or string
+                                        "/dbxfs/config.json")))         ; string
   (autostart?   dbxfs-configuration-autostart?
                 (default #t))
   (verbosity    tailscaled-configuration-verbosity
@@ -69,6 +69,8 @@
         (stop #~(make-system-destructor
                   #$(string-append "fusermount -u " mountpoint)))
         (actions
+         ;; TODO: This should use `dbxfs (--config-file config-json)? --print-default-config-file`
+         ;; TODO: Add support for --get-refresh-token or --gui?
          (list (shepherd-configuration-action config-json)))
         (auto-start? autostart?)
         (respawn? #f)))))
@@ -84,7 +86,10 @@
                                dbxfs-user-shepherd-service)
             (service-extension home-log-rotation-service-type
                                (const %dbxfs-log-rotation))
+            #;
+            (service-extension home-xdg-configuration-files-service-type
+                               (compose list dbxfs-configuration-config-json))
             (service-extension home-profile-service-type
                                (compose list dbxfs-configuration-package))))
     (default-value (dbxfs-configuration))
-    (description "Use dbxfs to keep files synced with Dropbox™.")))
+    (description "Use dbxfs to keep files synchronized with Dropbox™.")))
