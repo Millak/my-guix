@@ -27,7 +27,7 @@
   #:export (dbxfs-configuration
             home-dbxfs-service-type))
 
-;; Snarfed from (shepherd support).
+;; Snarfed from (shepherd support), then changes added.
 
 (define user-homedir
   ;; Look for $HOME first, to allow users to override the defaults.  This is
@@ -37,7 +37,7 @@
       ;; When bootstrapping and running as PID 1, /etc/{passwd,shadow} may be
       ;; unavailable.  Gracefully handle that.
       (false-if-exception (passwd:dir (getpwuid (getuid))))
-      "/"))
+      "~/"))
 
 (define %user-log-dir
   ;; Default log directory if shepherd is run as a normal user.
