@@ -81,19 +81,12 @@
         `(("dbxfs/config.json" ,config-json))
         '())))
 
-(define %dbxfs-log-rotation
-  ;; %user-log-dir depends on (shepherd support)
-  ;(list (string-append %user-log-dir "/dbxfs.log")))
-  (list "~/.local/state/shepherd/dbxfs.log"))
-
 (define home-dbxfs-service-type
   (service-type
     (name 'dbxfs)
     (extensions
       (list (service-extension home-shepherd-service-type
                                dbxfs-user-shepherd-service)
-            (service-extension home-log-rotation-service-type
-                               (const %dbxfs-log-rotation))
             (service-extension home-xdg-configuration-files-service-type
                                dbxfs-user-home-xdg-config-files)
             (service-extension home-profile-service-type
