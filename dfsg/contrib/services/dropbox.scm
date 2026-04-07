@@ -52,11 +52,11 @@
   dbxfs-configuration?
   (package      dbxfs-configuration-package
                 (default dbxfs))        ; package
+  ;; TODO: mount_point can be set in the config.
   (mountpoint   dbxfs-configuration-mountpoint
-                (default (string-append user-homedir "/Dropbox")))      ; string
+                (default "~/Dropbox"))  ; string
   (config-json  dbxfs-configuration-config-json
-                (default (string-append user-homedir
-                                        "/.config/dbxfs/config.json"))) ; string
+                (default #f))           ; #f | file-like
   (autostart?   dbxfs-configuration-autostart?
                 (default #t))
   (verbosity    tailscaled-configuration-verbosity
@@ -71,6 +71,7 @@
         (documentation "Provide access to Dropbox™")
         (provision '(dbxfs dropbox))
         ;(requirement '(networking))
+        (modules '((shepherd support)))      ;for '%user-log-dir'
         (start #~(make-forkexec-constructor
                    (list #$(file-append package "/bin/dbxfs")
                          "--foreground"
@@ -78,18 +79,29 @@
                               (1 '("--verbose"))
                               (2 '("--verbose" "--verbose"))
                               (_ '()))
-                         "--config-file" #$config-json
+                         #$@(if config-json
+                               `("--config-file" ,config-json)
+                               `())
                          #$mountpoint)
-                   #:log-file #$(string-append %user-log-dir "/dbxfs.log")))
+                   #:log-file (string-append %user-log-dir "/dbxfs.log")))
         (stop #~(make-system-destructor
                   #$(string-append "fusermount -u " mountpoint)))
         (actions
-         ;; TODO: This should use `dbxfs (--config-file config-json)? --print-default-config-file`
          ;; TODO: Add support for --get-refresh-token or --gui?
-         (list (shepherd-configuration-action config-json)))
+         (list (shepherd-configuration-action
+                 (or config-json
+                     "~/.config/dbxfs/config.json"))))
         (auto-start? autostart?)
         (respawn? #f)))))
 
+(define (dbxfs-user-home-xdg-config-files config)
+  (match-record config <dbxfs-configuration>
+                (config-json)
+    (if config-json
+        `(("dbxfs/config.json" ,config-json))
+        '())))
+
+;; %user-log-dir depends on (shepherd support)
 (define %dbxfs-log-rotation
   (list (string-append %user-log-dir "/dbxfs.log")))
 
@@ -101,9 +113,8 @@
                                dbxfs-user-shepherd-service)
             (service-extension home-log-rotation-service-type
                                (const %dbxfs-log-rotation))
-            #;
             (service-extension home-xdg-configuration-files-service-type
-                               (compose list dbxfs-configuration-config-json))
+                               dbxfs-user-home-xdg-config-files)
             (service-extension home-profile-service-type
                                (compose list dbxfs-configuration-package))))
     (default-value (dbxfs-configuration))
