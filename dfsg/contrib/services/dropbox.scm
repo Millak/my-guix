@@ -22,30 +22,10 @@
   #:use-module (guix records)
   #:use-module (guix gexp)
   #:use-module (gnu packages file-systems)
-  ;#:use-module (shepherd support)
   #:use-module (ice-9 match)
   #:export (dbxfs-configuration
             home-dbxfs-service-type))
 
-;; Snarfed from (shepherd support), then changes added.
-
-(define user-homedir
-  ;; Look for $HOME first, to allow users to override the defaults.  This is
-  ;; notably useful when shepherd is built in a Guix chroot.
-  (or (getenv "HOME")
-
-      ;; When bootstrapping and running as PID 1, /etc/{passwd,shadow} may be
-      ;; unavailable.  Gracefully handle that.
-      (false-if-exception (passwd:dir (getpwuid (getuid))))
-      "~/"))
-
-(define %user-log-dir
-  ;; Default log directory if shepherd is run as a normal user.
-  (string-append (or (getenv "XDG_STATE_HOME")
-                     (string-append user-homedir "/.local/state"))
-                 "/shepherd"))
-
-;;
 
 (define-record-type* <dbxfs-configuration>
   dbxfs-configuration make-dbxfs-configuration
@@ -101,9 +81,10 @@
         `(("dbxfs/config.json" ,config-json))
         '())))
 
-;; %user-log-dir depends on (shepherd support)
 (define %dbxfs-log-rotation
-  (list (string-append %user-log-dir "/dbxfs.log")))
+  ;; %user-log-dir depends on (shepherd support)
+  ;(list (string-append %user-log-dir "/dbxfs.log")))
+  (list "~/.local/state/shepherd/dbxfs.log"))
 
 (define home-dbxfs-service-type
   (service-type
