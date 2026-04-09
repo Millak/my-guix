@@ -31,22 +31,23 @@
   tailscaled-configuration make-tailscaled-configuration
   tailscaled-configuration?
   (package      tailscaled-configuration-package
-                (default tailscale))   ; package
+                (default tailscale))    ; package
   (listen-port  tailscaled-configuration-listen-port
-                (default 41641))     ; number
+                (default 41641))        ; number
   (state-file   tailscaled-configuration-state-file
-                (default "/var/lib/tailscale/tailscaled.state"))  ; path
+                (default "/var/lib/tailscale/tailscaled.state"))    ; path
   (socket-file  tailscaled-configuration-socket-file
-                (default "/var/run/tailscale/tailscaled.sock"))   ; path
+                (default "/var/run/tailscale/tailscaled.sock"))     ; path
   (no-logs?     tailscaled-configuration-no-logs
                 (default #f))
   (dev-net-tun? tailscaled-configuration-dev-net-tun
                 (default #t))
   (verbosity    tailscaled-configuration-verbosity
-                (default 0)))          ; number
+                (default 0)))           ; number
 
 ;; After experimentation `tailscaled --cleanup` needs to be an activation
 ;; script and not the stop action.
+;; It is in systemd's ExecPostStop command.
 (define (tailscaled-activation config)
   "Create the necessary directories for tailscale and run 'tailscaled
 --cleanup' at startup, as recommended."

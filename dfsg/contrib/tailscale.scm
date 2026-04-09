@@ -1,4 +1,4 @@
-;;; Copyright © 2022-2025 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2022-2026 Efraim Flashner <efraim@flashner.co.il>
 ;;; Copyright © 2024 umanwizard <brennan@umanwizard.com>
 ;;;
 ;;; This file is an addendum to GNU Guix.
@@ -77,7 +77,7 @@
             (use-modules ((guix build gnu-build-system) #:prefix gnu:)
                          (guix build utils))
             (let ((inputs (list
-                            #+go-1.25
+                            #+go-1.26
                             #+tar
                             #+bzip2
                             #+gzip)))
@@ -104,7 +104,7 @@
 (define-public tailscale
   (package
     (name "tailscale")
-    (version "1.94.2")
+    (version "1.96.5")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
@@ -112,15 +112,15 @@
                     (commit (string-append "v" version))
                     (hash
                      (base32
-                      "07pz43lfmxkvg3b1a4dq9wh8a247gaqxppqaa8ah4mjnrh3radda"))))
+                      "1xrprnng8vy9llcwc1x5n1rdrhbsi4sx71k1iknpgfddcgxip1mx"))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "0dqwgihl9wjv4kwsv0dj7c7l8n99bkfsd7v1ipy3cw3akgclilf7"))))
+                "0cq3ka0nzc9cawcj9723493ixk7ngjzai2qqf81lh5x4iyikafag"))))
     (build-system go-build-system)
     (arguments
      (list
-       #:go go-1.25
+       #:go go-1.26
        #:install-source? #f
        #:tests? #f
        #:modules
