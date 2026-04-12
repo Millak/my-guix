@@ -138,12 +138,15 @@
                          "|"))
        #:import-path "github.com/arduino/arduino-cli"
        #:build-flags
-       #~(list (string-append "-ldflags=-X github.com/arduino/arduino-cli/internal/version.versionString="
-                              "v" #$version
-                              " -X github.com/arduino/arduino-cli/internal/version.commit="
-                              (string-take #$(assoc-ref properties 'release-commit) 7)
-                              " -X github.com/arduino/arduino-cli/internal/version.date="
-                              #$(assoc-ref properties 'release-date)))
+       #~(let ((base "github.com/arduino/arduino-cli/internal/"))
+           (list (format #f "-ldflags=-X ~s -X ~s -X ~s"
+                         (string-append base "version.versionString="
+                                        "v" #$version)
+                         (string-append base "version.commit="
+                                        (string-take
+                                          #$(assoc-ref properties 'release-commit) 7))
+                         (string-append base "version.date="
+                                        #$(assoc-ref properties 'release-date)))))
        #:phases
        #~(modify-phases %standard-phases
            (add-before 'check 'pre-check
@@ -255,12 +258,15 @@ and sends response as JSON.")
        #:install-source? #f
        #:import-path "github.com/arduino/mdns-discovery"
        #:build-flags
-       #~(list (string-append "-ldflags=-X github.com/arduino/mdns-discovery/version.Version="
-                              "v" #$version
-                              " -X github.com/arduino/mdns-discovery/version.Commit="
-                              (string-take #$(assoc-ref properties 'release-commit) 7)
-                              " -X github.com/arduino/mdns-discovery/version.Timestamp="
-                              #$(assoc-ref properties 'release-date)))))
+       #~(let ((base "github.com/arduino/mdns-discovery/"))
+           (list (format #f "-ldflags=-X ~s -X ~s -X ~s"
+                         (string-append base "version.Version="
+                                        "v" #$version)
+                         (string-append base "version.Commit="
+                                        (string-take
+                                          #$(assoc-ref properties 'release-commit) 7))
+                         (string-append base "version.Timestamp="
+                                        #$(assoc-ref properties 'release-date)))))))
     (inputs (list go-github-com-arduino-go-properties-orderedmap
                   go-github-com-arduino-pluggable-discovery-protocol-handler-v2
                   go-github-com-hashicorp-mdns))
@@ -293,12 +299,15 @@ and sends response as JSON.")
        #:install-source? #f
        #:import-path "github.com/arduino/serial-discovery"
        #:build-flags
-       #~(list (string-append "-ldflags=-X github.com/arduino/serial-discovery/version.Version="
-                              "v" #$version
-                              " -X github.com/arduino/serial-discovery/version.Commit="
-                              (string-take #$(assoc-ref properties 'release-commit) 7)
-                              " -X github.com/arduino/serial-discovery/version.Timestamp="
-                              #$(assoc-ref properties 'release-date)))))
+       #~(let ((base "github.com/arduino/serial-discovery/"))
+           (list (format #f "-ldflags=-X ~s -X ~s -X ~s"
+                         (string-append base "version.Version="
+                                        "v" #$version)
+                         (string-append base "version.Commit="
+                                        (string-take
+                                          #$(assoc-ref properties 'release-commit) 7))
+                         (string-append base "version.Timestamp="
+                                        #$(assoc-ref properties 'release-date)))))))
     (inputs
      (list go-github-com-arduino-go-properties-orderedmap
            go-github-com-arduino-pluggable-discovery-protocol-handler-v2
@@ -335,12 +344,15 @@ with LF @code{\\n} and sends response as JSON.")
        #:install-source? #f
        #:import-path "github.com/arduino/serial-monitor"
        #:build-flags
-       #~(list (string-append "-ldflags=-X github.com/arduino/serial-monitor/version.Version="
-                              "v" #$version
-                              " -X github.com/arduino/serial-monitor/version.Commit="
-                              (string-take #$(assoc-ref properties 'release-commit) 7)
-                              " -X github.com/arduino/serial-monitor/version.Timestamp="
-                              #$(assoc-ref properties 'release-date)))))
+       #~(let ((base "github.com/arduino/serial-monitor/"))
+           (list (format #f "-ldflags=-X ~s -X ~s -X ~s"
+                         (string-append base "version.Version="
+                                        "v" #$version)
+                         (string-append base "version.Commit="
+                                        (string-take
+                                          #$(assoc-ref properties 'release-commit) 7))
+                         (string-append base "version.Timestamp="
+                                        #$(assoc-ref properties 'release-date)))))))
     (inputs
      (list go-github-com-arduino-pluggable-monitor-protocol-handler
            go-go-bug-st-serial go-golang-org-x-exp))
