@@ -123,8 +123,11 @@
        #:go go-1.26
        #:install-source? #f
        #:tests? #f
+       #:imported-modules (append %copy-build-system-modules
+                                  %go-build-system-modules)
        #:modules
        '((guix build go-build-system)
+         ((guix build copy-build-system) #:prefix copy:)
          (guix build utils)
          (ice-9 match))
        #:import-path "tailscale.com"
@@ -138,11 +141,13 @@
                    (("ERR-BuildInfo") "GNU-Guix")))))
            (add-after 'unpack 'adjust-calls-to-binaries
              (lambda* (#:key import-path #:allow-other-keys)
-               (let ((base (string-append "src/" import-path)))
-                 (substitute* (string-append base "/net/tstun/tun_linux.go")
+               (with-directory-excursion (string-append "src/" import-path)
+                 (substitute* "net/tstun/tun_linux.go"
                    (("/sbin/modprobe") "modprobe"))
-                 (substitute* (string-append base "/feature/clientupdate/clientupdate.go")
-                   (("/usr/local/bin") (string-append #$output "/bin"))))))
+                 (substitute* "feature/clientupdate/clientupdate.go"
+                   (("/usr/local/bin") (string-append #$output "/bin")))
+                 (substitute* "client/systray/tailscale-systray.desktop"
+                   (("/usr/bin") (string-append #$output "/bin"))))))
            (replace 'build
              (lambda* (#:key import-path build-flags #:allow-other-keys)
                (for-each
@@ -177,6 +182,19 @@
                  '(("bash" . "share/bash-completion/completions/tailscale")
                    ("fish" . "share/fish/vendor_completions.d/tailscale.fish")
                    ("zsh"  . "share/zsh/site-functions/_tailscale")))))
+           (add-after 'install 'install-extras
+             (lambda* (#:key import-path #:allow-other-keys #:rest args)
+               (with-directory-excursion (string-append "src/" import-path)
+                 (apply (assoc-ref copy:%standard-phases 'install)
+                        #:install-plan
+                        '(("client/systray/tailscale.svg"
+                           "share/icons/hicolor/scalable/apps/")
+                          ("client/systray/tailscale.png"
+                           "share/icons/hicolor/512x512/apps/")
+                          #;
+                          ("client/systray/tailscale-systray.desktop"
+                           "etc/xdg/autostart/"))
+                        args))))
            ;; Make sure this comes after 'install-binaries.
            (add-before 'strip 'wrap-binaries
              (lambda* (#:key inputs outputs #:allow-other-keys)
