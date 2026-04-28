@@ -1,5 +1,5 @@
 ;;; Copyright © 2023 Sam Lockart <sam@samlockart.com>
-;;; Copyright © 2023 Efraim Flashner <efraim@flashner.co.il>
+;;; Copyright © 2023, 2026 Efraim Flashner <efraim@flashner.co.il>
 ;;;
 ;;; This file is an addendum to GNU Guix.
 ;;;
@@ -17,6 +17,7 @@
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
 (define-module (dfsg contrib services tailscale)
+  #:use-module (gnu home services shepherd)
   #:use-module (gnu services)
   #:use-module (gnu services admin)
   #:use-module (gnu services configuration)
@@ -24,8 +25,11 @@
   #:use-module (guix records)
   #:use-module (guix gexp)
   #:use-module (dfsg contrib tailscale)
-  #:export (tailscaled-service-type
-            tailscaled-configuration))
+  #:export (tailscaled-configuration
+            tailscaled-service-type
+
+            tailscale-systray-configuration
+            home-tailscale-systray-service-type))
 
 (define-record-type* <tailscaled-configuration>
   tailscaled-configuration make-tailscaled-configuration
@@ -102,3 +106,33 @@
                                (compose list tailscaled-configuration-package))))
     (default-value (tailscaled-configuration))
     (description "Launch tailscaled.")))
+
+(define-record-type* <tailscale-systray-configuration>
+  tailscale-systray-configuration make-tailscale-systray-configuration
+  tailscale-systray-configuration?
+  (package tailscale-systray-configuration-package
+           (default tailscale)))    ; package
+
+(define (tailscale-systray-user-shepherd-service config)
+  "Return a <tailscale-systray-service> for tailscale with CONFIG."
+  (match-record config <tailscale-systray-configuration>
+                (package)
+    (list
+      (shepherd-service
+        (documentation "Manage tailscale from your systray")
+        (provision '(tailscale-systray))
+        ;(requirement '(dbus))
+        (start #~(make-forkexec-constructor
+                   (list #$(file-append package "/bin/tailscale")
+                         "systray")))
+        (stop #~(make-kill-destructor))
+        (respawn? #f)))))
+
+(define home-tailscale-systray-service-type
+  (service-type
+    (name 'tailscale-systray)
+    (extensions
+      (list (service-extension home-shepherd-service-type
+                               tailscale-systray-user-shepherd-service)))
+    (default-value (tailscale-systray-configuration))
+    (description "Manage tailscale from your system notification panel.")))
