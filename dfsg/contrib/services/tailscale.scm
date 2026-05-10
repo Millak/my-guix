@@ -87,7 +87,15 @@
                                 '())
                          "-verbose" (number->string #$verbosity))
                    #:log-file "/var/log/tailscaled.log"))
-        (stop #~(make-kill-destructor))))))
+        (stop #~(make-kill-destructor))
+        (actions
+         (list (shepherd-signal-action
+                'reload SIGHUP
+                #:documentation "Send a @code{SIGHUP} signal to
+                @command{tailscaled} to reload its configuration file.  This is
+                especially useful after reconfiguring the system."
+                #:message "Service tailscaled has been asked to reload \
+its configuration.")))))))
 
 (define %tailscaled-log-rotation
   (list "/var/log/tailscaled.log"))
