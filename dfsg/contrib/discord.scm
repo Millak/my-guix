@@ -135,14 +135,13 @@
            (add-after 'install 'glib-or-gtk-wrap
              (assoc-ref glib-or-gtk:%standard-phases 'glib-or-gtk-wrap)))))
     (inputs
-     (list gobject-introspection
-           gtk
+     (list gtk
            gtksourceview
            libadwaita
            libcanberra
            libspelling))
     (native-inputs
-     (list pkg-config))
+     (list gobject-introspection pkg-config))
     (home-page "https://github.com/diamondburned/dissent")
     (synopsis "Tiny native Discord app")
     (description "Dissent (previously gtkcord4) is a third-party Discord client
