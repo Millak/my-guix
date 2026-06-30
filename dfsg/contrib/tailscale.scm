@@ -104,7 +104,7 @@
 (define-public tailscale
   (package
     (name "tailscale")
-    (version "1.98.6")
+    (version "1.98.8")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
@@ -112,11 +112,11 @@
                     (commit (string-append "v" version))
                     (hash
                      (base32
-                      "0kajlpgk462c9jfgw0arp58z8jm2v283rjdiyyxday3m76jx5rqy"))))
+                      "0msh3rz75f5g4y6n744c5pc4s3yxbaqgwzxg9q87fwm3kn5jv2fw"))))
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "1r1xyg94va535v6mg4fxjvnx6b6s1rvw8yz8yvns0ldsmknd0w3h"))))
+                "1d4akbcpk1rnjhgrm6p8z8aslqw4fc0r1whg66941cgms0zini15"))))
     (build-system go-build-system)
     (arguments
      (list
