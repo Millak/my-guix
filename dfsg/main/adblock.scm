@@ -24,11 +24,11 @@
   #:use-module (guix gexp)
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system pyproject)
+  #:use-module (gnu packages build-tools)
   #:use-module (gnu packages check)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages rust)
-  #:use-module (gnu packages rust-apps)
   #:use-module (dfsg main rust-crates))
 
 (define-public python-adblock
