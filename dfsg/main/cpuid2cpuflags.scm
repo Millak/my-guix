@@ -17,24 +17,28 @@
 
 (define-module (dfsg main cpuid2cpuflags)
   #:use-module (guix packages)
-  #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix build-system gnu)
+  #:use-module (gnu packages autotools)
   #:use-module ((guix licenses) #:prefix license:))
 
 (define-public cpuid2cpuflags
   (package
     (name "cpuid2cpuflags")
-    (version "17")
+    (version "18")
     (source
       (origin
-        (method url-fetch)
-        (uri (string-append "https://github.com/gentoo/cpuid2cpuflags/releases/"
-                            "download/v" version "/"
-                            "cpuid2cpuflags-" version ".tar.bz2"))
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/gentoo/cpuid2cpuflags")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
         (sha256
          (base32
-          "0z18swr204wig69wvvxvf9q8l91w7s1w4lgvz38rl5wxjhcrcdvj"))))
+          "045xvld4ybavg544blbckf66lc0km1pamnhj0r07iwdb7lm9r6mp"))))
     (build-system gnu-build-system)
+    (native-inputs
+     (list autoconf automake))
     (home-page "https://github.com/gentoo/cpuid2cpuflags")
     (synopsis "Tool to generate CPU_FLAGS_* for your CPU")
     (description "This program attempts to obtain the identification and
@@ -43,4 +47,4 @@ CPU_FLAGS_* flags for Gentoo.")
     (supported-systems '("x86_64-linux" "i686-linux"
                          "armhf-linux" "aarch64-linux"
                          "powerpc-linux" "powerpc64le-linux"))
-    (license license:bsd-2)))
+    (license license:gpl2+)))
