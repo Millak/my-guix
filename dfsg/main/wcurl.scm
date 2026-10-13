@@ -30,7 +30,7 @@
 (define-public wcurl
   (package
     (name "wcurl")
-    (version "2026.01.05")
+    (version "2026.10.12")
     (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -39,7 +39,7 @@
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "1br5rl50h8cy1w0r9pfclsn8ykaxryg8nk47kpmbp2walq6wyv7d"))))
+                "15vz3kszm3i45r433i7jylm1j04ncs6ckg0ylaw4v792qawn8b5y"))))
     (build-system copy-build-system)
     (arguments
      (list
